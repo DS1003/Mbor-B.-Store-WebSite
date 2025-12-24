@@ -34,19 +34,24 @@ model User {
 }
 
 model Product {
-  id          String   @id @default(cuid())
-  name        String
-  description String?
-  price       Decimal
-  stock       Int      @default(0)
-  category    String
-  images      String[] // Array of image URLs
-  featured    Boolean  @default(false)
+  id            String   @id @default(cuid())
+  name          String
+  description   String?
+  price         Decimal
+  discountPrice Decimal?
+  stock         Int      @default(0)
+  category      String
+  subCategory   String?
+  images        String[] // Array of image URLs
+  featured      Boolean  @default(false)
   
-  orderItems  OrderItem[]
+  allowFlocage  Boolean  @default(false)
+  allowGravure  Boolean  @default(false)
 
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  orderItems    OrderItem[]
+
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
 }
 
 model Order {

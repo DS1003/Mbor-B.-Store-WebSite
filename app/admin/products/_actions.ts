@@ -8,32 +8,44 @@ export async function createProduct(formData: FormData) {
     const name = formData.get("name") as string
     const description = formData.get("description") as string
     const price = parseFloat(formData.get("price") as string)
+    const discountPrice = formData.get("discountPrice") ? parseFloat(formData.get("discountPrice") as string) : null
     const stock = parseInt(formData.get("stock") as string)
     const category = formData.get("category") as string
+    const subCategory = formData.get("subCategory") as string
     const imageUrl = formData.get("imageUrl") as string
+    const allowFlocage = formData.get("allowFlocage") === "true"
+    const allowGravure = formData.get("allowGravure") === "true"
 
-    await prisma.product.create({
+    const product = await prisma.product.create({
         data: {
             name,
             description,
             price,
+            discountPrice,
             stock,
             category,
+            subCategory,
             images: imageUrl ? [imageUrl] : [],
+            allowFlocage,
+            allowGravure,
         },
     })
 
     revalidatePath("/admin/products")
-    redirect("/admin/products")
+    return { success: true, product: JSON.parse(JSON.stringify(product)) }
 }
 
 export async function updateProduct(id: string, formData: FormData) {
     const name = formData.get("name") as string
     const description = formData.get("description") as string
     const price = parseFloat(formData.get("price") as string)
+    const discountPrice = formData.get("discountPrice") ? parseFloat(formData.get("discountPrice") as string) : null
     const stock = parseInt(formData.get("stock") as string)
     const category = formData.get("category") as string
+    const subCategory = formData.get("subCategory") as string
     const imageUrl = formData.get("imageUrl") as string
+    const allowFlocage = formData.get("allowFlocage") === "true"
+    const allowGravure = formData.get("allowGravure") === "true"
 
     await prisma.product.update({
         where: { id },
@@ -41,14 +53,18 @@ export async function updateProduct(id: string, formData: FormData) {
             name,
             description,
             price,
+            discountPrice,
             stock,
             category,
+            subCategory,
             images: imageUrl ? [imageUrl] : [],
+            allowFlocage,
+            allowGravure,
         },
     })
 
     revalidatePath("/admin/products")
-    redirect("/admin/products")
+    return { success: true }
 }
 
 export async function deleteProduct(id: string) {

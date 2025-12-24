@@ -65,6 +65,10 @@
         -webkit-text-stroke: 1px rgba(255, 255, 255, 0.3);
     }
 
+    .text-stroke-black {
+        -webkit-text-stroke: 1px rgba(0, 0, 0, 0.3);
+    }
+
     .clip-diagonal {
         clip-path: polygon(0 0, 100% 0, 100% 85%, 0% 100%);
     }
@@ -72,59 +76,95 @@
     .animate-marquee {
         animation: marquee 25s linear infinite;
     }
-}
 
-@keyframes marquee {
-    0% {
-        transform: translateX(0);
+    /* 2025 Glassmorphism Refined */
+    .glass-card {
+        background: rgba(255, 255, 255, 0.03);
+        backdrop-filter: blur(20px) saturate(180%);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
     }
 
-    100% {
-        transform: translateX(-50%);
+    .glass-card-light {
+        background: rgba(255, 255, 255, 0.7);
+        backdrop-filter: blur(12px) saturate(160%);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        box-shadow: 0 4px 20px 0 rgba(0, 0, 0, 0.05);
+    }
+
+    .mesh-gradient {
+        background-color: hsla(0, 0%, 100%, 1);
+        background-image:
+            radial-gradient(at 0% 0%, hsla(43, 100%, 50%, 0.15) 0px, transparent 50%),
+            radial-gradient(at 100% 0%, hsla(0, 0%, 0%, 0.05) 0px, transparent 50%),
+            radial-gradient(at 100% 100%, hsla(43, 100%, 50%, 0.1) 0px, transparent 50%),
+            radial-gradient(at 0% 100%, hsla(0, 0%, 0%, 0.05) 0px, transparent 50%);
+    }
+
+    .bento-card {
+        @apply relative overflow-hidden transition-all duration-500 hover:scale-[1.02] hover:-translate-y-1 active:scale-[0.98];
     }
 }
 
 :root {
-    /* MBOR BRAND: PREMIUM DARK MODE */
-    --background: oklch(0.1 0 0);
-    /* Deep Black */
-    --foreground: oklch(0.99 0 0);
-    /* Pure White */
+    /* MBOR 2025 - REFINED PALETTE */
+    --background: #FFFFFF;
+    --foreground: #0A0A0A;
 
-    --card: oklch(0.12 0 0);
-    --card-foreground: oklch(0.98 0 0);
+    --card: #F9FAFB;
+    --card-foreground: #0A0A0A;
 
-    --popover: oklch(0.1 0 0);
-    --popover-foreground: oklch(0.98 0 0);
+    --popover: #FFFFFF;
+    --popover-foreground: #0A0A0A;
 
-    --primary: oklch(0.98 0 0);
-    /* White */
-    --primary-foreground: oklch(0.1 0 0);
-    /* Black */
+    --primary: #000000;
+    --primary-foreground: #FFFFFF;
 
-    --secondary: oklch(0.15 0 0);
-    /* Dark Grey */
-    --secondary-foreground: oklch(0.98 0 0);
+    --secondary: #F3F4F6;
+    --secondary-foreground: #111827;
 
-    --muted: oklch(0.2 0 0);
-    --muted-foreground: oklch(0.6 0 0);
+    --muted: #F3F4F6;
+    --muted-foreground: #6B7280;
 
-    --accent: oklch(0.85 0.15 85);
-    /* Victory Gold / Yellow */
-    --accent-foreground: oklch(0.1 0 0);
+    --accent: #FFD700;
+    --accent-foreground: #000000;
 
-    --destructive: oklch(0.5 0.1 20);
-    --destructive-foreground: oklch(0.98 0 0);
+    --destructive: #EF4444;
+    --destructive-foreground: #FFFFFF;
 
-    --border: oklch(0.2 0 0);
-    --input: oklch(0.2 0 0);
-    --ring: oklch(0.98 0 0);
+    --border: #E5E7EB;
+    --input: #E5E7EB;
+    --ring: #000000;
 
-    --radius: 0.5rem;
+    --radius: 1.25rem;
 }
 
 .dark {
-    /* Ensuring dark mode is just an inverted version if properly supported, but mostly forcing light for this request */
-    --background: oklch(0.1 0 0);
-    --foreground: oklch(0.99 0 0);
+    --background: #0A0A0A;
+    --foreground: #F9FAFB;
+
+    --card: #111827;
+    --card-foreground: #F9FAFB;
+
+    --popover: #0A0A0A;
+    --popover-foreground: #F9FAFB;
+
+    --primary: #F9FAFB;
+    --primary-foreground: #0A0A0A;
+
+    --secondary: #1F2937;
+    --secondary-foreground: #F9FAFB;
+
+    --muted: #1F2937;
+    --muted-foreground: #9CA3AF;
+
+    --accent: #FFD700;
+    --accent-foreground: #000000;
+
+    --destructive: #7F1D1D;
+    --destructive-foreground: #F9FAFB;
+
+    --border: #374151;
+    --input: #374151;
+    --ring: #F9FAFB;
 }
