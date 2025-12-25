@@ -8,7 +8,7 @@ import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { usePathname } from "next/navigation"
 import { useSession, signOut } from "next-auth/react"
-import { motion, AnimatePresence } from "framer-motion"
+import { motion, AnimatePresence, Variants } from "framer-motion"
 
 export function Navigation() {
     const { data: session } = useSession()
@@ -45,12 +45,12 @@ export function Navigation() {
         { name: "Lifestyle", href: "/shop?category=lifestyle", desc: "Street Culture Essentials" },
     ]
 
-    const menuVariants = {
+    const menuVariants: Variants = {
         closed: {
             x: "100%",
             transition: {
                 duration: 0.8,
-                ease: [0.16, 1, 0.3, 1],
+                ease: [0.16, 1, 0.3, 1] as const,
                 staggerChildren: 0.05,
                 staggerDirection: -1
             }
@@ -59,7 +59,7 @@ export function Navigation() {
             x: 0,
             transition: {
                 duration: 0.8,
-                ease: [0.16, 1, 0.3, 1],
+                ease: [0.16, 1, 0.3, 1] as const,
                 staggerChildren: 0.1,
                 delayChildren: 0.2
             }
@@ -106,7 +106,7 @@ export function Navigation() {
                 <div className="container mx-auto px-6 lg:px-12 flex items-center justify-between">
 
                     {/* LOGO */}
-                    <Link href="/" className="flex items-center gap-3 group relative z-[70]">
+                    <Link href="/" className="flex items-center gap-3 group relative z-[110]">
                         <motion.div
                             whileHover={{ rotate: 12, scale: 1.1 }}
                             className="relative h-10 w-10 md:h-12 md:w-12 bg-[#FFD700] flex items-center justify-center shadow-xl shadow-[#FFD700]/10"
@@ -137,7 +137,7 @@ export function Navigation() {
                         ))}
                     </div>
 
-                    <div className="flex items-center gap-1 sm:gap-3 relative z-[70]">
+                    <div className="flex items-center gap-1 sm:gap-3 relative z-[110]">
                         <Button variant="ghost" size="icon" className="hover:bg-white/10 text-white hidden sm:flex">
                             <Search className="h-5 w-5" />
                         </Button>
@@ -215,12 +215,12 @@ export function Navigation() {
                             animate="open"
                             exit="closed"
                             variants={menuVariants}
-                            className="fixed inset-y-0 right-0 w-full sm:w-[450px] bg-[#0a0a0a] z-[65] lg:hidden shadow-[-20px_0_60px_rgba(0,0,0,0.5)] border-l border-white/5 flex flex-col"
+                            className="fixed inset-0 w-full sm:w-[450px] sm:left-auto sm:right-0 bg-black z-[100] lg:hidden shadow-[-20px_0_60px_rgba(0,0,0,0.8)] border-l border-white/5 flex flex-col"
                         >
                             {/* Menu Header (Logo Repeat or Info) */}
-                            <div className="p-10 pt-24 space-y-2 border-b border-white/5 bg-gradient-to-br from-zinc-900 to-transparent">
+                            <div className="p-10 pt-32 pb-8 space-y-2 border-b border-white/5 bg-zinc-950">
                                 <p className="text-[#FFD700] text-[10px] font-black uppercase tracking-[0.5em]">Exclusive Registry</p>
-                                <h2 className="text-3xl font-black italic uppercase text-white tracking-tighter">Menu <span className="text-zinc-500">Principal</span></h2>
+                                <h2 className="text-4xl font-black italic uppercase text-white tracking-tighter leading-none">Menu <span className="text-zinc-600">Principal</span></h2>
                             </div>
 
                             {/* Main Links */}
@@ -314,7 +314,7 @@ export function Navigation() {
                             animate={{ opacity: 1 }}
                             exit={{ opacity: 0 }}
                             onClick={() => setMobileMenuOpen(false)}
-                            className="fixed inset-0 bg-black/80 backdrop-blur-md z-[60] lg:hidden"
+                            className="fixed inset-0 bg-black/95 backdrop-blur-xl z-[90] lg:hidden"
                         />
                     )}
                 </AnimatePresence>
