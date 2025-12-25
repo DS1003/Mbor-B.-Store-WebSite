@@ -95,12 +95,12 @@ export function Navigation() {
 
             <nav
                 className={cn(
-                    "fixed z-50 w-full transition-all duration-700",
+                    "fixed z-[100] w-full left-0 right-0 transition-all duration-700",
                     !isHomePage
-                        ? "bg-black/90 backdrop-blur-xl border-b border-white/10 py-2 top-0"
+                        ? "bg-black/95 backdrop-blur-2xl border-b border-white/10 py-3 shadow-2xl shadow-black/50 top-0"
                         : scrolled || !promoBarVisible
-                            ? "bg-black/90 backdrop-blur-xl border-b border-white/10 py-2 top-0"
-                            : "bg-transparent py-4 top-8 sm:top-10"
+                            ? "bg-black/95 backdrop-blur-2xl border-b border-white/10 py-3 shadow-2xl shadow-black/50 top-0"
+                            : "bg-transparent py-5 top-8 sm:top-10"
                 )}
             >
                 <div className="container mx-auto px-6 lg:px-12 flex items-center justify-between">
@@ -233,12 +233,12 @@ export function Navigation() {
                                             onClick={() => setMobileMenuOpen(false)}
                                         >
                                             <div className="flex items-center gap-4">
-                                                <span className="text-zinc-800 font-black italic text-2xl group-hover:text-[#FFD700] transition-colors">0{i + 1}</span>
-                                                <span className="text-4xl sm:text-5xl font-black uppercase italic text-white group-hover:translate-x-3 transition-transform duration-500 tracking-tighter">
+                                                <span className="text-zinc-800 font-black italic text-xl group-hover:text-[#FFD700] transition-colors">0{i + 1}</span>
+                                                <span className="text-3xl sm:text-4xl font-black uppercase italic text-white group-hover:translate-x-3 transition-transform duration-500 tracking-tighter">
                                                     {link.name}
                                                 </span>
                                             </div>
-                                            <p className="ml-14 text-[9px] font-black uppercase tracking-[0.2em] text-zinc-500 group-hover:text-zinc-300 transition-colors">
+                                            <p className="ml-10 text-[9px] font-black uppercase tracking-[0.2em] text-zinc-500 group-hover:text-zinc-300 transition-colors">
                                                 {link.desc}
                                             </p>
                                         </Link>
