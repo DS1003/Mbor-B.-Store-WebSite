@@ -100,13 +100,14 @@ export function Navigation() {
                         ? "bg-black/95 backdrop-blur-2xl border-b border-white/10 py-3 shadow-2xl shadow-black/50 top-0"
                         : scrolled || !promoBarVisible
                             ? "bg-black/95 backdrop-blur-2xl border-b border-white/10 py-3 shadow-2xl shadow-black/50 top-0"
-                            : "bg-transparent py-5 top-8 sm:top-10"
+                            : "bg-transparent py-5 top-8 sm:top-10",
+                    mobileMenuOpen && "bg-transparent backdrop-blur-0 border-b-transparent shadow-none"
                 )}
             >
                 <div className="container mx-auto px-6 lg:px-12 flex items-center justify-between">
 
                     {/* LOGO */}
-                    <Link href="/" className="flex items-center gap-3 group relative z-[110]">
+                    <Link href="/" className="flex items-center gap-3 group relative z-[170]">
                         <motion.div
                             whileHover={{ rotate: 12, scale: 1.1 }}
                             className="relative h-10 w-10 md:h-12 md:w-12 bg-[#FFD700] flex items-center justify-center shadow-xl shadow-[#FFD700]/10"
@@ -114,10 +115,10 @@ export function Navigation() {
                             <span className="font-serif font-black text-2xl italic text-black">M</span>
                         </motion.div>
                         <div className="flex flex-col">
-                            <span className="font-black text-xl italic leading-none tracking-tighter uppercase text-white">
+                            <span className="font-black text-sm sm:text-lg italic leading-none tracking-tighter uppercase text-white">
                                 MBOR
                             </span>
-                            <span className="text-[8px] font-bold tracking-[0.4em] uppercase opacity-40 text-white">
+                            <span className="text-[7px] sm:text-[8px] font-bold tracking-[0.4em] uppercase opacity-40 text-white">
                                 Business Store
                             </span>
                         </div>
@@ -137,7 +138,7 @@ export function Navigation() {
                         ))}
                     </div>
 
-                    <div className="flex items-center gap-1 sm:gap-3 relative z-[110]">
+                    <div className="flex items-center gap-1 sm:gap-3 relative z-[170]">
                         <Button variant="ghost" size="icon" className="hover:bg-white/10 text-white hidden sm:flex">
                             <Search className="h-5 w-5" />
                         </Button>
@@ -206,25 +207,37 @@ export function Navigation() {
                         </button>
                     </div>
                 </div>
+            </nav>
 
-                {/* MODERN MOBILE MENU */}
-                <AnimatePresence>
-                    {mobileMenuOpen && (
+            {/* MODERN MOBILE MENU SYSTEM */}
+            <AnimatePresence>
+                {mobileMenuOpen && (
+                    <>
+                        {/* Dim Overlay */}
+                        <motion.div
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                            onClick={() => setMobileMenuOpen(false)}
+                            className="fixed inset-0 bg-black/95 backdrop-blur-xl z-[150] lg:hidden"
+                        />
+
+                        {/* Actual Drawer */}
                         <motion.div
                             initial="closed"
                             animate="open"
                             exit="closed"
                             variants={menuVariants}
-                            className="fixed inset-0 w-full sm:w-[450px] sm:left-auto sm:right-0 bg-black z-[100] lg:hidden shadow-[-20px_0_60px_rgba(0,0,0,0.8)] border-l border-white/5 flex flex-col"
+                            className="fixed inset-y-0 right-0 w-full sm:w-[450px] bg-zinc-950 z-[160] lg:hidden shadow-[-20px_0_60px_rgba(0,0,0,0.8)] border-l border-white/5 flex flex-col"
                         >
-                            {/* Menu Header (Logo Repeat or Info) */}
-                            <div className="p-10 pt-32 pb-8 space-y-2 border-b border-white/5 bg-zinc-950">
+                            {/* Menu Header */}
+                            <div className="p-10 pt-32 pb-8 space-y-2 border-b border-white/5 bg-zinc-950 shrink-0">
                                 <p className="text-[#FFD700] text-[10px] font-black uppercase tracking-[0.5em]">Exclusive Registry</p>
                                 <h2 className="text-4xl font-black italic uppercase text-white tracking-tighter leading-none">Menu <span className="text-zinc-600">Principal</span></h2>
                             </div>
 
-                            {/* Main Links */}
-                            <div className="flex-1 overflow-y-auto custom-scrollbar px-10 py-12 flex flex-col gap-6">
+                            {/* Main Links Container */}
+                            <div className="flex-1 overflow-y-auto custom-scrollbar px-10 py-12 flex flex-col gap-6 bg-zinc-950">
                                 {navLinks.map((link, i) => (
                                     <motion.div key={link.name} variants={itemVariants} className="group">
                                         <Link
@@ -249,7 +262,7 @@ export function Navigation() {
                                 <motion.div variants={itemVariants} className="pt-12 mt-4 border-t border-white/5 space-y-6">
                                     {session ? (
                                         <div className="space-y-4">
-                                            <div className="flex items-center gap-4 p-4 bg-zinc-900/50 rounded-2xl border border-white/5">
+                                            <div className="flex items-center gap-4 p-4 bg-zinc-900 border border-white/5 rounded-2xl">
                                                 <div className="h-12 w-12 rounded-xl bg-zinc-800 flex items-center justify-center overflow-hidden border border-white/10 italic font-black text-[#FFD700]">
                                                     {session.user?.name?.charAt(0) || "C"}
                                                 </div>
@@ -288,7 +301,7 @@ export function Navigation() {
                             </div>
 
                             {/* Menu Footer */}
-                            <motion.div variants={itemVariants} className="p-10 bg-black/50 border-t border-white/5 space-y-8">
+                            <motion.div variants={itemVariants} className="p-10 pb-12 bg-black border-t border-white/5 space-y-8 shrink-0">
                                 <div className="flex justify-between items-center text-zinc-500">
                                     <div className="flex gap-6">
                                         <Instagram className="h-5 w-5 hover:text-[#FFD700] cursor-pointer transition-colors" />
@@ -303,22 +316,9 @@ export function Navigation() {
                                 </div>
                             </motion.div>
                         </motion.div>
-                    )}
-                </AnimatePresence>
-
-                {/* Overlay Background */}
-                <AnimatePresence>
-                    {mobileMenuOpen && (
-                        <motion.div
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: 1 }}
-                            exit={{ opacity: 0 }}
-                            onClick={() => setMobileMenuOpen(false)}
-                            className="fixed inset-0 bg-black/95 backdrop-blur-xl z-[90] lg:hidden"
-                        />
-                    )}
-                </AnimatePresence>
-            </nav>
+                    </>
+                )}
+            </AnimatePresence>
         </>
     )
 }

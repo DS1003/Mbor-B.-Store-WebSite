@@ -9,12 +9,12 @@ import { Footer } from "@/components/footer"
 
 export default function TermsPage() {
     return (
-        <div className="min-h-screen bg-black text-white selection:bg-primary selection:text-black">
+        <div className="min-h-screen bg-black text-white selection:bg-primary selection:text-black overflow-x-hidden w-full">
             {/* Noise Overlay Global */}
             <div className="bg-noise absolute inset-0 z-0 pointer-events-none" />
             <Navigation />
 
-            <main className="container py-24 px-4 md:px-6 max-w-4xl mx-auto relative z-10">
+            <main className="container py-24 px-4 md:px-6 max-w-4xl mx-auto relative z-10 pt-32">
                 <Link href="/signup">
                     <Button variant="ghost" className="mb-8 pl-0 hover:pl-2 transition-all text-white hover:text-primary hover:bg-transparent">
                         <ArrowLeft className="mr-2 h-4 w-4" />
@@ -23,8 +23,10 @@ export default function TermsPage() {
                 </Link>
 
                 <div className="space-y-12">
-                    <div className="text-center md:text-left">
-                        <h1 className="text-5xl font-black tracking-tight mb-4 text-white">Conditions d'Utilisation</h1>
+                    <div className="text-center md:text-left border-b border-white/10 pb-10">
+                        <h1 className="text-[10vw] sm:text-5xl font-black tracking-tight mb-4 text-white leading-tight uppercase italic">
+                            Conditions d'<span className="text-transparent text-stroke-white">Utilisation</span>
+                        </h1>
                         <p className="text-xl text-white/60">
                             Dernière mise à jour : 20 Décembre 2025
                         </p>

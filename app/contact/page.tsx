@@ -25,7 +25,7 @@ export default function ContactPage() {
                     <div className="max-w-4xl mb-24 space-y-8">
                         <div className="space-y-4">
                             <p className="text-primary font-black uppercase tracking-[0.6em] text-[10px]">Communication</p>
-                            <h1 className="text-6xl md:text-9xl font-black tracking-tighter uppercase leading-[0.8] italic">
+                            <h1 className="text-[12vw] sm:text-6xl md:text-9xl font-black tracking-tighter uppercase leading-[0.8] italic">
                                 CONTACTEZ <br />
                                 <span className="text-muted-foreground/30 not-italic">NOUS_</span>
                             </h1>

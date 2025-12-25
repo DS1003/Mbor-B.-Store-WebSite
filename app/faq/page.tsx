@@ -10,7 +10,7 @@ import { Footer } from "@/components/footer"
 
 export default function FAQPage() {
     return (
-        <div className="min-h-screen bg-background text-foreground selection:bg-primary selection:text-primary-foreground">
+        <div className="min-h-screen bg-background text-foreground selection:bg-primary selection:text-primary-foreground overflow-x-hidden w-full">
             <Navigation />
 
             <main className="relative pt-32 pb-40 overflow-hidden">
@@ -19,11 +19,11 @@ export default function FAQPage() {
                     <h2 className="text-[25vw] font-black leading-none tracking-tighter uppercase italic">HANDBOOK_</h2>
                 </div>
 
-                <div className="container px-6 relative z-10">
+                <div className="container px-6 relative z-10 w-full overflow-hidden">
                     {/* Header Section */}
                     <div className="max-w-4xl mb-24 space-y-4">
                         <p className="text-primary font-black uppercase tracking-[0.6em] text-[10px]">Renseignements</p>
-                        <h1 className="text-6xl md:text-9xl font-black tracking-tighter uppercase leading-[0.8] italic">
+                        <h1 className="text-[12vw] sm:text-6xl md:text-9xl font-black tracking-tighter uppercase leading-[0.8] italic">
                             QUESTIONS <br />
                             <span className="text-muted-foreground/30 not-italic uppercase">FREQUENTES_</span>
                         </h1>

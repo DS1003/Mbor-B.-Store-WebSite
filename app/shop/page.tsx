@@ -14,7 +14,7 @@ export default function ShopPage() {
     const [filtersOpen, setFiltersOpen] = useState(false)
 
     return (
-        <div className="min-h-screen bg-white text-black font-sans selection:bg-[#FFD700] selection:text-black">
+        <div className="min-h-screen bg-white text-black font-sans selection:bg-[#FFD700] selection:text-black overflow-x-hidden">
             <Navigation />
 
             <main className="pt-32 pb-20">
@@ -27,7 +27,7 @@ export default function ShopPage() {
                                 <ChevronRight className="h-3 w-3" />
                                 <span className="text-black">Boutique</span>
                             </div>
-                            <h1 className="text-4xl md:text-6xl font-black uppercase italic tracking-tighter text-black">
+                            <h1 className="text-[10vw] sm:text-4xl md:text-6xl font-black uppercase italic tracking-tighter text-black">
                                 L'<span className="text-transparent text-stroke hover:text-[#FFD700] transition-colors">Inventaire</span>
                             </h1>
                             <p className="text-zinc-500 text-sm md:text-base max-w-md font-medium">

@@ -9,12 +9,12 @@ import { Footer } from "@/components/footer"
 
 export default function ShippingPage() {
     return (
-        <div className="min-h-screen bg-black text-white selection:bg-primary selection:text-black">
+        <div className="min-h-screen bg-black text-white selection:bg-primary selection:text-black overflow-x-hidden w-full">
             {/* Noise Overlay Global */}
             <div className="bg-noise absolute inset-0 z-0 pointer-events-none" />
             <Navigation />
 
-            <main className="container py-24 px-4 md:px-6 max-w-4xl mx-auto relative z-10">
+            <main className="container py-24 px-4 md:px-6 max-w-4xl mx-auto relative z-10 pt-32">
                 <Link href="/">
                     <Button variant="ghost" className="mb-8 pl-0 hover:pl-2 transition-all text-white hover:text-primary hover:bg-transparent">
                         <ArrowLeft className="mr-2 h-4 w-4" />
@@ -25,7 +25,9 @@ export default function ShippingPage() {
                 <div className="space-y-12">
                     <div className="space-y-16">
                         <div className="text-center">
-                            <h1 className="text-5xl font-black tracking-tight mb-6 text-white">Informations de Livraison</h1>
+                            <h1 className="text-[10vw] sm:text-5xl font-black tracking-tight mb-6 text-white uppercase italic">
+                                Informations de <span className="text-transparent text-stroke-white text-stroke-[1px]">Livraison</span>
+                            </h1>
                             <p className="text-xl text-white/60 max-w-2xl mx-auto leading-relaxed">
                                 Tout ce que vous devez savoir sur la livraison de votre équipement premium.
                             </p>

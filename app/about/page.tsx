@@ -8,7 +8,7 @@ import { ShieldCheck, Users, Trophy, Flag, MapPin } from "lucide-react"
 
 export default function AboutPage() {
     return (
-        <div className="min-h-screen bg-white text-black font-sans selection:bg-[#FFD700] selection:text-black">
+        <div className="min-h-screen bg-white text-black font-sans selection:bg-[#FFD700] selection:text-black overflow-x-hidden">
             <Navigation />
 
             <main className="pt-24 pb-20">
@@ -30,7 +30,7 @@ export default function AboutPage() {
                         <div className="inline-flex items-center gap-2 border border-black/10 bg-white/80 px-4 py-1 rounded-full text-black text-xs font-bold uppercase tracking-widest backdrop-blur-md shadow-sm">
                             <Flag className="h-3 w-3" /> Le Meilleur de Dakar
                         </div>
-                        <h1 className="text-5xl md:text-8xl font-black uppercase italic tracking-tighter text-black drop-shadow-sm">
+                        <h1 className="text-[10vw] sm:text-5xl md:text-8xl font-black uppercase italic tracking-tighter text-black drop-shadow-sm">
                             L'<span className="text-transparent text-stroke-black">HISTOIRE.</span>
                         </h1>
                         <p className="text-lg md:text-xl text-black/70 max-w-2xl mx-auto leading-relaxed font-medium bg-white/60 p-4 rounded-xl backdrop-blur-sm">
@@ -44,7 +44,7 @@ export default function AboutPage() {
                     {/* MISSION STATEMENT */}
                     <div className="grid md:grid-cols-2 gap-12 lg:gap-24 items-center mb-32">
                         <div className="space-y-8">
-                            <h2 className="text-4xl md:text-6xl font-black uppercase italic tracking-tighter text-black">
+                            <h2 className="text-3xl sm:text-4xl md:text-6xl font-black uppercase italic tracking-tighter text-black">
                                 Plus Que <br /> <span className="text-[#FFD700]">Du Merch.</span>
                             </h2>
                             <div className="space-y-6 text-zinc-600 font-medium leading-relaxed">

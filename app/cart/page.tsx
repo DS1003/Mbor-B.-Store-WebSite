@@ -10,7 +10,7 @@ import Link from "next/link"
 export default function CartPage() {
   return (
     <div
-      className="min-h-screen bg-[#FDFDFD] text-black font-sans selection:bg-[#FFD700] selection:text-black"
+      className="min-h-screen bg-[#FDFDFD] text-black font-sans selection:bg-[#FFD700] selection:text-black overflow-x-hidden"
       style={{
         "--background": "0 0% 100%",
         "--foreground": "240 10% 3.9%",
@@ -47,7 +47,7 @@ export default function CartPage() {
                 <ArrowLeft className="h-3 w-3 transition-transform group-hover:-translate-x-2" />
                 RETOUR À LA BOUTIQUE
               </Link>
-              <h1 className="text-5xl md:text-7xl font-black uppercase italic tracking-tighter text-black leading-none">
+              <h1 className="text-[8vw] sm:text-5xl md:text-7xl font-black uppercase italic tracking-tighter text-black leading-none">
                 VOTRE <span className="text-transparent text-stroke-black opacity-30">PANIER_</span>
               </h1>
             </div>
