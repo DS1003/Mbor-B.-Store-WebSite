@@ -34,18 +34,19 @@ export function SiteFooter() {
                                 Mbor<span className="text-primary">.Store</span>
                             </span>
                         </Link>
-                        <p className="text-lg text-white/50 max-w-sm leading-relaxed font-medium tracking-tight">
-                            La référence du sport et de la mode urbaine au Sénégal. Authenticité, Excellence et Passion.
+                        <p className="text-sm text-white/50 max-w-sm leading-relaxed font-medium tracking-tight">
+                            Mborbusiness’Store est une boutique spécialisée dans les équipements de sport, maillots, crampons, sneakers et streetwear.
+                            Livraison rapide à Dakar et à l’international. Paiement sécurisé via Wave et Orange Money.
                         </p>
                         <div className="flex space-x-4">
                             {[
-                                { icon: Instagram, label: "Instagram" },
-                                { icon: Facebook, label: "Facebook" },
-                                { icon: Twitter, label: "Twitter" },
+                                { icon: Instagram, label: "Instagram", href: "https://instagram.com/MborbusinessstoreSN" },
+                                { icon: Facebook, label: "Facebook", href: "https://facebook.com/MborBusinessCenter" },
                             ].map((social, i) => (
                                 <Link
                                     key={i}
-                                    href="#"
+                                    href={social.href}
+                                    target="_blank"
                                     className="h-12 w-12 rounded-xl bg-white/5 flex items-center justify-center text-white/40 hover:bg-primary hover:text-black transition-all duration-300 border border-white/10"
                                 >
                                     <social.icon className="h-5 w-5" />
@@ -78,9 +79,9 @@ export function SiteFooter() {
                 {/* Middle Section: Trust Badges */}
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-10 py-20 border-b border-white/10">
                     {[
-                        { icon: Truck, title: "Livraison Express", desc: "Dakar en 24h & Régions en 48h" },
+                        { icon: Truck, title: "Livraison Express", desc: "Dakar & Monde" },
                         { icon: ShieldCheck, title: "100% Authentique", desc: "Produits certifiés officiels" },
-                        { icon: CreditCard, title: "Paiement Sécurisé", desc: "Wave, OM & Espèces à livraison" },
+                        { icon: CreditCard, title: "Paiement Sécurisé", desc: "Wave, OM" },
                     ].map((badge, i) => (
                         <div key={i} className="flex items-center space-x-5 group">
                             <div className="h-14 w-14 rounded-2xl bg-white/5 flex items-center justify-center text-primary group-hover:scale-110 transition-transform border border-white/5">
@@ -144,15 +145,16 @@ export function SiteFooter() {
                     <div className="space-y-6">
                         <h4 className="text-[12px] font-bold uppercase tracking-widest text-primary">Contact Direct</h4>
                         <div className="space-y-3">
-                            <Link href="/contact" className="flex items-center text-sm font-medium text-white/80 hover:text-primary transition-colors cursor-pointer tracking-tight">
-                                <Phone className="h-4 w-4 mr-3 text-primary/60" /> +221 33 800 00 00
+                            <Link href="https://wa.me/221774272354" target="_blank" className="flex items-center text-sm font-medium text-white/80 hover:text-primary transition-colors cursor-pointer tracking-tight">
+                                <Phone className="h-4 w-4 mr-3 text-primary/60" /> +221 77 427 23 54
                             </Link>
-                            <Link href="/contact" className="flex items-center text-sm font-medium text-white/80 hover:text-primary transition-colors cursor-pointer tracking-tight">
-                                <Mail className="h-4 w-4 mr-3 text-primary/60" /> contact@mborstore.com
+                            <Link href="https://wa.me/221785934886" target="_blank" className="flex items-center text-sm font-medium text-white/80 hover:text-primary transition-colors cursor-pointer tracking-tight">
+                                <Phone className="h-4 w-4 mr-3 text-primary/60" /> +221 78 593 48 86
                             </Link>
-                            <Link href="/stores" className="flex items-center text-sm font-medium text-white/80 hover:text-primary transition-colors cursor-pointer tracking-tight">
-                                <MapPin className="h-4 w-4 mr-3 text-primary/60" /> Nos Adresses
-                            </Link>
+                            <div className="flex flex-col gap-1 pt-2">
+                                <p className="text-xs text-white/40 flex items-center"><MapPin className="h-3 w-3 mr-2" /> Boutique 1 : Pikine</p>
+                                <p className="text-xs text-white/40 flex items-center"><MapPin className="h-3 w-3 mr-2" /> Boutique 2 : Sacré-Cœur</p>
+                            </div>
                         </div>
                     </div>
                 </div>

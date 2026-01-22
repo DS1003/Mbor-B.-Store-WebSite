@@ -305,7 +305,19 @@ export async function getStoreConfig() {
 
     if (!config) {
         config = await prisma.storeConfig.create({
-            data: { id: 'singleton' }
+            data: {
+                id: 'singleton',
+                name: "Mborbusiness’Store",
+                slogan: "L'excellence du sport et de la mode urbaine au Sénégal.",
+                description: "Mborbusiness’Store est une boutique spécialisée dans les équipements de sport, maillots, crampons, sneakers et streetwear. Livraison rapide à Dakar et à l’international. Paiement sécurisé via Wave et Orange Money.",
+                contactPhone: "+221 77 427 23 54",
+                whatsappNumber: "+221 78 593 48 86",
+                instagramUrl: "@MborbusinessstoreSN",
+                facebookUrl: "Mbor Business Center",
+                address: "Boutique 1 : Pikine, Boutique 2 : Sacré-Cœur",
+                deliveryFee: 2000,
+                freeDeliveryOver: 50000
+            }
         })
     }
 

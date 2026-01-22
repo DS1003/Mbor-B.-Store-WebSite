@@ -9,20 +9,20 @@ import { Magnetic, DecryptText } from "@/components/interactions"
 export default function StoresPage() {
     const stores = [
         {
-            name: "Boutique Sacré-Cœur",
-            address: "Sacré-Cœur 3, Villa 900, Dakar, Sénégal",
-            phone: "+221 33 000 00 00",
-            whatsapp: "+221 77 000 00 00",
-            hours: "Lun - Sam: 10h - 21h",
+            name: "Boutique Pikine",
+            address: "Pikine, Dakar, Sénégal",
+            phone: "+221 77 427 23 54",
+            whatsapp: "+221774272354",
+            hours: "Lun - Sam: 09h - 21h",
             mapUrl: "#",
             image: "https://www.foot.fr/img/cms/mural-chaussures-foot-fr.jpg"
         },
         {
-            name: "Boutique Pikine",
-            address: "Tally Boubess, En face du Marché, Pikine, Dakar",
-            phone: "+221 33 111 11 11",
-            whatsapp: "+221 78 111 11 11",
-            hours: "Lun - Dim: 09h - 22h",
+            name: "Boutique Sacré-Cœur",
+            address: "Sacré-Cœur, Dakar, Sénégal",
+            phone: "+221 78 593 48 86",
+            whatsapp: "+221785934886",
+            hours: "Lun - Sam: 09h - 21h",
             mapUrl: "#",
             image: "https://www.foot.fr/img/cms/piscine-footfr.jpg"
         }

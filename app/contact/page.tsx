@@ -53,7 +53,7 @@ export default function ContactPage() {
                                         </div>
                                         <div className="space-y-2 pt-2">
                                             <h3 className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Appelez-nous</h3>
-                                            <p className="text-2xl font-black italic tracking-tighter hover:text-primary transition-colors cursor-pointer">+221 33 800 00 00</p>
+                                            <a href="tel:+221774272354" className="text-2xl font-black italic tracking-tighter hover:text-primary transition-colors cursor-pointer">+221 77 427 23 54</a>
                                         </div>
                                     </div>
 
@@ -63,7 +63,7 @@ export default function ContactPage() {
                                         </div>
                                         <div className="space-y-2 pt-2">
                                             <h3 className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">WhatsApp Direct</h3>
-                                            <p className="text-2xl font-black italic tracking-tighter hover:text-green-500 transition-colors cursor-pointer">+221 77 000 00 00</p>
+                                            <a href="https://wa.me/221785934886" target="_blank" className="text-2xl font-black italic tracking-tighter hover:text-green-500 transition-colors cursor-pointer">+221 78 593 48 86</a>
                                         </div>
                                     </div>
 
@@ -73,7 +73,7 @@ export default function ContactPage() {
                                         </div>
                                         <div className="space-y-2 pt-2">
                                             <h3 className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Email Support</h3>
-                                            <p className="text-2xl font-black italic tracking-tighter hover:text-primary transition-colors cursor-pointer">support@mbor.sn</p>
+                                            <a href="mailto:contact@mborbusiness.sn" className="text-2xl font-black italic tracking-tighter hover:text-primary transition-colors cursor-pointer">contact@mborbusiness.sn</a>
                                         </div>
                                     </div>
                                 </div>
@@ -91,7 +91,7 @@ export default function ContactPage() {
                                         </div>
                                         <div className="flex justify-between items-center text-xs font-bold uppercase tracking-widest text-white/60">
                                             <span>Dimanche</span>
-                                            <span className="text-primary italic">Fermé (ou Pikine 10h-18h)</span>
+                                            <span className="text-rose-400 italic">Fermé</span>
                                         </div>
                                     </div>
                                 </div>
@@ -149,7 +149,7 @@ export default function ContactPage() {
                     </ScrollReveal>
                     <div className="flex justify-center space-x-10">
                         <Magnetic>
-                            <Link href="#" className="flex flex-col items-center group">
+                            <Link href="https://instagram.com/MborbusinessstoreSN" target="_blank" className="flex flex-col items-center group">
                                 <div className="h-20 w-20 rounded-[2rem] bg-white/5 flex items-center justify-center group-hover:bg-primary transition-all duration-500 group-hover:rotate-12">
                                     <Instagram className="h-8 w-8" />
                                 </div>
@@ -157,7 +157,7 @@ export default function ContactPage() {
                             </Link>
                         </Magnetic>
                         <Magnetic>
-                            <Link href="#" className="flex flex-col items-center group">
+                            <Link href="https://facebook.com/MborBusinessCenter" target="_blank" className="flex flex-col items-center group">
                                 <div className="h-20 w-20 rounded-[2rem] bg-white/5 flex items-center justify-center group-hover:bg-primary transition-all duration-500 group-hover:-rotate-12">
                                     <Facebook className="h-8 w-8" />
                                 </div>

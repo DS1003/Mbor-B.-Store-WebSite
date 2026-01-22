@@ -22,11 +22,10 @@ async function main() {
             contactPhone: "+221 77 427 23 54",
             whatsappNumber: "+221 78 593 48 86",
             address: "Boutique 1 : Pikine, Boutique 2 : Sacré-Cœur",
-            workingHours: "Lun - Sam : 09h00 - 21h00", // Need to add this field to schema if not exists or put in description? Schema doesn't have workingHours. I will check schema.
-            // Schema has: name, slogan, description, logoUrl, contactEmail, contactPhone, address, facebookUrl, instagramUrl, whatsappNumber, ...
+            workingHours: "Lun - Sam : 09h00 - 21h00",
             instagramUrl: "@MborbusinessstoreSN",
             facebookUrl: "Mbor Business Center",
-            // tiktokUrl? Schema doesn't have it. I'll check schema again.
+            tiktokUrl: "@Mborbusiness_store"
         },
         create: {
             id: 'singleton',
@@ -38,6 +37,8 @@ async function main() {
             address: "Boutique 1 : Pikine, Boutique 2 : Sacré-Cœur",
             instagramUrl: "@MborbusinessstoreSN",
             facebookUrl: "Mbor Business Center",
+            tiktokUrl: "@Mborbusiness_store",
+            workingHours: "Lun - Sam : 09h00 - 21h00"
         }
     })
     console.log("Store Config updated.")

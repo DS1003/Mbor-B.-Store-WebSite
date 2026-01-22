@@ -181,8 +181,10 @@ export function SiteHeader() {
                                         </div>
                                     </div>
                                     <div className="p-8 border-t space-y-4">
-                                        <Button className="w-full h-14 bg-primary text-primary-foreground rounded-2xl font-bold tracking-tight text-sm shadow-lg shadow-primary/20">
-                                            Besoin d'aide ? WhatsApp
+                                        <Button asChild className="w-full h-14 bg-primary text-primary-foreground rounded-2xl font-bold tracking-tight text-sm shadow-lg shadow-primary/20">
+                                            <Link href="https://wa.me/221774272354" target="_blank">
+                                                Besoin d'aide ? WhatsApp
+                                            </Link>
                                         </Button>
                                     </div>
                                 </div>

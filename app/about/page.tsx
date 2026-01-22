@@ -58,7 +58,7 @@ export default function AboutPage() {
 
                         <ScrollReveal direction="left" className="space-y-12">
                             <h2 className="text-4xl md:text-5xl font-black uppercase italic tracking-tighter leading-tight">
-                                Notre Mission : <br /><span className="text-primary">Élever vore style</span>
+                                Notre Mission : <br /><span className="text-primary">Élever votre style</span>
                             </h2>
                             <div className="space-y-8">
                                 <p className="text-lg text-muted-foreground font-medium leading-relaxed">
