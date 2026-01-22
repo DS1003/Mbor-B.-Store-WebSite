@@ -7432,7 +7432,9 @@ export namespace Prisma {
     address: string | null
     facebookUrl: string | null
     instagramUrl: string | null
+    tiktokUrl: string | null
     whatsappNumber: string | null
+    workingHours: string | null
     deliveryFee: Decimal | null
     freeDeliveryOver: Decimal | null
     shippingPolicy: string | null
@@ -7455,7 +7457,9 @@ export namespace Prisma {
     address: string | null
     facebookUrl: string | null
     instagramUrl: string | null
+    tiktokUrl: string | null
     whatsappNumber: string | null
+    workingHours: string | null
     deliveryFee: Decimal | null
     freeDeliveryOver: Decimal | null
     shippingPolicy: string | null
@@ -7478,7 +7482,9 @@ export namespace Prisma {
     address: number
     facebookUrl: number
     instagramUrl: number
+    tiktokUrl: number
     whatsappNumber: number
+    workingHours: number
     deliveryFee: number
     freeDeliveryOver: number
     shippingPolicy: number
@@ -7513,7 +7519,9 @@ export namespace Prisma {
     address?: true
     facebookUrl?: true
     instagramUrl?: true
+    tiktokUrl?: true
     whatsappNumber?: true
+    workingHours?: true
     deliveryFee?: true
     freeDeliveryOver?: true
     shippingPolicy?: true
@@ -7536,7 +7544,9 @@ export namespace Prisma {
     address?: true
     facebookUrl?: true
     instagramUrl?: true
+    tiktokUrl?: true
     whatsappNumber?: true
+    workingHours?: true
     deliveryFee?: true
     freeDeliveryOver?: true
     shippingPolicy?: true
@@ -7559,7 +7569,9 @@ export namespace Prisma {
     address?: true
     facebookUrl?: true
     instagramUrl?: true
+    tiktokUrl?: true
     whatsappNumber?: true
+    workingHours?: true
     deliveryFee?: true
     freeDeliveryOver?: true
     shippingPolicy?: true
@@ -7669,7 +7681,9 @@ export namespace Prisma {
     address: string | null
     facebookUrl: string | null
     instagramUrl: string | null
+    tiktokUrl: string | null
     whatsappNumber: string | null
+    workingHours: string | null
     deliveryFee: Decimal
     freeDeliveryOver: Decimal
     shippingPolicy: string | null
@@ -7711,7 +7725,9 @@ export namespace Prisma {
     address?: boolean
     facebookUrl?: boolean
     instagramUrl?: boolean
+    tiktokUrl?: boolean
     whatsappNumber?: boolean
+    workingHours?: boolean
     deliveryFee?: boolean
     freeDeliveryOver?: boolean
     shippingPolicy?: boolean
@@ -7734,7 +7750,9 @@ export namespace Prisma {
     address?: boolean
     facebookUrl?: boolean
     instagramUrl?: boolean
+    tiktokUrl?: boolean
     whatsappNumber?: boolean
+    workingHours?: boolean
     deliveryFee?: boolean
     freeDeliveryOver?: boolean
     shippingPolicy?: boolean
@@ -7757,7 +7775,9 @@ export namespace Prisma {
     address?: boolean
     facebookUrl?: boolean
     instagramUrl?: boolean
+    tiktokUrl?: boolean
     whatsappNumber?: boolean
+    workingHours?: boolean
     deliveryFee?: boolean
     freeDeliveryOver?: boolean
     shippingPolicy?: boolean
@@ -7780,7 +7800,9 @@ export namespace Prisma {
     address?: boolean
     facebookUrl?: boolean
     instagramUrl?: boolean
+    tiktokUrl?: boolean
     whatsappNumber?: boolean
+    workingHours?: boolean
     deliveryFee?: boolean
     freeDeliveryOver?: boolean
     shippingPolicy?: boolean
@@ -7792,7 +7814,7 @@ export namespace Prisma {
     aboutUs?: boolean
   }
 
-  export type StoreConfigOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "slogan" | "description" | "logoUrl" | "contactEmail" | "contactPhone" | "address" | "facebookUrl" | "instagramUrl" | "whatsappNumber" | "deliveryFee" | "freeDeliveryOver" | "shippingPolicy" | "waveNumber" | "omNumber" | "bankAccount" | "paymentPolicy" | "returnPolicy" | "aboutUs", ExtArgs["result"]["storeConfig"]>
+  export type StoreConfigOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "slogan" | "description" | "logoUrl" | "contactEmail" | "contactPhone" | "address" | "facebookUrl" | "instagramUrl" | "tiktokUrl" | "whatsappNumber" | "workingHours" | "deliveryFee" | "freeDeliveryOver" | "shippingPolicy" | "waveNumber" | "omNumber" | "bankAccount" | "paymentPolicy" | "returnPolicy" | "aboutUs", ExtArgs["result"]["storeConfig"]>
 
   export type $StoreConfigPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "StoreConfig"
@@ -7808,7 +7830,9 @@ export namespace Prisma {
       address: string | null
       facebookUrl: string | null
       instagramUrl: string | null
+      tiktokUrl: string | null
       whatsappNumber: string | null
+      workingHours: string | null
       deliveryFee: Prisma.Decimal
       freeDeliveryOver: Prisma.Decimal
       shippingPolicy: string | null
@@ -8251,7 +8275,9 @@ export namespace Prisma {
     readonly address: FieldRef<"StoreConfig", 'String'>
     readonly facebookUrl: FieldRef<"StoreConfig", 'String'>
     readonly instagramUrl: FieldRef<"StoreConfig", 'String'>
+    readonly tiktokUrl: FieldRef<"StoreConfig", 'String'>
     readonly whatsappNumber: FieldRef<"StoreConfig", 'String'>
+    readonly workingHours: FieldRef<"StoreConfig", 'String'>
     readonly deliveryFee: FieldRef<"StoreConfig", 'Decimal'>
     readonly freeDeliveryOver: FieldRef<"StoreConfig", 'Decimal'>
     readonly shippingPolicy: FieldRef<"StoreConfig", 'String'>
@@ -9809,7 +9835,9 @@ export namespace Prisma {
     address: 'address',
     facebookUrl: 'facebookUrl',
     instagramUrl: 'instagramUrl',
+    tiktokUrl: 'tiktokUrl',
     whatsappNumber: 'whatsappNumber',
+    workingHours: 'workingHours',
     deliveryFee: 'deliveryFee',
     freeDeliveryOver: 'freeDeliveryOver',
     shippingPolicy: 'shippingPolicy',
@@ -10378,7 +10406,9 @@ export namespace Prisma {
     address?: StringNullableFilter<"StoreConfig"> | string | null
     facebookUrl?: StringNullableFilter<"StoreConfig"> | string | null
     instagramUrl?: StringNullableFilter<"StoreConfig"> | string | null
+    tiktokUrl?: StringNullableFilter<"StoreConfig"> | string | null
     whatsappNumber?: StringNullableFilter<"StoreConfig"> | string | null
+    workingHours?: StringNullableFilter<"StoreConfig"> | string | null
     deliveryFee?: DecimalFilter<"StoreConfig"> | Decimal | DecimalJsLike | number | string
     freeDeliveryOver?: DecimalFilter<"StoreConfig"> | Decimal | DecimalJsLike | number | string
     shippingPolicy?: StringNullableFilter<"StoreConfig"> | string | null
@@ -10401,7 +10431,9 @@ export namespace Prisma {
     address?: SortOrderInput | SortOrder
     facebookUrl?: SortOrderInput | SortOrder
     instagramUrl?: SortOrderInput | SortOrder
+    tiktokUrl?: SortOrderInput | SortOrder
     whatsappNumber?: SortOrderInput | SortOrder
+    workingHours?: SortOrderInput | SortOrder
     deliveryFee?: SortOrder
     freeDeliveryOver?: SortOrder
     shippingPolicy?: SortOrderInput | SortOrder
@@ -10427,7 +10459,9 @@ export namespace Prisma {
     address?: StringNullableFilter<"StoreConfig"> | string | null
     facebookUrl?: StringNullableFilter<"StoreConfig"> | string | null
     instagramUrl?: StringNullableFilter<"StoreConfig"> | string | null
+    tiktokUrl?: StringNullableFilter<"StoreConfig"> | string | null
     whatsappNumber?: StringNullableFilter<"StoreConfig"> | string | null
+    workingHours?: StringNullableFilter<"StoreConfig"> | string | null
     deliveryFee?: DecimalFilter<"StoreConfig"> | Decimal | DecimalJsLike | number | string
     freeDeliveryOver?: DecimalFilter<"StoreConfig"> | Decimal | DecimalJsLike | number | string
     shippingPolicy?: StringNullableFilter<"StoreConfig"> | string | null
@@ -10450,7 +10484,9 @@ export namespace Prisma {
     address?: SortOrderInput | SortOrder
     facebookUrl?: SortOrderInput | SortOrder
     instagramUrl?: SortOrderInput | SortOrder
+    tiktokUrl?: SortOrderInput | SortOrder
     whatsappNumber?: SortOrderInput | SortOrder
+    workingHours?: SortOrderInput | SortOrder
     deliveryFee?: SortOrder
     freeDeliveryOver?: SortOrder
     shippingPolicy?: SortOrderInput | SortOrder
@@ -10481,7 +10517,9 @@ export namespace Prisma {
     address?: StringNullableWithAggregatesFilter<"StoreConfig"> | string | null
     facebookUrl?: StringNullableWithAggregatesFilter<"StoreConfig"> | string | null
     instagramUrl?: StringNullableWithAggregatesFilter<"StoreConfig"> | string | null
+    tiktokUrl?: StringNullableWithAggregatesFilter<"StoreConfig"> | string | null
     whatsappNumber?: StringNullableWithAggregatesFilter<"StoreConfig"> | string | null
+    workingHours?: StringNullableWithAggregatesFilter<"StoreConfig"> | string | null
     deliveryFee?: DecimalWithAggregatesFilter<"StoreConfig"> | Decimal | DecimalJsLike | number | string
     freeDeliveryOver?: DecimalWithAggregatesFilter<"StoreConfig"> | Decimal | DecimalJsLike | number | string
     shippingPolicy?: StringNullableWithAggregatesFilter<"StoreConfig"> | string | null
@@ -10988,7 +11026,9 @@ export namespace Prisma {
     address?: string | null
     facebookUrl?: string | null
     instagramUrl?: string | null
+    tiktokUrl?: string | null
     whatsappNumber?: string | null
+    workingHours?: string | null
     deliveryFee?: Decimal | DecimalJsLike | number | string
     freeDeliveryOver?: Decimal | DecimalJsLike | number | string
     shippingPolicy?: string | null
@@ -11011,7 +11051,9 @@ export namespace Prisma {
     address?: string | null
     facebookUrl?: string | null
     instagramUrl?: string | null
+    tiktokUrl?: string | null
     whatsappNumber?: string | null
+    workingHours?: string | null
     deliveryFee?: Decimal | DecimalJsLike | number | string
     freeDeliveryOver?: Decimal | DecimalJsLike | number | string
     shippingPolicy?: string | null
@@ -11034,7 +11076,9 @@ export namespace Prisma {
     address?: NullableStringFieldUpdateOperationsInput | string | null
     facebookUrl?: NullableStringFieldUpdateOperationsInput | string | null
     instagramUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    tiktokUrl?: NullableStringFieldUpdateOperationsInput | string | null
     whatsappNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    workingHours?: NullableStringFieldUpdateOperationsInput | string | null
     deliveryFee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     freeDeliveryOver?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     shippingPolicy?: NullableStringFieldUpdateOperationsInput | string | null
@@ -11057,7 +11101,9 @@ export namespace Prisma {
     address?: NullableStringFieldUpdateOperationsInput | string | null
     facebookUrl?: NullableStringFieldUpdateOperationsInput | string | null
     instagramUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    tiktokUrl?: NullableStringFieldUpdateOperationsInput | string | null
     whatsappNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    workingHours?: NullableStringFieldUpdateOperationsInput | string | null
     deliveryFee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     freeDeliveryOver?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     shippingPolicy?: NullableStringFieldUpdateOperationsInput | string | null
@@ -11080,7 +11126,9 @@ export namespace Prisma {
     address?: string | null
     facebookUrl?: string | null
     instagramUrl?: string | null
+    tiktokUrl?: string | null
     whatsappNumber?: string | null
+    workingHours?: string | null
     deliveryFee?: Decimal | DecimalJsLike | number | string
     freeDeliveryOver?: Decimal | DecimalJsLike | number | string
     shippingPolicy?: string | null
@@ -11103,7 +11151,9 @@ export namespace Prisma {
     address?: NullableStringFieldUpdateOperationsInput | string | null
     facebookUrl?: NullableStringFieldUpdateOperationsInput | string | null
     instagramUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    tiktokUrl?: NullableStringFieldUpdateOperationsInput | string | null
     whatsappNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    workingHours?: NullableStringFieldUpdateOperationsInput | string | null
     deliveryFee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     freeDeliveryOver?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     shippingPolicy?: NullableStringFieldUpdateOperationsInput | string | null
@@ -11126,7 +11176,9 @@ export namespace Prisma {
     address?: NullableStringFieldUpdateOperationsInput | string | null
     facebookUrl?: NullableStringFieldUpdateOperationsInput | string | null
     instagramUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    tiktokUrl?: NullableStringFieldUpdateOperationsInput | string | null
     whatsappNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    workingHours?: NullableStringFieldUpdateOperationsInput | string | null
     deliveryFee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     freeDeliveryOver?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     shippingPolicy?: NullableStringFieldUpdateOperationsInput | string | null
@@ -11716,7 +11768,9 @@ export namespace Prisma {
     address?: SortOrder
     facebookUrl?: SortOrder
     instagramUrl?: SortOrder
+    tiktokUrl?: SortOrder
     whatsappNumber?: SortOrder
+    workingHours?: SortOrder
     deliveryFee?: SortOrder
     freeDeliveryOver?: SortOrder
     shippingPolicy?: SortOrder
@@ -11744,7 +11798,9 @@ export namespace Prisma {
     address?: SortOrder
     facebookUrl?: SortOrder
     instagramUrl?: SortOrder
+    tiktokUrl?: SortOrder
     whatsappNumber?: SortOrder
+    workingHours?: SortOrder
     deliveryFee?: SortOrder
     freeDeliveryOver?: SortOrder
     shippingPolicy?: SortOrder
@@ -11767,7 +11823,9 @@ export namespace Prisma {
     address?: SortOrder
     facebookUrl?: SortOrder
     instagramUrl?: SortOrder
+    tiktokUrl?: SortOrder
     whatsappNumber?: SortOrder
+    workingHours?: SortOrder
     deliveryFee?: SortOrder
     freeDeliveryOver?: SortOrder
     shippingPolicy?: SortOrder

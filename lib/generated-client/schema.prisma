@@ -117,7 +117,9 @@ model StoreConfig {
   address        String?
   facebookUrl    String?
   instagramUrl   String?
+  tiktokUrl      String?
   whatsappNumber String?
+  workingHours   String?
 
   // Shipping Settings
   deliveryFee      Decimal @default(2000)
