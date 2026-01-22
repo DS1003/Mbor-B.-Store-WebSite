@@ -131,6 +131,65 @@
         text-transform: none;
         /* No forced uppercase */
     }
+
+    /* Fix for Cloudinary Widget + Radix UI */
+    .cloudinary-widget,
+    .cloudinary-widget-root,
+    #cloudinary-widget-container,
+    .cloudinary-button {
+        pointer-events: auto !important;
+        z-index: 999999 !important;
+    }
+
+    body[style*="pointer-events: none"] .cloudinary-widget,
+    body[style*="pointer-events: none"] .cloudinary-widget-root,
+    body[style*="pointer-events: none"] #cloudinary-widget-container {
+        pointer-events: auto !important;
+        z-index: 999999 !important;
+    }
+
+    /* POS Receipt Print Isolation */
+    @media print {
+
+        /* 1. Hide EVERYTHING by default */
+        body>* {
+            display: none !important;
+        }
+
+        /* 2. BUT show the receipt container wherever it is portaled */
+        body>#thermal-receipt {
+            display: block !important;
+            position: absolute !important;
+            top: 0 !important;
+            left: 0 !important;
+            width: 80mm !important;
+            margin: 0 !important;
+            padding: 0 !important;
+            background: white !important;
+            visibility: visible !important;
+            z-index: 2147483647 !important;
+        }
+
+        /* 3. Ensure content inside is visible */
+        #thermal-receipt,
+        #thermal-receipt * {
+            visibility: visible !important;
+        }
+
+        /* 4. Thermal Page Settings */
+        @page {
+            size: 80mm auto;
+            margin: 0;
+        }
+
+        html,
+        body {
+            background: white !important;
+            margin: 0 !important;
+            padding: 0 !important;
+            height: auto !important;
+        }
+    }
 }
 
 @layer base {

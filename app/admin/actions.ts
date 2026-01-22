@@ -214,7 +214,11 @@ export async function createProduct(data: any) {
     })
     revalidatePath('/admin/products')
     revalidatePath('/admin/stock')
-    return product
+    return {
+        ...product,
+        price: product.price.toNumber(),
+        discountPrice: product.discountPrice?.toNumber() || null
+    }
 }
 
 export async function updateProduct(id: string, data: any) {
@@ -233,7 +237,11 @@ export async function updateProduct(id: string, data: any) {
     })
     revalidatePath('/admin/products')
     revalidatePath('/admin/stock')
-    return product
+    return {
+        ...product,
+        price: product.price.toNumber(),
+        discountPrice: product.discountPrice?.toNumber() || null
+    }
 }
 
 export async function updateStock(id: string, increment: number) {
@@ -306,6 +314,8 @@ export async function updateStoreConfig(data: any) {
 export async function createInStoreOrder(data: {
     customerName: string,
     customerEmail?: string,
+    customerPhone?: string,
+    customerAddress?: string,
     items: { productId: string, quantity: number, price: number, customName?: string, customNumber?: string }[],
     total: number
 }) {
@@ -313,6 +323,8 @@ export async function createInStoreOrder(data: {
         data: {
             customerName: data.customerName,
             customerEmail: data.customerEmail,
+            customerPhone: data.customerPhone,
+            customerAddress: data.customerAddress,
             status: "PAID", // In-store orders are usually paid immediately
             total: data.total,
             items: {

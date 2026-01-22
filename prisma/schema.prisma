@@ -66,6 +66,8 @@ model Order {
   user          User?       @relation(fields: [userId], references: [id])
   customerName  String?     // For guest checkout
   customerEmail String?     // For guest checkout
+  customerPhone String?     // For POS/Guest
+  customerAddress String?   // For POS/Guest
   
   status        OrderStatus @default(PENDING)
   total         Decimal

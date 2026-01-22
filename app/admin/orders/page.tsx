@@ -1,6 +1,7 @@
 "use client"
 
 import * as React from "react"
+import { createPortal } from "react-dom"
 import Link from "next/link"
 import {
     Plus,
@@ -44,6 +45,9 @@ import {
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { Badge } from "@/components/ui/badge"
+import { Switch } from "@/components/ui/switch"
+import { Label } from "@/components/ui/label"
+import { Textarea } from "@/components/ui/textarea"
 import { motion, AnimatePresence } from "framer-motion"
 import { getAdminOrders, updateOrderStatus, deleteOrder, getAdminProducts, createInStoreOrder } from "../actions"
 import { toast } from "sonner"
@@ -67,6 +71,7 @@ export default function AdminOrdersPage() {
     const [isDetailsOpen, setIsDetailsOpen] = React.useState(false)
     const [isPosOpen, setIsPosOpen] = React.useState(false)
     const [searchQuery, setSearchQuery] = React.useState("")
+    const [mounted, setMounted] = React.useState(false)
 
     // Delete state
     const [isDeleteDialogOpen, setIsDeleteDialogOpen] = React.useState(false)
@@ -75,6 +80,8 @@ export default function AdminOrdersPage() {
 
     // POS state
     const [posCustomerName, setPosCustomerName] = React.useState("")
+    const [posCustomerPhone, setPosCustomerPhone] = React.useState("")
+    const [posCustomerAddress, setPosCustomerAddress] = React.useState("")
     const [posItems, setPosItems] = React.useState<any[]>([])
     const [posSearchSearch, setPosSearch] = React.useState("")
     const [isSavingPos, setIsSavingPos] = React.useState(false)
@@ -102,6 +109,7 @@ export default function AdminOrdersPage() {
 
     React.useEffect(() => {
         loadOrders()
+        setMounted(true)
     }, [loadOrders])
 
     const handleStatusUpdate = async (orderId: string, status: string) => {
@@ -147,7 +155,10 @@ export default function AdminOrdersPage() {
                 productId: product.id,
                 name: product.name,
                 price: product.price,
-                quantity: 1
+                quantity: 1,
+                hasCustomization: false,
+                customName: "",
+                customNumber: ""
             }])
         }
         toast.info(`${product.name} ajouté`)
@@ -167,6 +178,12 @@ export default function AdminOrdersPage() {
         }))
     }
 
+    const updatePosItemCustomization = (productId: string, data: any) => {
+        setPosItems(posItems.map(item =>
+            item.productId === productId ? { ...item, ...data } : item
+        ))
+    }
+
     const posTotal = posItems.reduce((acc, current) => acc + (current.price * current.quantity), 0)
 
     const handleCreatePosOrder = async () => {
@@ -177,7 +194,15 @@ export default function AdminOrdersPage() {
         try {
             const order = await createInStoreOrder({
                 customerName: posCustomerName,
-                items: posItems,
+                customerPhone: posCustomerPhone,
+                customerAddress: posCustomerAddress,
+                items: posItems.map(i => ({
+                    productId: i.productId,
+                    quantity: i.quantity,
+                    price: i.price,
+                    customName: i.hasCustomization ? i.customName : undefined,
+                    customNumber: i.hasCustomization ? i.customNumber : undefined
+                })),
                 total: posTotal
             })
             toast.success("Commande Boutique Enregistrée")
@@ -186,13 +211,16 @@ export default function AdminOrdersPage() {
             setPrintOrder(order)
             setTimeout(() => {
                 window.print()
-                setPrintOrder(null)
+                setTimeout(() => {
+                    setPrintOrder(null)
+                    setIsPosOpen(false)
+                    setPosItems([])
+                    setPosCustomerName("")
+                    setPosCustomerPhone("")
+                    setPosCustomerAddress("")
+                    loadOrders()
+                }, 1000)
             }, 500)
-
-            setIsPosOpen(false)
-            setPosItems([])
-            setPosCustomerName("")
-            loadOrders()
         } catch (error) {
             toast.error("Erreur POS")
         } finally {
@@ -217,7 +245,15 @@ export default function AdminOrdersPage() {
     ]
 
     return (
-        <div className="space-y-10 pb-10">
+        <div className="admin-orders-page-root space-y-10 pb-10">
+            {/* Hidden Receipt for Printing (Thermal Style) - Portaled to Body */}
+            {mounted && createPortal(
+                <div id="thermal-receipt" className="receipt-print-only">
+                    <Receipt order={printOrder || selectedOrder} config={config} />
+                </div>,
+                document.body
+            )}
+
             {/* Header Area */}
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6">
                 <div className="space-y-1">
@@ -507,18 +543,49 @@ export default function AdminOrdersPage() {
                                 </Button>
                             </div>
 
-                            {/* Hidden Receipt for Printing */}
-                            <div className="hidden print:block fixed inset-0 z-[9999] bg-white">
-                                <Receipt order={printOrder || selectedOrder} config={config} />
-                            </div>
 
-                            {/* Printing specific Styles */}
+
+                            {/* Printing specific Styles - Total Isolation */}
                             <style jsx global>{`
                                 @media print {
-                                    body * { visibility: hidden; }
-                                    .print\\:block, .print\\:block * { visibility: visible; }
-                                    .print\\:block { position: absolute; left: 0; top: 0; width: 100%; border: none; padding: 0; margin: 0; }
-                                    .print\\:hidden { display: none !important; }
+                                    /* Hide every direct child of body except the receipt */
+                                    body > *:not(#thermal-receipt) {
+                                        display: none !important;
+                                    }
+
+                                    /* Ensure thermal receipt is the only thing visible */
+                                    #thermal-receipt {
+                                        display: block !important;
+                                        position: absolute !important;
+                                        top: 0 !important;
+                                        left: 0 !important;
+                                        width: 80mm !important;
+                                        margin: 0 !important;
+                                        padding: 0 !important;
+                                        background: white !important;
+                                        visibility: visible !important;
+                                    }
+
+                                    #thermal-receipt * {
+                                        visibility: visible !important;
+                                    }
+
+                                    /* Clean up paper settings */
+                                    @page {
+                                        size: 80mm auto;
+                                        margin: 0;
+                                    }
+
+                                    html, body {
+                                        background: white !important;
+                                        margin: 0 !important;
+                                        padding: 0 !important;
+                                    }
+                                }
+
+                                /* Standard browser hiding */
+                                .receipt-print-only {
+                                    display: none;
                                 }
                             `}</style>
                         </div>
@@ -577,40 +644,121 @@ export default function AdminOrdersPage() {
                         </div>
 
                         {/* Cart & Billing */}
-                        <div className="bg-gray-50/50 rounded-[2.5rem] p-8 border border-gray-50 flex flex-col h-full space-y-8">
-                            <div className="space-y-2">
-                                <label className="text-[10px] font-black uppercase tracking-widest text-gray-400 ml-1">Client (Nom complet)</label>
-                                <Input
-                                    placeholder="ex: Moussa Diop"
-                                    className="h-12 rounded-2xl bg-white border-white shadow-sm font-bold"
-                                    value={posCustomerName}
-                                    onChange={(e) => setPosCustomerName(e.target.value)}
-                                />
+                        <div className="bg-white rounded-[2.5rem] p-8 border border-indigo-50 shadow-sm flex flex-col h-full space-y-8">
+                            {/* Customer Info Section */}
+                            <div className="space-y-4">
+                                <h4 className="text-[11px] font-black text-indigo-600 uppercase tracking-widest flex items-center gap-2">
+                                    <User className="h-3 w-3" /> Informations Client
+                                </h4>
+                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                    <div className="space-y-1.5">
+                                        <Label className="text-[10px] font-bold text-gray-500 uppercase ml-1">Nom Complet</Label>
+                                        <Input
+                                            placeholder="ex: Moussa Diop"
+                                            className="h-11 rounded-xl bg-gray-50/50 border-gray-100 shadow-none font-medium focus:bg-white transition-all"
+                                            value={posCustomerName}
+                                            onChange={(e) => setPosCustomerName(e.target.value)}
+                                        />
+                                    </div>
+                                    <div className="space-y-1.5">
+                                        <Label className="text-[10px] font-bold text-gray-500 uppercase ml-1">Téléphone</Label>
+                                        <Input
+                                            placeholder="+221 ..."
+                                            className="h-11 rounded-xl bg-gray-50/50 border-gray-100 shadow-none font-medium focus:bg-white transition-all"
+                                            value={posCustomerPhone}
+                                            onChange={(e) => setPosCustomerPhone(e.target.value)}
+                                        />
+                                    </div>
+                                </div>
+                                <div className="space-y-1.5">
+                                    <Label className="text-[10px] font-bold text-gray-500 uppercase ml-1">Adresse de Livraison</Label>
+                                    <Input
+                                        placeholder="Quartier, Rue, Ville..."
+                                        className="h-11 rounded-xl bg-gray-50/50 border-gray-100 shadow-none font-medium focus:bg-white transition-all"
+                                        value={posCustomerAddress}
+                                        onChange={(e) => setPosCustomerAddress(e.target.value)}
+                                    />
+                                </div>
                             </div>
 
                             <Separator className="bg-gray-100" />
 
-                            <div className="flex-1 space-y-4 min-h-[250px] overflow-y-auto pr-2">
-                                <h4 className="text-[11px] font-black text-gray-400 uppercase tracking-widest">Panier Actuel ({posItems.length})</h4>
+                            <div className="flex-1 space-y-6 min-h-[350px] overflow-y-auto pr-2 custom-scrollbar">
+                                <h4 className="text-[11px] font-black text-indigo-600 uppercase tracking-widest flex items-center gap-2 sticky top-0 bg-white pb-2 z-10">
+                                    <ShoppingBag className="h-3 w-3" /> Panier Actuel ({posItems.length})
+                                </h4>
                                 {posItems.length === 0 ? (
-                                    <div className="flex flex-col items-center justify-center h-full opacity-30 italic text-[13px]">Panier vide</div>
+                                    <div className="flex flex-col items-center justify-center h-full opacity-30 italic text-[13px] py-20">
+                                        <Box className="h-10 w-10 mb-2 opacity-20" />
+                                        Panier vide
+                                    </div>
                                 ) : (
-                                    posItems.map((item) => (
-                                        <div key={item.productId} className="flex items-center justify-between">
-                                            <div className="space-y-0.5">
-                                                <p className="text-[12px] font-black text-gray-900">{item.name}</p>
-                                                <p className="text-[10px] text-gray-400">{Number(item.price).toLocaleString()} F / unité</p>
-                                            </div>
-                                            <div className="flex items-center gap-3">
-                                                <div className="flex items-center gap-2 bg-white rounded-xl p-1 shadow-sm border border-gray-50">
-                                                    <Button variant="ghost" size="icon" className="h-6 w-6 rounded-lg" onClick={() => updatePosQty(item.productId, -1)}><Minus className="h-3 w-3" /></Button>
-                                                    <span className="text-[12px] font-black tabular-nums">{item.quantity}</span>
-                                                    <Button variant="ghost" size="icon" className="h-6 w-6 rounded-lg" onClick={() => updatePosQty(item.productId, 1)}><Plus className="h-3 w-3" /></Button>
+                                    <div className="space-y-6">
+                                        {posItems.map((item) => (
+                                            <div key={item.productId} className="space-y-4 p-4 bg-gray-50/50 rounded-2xl border border-gray-50/50">
+                                                <div className="flex items-center justify-between">
+                                                    <div className="flex items-center gap-3">
+                                                        <div className="h-10 w-10 rounded-lg bg-gray-200 shrink-0">
+                                                            {/* Placeholder for image if needed */}
+                                                        </div>
+                                                        <div className="space-y-0.5">
+                                                            <p className="text-[12px] font-black text-gray-900 line-clamp-1">{item.name}</p>
+                                                            <p className="text-[10px] text-gray-400 font-bold tabular-nums">{Number(item.price).toLocaleString()} F / unité</p>
+                                                        </div>
+                                                    </div>
+                                                    <div className="flex items-center gap-3">
+                                                        <div className="flex items-center gap-2 bg-white rounded-xl p-1 shadow-sm border border-gray-100">
+                                                            <Button variant="ghost" size="icon" className="h-6 w-6 rounded-lg" onClick={() => updatePosQty(item.productId, -1)}><Minus className="h-3 w-3" /></Button>
+                                                            <span className="text-[11px] font-black tabular-nums min-w-[1.5rem] text-center">{item.quantity}</span>
+                                                            <Button variant="ghost" size="icon" className="h-6 w-6 rounded-lg" onClick={() => updatePosQty(item.productId, 1)}><Plus className="h-3 w-3" /></Button>
+                                                        </div>
+                                                        <Button variant="ghost" size="icon" className="h-8 w-8 text-rose-500 hover:bg-rose-50 hover:text-rose-600 rounded-xl transition-colors" onClick={() => removeFromPos(item.productId)}><Trash className="h-4 w-4" /></Button>
+                                                    </div>
                                                 </div>
-                                                <Button variant="ghost" size="icon" className="h-8 w-8 text-rose-500 hover:bg-rose-50 rounded-xl" onClick={() => removeFromPos(item.productId)}><Trash className="h-4 w-4" /></Button>
+
+                                                {/* Customization Toggle */}
+                                                <div className="pt-2 border-t border-gray-100">
+                                                    <div className="flex items-center justify-between pointer-events-auto">
+                                                        <div className="flex items-center gap-2">
+                                                            <Shirt className="h-3.5 w-3.5 text-indigo-500" />
+                                                            <Label className="text-[10px] font-black uppercase tracking-tight text-gray-600">Personnalisation (Flocage)</Label>
+                                                        </div>
+                                                        <Switch
+                                                            checked={item.hasCustomization}
+                                                            onCheckedChange={(val) => updatePosItemCustomization(item.productId, { hasCustomization: val })}
+                                                        />
+                                                    </div>
+
+                                                    {item.hasCustomization && (
+                                                        <motion.div
+                                                            initial={{ opacity: 0, height: 0 }}
+                                                            animate={{ opacity: 1, height: 'auto' }}
+                                                            className="grid grid-cols-2 gap-3 mt-3 pt-3"
+                                                        >
+                                                            <div className="space-y-1">
+                                                                <Label className="text-[9px] font-bold text-gray-400 uppercase ml-1">Nom / Texte</Label>
+                                                                <Input
+                                                                    placeholder="ex: MBAPPE"
+                                                                    className="h-9 text-[11px] rounded-lg bg-white border-gray-100"
+                                                                    value={item.customName}
+                                                                    onChange={(e) => updatePosItemCustomization(item.productId, { customName: e.target.value })}
+                                                                />
+                                                            </div>
+                                                            <div className="space-y-1">
+                                                                <Label className="text-[9px] font-bold text-gray-400 uppercase ml-1">Numéro</Label>
+                                                                <Input
+                                                                    placeholder="ex: 10"
+                                                                    className="h-9 text-[11px] rounded-lg bg-white border-gray-100"
+                                                                    value={item.customNumber}
+                                                                    onChange={(e) => updatePosItemCustomization(item.productId, { customNumber: e.target.value })}
+                                                                />
+                                                            </div>
+                                                        </motion.div>
+                                                    )}
+                                                </div>
                                             </div>
-                                        </div>
-                                    ))
+                                        ))}
+                                    </div>
                                 )}
                             </div>
 

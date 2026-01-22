@@ -3855,6 +3855,8 @@ export namespace Prisma {
     userId: string | null
     customerName: string | null
     customerEmail: string | null
+    customerPhone: string | null
+    customerAddress: string | null
     status: $Enums.OrderStatus | null
     total: Decimal | null
     createdAt: Date | null
@@ -3866,6 +3868,8 @@ export namespace Prisma {
     userId: string | null
     customerName: string | null
     customerEmail: string | null
+    customerPhone: string | null
+    customerAddress: string | null
     status: $Enums.OrderStatus | null
     total: Decimal | null
     createdAt: Date | null
@@ -3877,6 +3881,8 @@ export namespace Prisma {
     userId: number
     customerName: number
     customerEmail: number
+    customerPhone: number
+    customerAddress: number
     status: number
     total: number
     createdAt: number
@@ -3898,6 +3904,8 @@ export namespace Prisma {
     userId?: true
     customerName?: true
     customerEmail?: true
+    customerPhone?: true
+    customerAddress?: true
     status?: true
     total?: true
     createdAt?: true
@@ -3909,6 +3917,8 @@ export namespace Prisma {
     userId?: true
     customerName?: true
     customerEmail?: true
+    customerPhone?: true
+    customerAddress?: true
     status?: true
     total?: true
     createdAt?: true
@@ -3920,6 +3930,8 @@ export namespace Prisma {
     userId?: true
     customerName?: true
     customerEmail?: true
+    customerPhone?: true
+    customerAddress?: true
     status?: true
     total?: true
     createdAt?: true
@@ -4018,6 +4030,8 @@ export namespace Prisma {
     userId: string | null
     customerName: string | null
     customerEmail: string | null
+    customerPhone: string | null
+    customerAddress: string | null
     status: $Enums.OrderStatus
     total: Decimal
     createdAt: Date
@@ -4048,6 +4062,8 @@ export namespace Prisma {
     userId?: boolean
     customerName?: boolean
     customerEmail?: boolean
+    customerPhone?: boolean
+    customerAddress?: boolean
     status?: boolean
     total?: boolean
     createdAt?: boolean
@@ -4062,6 +4078,8 @@ export namespace Prisma {
     userId?: boolean
     customerName?: boolean
     customerEmail?: boolean
+    customerPhone?: boolean
+    customerAddress?: boolean
     status?: boolean
     total?: boolean
     createdAt?: boolean
@@ -4074,6 +4092,8 @@ export namespace Prisma {
     userId?: boolean
     customerName?: boolean
     customerEmail?: boolean
+    customerPhone?: boolean
+    customerAddress?: boolean
     status?: boolean
     total?: boolean
     createdAt?: boolean
@@ -4086,13 +4106,15 @@ export namespace Prisma {
     userId?: boolean
     customerName?: boolean
     customerEmail?: boolean
+    customerPhone?: boolean
+    customerAddress?: boolean
     status?: boolean
     total?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type OrderOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "customerName" | "customerEmail" | "status" | "total" | "createdAt" | "updatedAt", ExtArgs["result"]["order"]>
+  export type OrderOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "customerName" | "customerEmail" | "customerPhone" | "customerAddress" | "status" | "total" | "createdAt" | "updatedAt", ExtArgs["result"]["order"]>
   export type OrderInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     user?: boolean | Order$userArgs<ExtArgs>
     items?: boolean | Order$itemsArgs<ExtArgs>
@@ -4116,6 +4138,8 @@ export namespace Prisma {
       userId: string | null
       customerName: string | null
       customerEmail: string | null
+      customerPhone: string | null
+      customerAddress: string | null
       status: $Enums.OrderStatus
       total: Prisma.Decimal
       createdAt: Date
@@ -4549,6 +4573,8 @@ export namespace Prisma {
     readonly userId: FieldRef<"Order", 'String'>
     readonly customerName: FieldRef<"Order", 'String'>
     readonly customerEmail: FieldRef<"Order", 'String'>
+    readonly customerPhone: FieldRef<"Order", 'String'>
+    readonly customerAddress: FieldRef<"Order", 'String'>
     readonly status: FieldRef<"Order", 'OrderStatus'>
     readonly total: FieldRef<"Order", 'Decimal'>
     readonly createdAt: FieldRef<"Order", 'DateTime'>
@@ -8503,6 +8529,8 @@ export namespace Prisma {
     userId: 'userId',
     customerName: 'customerName',
     customerEmail: 'customerEmail',
+    customerPhone: 'customerPhone',
+    customerAddress: 'customerAddress',
     status: 'status',
     total: 'total',
     createdAt: 'createdAt',
@@ -8878,6 +8906,8 @@ export namespace Prisma {
     userId?: StringNullableFilter<"Order"> | string | null
     customerName?: StringNullableFilter<"Order"> | string | null
     customerEmail?: StringNullableFilter<"Order"> | string | null
+    customerPhone?: StringNullableFilter<"Order"> | string | null
+    customerAddress?: StringNullableFilter<"Order"> | string | null
     status?: EnumOrderStatusFilter<"Order"> | $Enums.OrderStatus
     total?: DecimalFilter<"Order"> | Decimal | DecimalJsLike | number | string
     createdAt?: DateTimeFilter<"Order"> | Date | string
@@ -8891,6 +8921,8 @@ export namespace Prisma {
     userId?: SortOrderInput | SortOrder
     customerName?: SortOrderInput | SortOrder
     customerEmail?: SortOrderInput | SortOrder
+    customerPhone?: SortOrderInput | SortOrder
+    customerAddress?: SortOrderInput | SortOrder
     status?: SortOrder
     total?: SortOrder
     createdAt?: SortOrder
@@ -8907,6 +8939,8 @@ export namespace Prisma {
     userId?: StringNullableFilter<"Order"> | string | null
     customerName?: StringNullableFilter<"Order"> | string | null
     customerEmail?: StringNullableFilter<"Order"> | string | null
+    customerPhone?: StringNullableFilter<"Order"> | string | null
+    customerAddress?: StringNullableFilter<"Order"> | string | null
     status?: EnumOrderStatusFilter<"Order"> | $Enums.OrderStatus
     total?: DecimalFilter<"Order"> | Decimal | DecimalJsLike | number | string
     createdAt?: DateTimeFilter<"Order"> | Date | string
@@ -8920,6 +8954,8 @@ export namespace Prisma {
     userId?: SortOrderInput | SortOrder
     customerName?: SortOrderInput | SortOrder
     customerEmail?: SortOrderInput | SortOrder
+    customerPhone?: SortOrderInput | SortOrder
+    customerAddress?: SortOrderInput | SortOrder
     status?: SortOrder
     total?: SortOrder
     createdAt?: SortOrder
@@ -8939,6 +8975,8 @@ export namespace Prisma {
     userId?: StringNullableWithAggregatesFilter<"Order"> | string | null
     customerName?: StringNullableWithAggregatesFilter<"Order"> | string | null
     customerEmail?: StringNullableWithAggregatesFilter<"Order"> | string | null
+    customerPhone?: StringNullableWithAggregatesFilter<"Order"> | string | null
+    customerAddress?: StringNullableWithAggregatesFilter<"Order"> | string | null
     status?: EnumOrderStatusWithAggregatesFilter<"Order"> | $Enums.OrderStatus
     total?: DecimalWithAggregatesFilter<"Order"> | Decimal | DecimalJsLike | number | string
     createdAt?: DateTimeWithAggregatesFilter<"Order"> | Date | string
@@ -9404,6 +9442,8 @@ export namespace Prisma {
     id?: string
     customerName?: string | null
     customerEmail?: string | null
+    customerPhone?: string | null
+    customerAddress?: string | null
     status?: $Enums.OrderStatus
     total: Decimal | DecimalJsLike | number | string
     createdAt?: Date | string
@@ -9417,6 +9457,8 @@ export namespace Prisma {
     userId?: string | null
     customerName?: string | null
     customerEmail?: string | null
+    customerPhone?: string | null
+    customerAddress?: string | null
     status?: $Enums.OrderStatus
     total: Decimal | DecimalJsLike | number | string
     createdAt?: Date | string
@@ -9428,6 +9470,8 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     customerName?: NullableStringFieldUpdateOperationsInput | string | null
     customerEmail?: NullableStringFieldUpdateOperationsInput | string | null
+    customerPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    customerAddress?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
     total?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -9441,6 +9485,8 @@ export namespace Prisma {
     userId?: NullableStringFieldUpdateOperationsInput | string | null
     customerName?: NullableStringFieldUpdateOperationsInput | string | null
     customerEmail?: NullableStringFieldUpdateOperationsInput | string | null
+    customerPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    customerAddress?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
     total?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -9453,6 +9499,8 @@ export namespace Prisma {
     userId?: string | null
     customerName?: string | null
     customerEmail?: string | null
+    customerPhone?: string | null
+    customerAddress?: string | null
     status?: $Enums.OrderStatus
     total: Decimal | DecimalJsLike | number | string
     createdAt?: Date | string
@@ -9463,6 +9511,8 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     customerName?: NullableStringFieldUpdateOperationsInput | string | null
     customerEmail?: NullableStringFieldUpdateOperationsInput | string | null
+    customerPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    customerAddress?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
     total?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -9474,6 +9524,8 @@ export namespace Prisma {
     userId?: NullableStringFieldUpdateOperationsInput | string | null
     customerName?: NullableStringFieldUpdateOperationsInput | string | null
     customerEmail?: NullableStringFieldUpdateOperationsInput | string | null
+    customerPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    customerAddress?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
     total?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -10124,6 +10176,8 @@ export namespace Prisma {
     userId?: SortOrder
     customerName?: SortOrder
     customerEmail?: SortOrder
+    customerPhone?: SortOrder
+    customerAddress?: SortOrder
     status?: SortOrder
     total?: SortOrder
     createdAt?: SortOrder
@@ -10139,6 +10193,8 @@ export namespace Prisma {
     userId?: SortOrder
     customerName?: SortOrder
     customerEmail?: SortOrder
+    customerPhone?: SortOrder
+    customerAddress?: SortOrder
     status?: SortOrder
     total?: SortOrder
     createdAt?: SortOrder
@@ -10150,6 +10206,8 @@ export namespace Prisma {
     userId?: SortOrder
     customerName?: SortOrder
     customerEmail?: SortOrder
+    customerPhone?: SortOrder
+    customerAddress?: SortOrder
     status?: SortOrder
     total?: SortOrder
     createdAt?: SortOrder
@@ -10862,6 +10920,8 @@ export namespace Prisma {
     id?: string
     customerName?: string | null
     customerEmail?: string | null
+    customerPhone?: string | null
+    customerAddress?: string | null
     status?: $Enums.OrderStatus
     total: Decimal | DecimalJsLike | number | string
     createdAt?: Date | string
@@ -10873,6 +10933,8 @@ export namespace Prisma {
     id?: string
     customerName?: string | null
     customerEmail?: string | null
+    customerPhone?: string | null
+    customerAddress?: string | null
     status?: $Enums.OrderStatus
     total: Decimal | DecimalJsLike | number | string
     createdAt?: Date | string
@@ -10914,6 +10976,8 @@ export namespace Prisma {
     userId?: StringNullableFilter<"Order"> | string | null
     customerName?: StringNullableFilter<"Order"> | string | null
     customerEmail?: StringNullableFilter<"Order"> | string | null
+    customerPhone?: StringNullableFilter<"Order"> | string | null
+    customerAddress?: StringNullableFilter<"Order"> | string | null
     status?: EnumOrderStatusFilter<"Order"> | $Enums.OrderStatus
     total?: DecimalFilter<"Order"> | Decimal | DecimalJsLike | number | string
     createdAt?: DateTimeFilter<"Order"> | Date | string
@@ -11133,6 +11197,8 @@ export namespace Prisma {
     id?: string
     customerName?: string | null
     customerEmail?: string | null
+    customerPhone?: string | null
+    customerAddress?: string | null
     status?: $Enums.OrderStatus
     total: Decimal | DecimalJsLike | number | string
     createdAt?: Date | string
@@ -11145,6 +11211,8 @@ export namespace Prisma {
     userId?: string | null
     customerName?: string | null
     customerEmail?: string | null
+    customerPhone?: string | null
+    customerAddress?: string | null
     status?: $Enums.OrderStatus
     total: Decimal | DecimalJsLike | number | string
     createdAt?: Date | string
@@ -11210,6 +11278,8 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     customerName?: NullableStringFieldUpdateOperationsInput | string | null
     customerEmail?: NullableStringFieldUpdateOperationsInput | string | null
+    customerPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    customerAddress?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
     total?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -11222,6 +11292,8 @@ export namespace Prisma {
     userId?: NullableStringFieldUpdateOperationsInput | string | null
     customerName?: NullableStringFieldUpdateOperationsInput | string | null
     customerEmail?: NullableStringFieldUpdateOperationsInput | string | null
+    customerPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    customerAddress?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
     total?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -11357,6 +11429,8 @@ export namespace Prisma {
     id?: string
     customerName?: string | null
     customerEmail?: string | null
+    customerPhone?: string | null
+    customerAddress?: string | null
     status?: $Enums.OrderStatus
     total: Decimal | DecimalJsLike | number | string
     createdAt?: Date | string
@@ -11367,6 +11441,8 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     customerName?: NullableStringFieldUpdateOperationsInput | string | null
     customerEmail?: NullableStringFieldUpdateOperationsInput | string | null
+    customerPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    customerAddress?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
     total?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -11378,6 +11454,8 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     customerName?: NullableStringFieldUpdateOperationsInput | string | null
     customerEmail?: NullableStringFieldUpdateOperationsInput | string | null
+    customerPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    customerAddress?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
     total?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -11389,6 +11467,8 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     customerName?: NullableStringFieldUpdateOperationsInput | string | null
     customerEmail?: NullableStringFieldUpdateOperationsInput | string | null
+    customerPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    customerAddress?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
     total?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string

@@ -86,15 +86,15 @@ export function ImageUpload({
                         }}
                     >
                         {({ open }) => {
-                            const onClick = () => {
-                                open()
-                            }
-
                             return (
                                 <button
                                     type="button"
                                     disabled={disabled}
-                                    onClick={onClick}
+                                    onClick={(e) => {
+                                        e.preventDefault()
+                                        e.stopPropagation()
+                                        open()
+                                    }}
                                     className="relative aspect-square flex flex-col items-center justify-center gap-2 rounded-[1.5rem] border-2 border-dashed border-gray-100 bg-gray-50/50 text-gray-400 hover:text-indigo-600 hover:bg-gray-50 hover:border-indigo-200 transition-all group"
                                 >
                                     <div className="h-10 w-10 rounded-2xl bg-white shadow-sm flex items-center justify-center group-hover:scale-110 transition-transform">

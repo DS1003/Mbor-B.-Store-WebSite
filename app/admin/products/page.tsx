@@ -426,8 +426,13 @@ export default function AdminProductsPage() {
             </div>
 
             {/* Product Modal */}
-            <Sheet open={isModalOpen} onOpenChange={setIsModalOpen}>
-                <SheetContent className="sm:max-w-2xl overflow-y-auto">
+            <Sheet open={isModalOpen} onOpenChange={setIsModalOpen} modal={false}>
+                <SheetContent
+                    className="sm:max-w-2xl overflow-y-auto"
+                    onPointerDownOutside={(e) => e.preventDefault()}
+                    onInteractOutside={(e) => e.preventDefault()}
+                    onEscapeKeyDown={(e) => e.preventDefault()}
+                >
                     <SheetHeader>
                         <SheetTitle className="text-xl font-black uppercase italic tracking-tight">Configuration <span className="text-indigo-600">Produit</span></SheetTitle>
                         <SheetDescription className="font-medium text-gray-400">
@@ -435,7 +440,7 @@ export default function AdminProductsPage() {
                         </SheetDescription>
                     </SheetHeader>
 
-                    <form onSubmit={handleSave} className="space-y-10 py-8 pb-20">
+                    <div className="space-y-10 py-8 pb-20">
                         {/* Media Section */}
                         <div className="space-y-4">
                             <Label className="text-[10px] font-black uppercase tracking-[0.2em] text-gray-400 ml-1">Assets Visuels (Max 5)</Label>
@@ -446,136 +451,138 @@ export default function AdminProductsPage() {
                             />
                         </div>
 
-                        {/* Basic Info */}
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <form onSubmit={handleSave} className="space-y-10">
+                            {/* Basic Info */}
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                                <div className="space-y-2">
+                                    <Label htmlFor="name" className="text-[10px] font-black uppercase tracking-widest text-gray-400 ml-1">Identifiant Commercial</Label>
+                                    <Input
+                                        id="name"
+                                        value={formData.name}
+                                        onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                                        placeholder="ex: Maillot Arsenal Domicile 24/25"
+                                        className="h-12 rounded-2xl border-gray-100 focus:ring-indigo-100 focus:border-indigo-200"
+                                        required
+                                    />
+                                </div>
+                                <div className="space-y-2">
+                                    <Label htmlFor="category" className="text-[10px] font-black uppercase tracking-widest text-gray-400 ml-1">Assignation Univers</Label>
+                                    <select
+                                        id="category"
+                                        value={formData.categoryId}
+                                        onChange={(e) => setFormData({ ...formData, categoryId: e.target.value })}
+                                        className="w-full h-12 px-4 rounded-2xl border border-gray-100 focus:ring-2 focus:ring-indigo-100 focus:border-indigo-200 text-[14px] font-bold bg-white outline-none appearance-none transition-all shadow-sm"
+                                        required
+                                    >
+                                        <option value="">Sélectionner</option>
+                                        {categories.map((c) => (
+                                            <option key={c.id} value={c.id}>{c.name}</option>
+                                        ))}
+                                    </select>
+                                </div>
+                            </div>
+
                             <div className="space-y-2">
-                                <Label htmlFor="name" className="text-[10px] font-black uppercase tracking-widest text-gray-400 ml-1">Identifiant Commercial</Label>
-                                <Input
-                                    id="name"
-                                    value={formData.name}
-                                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                                    placeholder="ex: Maillot Arsenal Domicile 24/25"
-                                    className="h-12 rounded-2xl border-gray-100 focus:ring-indigo-100 focus:border-indigo-200"
-                                    required
+                                <Label htmlFor="description" className="text-[10px] font-black uppercase tracking-widest text-gray-400 ml-1">Manifesto Produit (Description)</Label>
+                                <Textarea
+                                    id="description"
+                                    value={formData.description}
+                                    onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                                    placeholder="Détails techniques et arguments de vente..."
+                                    className="rounded-[2rem] border-gray-100 focus:ring-indigo-100 focus:border-indigo-200 p-6 text-[14px] leading-relaxed bg-gray-50/30"
+                                    rows={4}
                                 />
                             </div>
-                            <div className="space-y-2">
-                                <Label htmlFor="category" className="text-[10px] font-black uppercase tracking-widest text-gray-400 ml-1">Assignation Univers</Label>
-                                <select
-                                    id="category"
-                                    value={formData.categoryId}
-                                    onChange={(e) => setFormData({ ...formData, categoryId: e.target.value })}
-                                    className="w-full h-12 px-4 rounded-2xl border border-gray-100 focus:ring-2 focus:ring-indigo-100 focus:border-indigo-200 text-[14px] font-bold bg-white outline-none appearance-none transition-all shadow-sm"
-                                    required
+
+                            {/* Pricing & Stock */}
+                            <div className="grid grid-cols-3 gap-6">
+                                <div className="space-y-2">
+                                    <Label htmlFor="price" className="text-[10px] font-black uppercase tracking-widest text-gray-400 ml-1">Prix Brut (F CFA)</Label>
+                                    <Input
+                                        id="price"
+                                        type="number"
+                                        value={formData.price}
+                                        onChange={(e) => setFormData({ ...formData, price: e.target.value })}
+                                        className="h-12 rounded-2xl border-gray-100 font-black tabular-nums"
+                                        required
+                                    />
+                                </div>
+                                <div className="space-y-2">
+                                    <Label htmlFor="discountPrice" className="text-[10px] font-black uppercase tracking-widest text-gray-400 ml-1">Promo (Optionnel)</Label>
+                                    <Input
+                                        id="discountPrice"
+                                        type="number"
+                                        value={formData.discountPrice}
+                                        onChange={(e) => setFormData({ ...formData, discountPrice: e.target.value })}
+                                        className="h-12 rounded-2xl border-gray-100 border-dashed text-rose-500 font-bold tabular-nums"
+                                    />
+                                </div>
+                                <div className="space-y-2">
+                                    <Label htmlFor="stock" className="text-[10px] font-black uppercase tracking-widest text-gray-400 ml-1">Volume Stock</Label>
+                                    <Input
+                                        id="stock"
+                                        type="number"
+                                        value={formData.stock}
+                                        onChange={(e) => setFormData({ ...formData, stock: e.target.value })}
+                                        className="h-12 rounded-2xl border-gray-100 font-black tabular-nums"
+                                        required
+                                    />
+                                </div>
+                            </div>
+
+                            {/* Options */}
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div className="bg-gray-50/50 rounded-[2rem] p-6 border border-gray-100 flex items-center justify-between group hover:bg-white hover:shadow-xl transition-all">
+                                    <div className="space-y-1">
+                                        <Label className="text-[13px] font-black text-gray-900 uppercase">Vedette</Label>
+                                        <p className="text-[10px] text-gray-500 font-medium">Page d'accueil.</p>
+                                    </div>
+                                    <Switch
+                                        checked={formData.featured}
+                                        onCheckedChange={(checked) => setFormData({ ...formData, featured: checked })}
+                                    />
+                                </div>
+                                <div className="bg-gray-50/50 rounded-[2rem] p-6 border border-gray-100 flex items-center justify-between group hover:bg-white hover:shadow-xl transition-all">
+                                    <div className="space-y-1">
+                                        <Label className="text-[13px] font-black text-gray-900 uppercase">Flocage</Label>
+                                        <p className="text-[10px] text-gray-500 font-medium">Nom + Numéro.</p>
+                                    </div>
+                                    <Switch
+                                        checked={formData.allowFlocage}
+                                        onCheckedChange={(checked) => setFormData({ ...formData, allowFlocage: checked })}
+                                    />
+                                </div>
+                                <div className="bg-gray-50/50 rounded-[2rem] p-6 border border-gray-100 flex items-center justify-between group hover:bg-white hover:shadow-xl transition-all">
+                                    <div className="space-y-1">
+                                        <Label className="text-[13px] font-black text-gray-900 uppercase">Gravure</Label>
+                                        <p className="text-[10px] text-gray-500 font-medium">Texte personnalisé.</p>
+                                    </div>
+                                    <Switch
+                                        checked={formData.allowGravure}
+                                        onCheckedChange={(checked) => setFormData({ ...formData, allowGravure: checked })}
+                                    />
+                                </div>
+                            </div>
+
+                            <div className="pt-4 flex items-center gap-4 sticky bottom-0 bg-white py-4 -mx-6 px-6 border-t border-gray-50 z-20">
+                                <Button
+                                    type="button"
+                                    variant="outline"
+                                    className="flex-1 h-14 rounded-[1.5rem] font-bold text-gray-500 uppercase tracking-widest border-gray-100"
+                                    onClick={() => setIsModalOpen(false)}
                                 >
-                                    <option value="">Sélectionner</option>
-                                    {categories.map((c) => (
-                                        <option key={c.id} value={c.id}>{c.name}</option>
-                                    ))}
-                                </select>
+                                    Annuler
+                                </Button>
+                                <Button
+                                    type="submit"
+                                    className="flex-1 h-14 rounded-[1.5rem] bg-gray-900 text-white font-black uppercase tracking-widest shadow-2xl shadow-indigo-100"
+                                    disabled={isSaving}
+                                >
+                                    {isSaving ? "Synchronisation..." : editingProduct ? "Actualiser" : "Déployer"}
+                                </Button>
                             </div>
-                        </div>
-
-                        <div className="space-y-2">
-                            <Label htmlFor="description" className="text-[10px] font-black uppercase tracking-widest text-gray-400 ml-1">Manifesto Produit (Description)</Label>
-                            <Textarea
-                                id="description"
-                                value={formData.description}
-                                onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                                placeholder="Détails techniques et arguments de vente..."
-                                className="rounded-[2rem] border-gray-100 focus:ring-indigo-100 focus:border-indigo-200 p-6 text-[14px] leading-relaxed bg-gray-50/30"
-                                rows={4}
-                            />
-                        </div>
-
-                        {/* Pricing & Stock */}
-                        <div className="grid grid-cols-3 gap-6">
-                            <div className="space-y-2">
-                                <Label htmlFor="price" className="text-[10px] font-black uppercase tracking-widest text-gray-400 ml-1">Prix Brut (F CFA)</Label>
-                                <Input
-                                    id="price"
-                                    type="number"
-                                    value={formData.price}
-                                    onChange={(e) => setFormData({ ...formData, price: e.target.value })}
-                                    className="h-12 rounded-2xl border-gray-100 font-black tabular-nums"
-                                    required
-                                />
-                            </div>
-                            <div className="space-y-2">
-                                <Label htmlFor="discountPrice" className="text-[10px] font-black uppercase tracking-widest text-gray-400 ml-1">Promo (Optionnel)</Label>
-                                <Input
-                                    id="discountPrice"
-                                    type="number"
-                                    value={formData.discountPrice}
-                                    onChange={(e) => setFormData({ ...formData, discountPrice: e.target.value })}
-                                    className="h-12 rounded-2xl border-gray-100 border-dashed text-rose-500 font-bold tabular-nums"
-                                />
-                            </div>
-                            <div className="space-y-2">
-                                <Label htmlFor="stock" className="text-[10px] font-black uppercase tracking-widest text-gray-400 ml-1">Volume Stock</Label>
-                                <Input
-                                    id="stock"
-                                    type="number"
-                                    value={formData.stock}
-                                    onChange={(e) => setFormData({ ...formData, stock: e.target.value })}
-                                    className="h-12 rounded-2xl border-gray-100 font-black tabular-nums"
-                                    required
-                                />
-                            </div>
-                        </div>
-
-                        {/* Options */}
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <div className="bg-gray-50/50 rounded-[2rem] p-6 border border-gray-100 flex items-center justify-between group hover:bg-white hover:shadow-xl transition-all">
-                                <div className="space-y-1">
-                                    <Label className="text-[13px] font-black text-gray-900 uppercase">Vedette</Label>
-                                    <p className="text-[10px] text-gray-500 font-medium">Page d'accueil.</p>
-                                </div>
-                                <Switch
-                                    checked={formData.featured}
-                                    onCheckedChange={(checked) => setFormData({ ...formData, featured: checked })}
-                                />
-                            </div>
-                            <div className="bg-gray-50/50 rounded-[2rem] p-6 border border-gray-100 flex items-center justify-between group hover:bg-white hover:shadow-xl transition-all">
-                                <div className="space-y-1">
-                                    <Label className="text-[13px] font-black text-gray-900 uppercase">Flocage</Label>
-                                    <p className="text-[10px] text-gray-500 font-medium">Nom + Numéro.</p>
-                                </div>
-                                <Switch
-                                    checked={formData.allowFlocage}
-                                    onCheckedChange={(checked) => setFormData({ ...formData, allowFlocage: checked })}
-                                />
-                            </div>
-                            <div className="bg-gray-50/50 rounded-[2rem] p-6 border border-gray-100 flex items-center justify-between group hover:bg-white hover:shadow-xl transition-all">
-                                <div className="space-y-1">
-                                    <Label className="text-[13px] font-black text-gray-900 uppercase">Gravure</Label>
-                                    <p className="text-[10px] text-gray-500 font-medium">Texte personnalisé.</p>
-                                </div>
-                                <Switch
-                                    checked={formData.allowGravure}
-                                    onCheckedChange={(checked) => setFormData({ ...formData, allowGravure: checked })}
-                                />
-                            </div>
-                        </div>
-
-                        <div className="pt-4 flex items-center gap-4 sticky bottom-0 bg-white py-4 -mx-6 px-6 border-t border-gray-50 z-20">
-                            <Button
-                                type="button"
-                                variant="outline"
-                                className="flex-1 h-14 rounded-[1.5rem] font-bold text-gray-500 uppercase tracking-widest border-gray-100"
-                                onClick={() => setIsModalOpen(false)}
-                            >
-                                Annuler
-                            </Button>
-                            <Button
-                                type="submit"
-                                className="flex-1 h-14 rounded-[1.5rem] bg-gray-900 text-white font-black uppercase tracking-widest shadow-2xl shadow-indigo-100"
-                                disabled={isSaving}
-                            >
-                                {isSaving ? "Synchronisation..." : editingProduct ? "Actualiser" : "Déployer"}
-                            </Button>
-                        </div>
-                    </form>
+                        </form>
+                    </div>
                 </SheetContent>
             </Sheet>
 
