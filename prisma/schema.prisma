@@ -81,6 +81,7 @@ model Order {
   customerEmail String?     // For guest checkout
   customerPhone String?     // For POS/Guest
   customerAddress String?   // For POS/Guest
+  paymentMethod String?     // CASH, WAVE, OM
   
   status        OrderStatus @default(PENDING)
   total         Decimal
@@ -118,7 +119,9 @@ model StoreConfig {
   address         String?
   facebookUrl     String?
   instagramUrl    String?
+  tiktokUrl       String?
   whatsappNumber  String?
+  workingHours    String?
   
   // Shipping Settings
   deliveryFee     Decimal  @default(2000)

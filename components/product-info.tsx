@@ -22,18 +22,17 @@ interface ProductInfoProps {
         images: string[]
         isNew?: boolean
         allowFlocage?: boolean
+        sizes?: { size: string, stock: number }[]
     }
 }
 
 export function ProductInfo({ product }: ProductInfoProps) {
     const { addItem } = useCart()
-    const [selectedSize, setSelectedSize] = React.useState("42")
+    const [selectedSize, setSelectedSize] = React.useState("")
     const [isCustomizing, setIsCustomizing] = React.useState(false)
     const [customName, setCustomName] = React.useState("")
     const [customNumber, setCustomNumber] = React.useState("")
     const [isLoading, setIsLoading] = React.useState(false)
-
-    const sizes = ["40", "41", "42", "43", "44", "45"]
 
     const data = product || {
         id: "placeholder",
@@ -43,10 +42,34 @@ export function ProductInfo({ product }: ProductInfoProps) {
         description: "Description du produit non disponible.",
         images: ["/placeholder.svg"],
         isNew: true,
-        allowFlocage: false
+        allowFlocage: false,
+        sizes: []
     }
 
+    const availableSizes = data.sizes && data.sizes.length > 0
+        ? data.sizes
+        : [{ size: "Standard", stock: 99 }]
+
+    // Set default size if not selected
+    React.useEffect(() => {
+        if (!selectedSize && availableSizes.length > 0) {
+            const firstInStock = availableSizes.find(s => s.stock > 0)
+            if (firstInStock) setSelectedSize(firstInStock.size)
+        }
+    }, [availableSizes, selectedSize])
+
     const handleAddToCart = () => {
+        if (!selectedSize) {
+            toast.error("Veuillez sélectionner une taille")
+            return
+        }
+
+        const sizeObj = availableSizes.find(s => s.size === selectedSize)
+        if (sizeObj && sizeObj.stock <= 0) {
+            toast.error("Cette taille est en rupture de stock")
+            return
+        }
+
         setIsLoading(true)
 
         // Simulate a small delay for better UX feel
@@ -54,7 +77,7 @@ export function ProductInfo({ product }: ProductInfoProps) {
             addItem({
                 productId: data.id,
                 name: data.name,
-                price: data.price,
+                price: (data.allowFlocage && isCustomizing) ? data.price + 2000 : data.price,
                 quantity: 1,
                 image: data.images[0],
                 size: selectedSize,
@@ -128,18 +151,24 @@ export function ProductInfo({ product }: ProductInfoProps) {
                     </Link>
                 </div>
                 <div className="grid grid-cols-3 sm:grid-cols-6 gap-3">
-                    {sizes.map((size) => (
+                    {availableSizes.map((item) => (
                         <button
-                            key={size}
-                            onClick={() => setSelectedSize(size)}
+                            key={item.size}
+                            onClick={() => item.stock > 0 && setSelectedSize(item.size)}
+                            disabled={item.stock <= 0}
                             className={cn(
-                                "h-14 flex items-center justify-center rounded-2xl border text-[13px] font-bold transition-all duration-300",
-                                selectedSize === size
+                                "h-14 flex flex-col items-center justify-center rounded-2xl border text-[13px] font-bold transition-all duration-300 relative overflow-hidden",
+                                selectedSize === item.size
                                     ? "border-primary bg-primary text-primary-foreground shadow-lg shadow-primary/20 scale-105"
-                                    : "border-muted hover:border-foreground/40 bg-background text-foreground/70"
+                                    : item.stock <= 0
+                                        ? "border-muted bg-muted/50 text-muted-foreground/40 cursor-not-allowed"
+                                        : "border-muted hover:border-foreground/40 bg-background text-foreground/70"
                             )}
                         >
-                            {size}
+                            <span>{item.size}</span>
+                            {item.stock <= 0 && (
+                                <span className="absolute inset-0 flex items-center justify-center bg-background/50 text-[9px] font-black uppercase -rotate-45 text-rose-500">Épuisé</span>
+                            )}
                         </button>
                     ))}
                 </div>
@@ -152,7 +181,7 @@ export function ProductInfo({ product }: ProductInfoProps) {
                         <div className="space-y-1">
                             <h4 className="text-[14px] font-bold tracking-tight flex items-center">
                                 Personnaliser ce produit
-                                <span className="ml-2 text-[9px] bg-primary text-white px-2 py-0.5 rounded-full uppercase tracking-widest font-black">+ 2 500 F</span>
+                                <span className="ml-2 text-[9px] bg-primary text-white px-2 py-0.5 rounded-full uppercase tracking-widest font-black">+ 2 000 F</span>
                             </h4>
                             <p className="text-[11px] text-muted-foreground font-medium">Ajoutez votre nom et numéro officiel</p>
                         </div>

@@ -12,6 +12,36 @@ const prisma = new PrismaClient({ adapter })
 async function main() {
     console.log("Starting seeding...")
 
+    // 0. Seed Store Config
+    await prisma.storeConfig.upsert({
+        where: { id: 'singleton' },
+        update: {
+            name: "Mborbusiness’Store",
+            slogan: "L'excellence du sport et de la mode urbaine au Sénégal.",
+            description: "Mborbusiness’Store est une boutique spécialisée dans les équipements de sport, maillots, crampons, sneakers et streetwear. Livraison rapide à Dakar et à l’international. Paiement sécurisé via Wave et Orange Money.",
+            contactPhone: "+221 77 427 23 54",
+            whatsappNumber: "+221 78 593 48 86",
+            address: "Boutique 1 : Pikine, Boutique 2 : Sacré-Cœur",
+            workingHours: "Lun - Sam : 09h00 - 21h00", // Need to add this field to schema if not exists or put in description? Schema doesn't have workingHours. I will check schema.
+            // Schema has: name, slogan, description, logoUrl, contactEmail, contactPhone, address, facebookUrl, instagramUrl, whatsappNumber, ...
+            instagramUrl: "@MborbusinessstoreSN",
+            facebookUrl: "Mbor Business Center",
+            // tiktokUrl? Schema doesn't have it. I'll check schema again.
+        },
+        create: {
+            id: 'singleton',
+            name: "Mborbusiness’Store",
+            slogan: "L'excellence du sport et de la mode urbaine au Sénégal.",
+            description: "Mborbusiness’Store est une boutique spécialisée dans les équipements de sport, maillots, crampons, sneakers et streetwear. Livraison rapide à Dakar et à l’international. Paiement sécurisé via Wave et Orange Money.",
+            contactPhone: "+221 77 427 23 54",
+            whatsappNumber: "+221 78 593 48 86",
+            address: "Boutique 1 : Pikine, Boutique 2 : Sacré-Cœur",
+            instagramUrl: "@MborbusinessstoreSN",
+            facebookUrl: "Mbor Business Center",
+        }
+    })
+    console.log("Store Config updated.")
+
     // 1. Create Super Admin
     const adminPassword = await bcrypt.hash("admin123", 12)
     const admin = await prisma.user.upsert({
@@ -39,7 +69,7 @@ async function main() {
         "Street wear"
     ]
 
-    const categories: Record<string, string> = {}
+    const categories = {}
 
     for (const name of categoryNames) {
         const cat = await prisma.category.upsert({
@@ -194,13 +224,12 @@ async function main() {
     ]
 
     for (const product of products) {
-        // Clean up existing if needed (optional, upsert handles update but complicated with relations)
-        // For simplicity in seed, let's just try to create or update.
-        // Prisma upsert for relations (sizes) is tricky.
-        // We will just do a standard upsert on the product fields, and then transactionally delete/create sizes to be safe/simple for seed.
-
         const id = `seed-${product.name.replace(/\s+/g, '-').toLowerCase()}`
 
+        // Remove sizes from product object for the main upsert
+        const { sizes, ...productData } = product
+
+        // 1. Upsert Product (without nested sizes to avoid unique constraint issues on re-run)
         await prisma.product.upsert({
             where: { id },
             update: {
@@ -222,26 +251,21 @@ async function main() {
                 images: product.images,
                 featured: product.featured,
                 allowFlocage: product.allowFlocage,
-                stock: product.stock,
-                sizes: product.sizes
+                stock: product.stock
             }
         })
 
-        // If it was an update, we might want to ensure sizes exist, but for seed let's assume create won mostly or manual fix later.
-        // Actually, if we update, the sizes creation in `create` block won't run.
-        // Let's force update sizes for existing ones.
-        if (product.sizes && product.sizes.create) {
-            // Basic size sync for seed purposes
-            for (const sizeData of product.sizes.create) {
-                await prisma.productSize.upsert({
-                    where: {
-                        productId_size: {
-                            productId: id,
-                            size: sizeData.size
-                        }
-                    },
-                    update: { stock: sizeData.stock },
-                    create: {
+        // 2. Handle Sizes Idempotently
+        if (sizes && sizes.create) {
+            // Delete existing sizes to ensure a clean slate (avoids unique constraint violation)
+            await prisma.productSize.deleteMany({
+                where: { productId: id }
+            })
+
+            // Create new sizes
+            for (const sizeData of sizes.create) {
+                await prisma.productSize.create({
+                    data: {
                         productId: id,
                         size: sizeData.size,
                         stock: sizeData.stock

@@ -13,7 +13,10 @@ export default async function ProductPage({ params }: { params: Promise<{ id: st
 
     const product = await prisma.product.findUnique({
         where: { id },
-        include: { category: true }
+        include: {
+            category: true,
+            sizes: true
+        }
     })
 
     if (!product) {
@@ -28,9 +31,9 @@ export default async function ProductPage({ params }: { params: Promise<{ id: st
         description: product.description ?? "",
         images: product.images.length > 0 ? product.images : ["/placeholder.svg"],
         allowFlocage: product.allowFlocage,
-        isNew: true
+        isNew: true,
+        sizes: product.sizes.map(s => ({ size: s.size, stock: s.stock }))
     }
-
 
     return (
         <div className="flex flex-col w-full min-h-screen bg-background">

@@ -53,7 +53,8 @@ export async function getAdminProducts() {
             updatedAt: 'desc'
         },
         include: {
-            category: true
+            category: true,
+            sizes: true
         }
     })
 
@@ -200,7 +201,7 @@ export async function getProduct(id: string) {
 }
 
 export async function createProduct(data: any) {
-    const { category, ...rest } = data
+    const { category, sizes, ...rest } = data
     const product = await prisma.product.create({
         data: {
             ...rest,
@@ -210,6 +211,12 @@ export async function createProduct(data: any) {
             featured: Boolean(data.featured),
             allowFlocage: Boolean(data.allowFlocage),
             allowGravure: Boolean(data.allowGravure),
+            sizes: {
+                create: data.sizes?.map((s: any) => ({
+                    size: s.size,
+                    stock: Number(s.stock)
+                })) || []
+            }
         }
     })
     revalidatePath('/admin/products')
@@ -222,7 +229,10 @@ export async function createProduct(data: any) {
 }
 
 export async function updateProduct(id: string, data: any) {
-    const { category, ...rest } = data
+    const { category, sizes, ...rest } = data
+
+    // Handle sizes update transactionally with product update
+    // First, we update the product fields
     const product = await prisma.product.update({
         where: { id },
         data: {
@@ -235,6 +245,24 @@ export async function updateProduct(id: string, data: any) {
             allowGravure: Boolean(data.allowGravure),
         }
     })
+
+    // Then handle sizes
+    if (sizes) {
+        await prisma.productSize.deleteMany({
+            where: { productId: id }
+        })
+
+        if (sizes.length > 0) {
+            await prisma.productSize.createMany({
+                data: sizes.map((s: any) => ({
+                    productId: id,
+                    size: s.size,
+                    stock: Number(s.stock)
+                }))
+            })
+        }
+    }
+
     revalidatePath('/admin/products')
     revalidatePath('/admin/stock')
     return {
@@ -339,6 +367,7 @@ export async function createInStoreOrder(data: {
     customerEmail?: string,
     customerPhone?: string,
     customerAddress?: string,
+    paymentMethod?: string,
     items: { productId: string, quantity: number, price: number, customName?: string, customNumber?: string }[],
     total: number
 }) {
@@ -348,6 +377,7 @@ export async function createInStoreOrder(data: {
             customerEmail: data.customerEmail,
             customerPhone: data.customerPhone,
             customerAddress: data.customerAddress,
+            paymentMethod: data.paymentMethod,
             status: "PAID",
             total: data.total,
             items: {

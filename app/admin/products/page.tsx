@@ -78,7 +78,8 @@ export default function AdminProductsPage() {
         featured: false,
         allowFlocage: false,
         allowGravure: false,
-        images: []
+        images: [],
+        sizes: []
     })
 
     const loadData = React.useCallback(async () => {
@@ -116,7 +117,8 @@ export default function AdminProductsPage() {
                 featured: product.featured,
                 allowFlocage: product.allowFlocage,
                 allowGravure: product.allowGravure,
-                images: product.images || []
+                images: product.images || [],
+                sizes: product.sizes?.map((s: any) => ({ size: s.size, stock: s.stock })) || []
             })
         } else {
             setEditingProduct(null)
@@ -131,7 +133,8 @@ export default function AdminProductsPage() {
                 featured: false,
                 allowFlocage: false,
                 allowGravure: false,
-                images: []
+                images: [],
+                sizes: []
             })
         }
         setIsModalOpen(true)
@@ -446,8 +449,8 @@ export default function AdminProductsPage() {
                             <Label className="text-[10px] font-black uppercase tracking-[0.2em] text-gray-400 ml-1">Assets Visuels (Max 5)</Label>
                             <ImageUpload
                                 value={formData.images}
-                                onChange={(url) => setFormData({ ...formData, images: [...formData.images, url] })}
-                                onRemove={(url) => setFormData({ ...formData, images: formData.images.filter((i: string) => i !== url) })}
+                                onChange={(url) => setFormData((prev: any) => ({ ...prev, images: [...prev.images, url] }))}
+                                onRemove={(url) => setFormData((prev: any) => ({ ...prev, images: prev.images.filter((i: string) => i !== url) }))}
                             />
                         </div>
 
@@ -494,8 +497,8 @@ export default function AdminProductsPage() {
                                 />
                             </div>
 
-                            {/* Pricing & Stock */}
-                            <div className="grid grid-cols-3 gap-6">
+                            {/* Pricing Section (Restored) */}
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 <div className="space-y-2">
                                     <Label htmlFor="price" className="text-[10px] font-black uppercase tracking-widest text-gray-400 ml-1">Prix Brut (F CFA)</Label>
                                     <Input
@@ -517,16 +520,67 @@ export default function AdminProductsPage() {
                                         className="h-12 rounded-2xl border-gray-100 border-dashed text-rose-500 font-bold tabular-nums"
                                     />
                                 </div>
-                                <div className="space-y-2">
-                                    <Label htmlFor="stock" className="text-[10px] font-black uppercase tracking-widest text-gray-400 ml-1">Volume Stock</Label>
-                                    <Input
-                                        id="stock"
-                                        type="number"
-                                        value={formData.stock}
-                                        onChange={(e) => setFormData({ ...formData, stock: e.target.value })}
-                                        className="h-12 rounded-2xl border-gray-100 font-black tabular-nums"
-                                        required
-                                    />
+                            </div>
+
+                            {/* Sizes & Stock Manager */}
+                            <div className="space-y-4 pt-4 border-t border-gray-50">
+                                <div className="flex items-center justify-between">
+                                    <Label className="text-[10px] font-black uppercase tracking-[0.2em] text-gray-400 ml-1">Gestion des Tailles</Label>
+                                    <div className="text-[11px] font-bold text-gray-900 tabular-nums">
+                                        Total: {formData.sizes.reduce((acc: number, s: any) => acc + Number(s.stock || 0), 0)}
+                                    </div>
+                                </div>
+
+                                <div className="space-y-3">
+                                    {formData.sizes.map((item: any, idx: number) => (
+                                        <div key={idx} className="flex items-center gap-3">
+                                            <Input
+                                                placeholder="Taille (ex: M, 42)"
+                                                value={item.size}
+                                                onChange={(e) => {
+                                                    const newSizes = [...formData.sizes]
+                                                    newSizes[idx].size = e.target.value
+                                                    setFormData({ ...formData, sizes: newSizes })
+                                                }}
+                                                className="h-10 rounded-xl border-gray-100 text-[13px] font-bold flex-1"
+                                            />
+                                            <Input
+                                                type="number"
+                                                placeholder="Stock"
+                                                value={item.stock}
+                                                onChange={(e) => {
+                                                    const newSizes = [...formData.sizes]
+                                                    newSizes[idx].stock = e.target.value
+                                                    // Update total stock automatically
+                                                    const total = newSizes.reduce((acc: number, s: any) => acc + Number(s.stock || 0), 0)
+                                                    setFormData({ ...formData, sizes: newSizes, stock: total })
+                                                }}
+                                                className="h-10 w-24 rounded-xl border-gray-100 text-[13px] font-black tabular-nums"
+                                            />
+                                            <Button
+                                                type="button"
+                                                variant="ghost"
+                                                size="icon"
+                                                className="h-10 w-10 text-rose-400 hover:text-rose-600 hover:bg-rose-50 rounded-xl"
+                                                onClick={() => {
+                                                    const newSizes = formData.sizes.filter((_: any, i: number) => i !== idx)
+                                                    const total = newSizes.reduce((acc: number, s: any) => acc + Number(s.stock || 0), 0)
+                                                    setFormData({ ...formData, sizes: newSizes, stock: total })
+                                                }}
+                                            >
+                                                <Trash2 className="h-4 w-4" />
+                                            </Button>
+                                        </div>
+                                    ))}
+
+                                    <Button
+                                        type="button"
+                                        variant="outline"
+                                        className="w-full h-10 rounded-xl border-dashed border-gray-200 text-[12px] font-bold text-gray-400 hover:text-indigo-600 hover:border-indigo-200 hover:bg-indigo-50/50"
+                                        onClick={() => setFormData({ ...formData, sizes: [...formData.sizes, { size: "", stock: 0 }] })}
+                                    >
+                                        <Plus className="mr-2 h-3.5 w-3.5" /> Ajouter une variante
+                                    </Button>
                                 </div>
                             </div>
 

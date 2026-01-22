@@ -42,7 +42,10 @@ export default function POSPage() {
     const [posSearchSearch, setPosSearch] = React.useState("")
     const [isSavingPos, setIsSavingPos] = React.useState(false)
     const [config, setConfig] = React.useState<any>(null)
+
     const [printOrder, setPrintOrder] = React.useState<any>(null)
+    const [paymentMethod, setPaymentMethod] = React.useState("CASH")
+    const [globalDiscount, setGlobalDiscount] = React.useState<number>(0) // 0, 5, 10, 20 percentage
 
     const loadData = React.useCallback(async () => {
         setIsLoading(true)
@@ -80,6 +83,7 @@ export default function POSPage() {
                 hasCustomization: false,
                 customName: "",
                 customNumber: "",
+                manualDiscount: 0,
                 allowFlocage: product.allowFlocage,
                 allowGravure: product.allowGravure
             }])
@@ -107,7 +111,18 @@ export default function POSPage() {
         ))
     }
 
-    const posTotal = posItems.reduce((acc, current) => acc + (current.price * current.quantity), 0)
+    const posTotal = React.useMemo(() => {
+        const subtotal = posItems.reduce((acc, current) => {
+            const itemPrice = current.hasCustomization ? current.price + 2000 : current.price
+            const discountedPrice = Math.max(0, itemPrice - (current.manualDiscount || 0))
+            return acc + (discountedPrice * current.quantity)
+        }, 0)
+
+        if (globalDiscount > 0) {
+            return subtotal * (1 - globalDiscount / 100)
+        }
+        return subtotal
+    }, [posItems, globalDiscount])
 
     const handleCreatePosOrder = async () => {
         if (!posCustomerName) return toast.error("Nom du client requis")
@@ -119,19 +134,35 @@ export default function POSPage() {
                 customerName: posCustomerName,
                 customerPhone: posCustomerPhone,
                 customerAddress: posCustomerAddress,
-                items: posItems.map(i => ({
-                    productId: i.productId,
-                    quantity: i.quantity,
-                    price: i.price,
-                    customName: i.hasCustomization ? i.customName : undefined,
-                    customNumber: i.hasCustomization ? i.customNumber : undefined
-                })),
+                paymentMethod: paymentMethod,
+                items: posItems.map(i => {
+                    // Calculate effective unit price with item discount and global discount
+                    const basePrice = i.hasCustomization ? i.price + 2000 : i.price
+                    const afterItemDiscount = Math.max(0, basePrice - (i.manualDiscount || 0))
+                    // Global discount applies to the whole order, but we can distribute it unitarily if needed, 
+                    // or just let the Total reflect it and keep item prices as "post-item-discount".
+                    // The simplest for accounting is to save the item price as the price sold.
+                    // If we want to reflect global discount in item price:
+                    const finalPrice = globalDiscount > 0 ? afterItemDiscount * (1 - globalDiscount / 100) : afterItemDiscount
+
+                    return {
+                        productId: i.productId,
+                        quantity: i.quantity,
+                        price: finalPrice,
+                        customName: i.hasCustomization ? i.customName : undefined,
+                        customNumber: i.hasCustomization ? i.customNumber : undefined
+                    }
+                }),
                 total: posTotal
             })
             toast.success("Commande Boutique Enregistrée")
 
             // Auto-print receipt
-            setPrintOrder(order)
+            setPrintOrder({
+                ...order,
+                // Inject specific display info if needed for Receipt component
+                _globalDiscount: globalDiscount
+            })
             setTimeout(() => {
                 window.print()
                 setTimeout(() => {
@@ -140,6 +171,8 @@ export default function POSPage() {
                     setPosCustomerName("")
                     setPosCustomerPhone("")
                     setPosCustomerAddress("")
+                    setPaymentMethod("CASH")
+                    setGlobalDiscount(0)
                 }, 1000)
             }, 500)
         } catch (error) {
@@ -287,6 +320,20 @@ export default function POSPage() {
                                                 <Button variant="ghost" size="icon" className="h-8 w-8 text-rose-500 hover:bg-rose-50 rounded-xl" onClick={() => removeFromPos(item.productId)}><Trash className="h-4 w-4" /></Button>
                                             </div>
                                         </div>
+                                        {/* Per Item Discount Input */}
+                                        <div className="pt-2 flex items-center gap-4">
+                                            <Label className="text-[10px] font-bold text-gray-400 uppercase">Réduction (F CFA)</Label>
+                                            <div className="relative flex-1">
+                                                <Input
+                                                    type="number"
+                                                    placeholder="0"
+                                                    className="h-8 text-[11px] font-bold tabular-nums"
+                                                    value={item.manualDiscount || ""}
+                                                    onChange={(e) => updatePosItemCustomization(item.productId, { manualDiscount: Number(e.target.value) })}
+                                                />
+                                                <div className="absolute right-3 top-1/2 -translate-y-1/2 text-[9px] font-bold text-gray-400">F</div>
+                                            </div>
+                                        </div>
 
                                         {/* Customization (Only if allowed) */}
                                         {(item.allowFlocage || item.allowGravure) && (
@@ -345,12 +392,69 @@ export default function POSPage() {
 
                     {/* Footer / Summary Area */}
                     <div className="p-8 bg-white border-t border-gray-100 space-y-6 shrink-0">
+                        {/* Payment Method Selector */}
+                        <div className="grid grid-cols-3 gap-3">
+                            <button
+                                onClick={() => setPaymentMethod("CASH")}
+                                className={cn(
+                                    "flex flex-col items-center justify-center p-3 rounded-xl border-2 transition-all gap-2 relative overflow-hidden",
+                                    paymentMethod === "CASH" ? "border-emerald-500 bg-emerald-50/50" : "border-gray-100 bg-white hover:bg-gray-50"
+                                )}
+                            >
+                                <img src="/payment-cash.png" alt="Espèces" className="h-8 w-8 object-contain" />
+                                <span className={cn("text-[10px] font-black uppercase", paymentMethod === "CASH" ? "text-emerald-700" : "text-gray-400")}>Espèces</span>
+                            </button>
+                            <button
+                                onClick={() => setPaymentMethod("WAVE")}
+                                className={cn(
+                                    "flex flex-col items-center justify-center p-3 rounded-xl border-2 transition-all gap-2",
+                                    paymentMethod === "WAVE" ? "border-blue-500 bg-blue-50/50" : "border-gray-100 bg-white hover:bg-gray-50"
+                                )}
+                            >
+                                <img src="/payment-wave.png" alt="Wave" className="h-8 w-8 object-contain" />
+                                <span className={cn("text-[10px] font-black uppercase", paymentMethod === "WAVE" ? "text-blue-700" : "text-gray-400")}>Wave</span>
+                            </button>
+                            <button
+                                onClick={() => setPaymentMethod("OM")}
+                                className={cn(
+                                    "flex flex-col items-center justify-center p-3 rounded-xl border-2 transition-all gap-2",
+                                    paymentMethod === "OM" ? "border-orange-500 bg-orange-50/50" : "border-gray-100 bg-white hover:bg-gray-50"
+                                )}
+                            >
+                                <img src="/payment-om.png" alt="Orange Money" className="h-8 w-8 object-contain" />
+                                <span className={cn("text-[10px] font-black uppercase", paymentMethod === "OM" ? "text-orange-700" : "text-gray-400")}>Orange Mobile</span>
+                            </button>
+                        </div>
+
+                        <Separator className="bg-gray-100" />
+
                         <div className="flex justify-between items-center">
                             <div className="space-y-0.5">
                                 <p className="text-[11px] font-black text-gray-400 uppercase tracking-widest">Montant Total</p>
                                 <p className="text-[10px] font-bold text-indigo-400 italic">Net à payer immédiatement</p>
                             </div>
                             <span className="text-4xl font-black text-gray-900 tabular-nums italic tracking-tighter shrink-0">{Number(posTotal).toLocaleString()} F</span>
+                        </div>
+
+                        {/* Global Discount Toggles */}
+                        <div className="space-y-2">
+                            <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Réduction Panier (Global)</p>
+                            <div className="flex bg-gray-50 p-1 rounded-xl border border-gray-100">
+                                {[0, 5, 10, 15, 20].map((disc) => (
+                                    <button
+                                        key={disc}
+                                        onClick={() => setGlobalDiscount(disc)}
+                                        className={cn(
+                                            "flex-1 py-2 rounded-lg text-[10px] font-black transition-all",
+                                            globalDiscount === disc
+                                                ? "bg-indigo-600 text-white shadow-md"
+                                                : "text-gray-500 hover:bg-gray-200"
+                                        )}
+                                    >
+                                        {disc === 0 ? "Normal" : `-${disc}%`}
+                                    </button>
+                                ))}
+                            </div>
                         </div>
 
                         <Button
@@ -372,10 +476,10 @@ export default function POSPage() {
                         </Button>
                     </div>
                 </div>
-            </div>
+            </div >
 
             {/* Printing specific Styles (Copied from Orders for consistency) */}
-            <style jsx global>{`
+            < style jsx global > {`
                 @media print {
                     body > *:not(#thermal-receipt) {
                         display: none !important;
@@ -407,7 +511,7 @@ export default function POSPage() {
                 .receipt-print-only {
                     display: none;
                 }
-            `}</style>
-        </div>
+            `}</style >
+        </div >
     )
 }
