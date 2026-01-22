@@ -1,135 +1,94 @@
 "use client"
 
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardFooter } from "@/components/ui/card"
-import { Trash, ShoppingCart, Heart } from "lucide-react"
+import * as React from "react"
+import {
+    Heart,
+    ShoppingBag,
+    Trash2,
+    ArrowRight,
+    ChevronLeft
+} from "lucide-react"
 import Link from "next/link"
-import { Navigation } from "@/components/navigation"
-import { Footer } from "@/components/footer"
+import { ScrollReveal } from "@/components/scroll-reveal"
+import { Magnetic } from "@/components/interactions"
+import { Button } from "@/components/ui/button"
+
+const wishlistItems = [
+    { id: "1", name: "Nike Mercurial Vapor 16", price: 125000, image: "https://www.foot.fr/151284-large_default/nike-air-zoom-mercurial-vapor-16-pro-fg-bleu-rose.jpg", category: "Crampons" },
+    { id: "2", name: "Maillot PSG 24/25 Home", price: 65000, image: "https://www.foot.fr/151284-large_default/nike-air-zoom-mercurial-vapor-16-pro-fg-bleu-rose.jpg", category: "Maillots" },
+]
 
 export default function WishlistPage() {
-    // Mock Wishlist Data
-    const wishlistItems = [
-        {
-            id: 1,
-            name: "Air Jordan 1 Retro High OG",
-            category: "Sneakers",
-            price: "$180.00",
-            image: "/placeholder.svg",
-            inStock: true,
-        },
-        {
-            id: 2,
-            name: "Nike Dri-FIT Adv",
-            category: "Jersey",
-            price: "$140.00",
-            image: "/placeholder.svg",
-            inStock: true,
-        },
-        {
-            id: 3,
-            name: "Adidas Predator Elite",
-            category: "Cleats",
-            price: "$280.00",
-            image: "/placeholder.svg",
-            inStock: false,
-        },
-    ]
-
     return (
-        <div className="min-h-screen bg-background text-foreground selection:bg-primary selection:text-primary-foreground">
-            <Navigation />
-
-            <main className="relative pt-32 pb-40 overflow-hidden">
-                {/* Massive Background Text */}
-                <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 opacity-[0.03] pointer-events-none select-none z-0">
-                    <h2 className="text-[30vw] font-black leading-none tracking-tighter">ENREGISTRE</h2>
-                </div>
-
-                <div className="container px-6 relative z-10">
-                    {/* Header Section */}
-                    <div className="max-w-4xl mb-16 space-y-4">
-                        <div className="flex items-end justify-between gap-8">
+        <div className="flex flex-col w-full bg-background min-h-screen">
+            <div className="container-custom py-20 px-4">
+                <div className="max-w-6xl mx-auto space-y-16">
+                    {/* Header */}
+                    <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 border-b-2 border-muted pb-12">
+                        <ScrollReveal direction="left">
                             <div className="space-y-4 text-left">
-                                <p className="text-primary font-black uppercase tracking-[0.6em] text-[10px]">Votre Sélection</p>
-                                <h1 className="text-6xl md:text-9xl font-black tracking-tighter uppercase leading-[0.8] italic">
-                                    LA <br />
-                                    <span className="text-muted-foreground/30 not-italic">LISTE_D'ENVIES_</span>
+                                <Link href="/shop" className="inline-flex items-center text-[10px] font-black uppercase tracking-[0.3em] text-muted-foreground hover:text-primary transition-colors mb-4">
+                                    <ChevronLeft className="h-4 w-4 mr-1" /> Retour au shop
+                                </Link>
+                                <h1 className="font-heading text-6xl md:text-8xl font-black uppercase italic tracking-tighter leading-none">
+                                    Mes <span className="text-primary italic">Favoris.</span>
                                 </h1>
                             </div>
-                            <div className="hidden md:block pb-4">
-                                <p className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">
-                                    {wishlistItems.length} ARTICLES ARCHIVES
-                                </p>
+                        </ScrollReveal>
+                        <ScrollReveal direction="right" className="flex items-center space-x-6">
+                            <div className="text-right">
+                                <p className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Articles Sauvegardés</p>
+                                <p className="text-3xl font-black italic tracking-tighter text-primary">{wishlistItems.length}</p>
                             </div>
-                        </div>
+                            <div className="h-16 w-16 rounded-[1.5rem] bg-primary/10 flex items-center justify-center text-primary">
+                                <Heart className="h-8 w-8 fill-current" />
+                            </div>
+                        </ScrollReveal>
                     </div>
 
+                    {/* Grid */}
                     {wishlistItems.length > 0 ? (
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-                            {wishlistItems.map((item) => (
-                                <div key={item.id} className="group relative border-l border-border hover:border-primary transition-all p-8 flex flex-col bg-secondary/5 hover:bg-secondary/10 rounded-r-[2rem]">
-                                    <div className="aspect-square relative overflow-hidden rounded-2xl bg-background border border-border group-hover:scale-[1.02] transition-transform duration-500 mb-6">
-                                        <img
-                                            src={item.image || "/placeholder.svg"}
-                                            alt={item.name}
-                                            className="object-cover w-full h-full"
-                                        />
-                                        {!item.inStock && (
-                                            <div className="absolute inset-0 bg-background/80 flex items-center justify-center backdrop-blur-sm">
-                                                <span className="text-[10px] font-black uppercase tracking-[0.4em] text-red-500 border border-red-500/20 px-4 py-2 rounded-full">
-                                                    Epuisé_
-                                                </span>
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+                            {wishlistItems.map((item, i) => (
+                                <ScrollReveal key={item.id} delay={i * 0.1}>
+                                    <div className="group bg-card border-2 border-muted/50 rounded-[3rem] p-8 space-y-8 hover:shadow-2xl transition-all hover:border-primary/20">
+                                        <div className="relative aspect-square rounded-[2rem] overflow-hidden border bg-muted">
+                                            <img src={item.image} alt={item.name} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
+                                            <button className="absolute top-4 right-4 h-12 w-12 bg-white/90 dark:bg-black/90 rounded-2xl flex items-center justify-center text-rose-500 hover:bg-rose-500 hover:text-white transition-all shadow-xl">
+                                                <Trash2 className="h-5 w-5" />
+                                            </button>
+                                        </div>
+                                        <div className="space-y-4">
+                                            <div className="flex items-center justify-between">
+                                                <span className="text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground">{item.category}</span>
+                                                <span className="text-lg font-black italic tracking-tighter tabular-nums">{item.price.toLocaleString()} F</span>
                                             </div>
-                                        )}
+                                            <h3 className="text-xl font-black uppercase italic tracking-tighter leading-tight group-hover:text-primary transition-colors">{item.name}</h3>
+                                        </div>
+                                        <Magnetic>
+                                            <Button className="w-full h-16 bg-black text-white hover:bg-primary rounded-2xl font-black uppercase tracking-widest text-[10px] group/btn">
+                                                Ajouter au Panier
+                                                <ShoppingBag className="ml-3 h-4 w-4 transition-transform group-hover/btn:scale-110" />
+                                            </Button>
+                                        </Magnetic>
                                     </div>
-
-                                    <div className="flex-1 space-y-2">
-                                        <p className="text-[10px] font-black uppercase tracking-[0.3em] text-primary">{item.category}</p>
-                                        <h3 className="text-xl font-black uppercase italic leading-tight group-hover:text-primary transition-colors">{item.name}</h3>
-                                        <p className="text-2xl font-black italic tabular-nums text-muted-foreground">{item.price}</p>
-                                    </div>
-
-                                    <div className="mt-8 flex gap-3">
-                                        <Button
-                                            className="flex-1 h-12 rounded-full bg-foreground text-background hover:bg-primary hover:text-primary-foreground font-black uppercase tracking-widest text-[10px] transition-all"
-                                            disabled={!item.inStock}
-                                        >
-                                            <ShoppingCart className="mr-2 h-4 w-4" />
-                                            Transférer
-                                        </Button>
-                                        <Button
-                                            variant="outline"
-                                            size="icon"
-                                            className="h-12 w-12 rounded-full border-border hover:bg-red-500/10 hover:text-red-500 hover:border-red-500 transition-all"
-                                        >
-                                            <Trash className="h-4 w-4" />
-                                        </Button>
-                                    </div>
-                                </div>
+                                </ScrollReveal>
                             ))}
                         </div>
                     ) : (
-                        <div className="p-32 text-center bg-secondary/10 rounded-[4rem] border border-border backdrop-blur-sm relative overflow-hidden">
-                            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 opacity-[0.05] pointer-events-none">
-                                <Heart className="h-64 w-64 fill-foreground" />
+                        <div className="py-40 text-center space-y-8">
+                            <div className="h-32 w-32 bg-muted rounded-full flex items-center justify-center mx-auto mb-10">
+                                <Heart className="h-16 w-16 text-muted-foreground/30" />
                             </div>
-                            <div className="relative z-10 space-y-8">
-                                <h2 className="text-4xl md:text-6xl font-black italic uppercase leading-none tracking-tighter">LE COFFRE EST OUVERT_</h2>
-                                <p className="text-xl text-muted-foreground max-w-md mx-auto font-medium leading-relaxed">
-                                    Votre archive personnelle est actuellement vide. Explorez les derniers arrivages pour curer votre collection.
-                                </p>
-                                <Link href="/shop" className="inline-block">
-                                    <Button className="h-20 px-12 rounded-full bg-foreground text-background hover:bg-primary hover:text-primary-foreground font-black uppercase tracking-[0.4em] text-sm transition-all shadow-xl">
-                                        Explorer les Arrivages
-                                    </Button>
-                                </Link>
-                            </div>
+                            <h2 className="text-4xl font-black uppercase italic tracking-tighter leading-none">Votre liste est vide.</h2>
+                            <p className="text-muted-foreground font-medium max-w-md mx-auto italic">Explorez notre collection et sauvez vos articles préférés pour plus tard.</p>
+                            <Link href="/shop" className="inline-flex h-16 px-10 bg-primary text-primary-foreground rounded-2xl items-center font-black uppercase tracking-widest text-[10px] hover:scale-105 transition-all">
+                                Découvrir le Catalogue <ArrowRight className="ml-3 h-4 w-4" />
+                            </Link>
                         </div>
                     )}
                 </div>
-            </main>
-            <Footer />
+            </div>
         </div>
     )
 }

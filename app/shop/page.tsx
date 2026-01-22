@@ -1,106 +1,100 @@
-"use client"
-
-import { Navigation } from "@/components/navigation"
-import { Footer } from "@/components/footer"
-import { ProductGrid } from "@/components/product-grid"
+import * as React from "react"
+import { ProductCard } from "@/components/product-card"
 import { ShopFilters } from "@/components/shop-filters"
+import { ChevronDown, LayoutGrid, List, SlidersHorizontal } from "lucide-react"
+import { ScrollReveal } from "@/components/scroll-reveal"
+import { prisma } from "@/lib/prisma"
 import { Button } from "@/components/ui/button"
-import { Filter, ChevronRight, SlidersHorizontal, ArrowDownWideNarrow } from "lucide-react"
-import Link from "next/link"
-import { useState } from "react"
-import { cn } from "@/lib/utils"
 
-export default function ShopPage() {
-    const [filtersOpen, setFiltersOpen] = useState(false)
+export default async function ShopPage() {
+    const productsFromDb = await prisma.product.findMany({
+        orderBy: { createdAt: 'desc' },
+        include: { category: true }
+    })
+
+    const products = productsFromDb.map(p => ({
+        id: p.id,
+        name: p.name,
+        price: Number(p.price),
+        category: p.category?.name || "Sans catégorie",
+        image: p.images[0] || "/placeholder.svg",
+        isNew: true // Simplified for seed data
+    }))
 
     return (
-        <div className="min-h-screen bg-white text-black font-sans selection:bg-[#FFD700] selection:text-black overflow-x-hidden">
-            <Navigation />
-
-            <main className="pt-32 pb-20">
-                <div className="container mx-auto px-4 sm:px-6 lg:px-12 max-w-[1440px]">
-                    {/* Header Block */}
-                    <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-12 border-b border-zinc-200 pb-8">
+        <div className="flex flex-col w-full bg-background min-h-screen">
+            <div className="container-custom py-16 md:py-24">
+                <div className="flex flex-col space-y-12">
+                    {/* Page Header */}
+                    <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 pb-12 border-b">
                         <div className="space-y-4">
-                            <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-zinc-400">
-                                <Link href="/" className="hover:text-black transition-colors">Accueil</Link>
-                                <ChevronRight className="h-3 w-3" />
-                                <span className="text-black">Boutique</span>
-                            </div>
-                            <h1 className="text-[10vw] sm:text-4xl md:text-6xl font-black uppercase italic tracking-tighter text-black">
-                                L'<span className="text-transparent text-stroke hover:text-[#FFD700] transition-colors">Inventaire</span>
-                            </h1>
-                            <p className="text-zinc-500 text-sm md:text-base max-w-md font-medium">
-                                Explorez notre collection de vêtements de sport d'élite, sneakers limitées et maillots authentiques.
-                            </p>
+                            <ScrollReveal direction="left">
+                                <h1 className="font-heading text-5xl md:text-7xl font-bold tracking-tight leading-none">
+                                    Catalogue <span className="text-primary">Mbor Store</span>
+                                </h1>
+                            </ScrollReveal>
+                            <ScrollReveal direction="left" delay={0.1}>
+                                <p className="text-muted-foreground font-medium text-lg max-w-xl">
+                                    L'excellence du football et du streetwear sélectionnée pour vous.
+                                </p>
+                            </ScrollReveal>
                         </div>
 
-                        <div className="flex gap-4 md:hidden">
-                            <Button
-                                variant="outline"
-                                className="flex-1 bg-zinc-50 border-zinc-200 text-black hover:bg-black hover:text-white font-bold uppercase tracking-widest text-xs h-12"
-                                onClick={() => setFiltersOpen(true)}
-                            >
-                                <SlidersHorizontal className="mr-2 h-4 w-4" /> Filtres
+                        <ScrollReveal direction="right" className="flex items-center space-x-4">
+                            <div className="hidden sm:flex items-center bg-muted/50 p-1 rounded-xl">
+                                <Button variant="ghost" size="icon" className="h-9 w-9 rounded-lg bg-background shadow-sm">
+                                    <LayoutGrid className="h-4 w-4" />
+                                </Button>
+                                <Button variant="ghost" size="icon" className="h-9 w-9 rounded-lg text-muted-foreground">
+                                    <List className="h-4 w-4" />
+                                </Button>
+                            </div>
+
+                            <Button variant="outline" className="h-12 px-6 rounded-xl text-[13px] font-bold tracking-tight border-muted hover:bg-muted group">
+                                <span>Trier : Nouveautés</span>
+                                <ChevronDown className="ml-2 h-4 w-4 text-primary transition-transform group-hover:translate-y-0.5" />
                             </Button>
-                            <Button
-                                variant="outline"
-                                className="flex-1 bg-zinc-50 border-zinc-200 text-black hover:bg-black hover:text-white font-bold uppercase tracking-widest text-xs h-12"
-                            >
-                                <ArrowDownWideNarrow className="mr-2 h-4 w-4" /> Trier
-                            </Button>
-                        </div>
+                        </ScrollReveal>
                     </div>
 
-                    <div className="flex flex-col lg:flex-row gap-12 items-start relative">
-                        {/* Sidebar - Desktop Sticky / Mobile Drawer */}
-                        <aside className={cn(
-                            "lg:w-72 shrink-0 transition-all duration-300 z-40",
-                            filtersOpen
-                                ? "fixed inset-0 bg-white p-6 overflow-y-auto animate-in slide-in-from-left-full lg:static lg:bg-transparent lg:p-0 lg:block lg:animate-none border-r border-zinc-100"
-                                : "hidden lg:block lg:sticky lg:top-32"
-                        )}>
-                            <div className="lg:hidden flex justify-between items-center mb-8 pb-4 border-b border-zinc-100">
-                                <h2 className="text-2xl font-black uppercase italic">Filtres</h2>
-                                <Button variant="ghost" onClick={() => setFiltersOpen(false)}>Fermer</Button>
-                            </div>
-
-                            <div className="text-black">
+                    <div className="grid grid-cols-1 gap-12 lg:grid-cols-4 lg:items-start">
+                        {/* Filters Sidebar */}
+                        <aside className="hidden lg:block lg:sticky lg:top-32 h-fit">
+                            <ScrollReveal direction="left">
                                 <ShopFilters />
-                            </div>
+                            </ScrollReveal>
                         </aside>
 
-                        {/* Content */}
-                        <div className="flex-1 w-full">
-                            {/* Desktop Sort Bar */}
-                            <div className="hidden lg:flex items-center justify-between mb-8 pb-4 border-b border-zinc-100">
-                                <span className="text-sm font-bold text-zinc-400 uppercase tracking-widest">Affichage de 24 sur 120 Articles</span>
-                                <div className="flex items-center gap-4">
-                                    <span className="text-sm font-bold text-black uppercase tracking-widest">Trier Par:</span>
-                                    <select className="bg-transparent text-black text-xs font-bold uppercase tracking-widest h-10 px-4 rounded-md focus:ring-0 outline-none cursor-pointer border-none hover:bg-zinc-50">
-                                        <option>Nouveautés</option>
-                                        <option>Prix : Croissant</option>
-                                        <option>Prix : Décroissant</option>
-                                        <option>Meilleures Ventes</option>
-                                    </select>
-                                </div>
+                        {/* Product Grid */}
+                        <div className="lg:col-span-3 space-y-20">
+                            {/* Mobile Filter Trigger */}
+                            <div className="lg:hidden flex justify-between items-center mb-6">
+                                <Button variant="outline" className="flex-1 h-12 rounded-xl font-bold tracking-tight mr-4">
+                                    <SlidersHorizontal className="mr-2 h-4 w-4" /> Filtrer
+                                </Button>
+                                <p className="text-sm font-medium text-muted-foreground">{products.length} produits</p>
                             </div>
 
-                            {/* Products */}
-                            <ProductGrid />
+                            <div className="grid grid-cols-1 gap-x-6 gap-y-12 sm:grid-cols-2 xl:grid-cols-3">
+                                {products.map((product, i) => (
+                                    <ScrollReveal key={product.id} delay={i * 0.05}>
+                                        <ProductCard {...product} />
+                                    </ScrollReveal>
+                                ))}
+                            </div>
 
                             {/* Load More */}
-                            <div className="mt-20 text-center">
-                                <Button variant="outline" className="h-14 px-12 bg-white border-black text-black hover:bg-black hover:text-white font-black uppercase tracking-widest text-xs rounded-none clip-diagonal transition-all">
-                                    Charger Plus d'Articles
-                                </Button>
+                            <div className="flex justify-center pt-12">
+                                <ScrollReveal direction="up">
+                                    <Button variant="outline" className="h-14 px-12 rounded-2xl text-[13px] font-bold tracking-tight border-primary/20 hover:bg-primary hover:text-primary-foreground hover:border-primary transition-all active:scale-95 shadow-md">
+                                        Charger plus de produits
+                                    </Button>
+                                </ScrollReveal>
                             </div>
                         </div>
                     </div>
                 </div>
-            </main>
-
-            <Footer />
+            </div>
         </div>
     )
 }

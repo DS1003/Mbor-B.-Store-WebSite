@@ -1,135 +1,270 @@
-import { prisma } from "@/lib/prisma"
-import { Search, Filter, AlertCircle, TrendingDown, ArrowRight, Box, PackageOpen } from "lucide-react"
-import { PageTransition } from "@/components/admin/page-transition"
+"use client"
 
-export default async function AdminStockPage() {
-    const products = await prisma.product.findMany({
-        orderBy: { stock: 'asc' }
-    })
+import * as React from "react"
+import {
+    AlertTriangle,
+    ArrowUp,
+    ArrowDown,
+    RotateCcw,
+    Search,
+    Filter,
+    ArrowUpDown,
+    CheckCircle2,
+    Database,
+    Zap,
+    Scale,
+    Layers,
+    History,
+    MoreHorizontal,
+    Edit,
+    Plus,
+    RefreshCw
+} from "lucide-react"
+import { cn } from "@/lib/utils"
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuLabel,
+    DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
+import { Badge } from "@/components/ui/badge"
+import { motion, AnimatePresence } from "framer-motion"
+import { toast } from "sonner"
 
-    const lowStockCount = products.filter(p => p.stock < 5).length
+import { getAdminProducts, updateStock } from "../actions"
+
+export default function AdminStockPage() {
+    const [productsData, setProductsData] = React.useState<any[]>([])
+    const [isLoading, setIsLoading] = React.useState(true)
+    const [searchQuery, setSearchQuery] = React.useState("")
+    const [isUpdating, setIsUpdating] = React.useState<string | null>(null)
+
+    const loadData = React.useCallback(async () => {
+        setIsLoading(true)
+        try {
+            const data = await getAdminProducts()
+            setProductsData(data)
+        } catch (error) {
+            console.error("Failed to load stock data:", error)
+        } finally {
+            setIsLoading(false)
+        }
+    }, [])
+
+    React.useEffect(() => {
+        loadData()
+    }, [loadData])
+
+    const handleStockUpdate = async (id: string, increment: number) => {
+        setIsUpdating(id)
+        try {
+            await updateStock(id, increment)
+            toast.success(`Stock synchronisé: ${increment > 0 ? '+' : ''}${increment}`)
+            loadData()
+        } catch (error) {
+            toast.error("Erreur de synchronisation")
+        } finally {
+            setIsUpdating(null)
+        }
+    }
+
+    const filteredProducts = productsData.filter(p =>
+        p.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        p.id.toLowerCase().includes(searchQuery.toLowerCase())
+    )
+
+    const criticalCount = productsData.filter(p => (p.stock || 0) === 0).length
+    const lowCount = productsData.filter(p => (p.stock || 0) > 0 && (p.stock || 0) <= 5).length
+    const healthyCount = productsData.filter(p => (p.stock || 0) > 5).length
+
+    const alerts = [
+        { label: "Rupture Critique", value: criticalCount.toString(), icon: AlertTriangle, color: "text-rose-600", bg: "bg-rose-50" },
+        { label: "Seuil Alerte", value: lowCount.toString(), icon: Scale, color: "text-amber-600", bg: "bg-amber-50" },
+        { label: "Flux Opérationnel", value: healthyCount.toString(), icon: CheckCircle2, color: "text-emerald-600", bg: "bg-emerald-50" },
+    ]
 
     return (
-        <PageTransition>
-            <div className="space-y-12 pb-20">
-                {/* Immersive Header */}
-                <div className="flex flex-col md:flex-row md:items-end justify-between gap-10">
-                    <div className="space-y-6">
-                        <div className="flex items-center gap-4">
-                            <div className="h-0.5 w-16 bg-black" />
-                            <span className="text-zinc-500 text-[10px] font-black uppercase tracking-[0.4em]">Logistique d'Inventaire</span>
+        <div className="space-y-10 pb-10">
+            {/* Header Area */}
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6">
+                <div className="space-y-1">
+                    <h1 className="text-3xl font-black tracking-tighter text-gray-900 uppercase italic">Gestion <span className="text-indigo-600">Logistique.</span></h1>
+                    <p className="text-[13px] text-gray-500 font-medium">Surveillance des flux de stock et réapprovisionnement stratégique.</p>
+                </div>
+
+                <div className="flex items-center gap-3">
+                    <Button variant="outline" className="h-11 px-6 rounded-2xl text-[12px] font-bold border-gray-100 hover:bg-white hover:shadow-xl transition-all flex items-center gap-2 uppercase tracking-widest bg-white shadow-sm">
+                        <History className="h-4 w-4 text-gray-400" /> Audit Logs
+                    </Button>
+                    <Button
+                        onClick={loadData}
+                        className="h-11 px-6 rounded-2xl bg-gray-900 text-white text-[12px] font-bold hover:bg-black hover:shadow-2xl transition-all flex items-center gap-2 uppercase tracking-widest shadow-xl"
+                    >
+                        <RefreshCw className={cn("h-4 w-4", isLoading && "animate-spin")} /> Refresh Database
+                    </Button>
+                </div>
+            </div>
+
+            {/* Matrix Metrics */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                {alerts.map((stat, i) => (
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: i * 0.1 }}
+                        key={i}
+                        className="bg-white border border-gray-50 rounded-[2.5rem] p-8 shadow-sm hover:shadow-2xl transition-all duration-500 group relative overflow-hidden"
+                    >
+                        <div className="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity">
+                            <stat.icon className="h-10 w-10" />
                         </div>
-                        <h1 className="text-6xl md:text-8xl font-black uppercase italic tracking-tighter text-zinc-900 leading-[0.8]">
-                            Contrôle <br />
-                            <span className="text-transparent text-stroke-black">Physique.</span>
-                        </h1>
-                    </div>
-                    <div className="pb-2">
-                        <button className="h-16 px-10 bg-black text-[#FFD700] rounded-2xl text-[10px] font-black uppercase tracking-[0.2em] shadow-2xl shadow-black/20 hover:scale-105 transition-all flex items-center gap-3">
-                            AUDIO D'INVENTAIRE
-                            <PackageOpen className="h-5 w-5" />
-                        </button>
+                        <div className="flex items-center justify-between mb-6">
+                            <div className={cn("h-12 w-12 rounded-2xl flex items-center justify-center shadow-inner", stat.bg, stat.color)}>
+                                <stat.icon className="h-6 w-6" />
+                            </div>
+                        </div>
+                        <div className="space-y-1">
+                            <p className="text-[10px] font-black text-gray-400 uppercase tracking-[0.2em]">{stat.label}</p>
+                            <h3 className="text-2xl font-black tracking-tighter text-gray-900 italic">
+                                {isLoading ? <span className="h-8 w-16 bg-gray-50 animate-pulse block rounded-lg" /> : stat.value}
+                            </h3>
+                        </div>
+                    </motion.div>
+                ))}
+            </div>
+
+            {/* List Manager */}
+            <div className="bg-white border border-gray-50 rounded-[2.5rem] overflow-hidden shadow-sm">
+                <div className="p-6 flex flex-col md:flex-row items-center gap-4 bg-gray-50/30 border-b border-gray-50">
+                    <div className="relative flex-1 w-full flex items-center group">
+                        <Search className="absolute left-5 h-4 w-4 text-gray-400 group-focus-within:text-indigo-600 transition-colors" />
+                        <Input
+                            placeholder="Chercher par SKU, désignation ou univers..."
+                            className="bg-white h-12 pl-12 pr-6 rounded-2xl border-gray-100 focus-visible:ring-2 focus-visible:ring-indigo-100 focus-visible:border-indigo-200 text-[14px] font-medium placeholder:text-gray-400 shadow-sm"
+                            value={searchQuery}
+                            onChange={(e) => setSearchQuery(e.target.value)}
+                        />
                     </div>
                 </div>
 
-                {/* Critical Alerts Row */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                    <div className="group relative bg-white/60 backdrop-blur-xl p-10 rounded-[2.5rem] border border-white/60 shadow-xl shadow-zinc-200/50 transition-all hover:scale-[1.02]">
-                        <div className="flex items-center gap-8">
-                            <div className="h-20 w-20 bg-rose-50 border border-rose-100 rounded-3xl flex items-center justify-center text-rose-500 shadow-xl shadow-rose-500/5 group-hover:rotate-6 transition-transform">
-                                <AlertCircle className="h-10 w-10" />
-                            </div>
-                            <div>
-                                <p className="text-[10px] font-black text-rose-500 uppercase tracking-[0.4em] mb-2">Actifs Critiques</p>
-                                <p className="text-4xl font-black text-zinc-900 italic tracking-tighter">{lowStockCount} UNITÉS SOUS LE SEUIL</p>
-                            </div>
-                        </div>
-                        <ArrowRight className="absolute top-10 right-10 h-6 w-6 text-zinc-300 group-hover:text-black transition-colors" />
-                    </div>
-                    <div className="group relative bg-white/60 backdrop-blur-xl p-10 rounded-[2.5rem] border border-white/60 shadow-xl shadow-zinc-200/50 transition-all hover:scale-[1.02]">
-                        <div className="flex items-center gap-8">
-                            <div className="h-20 w-20 bg-amber-50 border border-amber-100 rounded-3xl flex items-center justify-center text-amber-500 shadow-xl shadow-amber-500/5 group-hover:rotate-6 transition-transform">
-                                <TrendingDown className="h-10 w-10" />
-                            </div>
-                            <div>
-                                <p className="text-[10px] font-black text-amber-500 uppercase tracking-[0.4em] mb-2">Approvisionnement</p>
-                                <p className="text-4xl font-black text-zinc-900 italic tracking-tighter">12 EXPÉDITIONS EN ATTENTE</p>
-                            </div>
-                        </div>
-                        <ArrowRight className="absolute top-10 right-10 h-6 w-6 text-zinc-300 group-hover:text-black transition-colors" />
-                    </div>
-                </div>
-
-                {/* Main Inventory Ledger */}
-                <div className="bg-white/60 backdrop-blur-xl rounded-[3rem] border border-white/60 overflow-hidden shadow-2xl shadow-zinc-200/50">
-                    <div className="p-12 border-b border-zinc-100/50 flex flex-col md:flex-row items-center justify-between gap-10">
-                        <div>
-                            <h2 className="text-3xl font-black uppercase italic tracking-tighter text-zinc-900">Grand Livre des Stocks</h2>
-                            <p className="text-[10px] font-black text-zinc-400 uppercase tracking-[0.2em] mt-2">État en temps réel de tous les actifs physiques</p>
-                        </div>
-                        <div className="relative w-full max-w-sm group">
-                            <Search className="absolute left-5 top-1/2 -translate-y-1/2 h-5 w-5 text-zinc-400 group-focus-within:text-black transition-colors" />
-                            <input
-                                type="text"
-                                placeholder="IDENTIFIER UN ACTIF..."
-                                className="w-full h-14 pl-14 pr-6 bg-zinc-50/50 border border-zinc-100 rounded-2xl text-[10px] font-black uppercase tracking-widest text-zinc-900 focus:ring-4 focus:ring-black/5 focus:bg-white transition-all shadow-sm"
-                            />
-                        </div>
-                    </div>
-                    <div className="overflow-x-auto">
-                        <table className="w-full text-left border-collapse">
-                            <thead>
-                                <tr className="bg-white/40 border-b border-zinc-100/50 text-[10px] font-black text-zinc-400 uppercase tracking-[0.3em]">
-                                    <th className="px-12 py-8">Spécification de l'Actif</th>
-                                    <th className="px-12 py-8">Détention Actuelle</th>
-                                    <th className="px-12 py-8 text-center">Statut de Sécurité</th>
-                                    <th className="px-12 py-8">Seuil de Réappro</th>
-                                    <th className="px-12 py-8 text-right"></th>
-                                </tr>
-                            </thead>
-                            <tbody className="divide-y divide-zinc-50">
-                                {products.map((p) => (
-                                    <tr key={p.id} className="hover:bg-white/80 transition-all group">
-                                        <td className="px-12 py-8">
-                                            <div className="flex items-center gap-6">
-                                                <div className="h-16 w-16 rounded-2xl bg-white border border-zinc-100 overflow-hidden shadow-sm group-hover:scale-110 transition-transform duration-500">
-                                                    {p.images[0] ? (
-                                                        <img src={p.images[0]} className="h-full w-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700" alt="" />
-                                                    ) : (
-                                                        <Box className="h-7 w-7 text-zinc-200 m-auto" />
-                                                    )}
+                <div className="overflow-x-auto">
+                    <table className="w-full text-left">
+                        <thead>
+                            <tr className="bg-gray-50/50 border-b border-gray-50 font-black text-[10px] text-gray-400 uppercase tracking-widest">
+                                <th className="px-8 py-5">Référence</th>
+                                <th className="px-8 py-5">Désignation</th>
+                                <th className="px-8 py-5">Audit Intensité</th>
+                                <th className="px-8 py-5 text-center">Status Flux</th>
+                                <th className="px-8 py-5 text-right">Ajustement</th>
+                            </tr>
+                        </thead>
+                        <tbody className="divide-y divide-gray-50">
+                            {isLoading ? (
+                                [...Array(5)].map((_, i) => (
+                                    <tr key={i}><td colSpan={5} className="px-8 py-6"><div className="h-12 w-full bg-gray-50 animate-pulse rounded-2xl" /></td></tr>
+                                ))
+                            ) : filteredProducts.length === 0 ? (
+                                <tr><td colSpan={5} className="px-8 py-20 text-center text-gray-400 font-bold uppercase tracking-widest">Aucun produit trouvé</td></tr>
+                            ) : (
+                                filteredProducts.map((item) => (
+                                    <tr key={item.id} className="group hover:bg-gray-50/30 transition-all cursor-pointer">
+                                        <td className="px-8 py-5">
+                                            <div className="px-3 py-1.5 rounded-xl bg-gray-50 text-[10px] font-black text-gray-500 uppercase tracking-widest w-fit border border-gray-100/50">
+                                                SKU-{item.id.slice(0, 8).toUpperCase()}
+                                            </div>
+                                        </td>
+                                        <td className="px-8 py-5">
+                                            <p className="text-[14px] font-bold text-gray-900 leading-tight mb-1">{item.name}</p>
+                                            <p className="text-[10px] text-gray-400 font-black uppercase tracking-[0.15em] flex items-center gap-2">
+                                                <Layers className="h-3 w-3" /> {item.category?.name || "Sans univers"}
+                                            </p>
+                                        </td>
+                                        <td className="px-8 py-5">
+                                            <div className="flex flex-col gap-2 w-48">
+                                                <div className="flex items-center justify-between text-[11px] font-black text-gray-400 uppercase tracking-widest">
+                                                    <span>{item.stock} / 100 Vol.</span>
+                                                    <span className={cn(
+                                                        item.stock <= 5 ? 'text-rose-600' : 'text-indigo-600'
+                                                    )}>
+                                                        {Math.min(item.stock, 100)}%
+                                                    </span>
                                                 </div>
-                                                <div className="flex flex-col">
-                                                    <span className="text-base font-black uppercase text-zinc-900 group-hover:text-black transition-colors italic tracking-tight">{p.name}</span>
-                                                    <span className="text-[10px] text-zinc-400 font-bold uppercase tracking-widest mt-1">Ref: {p.id.slice(0, 8).toUpperCase()}</span>
+                                                <div className="h-2 w-full bg-gray-100 rounded-full overflow-hidden shadow-inner">
+                                                    <motion.div
+                                                        initial={{ width: 0 }}
+                                                        animate={{ width: `${Math.min((item.stock / 100) * 100, 100)}%` }}
+                                                        className={cn(
+                                                            "h-full transition-all duration-700 rounded-full",
+                                                            item.stock === 0 ? 'bg-rose-500 shadow-[0_0_15px_rgba(244,63,94,0.4)]' :
+                                                                item.stock <= 5 ? 'bg-amber-500 shadow-[0_0_15px_rgba(245,158,11,0.4)]' : 'bg-indigo-600 shadow-[0_0_15px_rgba(79,70,229,0.4)]'
+                                                        )}
+                                                    />
                                                 </div>
                                             </div>
                                         </td>
-                                        <td className="px-12 py-8">
-                                            <span className="text-base font-black text-zinc-900 italic">{p.stock} UNITÉS</span>
-                                        </td>
-                                        <td className="px-12 py-8 text-center">
-                                            <span className={`px-5 py-2 rounded-full text-[10px] font-black uppercase tracking-widest border ${p.stock < 5 ? 'bg-rose-50 text-rose-600 border-rose-100' : 'bg-emerald-50 text-emerald-600 border-emerald-100'
-                                                }`}>
-                                                {p.stock < 5 ? 'RENDEMENT BAS - ALERTE' : 'OPÉRATIONNEL'}
+                                        <td className="px-8 py-5 text-center">
+                                            <span className={cn(
+                                                "px-3 py-1.5 rounded-xl text-[10px] font-black uppercase tracking-widest",
+                                                item.stock === 0 ? "bg-rose-50 text-rose-600" :
+                                                    item.stock <= 5 ? "bg-amber-50 text-amber-600 shadow-sm" :
+                                                        "bg-emerald-50 text-emerald-600 shadow-sm"
+                                            )}>
+                                                {item.stock === 0 ? "CRITIQUE" : item.stock <= 5 ? "FAIBLE" : "OPTIMAL"}
                                             </span>
                                         </td>
-                                        <td className="px-12 py-8">
-                                            <span className="text-[10px] font-black text-zinc-500 uppercase tracking-widest bg-zinc-100 px-3 py-1 rounded-lg">5 UNITÉS (FIXE)</span>
-                                        </td>
-                                        <td className="px-12 py-8 text-right">
-                                            <button className="group h-12 px-8 bg-black text-[#FFD700] text-[10px] font-black uppercase tracking-widest rounded-xl hover:bg-zinc-800 transition-all shadow-lg shadow-black/5 active:scale-95 flex items-center gap-3 ml-auto">
-                                                ORDRE RÉAPPRO
-                                                <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
-                                            </button>
+                                        <td className="px-8 py-5 text-right">
+                                            <div className="flex items-center justify-end gap-3">
+                                                <Button
+                                                    size="icon"
+                                                    variant="outline"
+                                                    className="h-10 w-10 rounded-xl border-gray-100 text-gray-400 hover:text-rose-600 hover:bg-rose-50 hover:border-rose-100 transition-all bg-white"
+                                                    onClick={() => handleStockUpdate(item.id, -1)}
+                                                    disabled={isUpdating === item.id}
+                                                >
+                                                    <ArrowDown className="h-4 w-4" />
+                                                </Button>
+                                                <Button
+                                                    size="icon"
+                                                    variant="outline"
+                                                    className="h-10 w-10 rounded-xl border-gray-100 text-gray-400 hover:text-emerald-600 hover:bg-emerald-50 hover:border-emerald-100 transition-all bg-white"
+                                                    onClick={() => handleStockUpdate(item.id, 1)}
+                                                    disabled={isUpdating === item.id}
+                                                >
+                                                    <ArrowUp className="h-4 w-4" />
+                                                </Button>
+                                                1:
+                                                <DropdownMenu>
+                                                    <DropdownMenuTrigger asChild>
+                                                        <Button variant="ghost" size="icon" className="h-10 w-10 text-gray-400 hover:text-gray-900 rounded-xl transition-all">
+                                                            <MoreHorizontal className="h-5 w-5" />
+                                                        </Button>
+                                                    </DropdownMenuTrigger>
+                                                    <DropdownMenuContent align="end" className="w-[200px] rounded-[1.5rem] shadow-2xl border-gray-50 p-2">
+                                                        <DropdownMenuLabel className="text-[10px] font-black text-gray-400 px-3 py-2 uppercase tracking-widest border-b border-gray-50 mb-1">Audit Flux</DropdownMenuLabel>
+                                                        <DropdownMenuItem className="text-[12px] font-bold py-3 px-3 focus:bg-emerald-50 focus:text-emerald-600 rounded-xl transition-colors cursor-pointer" onClick={() => handleStockUpdate(item.id, 10)}>
+                                                            <Plus className="mr-3 h-4 w-4" /> Ajouter +10
+                                                        </DropdownMenuItem>
+                                                        <DropdownMenuItem className="text-[12px] font-bold py-3 px-3 focus:bg-rose-50 focus:text-rose-600 rounded-xl transition-colors cursor-pointer" onClick={() => handleStockUpdate(item.id, -10)}>
+                                                            <ArrowDown className="mr-3 h-4 w-4" /> Retirer -10
+                                                        </DropdownMenuItem>
+                                                    </DropdownMenuContent>
+                                                </DropdownMenu>
+                                            </div>
                                         </td>
                                     </tr>
-                                ))}
-                            </tbody>
-                        </table>
-                    </div>
+                                ))
+                            )}
+                        </tbody>
+                    </table>
+                </div>
+
+                <div className="p-6 border-t border-gray-50 flex items-center justify-between bg-gray-50/20 text-[11px] font-black text-gray-400 uppercase tracking-widest">
+                    <p>Database Flux : {filteredProducts.length} Entités en audit temps-réel</p>
                 </div>
             </div>
-        </PageTransition>
+        </div>
     )
 }

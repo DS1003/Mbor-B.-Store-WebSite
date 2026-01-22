@@ -1,132 +1,146 @@
 "use client"
 
-import { Navigation } from "@/components/navigation"
-import { Footer } from "@/components/footer"
+import * as React from "react"
+import Link from "next/link"
 import Image from "next/image"
+import { ArrowRight, Trophy, Target, ShieldCheck, TrendingUp, Users } from "lucide-react"
+import { ScrollReveal } from "@/components/scroll-reveal"
+import { Magnetic } from "@/components/interactions"
 import { Button } from "@/components/ui/button"
-import { ShieldCheck, Users, Trophy, Flag, MapPin } from "lucide-react"
 
 export default function AboutPage() {
     return (
-        <div className="min-h-screen bg-white text-black font-sans selection:bg-[#FFD700] selection:text-black overflow-x-hidden">
-            <Navigation />
-
-            <main className="pt-24 pb-20">
-
-                {/* HERO SECTION - LIGHT THEME */}
-                <section className="relative h-[60vh] md:h-[70vh] w-full flex items-center justify-center overflow-hidden mb-24 bg-zinc-50">
-                    <div className="absolute inset-0 z-0">
-                        <Image
-                            src="/mbor-storefront.jpg"
-                            alt="Mbor Store Interior"
-                            fill
-                            className="object-cover opacity-100"
-                        />
-                        <div className="absolute inset-0 bg-white/40" />
-                        <div className="absolute inset-0 bg-gradient-to-t from-white via-white/20 to-transparent" />
+        <div className="flex flex-col w-full bg-background min-h-screen">
+            {/* Minimalist Hero */}
+            <section className="py-24 md:py-40 bg-muted/20 relative overflow-hidden">
+                <div className="container-custom relative z-10">
+                    <div className="max-w-5xl">
+                        <ScrollReveal direction="down">
+                            <span className="text-primary font-black uppercase tracking-[0.5em] text-[10px] bg-primary/10 px-5 py-2 rounded-full border border-primary/20">
+                                À Propos de Nous
+                            </span>
+                        </ScrollReveal>
+                        <ScrollReveal delay={0.2} className="mt-8">
+                            <h1 className="font-heading text-6xl md:text-9xl font-black uppercase italic tracking-tighter leading-none">
+                                L'Excellence <br /> <span className="text-primary italic">Redéfinie.</span>
+                            </h1>
+                        </ScrollReveal>
+                        <ScrollReveal delay={0.4} className="mt-10 max-w-2xl">
+                            <p className="text-xl text-muted-foreground font-medium leading-relaxed">
+                                Plus qu'une boutique, Mbor Store est le point de convergence entre la performance sportive de haut niveau et l'élégance du lifestyle urbain.
+                            </p>
+                        </ScrollReveal>
                     </div>
+                </div>
 
-                    <div className="container mx-auto px-6 relative z-10 text-center space-y-6">
-                        <div className="inline-flex items-center gap-2 border border-black/10 bg-white/80 px-4 py-1 rounded-full text-black text-xs font-bold uppercase tracking-widest backdrop-blur-md shadow-sm">
-                            <Flag className="h-3 w-3" /> Le Meilleur de Dakar
-                        </div>
-                        <h1 className="text-[10vw] sm:text-5xl md:text-8xl font-black uppercase italic tracking-tighter text-black drop-shadow-sm">
-                            L'<span className="text-transparent text-stroke-black">HISTOIRE.</span>
-                        </h1>
-                        <p className="text-lg md:text-xl text-black/70 max-w-2xl mx-auto leading-relaxed font-medium bg-white/60 p-4 rounded-xl backdrop-blur-sm">
-                            Forgé dans les rues du Point E. Mbor Business Store n'est pas juste une boutique; c'est un sanctuaire pour la culture football et l'esthétique premium.
-                        </p>
-                    </div>
-                </section>
+                {/* Visual Accent */}
+                <div className="absolute -right-20 top-1/2 -translate-y-1/2 opacity-5 pointer-events-none hidden lg:block">
+                    <h2 className="text-[25rem] font-black uppercase italic tracking-tighter leading-none text-primary">WIN</h2>
+                </div>
+            </section>
 
-                <div className="container mx-auto px-6 lg:px-12 max-w-[1440px]">
-
-                    {/* MISSION STATEMENT */}
-                    <div className="grid md:grid-cols-2 gap-12 lg:gap-24 items-center mb-32">
-                        <div className="space-y-8">
-                            <h2 className="text-3xl sm:text-4xl md:text-6xl font-black uppercase italic tracking-tighter text-black">
-                                Plus Que <br /> <span className="text-[#FFD700]">Du Merch.</span>
-                            </h2>
-                            <div className="space-y-6 text-zinc-600 font-medium leading-relaxed">
-                                <p>
-                                    Fondé en 2026, MBOR Business Store est né d'une obsession singulière : la perfection. Nous avons vu un vide sur le marché pour des équipements de football vraiment authentiques et des sneakers exclusives en Afrique de l'Ouest.
-                                </p>
-                                <p>
-                                    Nous comblons le fossé entre les géants mondiaux du sportswear et le cœur vibrant de la culture urbaine de Dakar. Chaque maillot raconte une histoire. Chaque sneaker marque un moment.
-                                </p>
-                            </div>
-                            <div className="flex gap-8 pt-4">
-                                <div className="space-y-1">
-                                    <h4 className="text-3xl font-black text-black">5K+</h4>
-                                    <p className="text-xs font-bold uppercase tracking-widest text-zinc-400">Clients Heureux</p>
-                                </div>
-                                <div className="space-y-1">
-                                    <h4 className="text-3xl font-black text-black">100%</h4>
-                                    <p className="text-xs font-bold uppercase tracking-widest text-zinc-400">Authentique</p>
-                                </div>
-                                <div className="space-y-1">
-                                    <h4 className="text-3xl font-black text-black">24/7</h4>
-                                    <p className="text-xs font-bold uppercase tracking-widest text-zinc-400">Support</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="relative aspect-square md:aspect-[4/5] rounded-[2rem] overflow-hidden border border-zinc-100 group shadow-2xl">
+            {/* Mission Section */}
+            <section className="py-24 md:py-40">
+                <div className="container-custom">
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
+                        <ScrollReveal direction="right" className="relative h-[600px] rounded-[3rem] overflow-hidden shadow-2xl group">
                             <Image
-                                src="/streetwear-collection-urban-fashion.jpg"
-                                alt="Store Culture"
+                                src="https://www.foot.fr/img/cms/mural-chaussures-foot-fr.jpg"
+                                alt="Mbor Store Vision"
                                 fill
-                                className="object-cover transition-transform duration-700 group-hover:scale-110"
+                                className="object-cover transition-transform duration-1000 group-hover:scale-110"
                             />
-                            <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
-                            <div className="absolute bottom-8 left-8">
-                                <div className="bg-white text-black px-4 py-2 rounded-full font-bold uppercase text-xs inline-flex items-center gap-2">
-                                    <MapPin className="h-3 w-3" /> Point E, Dakar
-                                </div>
+                            <div className="absolute inset-0 bg-black/40 mix-blend-multiply" />
+                            <div className="absolute bottom-12 left-12 right-12">
+                                <span className="text-white text-9xl font-black italic opacity-20 transform translate-y-4">01</span>
                             </div>
-                        </div>
-                    </div>
+                        </ScrollReveal>
 
-                    {/* VALUES GRID */}
-                    <div className="grid md:grid-cols-3 gap-8 mb-32">
-                        {[
-                            { title: "Authenticité", icon: ShieldCheck, desc: "Chaque article est rigoureusement vérifié. Nous ne vendons pas de contrefaçons. Seuls les produits officiels et d'élite entrent dans notre coffre." },
-                            { title: "Communauté", icon: Users, desc: "Ancré au Sénégal, au service des rêveurs et acteurs panafricains. Nous soutenons les ligues locales et les jeunes talents." },
-                            { title: "Excellence", icon: Trophy, desc: "De notre emballage à notre service client, l'expérience égale la qualité premium de notre inventaire." }
-                        ].map((val, i) => (
-                            <div key={i} className="bg-zinc-50 border border-zinc-100 p-8 rounded-[2rem] hover:bg-white hover:shadow-xl transition-all group">
-                                <div className="bg-black text-white p-4 rounded-xl inline-block mb-6 group-hover:bg-[#FFD700] group-hover:text-black transition-colors group-hover:scale-110">
-                                    <val.icon className="h-6 w-6" />
-                                </div>
-                                <h3 className="text-2xl font-black uppercase italic mb-4 text-black">{val.title}</h3>
-                                <p className="text-zinc-500 leading-relaxed text-sm font-medium">
-                                    {val.desc}
+                        <ScrollReveal direction="left" className="space-y-12">
+                            <h2 className="text-4xl md:text-5xl font-black uppercase italic tracking-tighter leading-tight">
+                                Notre Mission : <br /><span className="text-primary">Élever vore style</span>
+                            </h2>
+                            <div className="space-y-8">
+                                <p className="text-lg text-muted-foreground font-medium leading-relaxed">
+                                    Né de la passion pour le football et la culture streetwear, Mbor Store s'est donné pour mission d'offrir au public sénégalais l'accès aux équipements les plus exclusifs et authentiques du marché.
+                                </p>
+                                <p className="text-lg text-muted-foreground font-medium leading-relaxed">
+                                    Nous croyons que chaque détail compte. Du choix des matériaux à l'expérience d'achat, tout est pensé pour ceux qui ne font aucun compromis entre qualité et style.
                                 </p>
                             </div>
+
+                            <div className="grid grid-cols-2 gap-8 pt-8">
+                                <div className="space-y-4">
+                                    <div className="h-16 w-16 bg-muted/40 rounded-2xl flex items-center justify-center">
+                                        <ShieldCheck className="h-8 w-8 text-primary" />
+                                    </div>
+                                    <h3 className="font-bold text-sm uppercase tracking-widest">100% Authentique</h3>
+                                </div>
+                                <div className="space-y-4">
+                                    <div className="h-16 w-16 bg-muted/40 rounded-2xl flex items-center justify-center">
+                                        <Trophy className="h-8 w-8 text-primary" />
+                                    </div>
+                                    <h3 className="font-bold text-sm uppercase tracking-widest">Qualité Premium</h3>
+                                </div>
+                            </div>
+                        </ScrollReveal>
+                    </div>
+                </div>
+            </section>
+
+            {/* Values Banner */}
+            <section className="py-24 bg-black text-white relative overflow-hidden">
+                <div className="absolute inset-0 opacity-20 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')]"></div>
+                <div className="container-custom relative z-10">
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
+                        {[
+                            { icon: Target, title: "Précision", text: "Nous sélectionnons chaque article avec une rigueur absolue pour garantir la satisfaction totale de notre clientèle d'élite." },
+                            { icon: TrendingUp, title: "Innovation", text: "Toujours à l'avant-garde des tendances, nous vous apportons les dernières collections mondiales en temps record." },
+                            { icon: Users, title: "Communauté", text: "Mbor Store n'est pas juste une marque, c'est un club privé pour les passionnés de sport et de mode." },
+                        ].map((item, i) => (
+                            <ScrollReveal key={i} delay={i * 0.2} className="space-y-6 group">
+                                <div className="h-20 w-20 rounded-full border border-white/20 flex items-center justify-center group-hover:bg-primary group-hover:border-primary group-hover:text-black transition-all duration-500">
+                                    <item.icon className="h-8 w-8" />
+                                </div>
+                                <h3 className="text-2xl font-black uppercase italic tracking-tighter">{item.title}</h3>
+                                <p className="text-white/60 font-medium leading-relaxed max-w-sm">
+                                    {item.text}
+                                </p>
+                            </ScrollReveal>
                         ))}
                     </div>
-
-                    {/* CTA */}
-                    <div className="rounded-[3rem] bg-[#FFD700] relative overflow-hidden text-black text-center py-20 px-6">
-                        <div className="relative z-10 space-y-6 max-w-2xl mx-auto">
-                            <h2 className="text-4xl md:text-6xl font-black uppercase italic tracking-tighter">
-                                Rejoignez Le <span className="text-white drop-shadow-sm">Mouvement.</span>
-                            </h2>
-                            <p className="font-bold text-lg md:text-xl opacity-80">
-                                Découvrez le nouveau standard de la vente au détail de sportswear à Dakar. Visitez-nous aujourd'hui ou achetez la collection en ligne.
-                            </p>
-                            <Button className="h-14 px-10 bg-black text-white hover:bg-white hover:text-black font-black uppercase tracking-widest rounded-full transition-all">
-                                Explorer l'Inventaire
-                            </Button>
-                        </div>
-                        <div className="absolute inset-0 opacity-10 pointer-events-none">
-                            <Image src="/premium-sneakers-and-jordans.jpg" fill className="object-cover" alt="texture" />
-                        </div>
-                    </div>
-
                 </div>
-            </main>
+            </section>
 
-            <Footer />
+            {/* CTA */}
+            <section className="py-32">
+                <div className="container-custom text-center space-y-12">
+                    <ScrollReveal>
+                        <h2 className="font-heading text-5xl md:text-7xl font-black uppercase italic tracking-tighter">
+                            Rejoignez le <span className="text-primary italic">Mouvement</span>
+                        </h2>
+                        <p className="text-xl text-muted-foreground max-w-2xl mx-auto pt-6">
+                            Découvrez nos collections et faites partie de l'élite.
+                        </p>
+                        <div className="pt-8 flex justify-center gap-6">
+                            <Magnetic>
+                                <Link href="/shop">
+                                    <Button className="h-16 px-10 bg-black text-white rounded-2xl text-xs font-black uppercase tracking-[0.3em] hover:bg-primary hover:text-black transition-all shadow-xl">
+                                        Voir la Boutique
+                                    </Button>
+                                </Link>
+                            </Magnetic>
+                            <Magnetic>
+                                <Link href="/contact">
+                                    <Button variant="outline" className="h-16 px-10 rounded-2xl text-xs font-black uppercase tracking-[0.3em] border-2 transition-all">
+                                        Nous Contacter
+                                    </Button>
+                                </Link>
+                            </Magnetic>
+                        </div>
+                    </ScrollReveal>
+                </div>
+            </section>
         </div>
     )
 }

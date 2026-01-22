@@ -1,105 +1,78 @@
 "use client"
 
-import { Label } from "@/components/ui/label"
-import { Checkbox } from "@/components/ui/checkbox"
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
-import { Separator } from "@/components/ui/separator"
-import { Slider } from "@/components/ui/slider"
-import { useState } from "react"
+import * as React from "react"
+import { Check, ChevronDown, SlidersHorizontal } from "lucide-react"
+import { cn } from "@/lib/utils"
 
 export function ShopFilters() {
-  const [priceRange, setPriceRange] = useState([0, 500])
+    const categories = [
+        "Maillots", "Sneakers", "Lifestyle", "Crampons", "Équipements", "Flocage"
+    ]
 
-  const categories = ["Maillots", "Sneakers", "Crampons", "Streetwear", "Accessoires"]
-  const brands = ["Nike", "Adidas", "Puma", "Jordan", "Under Armour"]
+    const sizes = ["S", "M", "L", "XL", "XXL", "38", "39", "40", "41", "42", "43", "44"]
 
-  return (
-    <div className="space-y-10">
-      {/* Sort By */}
-      <div className="space-y-6">
-        <h3 className="text-[10px] font-black uppercase tracking-[0.3em] text-zinc-900">Trier Par</h3>
-        <RadioGroup defaultValue="newest" className="space-y-4">
-          {[
-            { id: "newest", label: "Nouveautés" },
-            { id: "popular", label: "Plus Populaires" },
-            { id: "low", label: "Prix : Croissant" },
-            { id: "high", label: "Prix : Décroissant" }
-          ].map((option) => (
-            <div key={option.id} className="flex items-center space-x-3 group cursor-pointer">
-              <RadioGroupItem
-                value={option.id}
-                id={option.id}
-                className="border-zinc-300 text-black w-4 h-4 data-[state=checked]:border-black data-[state=checked]:text-black"
-              />
-              <Label htmlFor={option.id} className="text-sm font-bold cursor-pointer text-zinc-500 group-hover:text-black transition-colors uppercase tracking-wide">
-                {option.label}
-              </Label>
+    const priceRanges = [
+        { label: "0 - 25,000 FCFA", value: "0-25000" },
+        { label: "25,000 - 50,000 FCFA", value: "25000-50000" },
+        { label: "50,000 - 100,000 FCFA", value: "50000-100000" },
+        { label: "100,000 FCFA+", value: "100000+" },
+    ]
+
+    return (
+        <div className="space-y-12">
+            <div className="flex items-center space-x-3 text-foreground">
+                <SlidersHorizontal className="h-5 w-5 text-primary" />
+                <h3 className="font-heading text-xl font-bold tracking-tight">Filtrer</h3>
             </div>
-          ))}
-        </RadioGroup>
-      </div>
 
-      <Separator className="bg-zinc-100" />
-
-      {/* Category */}
-      <div className="space-y-6">
-        <h3 className="text-[10px] font-black uppercase tracking-[0.3em] text-zinc-900">Catégorie</h3>
-        <div className="space-y-4">
-          {categories.map((category) => (
-            <div key={category} className="flex items-center space-x-3 group cursor-pointer">
-              <Checkbox
-                id={category}
-                className="border-zinc-300 rounded-sm data-[state=checked]:bg-black data-[state=checked]:border-black data-[state=checked]:text-white transition-all"
-              />
-              <Label htmlFor={category} className="text-sm font-bold cursor-pointer text-zinc-500 group-hover:text-black transition-colors uppercase tracking-wide">
-                {category}
-              </Label>
+            {/* Category Filter */}
+            <div className="space-y-5">
+                <h4 className="text-[11px] font-bold tracking-tight text-muted-foreground/60">CATÉGORIES</h4>
+                <div className="space-y-3">
+                    {categories.map((item) => (
+                        <label key={item} className="flex items-center space-x-3 cursor-pointer group">
+                            <div className="h-5 w-5 border rounded-md flex items-center justify-center transition-all bg-muted/30 group-hover:border-primary group-hover:bg-primary/5">
+                                {/* Simulated checkbox */}
+                            </div>
+                            <span className="text-sm font-semibold tracking-tight text-foreground/70 group-hover:text-primary transition-colors">
+                                {item}
+                            </span>
+                        </label>
+                    ))}
+                </div>
             </div>
-          ))}
-        </div>
-      </div>
 
-      <Separator className="bg-zinc-100" />
-
-      {/* Brand */}
-      <div className="space-y-6">
-        <h3 className="text-[10px] font-black uppercase tracking-[0.3em] text-zinc-900">Marque</h3>
-        <div className="space-y-4">
-          {brands.map((brand) => (
-            <div key={brand} className="flex items-center space-x-3 group cursor-pointer">
-              <Checkbox
-                id={`brand-${brand}`}
-                className="border-zinc-300 rounded-sm data-[state=checked]:bg-black data-[state=checked]:border-black data-[state=checked]:text-white transition-all"
-              />
-              <Label htmlFor={`brand-${brand}`} className="text-sm font-bold cursor-pointer text-zinc-500 group-hover:text-black transition-colors uppercase tracking-wide">
-                {brand}
-              </Label>
+            {/* Size Filter */}
+            <div className="space-y-5">
+                <h4 className="text-[11px] font-bold tracking-tight text-muted-foreground/60">TAILLES</h4>
+                <div className="grid grid-cols-4 gap-2">
+                    {sizes.map((size) => (
+                        <button
+                            key={size}
+                            className="h-11 flex items-center justify-center border border-muted text-[12px] font-bold hover:border-primary hover:text-primary transition-all rounded-xl"
+                        >
+                            {size}
+                        </button>
+                    ))}
+                </div>
             </div>
-          ))}
-        </div>
-      </div>
 
-      <Separator className="bg-zinc-100" />
-
-      {/* Price Range */}
-      <div className="space-y-6">
-        <h3 className="text-[10px] font-black uppercase tracking-[0.3em] text-zinc-900">Fourchette de Prix</h3>
-        <div className="px-1 pt-4">
-          <Slider
-            defaultValue={[0, 500]}
-            max={500}
-            step={10}
-            value={priceRange}
-            onValueChange={setPriceRange}
-            className="mb-6 cursor-pointer"
-          />
-          <div className="flex justify-between items-center">
-            <div className="px-3 py-1 bg-zinc-50 border border-zinc-200 rounded-md text-xs font-mono font-bold text-black">$ {priceRange[0]}</div>
-            <div className="h-px w-4 bg-zinc-200" />
-            <div className="px-3 py-1 bg-zinc-50 border border-zinc-200 rounded-md text-xs font-mono font-bold text-black">$ {priceRange[1]}</div>
-          </div>
+            {/* Price Filter */}
+            <div className="space-y-5">
+                <h4 className="text-[11px] font-bold tracking-tight text-muted-foreground/60">PRIX</h4>
+                <div className="space-y-3">
+                    {priceRanges.map((range) => (
+                        <label key={range.value} className="flex items-center space-x-3 cursor-pointer group">
+                            <div className="h-5 w-5 border-2 border-muted rounded-full flex items-center justify-center transition-all group-hover:border-primary">
+                                {/* Simulated radio */}
+                            </div>
+                            <span className="text-sm font-semibold tracking-tight text-foreground/70 group-hover:text-primary transition-colors">
+                                {range.label}
+                            </span>
+                        </label>
+                    ))}
+                </div>
+            </div>
         </div>
-      </div>
-    </div>
-  )
+    )
 }

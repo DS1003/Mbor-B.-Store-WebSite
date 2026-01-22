@@ -1,137 +1,91 @@
-"use client"
-
-import { Navigation } from "@/components/navigation"
-import { Footer } from "@/components/footer"
+import * as React from "react"
 import { ProductGallery } from "@/components/product-gallery"
 import { ProductInfo } from "@/components/product-info"
 import { RelatedProducts } from "@/components/related-products"
-import { use, useState } from "react"
-import { ArrowLeft, Share2, Heart, ShieldCheck, Globe, Truck, Check, Star } from "lucide-react"
+import { ChevronRight } from "lucide-react"
 import Link from "next/link"
-import { Button } from "@/components/ui/button"
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion"
+import { ScrollReveal } from "@/components/scroll-reveal"
+import { prisma } from "@/lib/prisma"
+import { notFound } from "next/navigation"
 
-export default function ProductPage({ params }: { params: Promise<{ id: string }> }) {
-  const { id } = use(params)
+export default async function ProductPage({ params }: { params: { id: string } }) {
+    const { id } = params
 
-  return (
-    <div className="min-h-screen bg-white text-black font-sans selection:bg-[#FFD700] selection:text-black">
-      <Navigation />
+    const product = await prisma.product.findUnique({
+        where: { id }
+    })
 
-      <main className="pt-32 pb-40">
-        <div className="container mx-auto px-6 lg:px-12 max-w-[1440px]">
+    if (!product) {
+        return notFound()
+    }
 
-          {/* REFINED BREADCRUMBS */}
-          <nav className="flex items-center gap-2 mb-12 text-[10px] md:text-xs font-bold uppercase tracking-[0.2em] text-zinc-400">
-            <Link href="/" className="hover:text-black transition-colors">Accueil</Link>
-            <span className="opacity-30">/</span>
-            <Link href="/shop" className="hover:text-black transition-colors">Boutique</Link>
-            <span className="opacity-30">/</span>
-            <span className="text-black">Détail_Produit</span>
-          </nav>
+    const productData = {
+        id: product.id,
+        name: product.name,
+        price: Number(product.price),
+        category: product.category,
+        description: product.description ?? "",
+        images: product.images.length > 0 ? product.images : ["/placeholder.svg"],
+        allowFlocage: product.allowFlocage,
+        isNew: true
+    }
 
-          {/* PRODUCT LAYOUT */}
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-24 items-start mb-40">
 
-            {/* GALLERY AREA */}
-            <div className="lg:col-span-7 sticky top-40 animate-in fade-in slide-in-from-left-8 duration-700">
-              <ProductGallery />
-            </div>
+    return (
+        <div className="flex flex-col w-full min-h-screen bg-background">
+            <div className="container-custom py-12 md:py-20">
+                {/* Breadcrumbs */}
+                <ScrollReveal direction="down">
+                    <nav className="flex items-center space-x-2 text-[11px] font-semibold tracking-tight text-muted-foreground/60 mb-12 border-b pb-6">
+                        <Link href="/" className="hover:text-primary transition-colors">Accueil</Link>
+                        <ChevronRight className="h-3 w-3 opacity-30" />
+                        <Link href="/shop" className="hover:text-primary transition-colors">Boutique</Link>
+                        <ChevronRight className="h-3 w-3 opacity-30" />
+                        <Link href={`/shop?category=${productData.category}`} className="hover:text-primary transition-colors">{productData.category}</Link>
+                        <ChevronRight className="h-3 w-3 opacity-30" />
+                        <span className="text-foreground/80 font-bold">{productData.name}</span>
+                    </nav>
+                </ScrollReveal>
 
-            {/* PRODUCT INTEL */}
-            <div className="lg:col-span-5 space-y-12 animate-in fade-in slide-in-from-right-8 duration-700 delay-150">
-              <div className="space-y-4">
-                <div className="flex items-center gap-3">
-                  <span className="px-3 py-1 bg-black text-white text-[10px] font-black uppercase tracking-widest rounded-full">
-                    En Stock
-                  </span>
-                  <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-zinc-400">SKU: MBOR_{id.substring(0, 6).toUpperCase()}</p>
+                {/* Main product experience */}
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-20 mb-32">
+                    <div className="lg:col-span-7">
+                        <ScrollReveal direction="left">
+                            <ProductGallery images={productData.images} />
+                        </ScrollReveal>
+                    </div>
+                    <div className="lg:col-span-5">
+                        <ScrollReveal direction="right" delay={0.2}>
+                            <ProductInfo product={productData} />
+                        </ScrollReveal>
+                    </div>
                 </div>
-                <ProductInfo productId={id} />
-              </div>
 
-              {/* DETAILS ACCORDION */}
-              <div className="space-y-1 pt-8 border-t border-zinc-100">
-                <Accordion type="single" collapsible className="w-full">
-                  <AccordionItem value="description" className="border-b border-zinc-100">
-                    <AccordionTrigger className="text-xs font-black uppercase tracking-[0.2em] text-black hover:text-zinc-600 py-6 hover:no-underline">
-                      Spécifications Techniques
-                    </AccordionTrigger>
-                    <AccordionContent className="text-zinc-600 leading-relaxed font-medium text-sm pb-6">
-                      <p className="mb-4">
-                        Conçu pour la performance d'élite. Cet article dispose de matériaux anti-transpiration avancés et d'une coupe aérodynamique conçue pour le jeu moderne.
-                      </p>
-                      <ul className="space-y-2">
-                        <li className="flex items-center gap-2"><Check className="h-3 w-3 text-black" /> Détails Authentiques de l'Équipe</li>
-                        <li className="flex items-center gap-2"><Check className="h-3 w-3 text-black" /> Panneaux en Maille Respirante</li>
-                        <li className="flex items-center gap-2"><Check className="h-3 w-3 text-black" /> Construction Durable</li>
-                      </ul>
-                    </AccordionContent>
-                  </AccordionItem>
-
-                  <AccordionItem value="shipping" className="border-b border-zinc-100">
-                    <AccordionTrigger className="text-xs font-black uppercase tracking-[0.2em] text-black hover:text-zinc-600 py-6 hover:no-underline">
-                      Expédition & Livraison
-                    </AccordionTrigger>
-                    <AccordionContent className="text-zinc-600 font-medium text-sm pb-6 space-y-4">
-                      <div className="flex items-start gap-3">
-                        <Truck className="h-5 w-5 text-black mt-0.5" />
-                        <div>
-                          <p className="text-black font-bold">Livraison Nationale Gratuite</p>
-                          <p className="text-xs mt-1">Sur les commandes de plus de 50 000 FCFA. Expédié depuis le Hub de Dakar.</p>
+                {/* Additional Content / Specs Section */}
+                <ScrollReveal direction="up" className="pt-24 border-t border-muted/50">
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
+                        <div className="space-y-4">
+                            <h4 className="text-sm font-bold tracking-tight">Technologie Elite</h4>
+                            <p className="text-sm text-muted-foreground font-medium leading-relaxed">Conçu avec les dernières innovations pour une agilité et performance supérieures.</p>
                         </div>
-                      </div>
-                      <div className="flex items-start gap-3">
-                        <ShieldCheck className="h-5 w-5 text-black mt-0.5" />
-                        <div>
-                          <p className="text-black font-bold">Garantie d'Authenticité</p>
-                          <p className="text-xs mt-1">Protocole MBOR 2025 Vérifié. 100% Original.</p>
+                        <div className="space-y-4">
+                            <h4 className="text-sm font-bold tracking-tight">Retour d'Énergie</h4>
+                            <p className="text-sm text-muted-foreground font-medium leading-relaxed">Matériaux haute performance offrant une sensation de dynamisme sous le pied.</p>
                         </div>
-                      </div>
-                    </AccordionContent>
-                  </AccordionItem>
-                </Accordion>
-              </div>
+                        <div className="space-y-4">
+                            <h4 className="text-sm font-bold tracking-tight">Mbor Store Service</h4>
+                            <p className="text-sm text-muted-foreground font-medium leading-relaxed">Livraison express en 24h sur Dakar et service client disponible 7j/7.</p>
+                        </div>
+                    </div>
+                </ScrollReveal>
 
-              {/* ACTION ROW */}
-              <div className="flex items-center gap-8 pt-4">
-                <button className="text-[10px] font-black uppercase tracking-[0.2em] text-zinc-400 hover:text-black transition-all flex items-center gap-2 group">
-                  <Heart className="h-4 w-4 group-hover:text-black group-hover:fill-black transition-all" /> Ajouter aux Favoris
-                </button>
-                <button className="text-[10px] font-black uppercase tracking-[0.2em] text-zinc-400 hover:text-black transition-all flex items-center gap-2 group">
-                  <Share2 className="h-4 w-4 group-hover:text-black transition-all" /> Partager le Produit
-                </button>
-              </div>
-            </div>
-          </div>
-
-          {/* RELATED CURATION */}
-          <div className="pt-24 border-t border-zinc-100">
-            <div className="flex flex-col md:flex-row justify-between items-end mb-16 gap-8">
-              <div className="space-y-2">
-                <div className="flex items-center gap-2 text-black">
-                  <Star className="h-4 w-4 fill-current" />
-                  <p className="text-[10px] font-bold uppercase tracking-[0.3em]">Sélection / Similaire</p>
+                {/* Related Products */}
+                <div className="mt-32 pt-24 border-t">
+                    <ScrollReveal direction="up">
+                        <RelatedProducts />
+                    </ScrollReveal>
                 </div>
-                <h2 className="text-4xl md:text-5xl font-black tracking-tighter italic uppercase text-black">
-                  Articles <span className="text-transparent text-stroke-black hover:text-black transition-colors duration-500">Complémentaires</span>
-                </h2>
-              </div>
-              <Link href="/shop" className="text-xs font-black uppercase tracking-widest border-b border-black pb-1 hover:text-zinc-600 hover:border-zinc-400 transition-all text-black">
-                Voir Tout l'Archive
-              </Link>
             </div>
-            <RelatedProducts />
-          </div>
         </div>
-      </main>
-
-      <Footer />
-    </div>
-  )
+    )
 }

@@ -1,116 +1,247 @@
 "use client"
 
-import { Button } from "@/components/ui/button"
-import { Badge } from "@/components/ui/badge"
-import { Separator } from "@/components/ui/separator"
-import {
-  Heart, Plus, Minus, Ruler, ArrowRight, ShoppingBag
-} from "lucide-react"
-import { useState } from "react"
+import * as React from "react"
+import Link from "next/link"
+import { Heart, ShoppingBag, Truck, ShieldCheck, Ruler, Star, CheckCircle2, User, Hash } from "lucide-react"
 import { cn } from "@/lib/utils"
+import { Magnetic } from "@/components/interactions"
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import { Switch } from "@/components/ui/switch"
+import { useCart } from "./cart-context"
+import { toast } from "sonner"
 
-const SIZES = ["S", "M", "L", "XL", "XXL"]
-const COLORS = [
-  { name: "Obsidienne", class: "bg-zinc-950" },
-  { name: "Or", class: "bg-[#FFD700]" },
-  { name: "Blanc", class: "bg-white border border-zinc-200" },
-]
-
-export function ProductInfo({ productId }: { productId: string }) {
-  const [selectedSize, setSelectedSize] = useState("L")
-  const [selectedColor, setSelectedColor] = useState("Obsidienne")
-  const [quantity, setQuantity] = useState(1)
-
-  return (
-    <div className="space-y-10">
-      {/* HEADER */}
-      <div className="space-y-6">
-        <h1 className="text-4xl md:text-6xl font-black tracking-tighter leading-[0.9] italic text-black uppercase">
-          MBOR Elite <br className="hidden md:block" />
-          <span className="text-transparent text-stroke-black hover:text-black transition-colors duration-300">Kit Performance</span>
-        </h1>
-        <div className="flex items-end gap-6">
-          <span className="text-4xl font-black tracking-tighter text-black">$120.00</span>
-          <span className="text-lg font-bold text-zinc-400 line-through tracking-tight mb-1">$150.00</span>
-          <span className="mb-2 text-[10px] font-black uppercase tracking-widest text-black bg-[#FFD700] px-3 py-1 rounded-full">
-            -20%
-          </span>
-        </div>
-        <p className="text-zinc-600 font-medium leading-relaxed max-w-lg">
-          Construction jour de match premium avec textures aérodynamiques et technologie anti-transpiration. Conçu pour les rues de Dakar et la scène mondiale.
-        </p>
-      </div>
-
-      <div className="space-y-10 pt-8 border-t border-zinc-100">
-        {/* COLOR */}
-        <div className="space-y-4">
-          <label className="text-[10px] font-bold uppercase tracking-[0.3em] text-zinc-400 flex justify-between">
-            Choisir Couleur / <span className="text-black">{selectedColor}</span>
-          </label>
-          <div className="flex gap-4">
-            {COLORS.map((color) => (
-              <button
-                key={color.name}
-                onClick={() => setSelectedColor(color.name)}
-                className={cn(
-                  "relative h-12 w-12 rounded-full transition-all flex items-center justify-center border-2",
-                  selectedColor === color.name ? "border-black scale-110" : "border-zinc-200 hover:border-black"
-                )}
-              >
-                <div className={cn("h-8 w-8 rounded-full shadow-sm", color.class)} />
-              </button>
-            ))}
-          </div>
-        </div>
-
-        {/* SIZES */}
-        <div className="space-y-4">
-          <div className="flex justify-between items-center">
-            <label className="text-[10px] font-bold uppercase tracking-[0.3em] text-zinc-400">Sélection Taille</label>
-            <button className="text-[10px] font-bold uppercase tracking-widest text-zinc-400 hover:text-black transition-colors flex items-center gap-2">
-              <Ruler className="h-3 w-3" /> Guide des Tailles
-            </button>
-          </div>
-          <div className="flex flex-wrap gap-3">
-            {SIZES.map((size) => (
-              <button
-                key={size}
-                onClick={() => setSelectedSize(size)}
-                className={cn(
-                  "h-12 min-w-[3.5rem] px-4 flex items-center justify-center text-xs font-black tracking-widest uppercase transition-all rounded-lg border",
-                  selectedSize === size
-                    ? "bg-black text-white border-black shadow-xl"
-                    : "bg-white border-zinc-200 text-zinc-500 hover:border-black hover:text-black"
-                )}
-              >
-                {size}
-              </button>
-            ))}
-          </div>
-        </div>
-      </div>
-
-      {/* ACTIONS */}
-      <div className="space-y-6 pt-8 border-t border-zinc-100">
-        <label className="text-[10px] font-bold uppercase tracking-[0.3em] text-zinc-400">Commande</label>
-        <div className="flex flex-col sm:flex-row gap-4">
-          {/* Quantity */}
-          <div className="flex items-center h-16 bg-zinc-50 rounded-lg px-6 gap-6 border border-zinc-200">
-            <button onClick={() => setQuantity(Math.max(1, quantity - 1))} className="text-zinc-400 hover:text-black transition-colors p-2">
-              <Minus className="h-4 w-4" />
-            </button>
-            <span className="text-base font-black w-4 text-center text-black">{quantity}</span>
-            <button onClick={() => setQuantity(quantity + 1)} className="text-zinc-400 hover:text-black transition-colors p-2">
-              <Plus className="h-4 w-4" />
-            </button>
-          </div>
-
-          {/* Add to Cart */}
-          <Button size="lg" className="flex-1 h-16 rounded-lg bg-black text-white text-xs font-black uppercase tracking-[0.3em] hover:bg-[#FFD700] hover:text-black shadow-xl transition-all group active:scale-95">
-            Ajouter au Panier <ShoppingBag className="ml-3 h-4 w-4 group-hover:scale-110 transition-transform" />
-          </Button>
-        </div>
-      </div>
-    </div>
-  )
+interface ProductInfoProps {
+    product?: {
+        id: string
+        name: string
+        price: number
+        category: string
+        description: string
+        images: string[]
+        isNew?: boolean
+        allowFlocage?: boolean
+    }
 }
+
+export function ProductInfo({ product }: ProductInfoProps) {
+    const { addItem } = useCart()
+    const [selectedSize, setSelectedSize] = React.useState("42")
+    const [isCustomizing, setIsCustomizing] = React.useState(false)
+    const [customName, setCustomName] = React.useState("")
+    const [customNumber, setCustomNumber] = React.useState("")
+    const [isLoading, setIsLoading] = React.useState(false)
+
+    const sizes = ["40", "41", "42", "43", "44", "45"]
+
+    const data = product || {
+        id: "placeholder",
+        name: "Produit Premium",
+        price: 0,
+        category: "Collection",
+        description: "Description du produit non disponible.",
+        images: ["/placeholder.svg"],
+        isNew: true,
+        allowFlocage: false
+    }
+
+    const handleAddToCart = () => {
+        setIsLoading(true)
+
+        // Simulate a small delay for better UX feel
+        setTimeout(() => {
+            addItem({
+                productId: data.id,
+                name: data.name,
+                price: data.price,
+                quantity: 1,
+                image: data.images[0],
+                size: selectedSize,
+                customName: isCustomizing ? customName : undefined,
+                customNumber: isCustomizing ? customNumber : undefined
+            })
+
+            toast.success("Produit ajouté au panier", {
+                description: `${data.name} - Taille ${selectedSize}`,
+            })
+            setIsLoading(false)
+        }, 300)
+    }
+
+    return (
+        <div className="flex flex-col space-y-10">
+            {/* Category & Title */}
+            <div className="space-y-4">
+                <div className="flex items-center gap-3">
+                    <span className="text-primary font-bold tracking-tight text-[11px] bg-primary/10 px-4 py-1.5 rounded-full border border-primary/20">
+                        {data.category}
+                    </span>
+                    {data.isNew && (
+                        <span className="text-foreground/60 font-medium tracking-tight text-[11px] bg-muted px-4 py-1.5 rounded-full">
+                            Nouvelle Collection
+                        </span>
+                    )}
+                </div>
+                <h1 className="font-heading text-4xl sm:text-5xl font-bold tracking-tight leading-tight text-balance">
+                    {data.name}
+                </h1>
+                <div className="flex items-center space-x-3 pt-2">
+                    <div className="flex text-primary">
+                        {[1, 2, 3, 4, 5].map((s) => (
+                            <Star key={s} className="h-3.5 w-3.5 fill-current" />
+                        ))}
+                    </div>
+                    <span className="text-muted-foreground text-[12px] font-medium tracking-tight">120 avis vérifiés</span>
+                </div>
+            </div>
+
+            {/* Price section - Elegant style */}
+            <div className="flex flex-col space-y-3 p-8 bg-muted/30 rounded-3xl border border-muted/50">
+                <div className="flex items-baseline space-x-4">
+                    <span className="text-4xl font-bold tracking-tight tabular-nums text-foreground">
+                        {data.price.toLocaleString()} <span className="text-lg font-semibold ml-1 text-muted-foreground">FCFA</span>
+                    </span>
+                    {data.price > 0 && (
+                        <span className="text-lg text-muted-foreground/40 line-through font-medium">
+                            {(data.price * 1.2).toLocaleString()}
+                        </span>
+                    )}
+                </div>
+                <div className="flex items-center gap-2 text-[11px] font-semibold tracking-tight text-green-600 dark:text-green-500">
+                    <CheckCircle2 className="h-3.5 w-3.5" />
+                    <span>En stock • Expédition immédiate</span>
+                </div>
+            </div>
+
+            {/* Description */}
+            <p className="text-muted-foreground leading-relaxed font-medium text-[15px]">
+                {data.description}
+            </p>
+
+            {/* Size Selector */}
+            <div className="space-y-6">
+                <div className="flex justify-between items-center px-2">
+                    <label className="text-[12px] font-bold tracking-tight uppercase text-muted-foreground">Choisir votre taille</label>
+                    <Link href="/guide-des-tailles" className="text-[12px] font-semibold underline tracking-tight text-muted-foreground flex items-center hover:text-primary transition-colors">
+                        <Ruler className="h-3.5 w-3.5 mr-2" /> Guide des Tailles
+                    </Link>
+                </div>
+                <div className="grid grid-cols-3 sm:grid-cols-6 gap-3">
+                    {sizes.map((size) => (
+                        <button
+                            key={size}
+                            onClick={() => setSelectedSize(size)}
+                            className={cn(
+                                "h-14 flex items-center justify-center rounded-2xl border text-[13px] font-bold transition-all duration-300",
+                                selectedSize === size
+                                    ? "border-primary bg-primary text-primary-foreground shadow-lg shadow-primary/20 scale-105"
+                                    : "border-muted hover:border-foreground/40 bg-background text-foreground/70"
+                            )}
+                        >
+                            {size}
+                        </button>
+                    ))}
+                </div>
+            </div>
+
+            {/* Personalization Section */}
+            {data.allowFlocage && (
+                <div className="p-6 bg-primary/5 rounded-3xl border border-primary/10 space-y-6 animate-in fade-in slide-in-from-bottom-2 duration-500">
+                    <div className="flex items-center justify-between">
+                        <div className="space-y-1">
+                            <h4 className="text-[14px] font-bold tracking-tight flex items-center">
+                                Personnaliser ce produit
+                                <span className="ml-2 text-[9px] bg-primary text-white px-2 py-0.5 rounded-full uppercase tracking-widest font-black">+ 2 500 F</span>
+                            </h4>
+                            <p className="text-[11px] text-muted-foreground font-medium">Ajoutez votre nom et numéro officiel</p>
+                        </div>
+                        <Switch
+                            checked={isCustomizing}
+                            onCheckedChange={setIsCustomizing}
+                            className="data-[state=checked]:bg-primary"
+                        />
+                    </div>
+
+                    {isCustomizing && (
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2 animate-in fade-in zoom-in-95 duration-300">
+                            <div className="space-y-2">
+                                <Label className="text-[10px] uppercase font-bold tracking-widest text-muted-foreground ml-1">Nom (Flocage)</Label>
+                                <div className="relative">
+                                    <User className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted-foreground/60" />
+                                    <Input
+                                        placeholder="Ex: SADIO"
+                                        value={customName}
+                                        onChange={(e) => setCustomName(e.target.value.toUpperCase())}
+                                        className="h-11 pl-9 rounded-xl border-primary/20 bg-background focus-visible:ring-primary/20 uppercase font-bold text-xs"
+                                    />
+                                </div>
+                            </div>
+                            <div className="space-y-2">
+                                <Label className="text-[10px] uppercase font-bold tracking-widest text-muted-foreground ml-1">Numéro</Label>
+                                <div className="relative">
+                                    <Hash className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted-foreground/60" />
+                                    <Input
+                                        placeholder="10"
+                                        maxLength={2}
+                                        value={customNumber}
+                                        onChange={(e) => setCustomNumber(e.target.value)}
+                                        className="h-11 pl-9 rounded-xl border-primary/20 bg-background focus-visible:ring-primary/20 font-bold text-xs"
+                                    />
+                                </div>
+                            </div>
+                        </div>
+                    )}
+                </div>
+            )}
+
+            {/* CTA's */}
+            <div className="flex flex-col sm:flex-row gap-5">
+                <Magnetic>
+                    <button
+                        onClick={handleAddToCart}
+                        disabled={isLoading}
+                        className="flex-1 h-16 bg-black text-white dark:bg-white dark:text-black rounded-2xl text-[14px] font-bold tracking-tight transition-all hover:scale-[1.02] active:scale-95 flex items-center justify-center px-10 group disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                        {isLoading ? (
+                            <div className="h-5 w-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                        ) : (
+                            <>
+                                <ShoppingBag className="h-5 w-5 mr-3 transition-transform group-hover:scale-110" />
+                                Ajouter au panier
+                            </>
+                        )}
+                    </button>
+                </Magnetic>
+                <Magnetic>
+                    <button className="h-16 px-8 border border-muted rounded-2xl flex items-center justify-center hover:bg-muted transition-all active:scale-90 group">
+                        <Heart className="h-5 w-5 group-hover:fill-rose-500 group-hover:text-rose-500 transition-colors" />
+                    </button>
+                </Magnetic>
+            </div>
+
+            {/* Trust Badges */}
+            <div className="grid grid-cols-2 gap-6 pt-10 border-t border-muted/50">
+                <div className="flex items-center space-x-4">
+                    <div className="h-10 w-10 rounded-xl bg-muted/50 flex items-center justify-center">
+                        <Truck className="h-5 w-5 text-primary" />
+                    </div>
+                    <div>
+                        <p className="text-[11px] font-bold tracking-tight text-foreground uppercase">Livraison Express</p>
+                        <p className="text-[10px] font-medium text-muted-foreground">Dakar & Banlieue 24h</p>
+                    </div>
+                </div>
+                <div className="flex items-center space-x-4">
+                    <div className="h-10 w-10 rounded-xl bg-muted/50 flex items-center justify-center">
+                        <ShieldCheck className="h-5 w-5 text-primary" />
+                    </div>
+                    <div>
+                        <p className="text-[11px] font-bold tracking-tight text-foreground uppercase">100% Authentique</p>
+                        <p className="text-[10px] font-medium text-muted-foreground">Garantie Mbor Store</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    )
+}
+

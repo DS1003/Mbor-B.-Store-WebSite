@@ -1,164 +1,366 @@
-import { prisma } from "@/lib/prisma"
-import { Download } from "lucide-react"
-import { SearchInput } from "@/components/admin/search-input"
-import { PaginationControl } from "@/components/admin/pagination-control"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+"use client"
+
+import * as React from "react"
+import {
+    Search,
+    Filter,
+    MoreHorizontal,
+    Mail,
+    Phone,
+    MapPin,
+    Calendar,
+    ChevronLeft,
+    ChevronRight,
+    UserPlus,
+    User,
+    ShoppingBag,
+    Star,
+    Eye,
+    Zap,
+    Trophy,
+    Shield,
+    MessageSquare,
+    TrendingUp,
+    Trash,
+    Target,
+    Activity
+} from "lucide-react"
+import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
 import {
     DropdownMenu,
     DropdownMenuContent,
     DropdownMenuItem,
+    DropdownMenuLabel,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { MoreVertical, Mail } from "lucide-react"
-import { PageTransition } from "@/components/admin/page-transition"
-import { CustomerDetailsModal } from "@/components/admin/customer-details-modal"
+import { Badge } from "@/components/ui/badge"
+import { motion, AnimatePresence } from "framer-motion"
+import { getAdminCustomers, deleteUser } from "../actions"
+import { toast } from "sonner"
+import {
+    Sheet,
+    SheetContent,
+    SheetDescription,
+    SheetHeader,
+    SheetTitle,
+} from "@/components/ui/sheet"
+import { Separator } from "@/components/ui/separator"
+import { DeleteConfirmModal } from "@/components/admin/delete-confirm-modal"
 
-export default async function AdminCustomersPage({
-    searchParams,
-}: {
-    searchParams: Promise<{
-        q?: string
-        page?: string
-    }>
-}) {
-    const params = await searchParams
-    const query = params?.q || ""
-    const currentPage = Number(params?.page) || 1
-    const itemsPerPage = 10
-    const skip = (currentPage - 1) * itemsPerPage
+export default function AdminCustomersPage() {
+    const [customersData, setCustomersData] = React.useState<any[]>([])
+    const [isLoading, setIsLoading] = React.useState(true)
+    const [selectedCustomer, setSelectedCustomer] = React.useState<any>(null)
+    const [isDetailsOpen, setIsDetailsOpen] = React.useState(false)
+    const [searchQuery, setSearchQuery] = React.useState("")
 
-    const where: any = {
-        role: 'USER'
+    // Delete state
+    const [isDeleteDialogOpen, setIsDeleteDialogOpen] = React.useState(false)
+    const [idToDelete, setIdToDelete] = React.useState<string | null>(null)
+    const [isDeleting, setIsDeleting] = React.useState(false)
+
+    const loadData = React.useCallback(async () => {
+        setIsLoading(true)
+        try {
+            const data = await getAdminCustomers()
+            setCustomersData(data)
+        } catch (error) {
+            console.error("Failed to load customers:", error)
+            toast.error("Erreur de chargement")
+        } finally {
+            setIsLoading(false)
+        }
+    }, [])
+
+    React.useEffect(() => {
+        loadData()
+    }, [loadData])
+
+    const confirmDelete = (id: string) => {
+        setIdToDelete(id)
+        setIsDeleteDialogOpen(true)
     }
 
-    if (query) {
-        where.OR = [
-            { name: { contains: query, mode: 'insensitive' } },
-            { email: { contains: query, mode: 'insensitive' } },
-        ]
+    const handleDeleteUser = async () => {
+        if (!idToDelete) return
+        setIsDeleting(true)
+        try {
+            await deleteUser(idToDelete)
+            toast.success("Client supprimé")
+            loadData()
+            setIsDetailsOpen(false)
+        } catch (error) {
+            toast.error("Erreur de suppression")
+        } finally {
+            setIsDeleting(false)
+            setIsDeleteDialogOpen(false)
+        }
     }
 
-    const [customers, totalCount] = await Promise.all([
-        prisma.user.findMany({
-            where,
-            orderBy: { createdAt: 'desc' },
-            skip,
-            take: itemsPerPage,
-            include: {
-                orders: true
-            }
-        }),
-        prisma.user.count({ where }),
-    ])
+    const filteredCustomers = customersData.filter(c =>
+        (c.name?.toLowerCase() || "").includes(searchQuery.toLowerCase()) ||
+        (c.email?.toLowerCase() || "").includes(searchQuery.toLowerCase())
+    )
 
-    const totalPages = Math.ceil(totalCount / itemsPerPage)
+    const totalCustomers = customersData.length
+    const eliteMembers = customersData.filter(c => (c._count?.orders || 0) > 5).length
+    const retentionRate = "68%"
+
+    const stats = [
+        { label: "Base Clients", value: totalCustomers.toLocaleString(), icon: User, color: "text-gray-600", bg: "bg-gray-50" },
+        { label: "Elite Members", value: eliteMembers.toString(), icon: Trophy, color: "text-amber-600", bg: "bg-amber-50" },
+        { label: "Taux Rétention", value: retentionRate, icon: Target, color: "text-indigo-600", bg: "bg-indigo-50" },
+    ]
 
     return (
-        <PageTransition>
-            <div className="space-y-8 pb-20">
-                {/* Header */}
-                <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-6">
-                    <div>
-                        <h1 className="text-3xl font-black uppercase italic tracking-tighter text-zinc-900">Clients</h1>
-                        <p className="text-sm font-bold uppercase tracking-widest text-zinc-400 mt-1">Consultez et gérez vos clients.</p>
-                    </div>
-                    <button className="h-12 px-6 bg-black text-[#FFD700] rounded-xl text-xs font-black uppercase tracking-widest hover:bg-zinc-900 flex items-center gap-3 shadow-lg shadow-black/20 hover:shadow-black/40 hover:scale-105 transition-all">
-                        <Download className="h-4 w-4" />
-                        Exporter
-                    </button>
+        <div className="space-y-10 pb-10">
+            {/* Header Area */}
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6">
+                <div className="space-y-1">
+                    <h1 className="text-3xl font-black tracking-tighter text-gray-900 uppercase italic">Base <span className="text-indigo-600">Clients.</span></h1>
+                    <p className="text-[13px] text-gray-500 font-medium">Gestion de la base de données et programmes de fidélisation.</p>
                 </div>
 
-                {/* Controls Bar */}
-                <div className="bg-white/60 backdrop-blur-xl p-4 rounded-[2rem] border border-white/60 shadow-xl shadow-zinc-200/50 flex flex-col md:flex-row items-center gap-4 justify-between">
-                    <SearchInput placeholder="Rechercher un client..." />
+                <div className="flex items-center gap-3">
+                    <Button variant="outline" className="h-11 px-6 rounded-2xl text-[12px] font-bold border-gray-100 hover:bg-white hover:shadow-xl transition-all flex items-center gap-2 uppercase tracking-widest bg-white shadow-sm">
+                        <MessageSquare className="h-4 w-4 text-gray-400" /> Marketing Flow
+                    </Button>
+                    <Button className="h-11 px-6 rounded-2xl bg-gray-900 text-white text-[12px] font-bold hover:bg-black hover:shadow-2xl transition-all flex items-center gap-2 uppercase tracking-widest shadow-xl">
+                        <UserPlus className="h-4 w-4" /> Manuel Register
+                    </Button>
                 </div>
-
-                {/* Customers Table */}
-                <div className="bg-white/60 backdrop-blur-xl rounded-[2rem] border border-white/60 shadow-xl shadow-zinc-200/50 overflow-hidden">
-                    <div className="overflow-x-auto">
-                        <table className="w-full text-left border-collapse">
-                            <thead>
-                                <tr className="bg-white/40 border-b border-white/60">
-                                    <th className="px-8 py-6 text-[10px] font-black text-zinc-400 uppercase tracking-widest">Client</th>
-                                    <th className="px-8 py-6 text-[10px] font-black text-zinc-400 uppercase tracking-widest">Contact</th>
-                                    <th className="px-8 py-6 text-[10px] font-black text-zinc-400 uppercase tracking-widest">Statut</th>
-                                    <th className="px-8 py-6 text-[10px] font-black text-zinc-400 uppercase tracking-widest text-center">Commandes</th>
-                                    <th className="px-8 py-6 text-[10px] font-black text-zinc-400 uppercase tracking-widest">Total Dépensé</th>
-                                    <th className="px-8 py-6 text-right"></th>
-                                </tr>
-                            </thead>
-                            <tbody className="divide-y divide-zinc-50">
-                                {customers.map((customer) => {
-                                    const ltv = customer.orders.reduce((acc, order) => acc + Number(order.total), 0)
-                                    const isPremium = ltv > 150000
-
-                                    return (
-                                        <tr key={customer.id} className="hover:bg-white/80 transition-colors group">
-                                            <td className="px-8 py-6">
-                                                <div className="flex items-center gap-4">
-                                                    <Avatar className="h-10 w-10 border border-zinc-100 ring-2 ring-white shadow-sm">
-                                                        <AvatarImage src={`https://api.dicebear.com/7.x/initials/svg?seed=${customer.email}`} />
-                                                        <AvatarFallback className="bg-black text-[#FFD700] text-xs font-black">
-                                                            {customer.name?.slice(0, 2).toUpperCase() || "C"}
-                                                        </AvatarFallback>
-                                                    </Avatar>
-                                                    <div className="flex flex-col">
-                                                        <span className="text-sm font-black text-zinc-900 group-hover:text-black transition-colors">{customer.name || "Utilisateur"}</span>
-                                                        <span className="text-[10px] font-bold text-zinc-400 uppercase tracking-wider">#{customer.id.slice(0, 8)}</span>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td className="px-8 py-6">
-                                                <div className="flex items-center gap-2 text-xs font-bold text-zinc-500">
-                                                    <Mail className="h-3 w-3" />
-                                                    {customer.email}
-                                                </div>
-                                            </td>
-                                            <td className="px-8 py-6">
-                                                {isPremium ? (
-                                                    <span className="inline-flex items-center px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest bg-[#FFD700]/10 text-black border border-[#FFD700]/50 shadow-sm">
-                                                        VIP
-                                                    </span>
-                                                ) : (
-                                                    <span className="inline-flex items-center px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest bg-zinc-100 text-zinc-500 border border-zinc-200">
-                                                        Client
-                                                    </span>
-                                                )}
-                                            </td>
-                                            <td className="px-8 py-6 text-center">
-                                                <span className="text-sm font-black text-zinc-900">{customer.orders.length}</span>
-                                            </td>
-                                            <td className="px-8 py-6">
-                                                <span className="text-sm font-black italic tracking-tighter text-zinc-900">{ltv.toLocaleString()} F</span>
-                                            </td>
-                                            <td className="px-8 py-6 text-right flex items-center justify-end gap-2">
-                                                <CustomerDetailsModal customer={customer} />
-
-                                                <DropdownMenu>
-                                                    <DropdownMenuTrigger asChild>
-                                                        <Button variant="ghost" size="icon" className="h-8 w-8 text-zinc-400 hover:text-black hover:bg-zinc-100 rounded-lg">
-                                                            <MoreVertical className="h-4 w-4" />
-                                                        </Button>
-                                                    </DropdownMenuTrigger>
-                                                    <DropdownMenuContent align="end" className="w-48 bg-white border border-zinc-100 rounded-xl shadow-xl shadow-zinc-200/50">
-                                                        <DropdownMenuItem className="gap-2 text-[10px] font-bold uppercase tracking-widest text-zinc-500 cursor-pointer hover:bg-zinc-50 hover:text-black">
-                                                            <Mail className="h-4 w-4" />
-                                                            Contacter
-                                                        </DropdownMenuItem>
-                                                    </DropdownMenuContent>
-                                                </DropdownMenu>
-                                            </td>
-                                        </tr>
-                                    )
-                                })}
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-
-                <PaginationControl totalPages={totalPages} currentPage={currentPage} />
             </div>
-        </PageTransition>
+
+            {/* Matrix Stats */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                {stats.map((stat, i) => (
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: i * 0.1 }}
+                        key={i}
+                        className="bg-white border border-gray-50 rounded-[2rem] p-8 shadow-sm hover:shadow-2xl transition-all duration-500 group relative overflow-hidden"
+                    >
+                        <div className="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity">
+                            <stat.icon className="h-10 w-10" />
+                        </div>
+                        <div className="flex items-center justify-between mb-6">
+                            <div className={cn("h-12 w-12 rounded-2xl flex items-center justify-center shadow-inner", stat.bg, stat.color)}>
+                                <stat.icon className="h-6 w-6" />
+                            </div>
+                        </div>
+                        <div className="space-y-1">
+                            <p className="text-[10px] font-black text-gray-400 uppercase tracking-[0.2em]">{stat.label}</p>
+                            <h3 className="text-2xl font-black tracking-tighter text-gray-900 italic">
+                                {isLoading ? <span className="h-8 w-16 bg-gray-50 animate-pulse block rounded-lg" /> : stat.value}
+                            </h3>
+                        </div>
+                    </motion.div>
+                ))}
+            </div>
+
+            {/* List Manager */}
+            <div className="bg-white border border-gray-50 rounded-[2.5rem] overflow-hidden shadow-sm">
+                <div className="p-6 flex flex-col md:flex-row items-center gap-4 bg-gray-50/30 border-b border-gray-50">
+                    <div className="relative flex-1 w-full flex items-center group">
+                        <Search className="absolute left-5 h-4 w-4 text-gray-400 group-focus-within:text-indigo-600 transition-colors" />
+                        <Input
+                            placeholder="Rechercher par nom, email ou identifiant..."
+                            className="bg-white h-12 pl-12 pr-6 rounded-2xl border-gray-100 focus-visible:ring-2 focus-visible:ring-indigo-100 focus-visible:border-indigo-200 text-[14px] font-medium placeholder:text-gray-400 shadow-sm"
+                            value={searchQuery}
+                            onChange={(e) => setSearchQuery(e.target.value)}
+                        />
+                    </div>
+                </div>
+
+                <div className="overflow-x-auto">
+                    <table className="w-full text-left">
+                        <thead>
+                            <tr className="bg-gray-50/50 border-b border-gray-50 font-black text-[10px] text-gray-400 uppercase tracking-widest">
+                                <th className="px-8 py-5">Identité Client</th>
+                                <th className="px-8 py-5">Engagement</th>
+                                <th className="px-8 py-5 text-center">Rang Audit</th>
+                                <th className="px-8 py-5 text-center">Inscription</th>
+                                <th className="px-8 py-5 text-right">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody className="divide-y divide-gray-50">
+                            {isLoading ? (
+                                [...Array(5)].map((_, i) => (
+                                    <tr key={i}><td colSpan={5} className="px-8 py-6"><div className="h-12 w-full bg-gray-50 animate-pulse rounded-2xl" /></td></tr>
+                                ))
+                            ) : filteredCustomers.length === 0 ? (
+                                <tr><td colSpan={5} className="px-8 py-20 text-center text-gray-400 font-bold uppercase tracking-widest">Aucune entité trouvée</td></tr>
+                            ) : (
+                                filteredCustomers.map((c) => (
+                                    <tr key={c.id} className="group hover:bg-gray-50/30 transition-all cursor-pointer">
+                                        <td className="px-8 py-5" onClick={() => { setSelectedCustomer(c); setIsDetailsOpen(true); }}>
+                                            <div className="flex items-center gap-5">
+                                                <div className="h-12 w-12 rounded-2xl bg-gray-100 flex items-center justify-center font-black text-[12px] text-gray-500 uppercase rotate-6 group-hover:rotate-0 transition-all shadow-sm">
+                                                    {(c.name || "U").split(' ').map((n: string) => n[0]).join('')}
+                                                </div>
+                                                <div>
+                                                    <p className="text-[14px] font-bold text-gray-900 leading-tight mb-1">{c.name || "Invite"}</p>
+                                                    <p className="text-[11px] text-gray-400 font-medium flex items-center gap-1.5 leading-none">
+                                                        <Mail className="h-3 w-3 text-indigo-400" /> {c.email}
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td className="px-8 py-5">
+                                            <div className="flex flex-col gap-1.5">
+                                                <p className="text-[11px] font-black text-gray-900 uppercase tracking-widest">{c._count?.orders || 0} Flux Validés</p>
+                                                <div className="h-1.5 w-24 bg-gray-100 rounded-full overflow-hidden shadow-inner">
+                                                    <motion.div
+                                                        initial={{ width: 0 }}
+                                                        animate={{ width: `${Math.min(((c._count?.orders || 0) / 10) * 100, 100)}%` }}
+                                                        className="h-full bg-indigo-500 shadow-[0_0_10px_rgba(79,70,229,0.3)]"
+                                                    />
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td className="px-8 py-5 text-center">
+                                            <span className={cn(
+                                                "px-3 py-1.5 rounded-xl text-[10px] font-black uppercase tracking-widest",
+                                                (c._count?.orders || 0) > 10 ? "bg-gray-900 text-white shadow-xl" :
+                                                    (c._count?.orders || 0) > 5 ? "bg-amber-50 text-amber-600 border border-amber-100/50" :
+                                                        "bg-gray-50 text-gray-500 border border-gray-100",
+                                            )}>
+                                                {(c._count?.orders || 0) > 10 ? "Platinum" : (c._count?.orders || 0) > 5 ? "Gold" : "Silver"} Rank
+                                            </span>
+                                        </td>
+                                        <td className="px-8 py-5 text-center">
+                                            <div className="text-[12px] text-gray-400 font-bold tabular-nums">
+                                                {new Date(c.createdAt).toLocaleDateString()}
+                                            </div>
+                                        </td>
+                                        <td className="px-8 py-5 text-right">
+                                            <DropdownMenu>
+                                                <DropdownMenuTrigger asChild>
+                                                    <Button variant="ghost" size="icon" className="h-10 w-10 text-gray-400 hover:text-gray-900 hover:bg-gray-100 rounded-xl transition-all">
+                                                        <MoreHorizontal className="h-5 w-5" />
+                                                    </Button>
+                                                </DropdownMenuTrigger>
+                                                <DropdownMenuContent align="end" className="w-[200px] rounded-[1.5rem] shadow-2xl border-gray-50 p-2">
+                                                    <DropdownMenuLabel className="text-[10px] font-black text-gray-400 px-3 py-2 uppercase tracking-widest border-b border-gray-50 mb-1">Audit Partenaire</DropdownMenuLabel>
+                                                    <DropdownMenuItem onClick={() => { setSelectedCustomer(c); setIsDetailsOpen(true); }} className="text-[12px] font-bold py-3 px-3 focus:bg-indigo-50 focus:text-indigo-600 rounded-xl transition-colors cursor-pointer">
+                                                        <Eye className="mr-3 h-4 w-4" /> Profil Analytique
+                                                    </DropdownMenuItem>
+                                                    <DropdownMenuItem onClick={() => confirmDelete(c.id)} className="text-[12px] font-bold py-3 px-3 text-rose-600 focus:bg-rose-50 focus:text-rose-600 rounded-xl transition-colors cursor-pointer border-t border-gray-50 mt-1">
+                                                        <Trash className="mr-3 h-4 w-4" /> Bloquer Accès
+                                                    </DropdownMenuItem>
+                                                </DropdownMenuContent>
+                                            </DropdownMenu>
+                                        </td>
+                                    </tr>
+                                ))
+                            )}
+                        </tbody>
+                    </table>
+                </div>
+
+                <div className="p-6 border-t border-gray-50 flex items-center justify-between bg-gray-50/20 text-[11px] font-black text-gray-400 uppercase tracking-widest">
+                    <p>Database : {totalCustomers.toLocaleString()} Entités Répertoriées</p>
+                </div>
+            </div>
+
+            {/* Customer Details Sheet */}
+            <Sheet open={isDetailsOpen} onOpenChange={setIsDetailsOpen}>
+                <SheetContent className="sm:max-w-xl overflow-y-auto">
+                    <SheetHeader>
+                        <SheetTitle className="text-xl font-black uppercase italic tracking-tight">Profil <span className="text-indigo-600">Analytique</span></SheetTitle>
+                        <SheetDescription className="font-medium text-gray-400">
+                            Audit complet de l'activité du partenaire commercial.
+                        </SheetDescription>
+                    </SheetHeader>
+
+                    {selectedCustomer && (
+                        <div className="space-y-10 py-10">
+                            {/* Profile Card */}
+                            <div className="flex items-center gap-8 p-8 bg-gray-900 rounded-[2.5rem] relative overflow-hidden group shadow-2xl">
+                                <div className="absolute top-0 right-0 p-8 opacity-10">
+                                    <Shield className="h-32 w-32 text-white" />
+                                </div>
+                                <div className="h-24 w-24 rounded-[2rem] bg-white shadow-2xl flex items-center justify-center text-3xl font-black text-gray-900 uppercase shrink-0 rotate-3 group-hover:rotate-0 transition-transform duration-500">
+                                    {(selectedCustomer.name || "U")[0]}
+                                </div>
+                                <div className="space-y-1 relative z-10">
+                                    <h3 className="text-2xl font-black text-white uppercase italic leading-tight">{selectedCustomer.name || "Invite"}</h3>
+                                    <p className="text-[13px] text-indigo-400 font-black uppercase tracking-widest">{selectedCustomer.email}</p>
+                                    <Badge className="mt-4 bg-white text-gray-900 border-0 px-4 py-1.5 rounded-xl text-[10px] font-black uppercase tracking-widest shadow-xl">
+                                        {(selectedCustomer._count?.orders || 0) > 10 ? "Platinum Elite" : (selectedCustomer._count?.orders || 0) > 5 ? "Gold Partner" : "Silver Member"}
+                                    </Badge>
+                                </div>
+                            </div>
+
+                            {/* Stats Grid */}
+                            <div className="grid grid-cols-3 gap-6">
+                                <div className="p-6 bg-white border border-gray-50 rounded-[2rem] space-y-2 shadow-sm group hover:shadow-xl transition-all duration-500">
+                                    <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Flux Total</p>
+                                    <p className="text-2xl font-black text-gray-900 italic tracking-tighter">{selectedCustomer._count?.orders || 0}</p>
+                                </div>
+                                <div className="p-6 bg-white border border-gray-50 rounded-[2rem] space-y-2 shadow-sm group hover:shadow-xl transition-all duration-500">
+                                    <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Score Trust</p>
+                                    <p className="text-2xl font-black text-indigo-600 italic tracking-tighter">9.8</p>
+                                </div>
+                                <div className="p-6 bg-white border border-gray-50 rounded-[2rem] space-y-2 shadow-sm group hover:shadow-xl transition-all duration-500">
+                                    <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Anciennaté</p>
+                                    <p className="text-2xl font-black text-gray-900 italic tracking-tighter">12m</p>
+                                </div>
+                            </div>
+
+                            {/* Info Rows */}
+                            <div className="space-y-4">
+                                <div className="flex items-center gap-3 ml-2">
+                                    <Activity className="h-4 w-4 text-indigo-600" />
+                                    <h4 className="text-[12px] font-black text-gray-400 uppercase tracking-[0.2em]">Données de Liaison</h4>
+                                </div>
+                                <div className="bg-white border border-gray-50 rounded-[2.5rem] p-8 space-y-6 shadow-sm">
+                                    <div className="flex items-center justify-between">
+                                        <span className="text-[13px] font-bold text-gray-400">Canal Mail</span>
+                                        <span className="text-[14px] font-black text-indigo-600">{selectedCustomer.email}</span>
+                                    </div>
+                                    <Separator className="bg-gray-50" />
+                                    <div className="flex items-center justify-between">
+                                        <span className="text-[13px] font-bold text-gray-400">Identité Database</span>
+                                        <span className="text-[14px] font-black text-gray-900 italic">#{selectedCustomer.id.slice(-8).toUpperCase()}</span>
+                                    </div>
+                                    <Separator className="bg-gray-50" />
+                                    <div className="flex items-center justify-between">
+                                        <span className="text-[13px] font-bold text-gray-400">Instant Inscription</span>
+                                        <span className="text-[14px] font-black text-gray-900 tabular-nums">{new Date(selectedCustomer.createdAt).toLocaleDateString()}</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* Actions */}
+                            <div className="pt-6 flex flex-col gap-4">
+                                <Button className="w-full h-14 bg-gray-900 text-white rounded-[1.5rem] font-black uppercase tracking-[0.2em] shadow-2xl hover:scale-[1.02] transition-transform">
+                                    Générer Ticket Support
+                                </Button>
+                                <Button
+                                    variant="outline"
+                                    className="w-full h-14 border-rose-100 text-rose-600 hover:bg-rose-50 rounded-[1.5rem] font-black uppercase tracking-[0.2em]"
+                                    onClick={() => confirmDelete(selectedCustomer.id)}
+                                >
+                                    Révoquer l'accès définitif
+                                </Button>
+                            </div>
+                        </div>
+                    )}
+                </SheetContent>
+            </Sheet>
+
+            <DeleteConfirmModal
+                isOpen={isDeleteDialogOpen}
+                onClose={() => setIsDeleteDialogOpen(false)}
+                onConfirm={handleDeleteUser}
+                isLoading={isDeleting}
+                title="Séquence de Bannissement"
+                description="Êtes-vous certain de vouloir révoquer l'accès de ce client ? Cette action est irréversible et supprimera toutes les données d'engagement associées."
+            />
+        </div>
     )
 }

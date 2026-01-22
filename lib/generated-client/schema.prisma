@@ -1,0 +1,129 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../lib/generated-client"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+enum OrderStatus {
+  PENDING
+  PAID
+  SHIPPED
+  DELIVERED
+  CANCELLED
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  password  String
+  name      String?
+  role      Role     @default(USER)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  orders    Order[]
+}
+
+model Product {
+  id            String   @id @default(cuid())
+  name          String
+  description   String?
+  price         Decimal
+  discountPrice Decimal?
+  stock         Int      @default(0)
+
+  categoryId String?
+  category   Category? @relation(fields: [categoryId], references: [id])
+
+  subCategory String?
+  images      String[] // Array of image URLs
+  featured    Boolean  @default(false)
+
+  allowFlocage Boolean @default(false)
+  allowGravure Boolean @default(false)
+
+  orderItems OrderItem[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Order {
+  id            String  @id @default(cuid())
+  userId        String?
+  user          User?   @relation(fields: [userId], references: [id])
+  customerName  String? // For guest checkout
+  customerEmail String? // For guest checkout
+
+  status OrderStatus @default(PENDING)
+  total  Decimal
+
+  items OrderItem[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model OrderItem {
+  id        String  @id @default(cuid())
+  orderId   String
+  order     Order   @relation(fields: [orderId], references: [id])
+  productId String
+  product   Product @relation(fields: [productId], references: [id])
+
+  quantity Int
+  price    Decimal // Price at time of purchase
+
+  // Customization fields
+  customName   String?
+  customNumber String?
+}
+
+model StoreConfig {
+  id             String  @id @default("singleton")
+  name           String  @default("Mbor B. Store")
+  slogan         String? @default("L'excellence du sport au Sénégal")
+  description    String?
+  logoUrl        String?
+  contactEmail   String?
+  contactPhone   String?
+  address        String?
+  facebookUrl    String?
+  instagramUrl   String?
+  whatsappNumber String?
+
+  // Shipping Settings
+  deliveryFee      Decimal @default(2000)
+  freeDeliveryOver Decimal @default(50000)
+  shippingPolicy   String?
+
+  // Payment Settings
+  waveNumber    String?
+  omNumber      String?
+  bankAccount   String?
+  paymentPolicy String?
+
+  // Corporate
+  returnPolicy String?
+  aboutUs      String?
+}
+
+model Category {
+  id          String    @id @default(cuid())
+  name        String    @unique
+  description String?
+  image       String?
+  products    Product[]
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
