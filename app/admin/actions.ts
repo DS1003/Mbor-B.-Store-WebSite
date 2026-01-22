@@ -311,6 +311,29 @@ export async function updateStoreConfig(data: any) {
         freeDeliveryOver: config.freeDeliveryOver.toNumber()
     }
 }
+// Helper to serialize Decimal types
+function serializeProduct(product: any) {
+    if (!product) return null
+    return {
+        ...product,
+        price: Number(product.price),
+        discountPrice: product.discountPrice ? Number(product.discountPrice) : null
+    }
+}
+
+function serializeOrder(order: any) {
+    if (!order) return null
+    return {
+        ...order,
+        total: Number(order.total),
+        items: order.items?.map((item: any) => ({
+            ...item,
+            price: Number(item.price),
+            product: serializeProduct(item.product)
+        })) || []
+    }
+}
+
 export async function createInStoreOrder(data: {
     customerName: string,
     customerEmail?: string,
@@ -325,7 +348,7 @@ export async function createInStoreOrder(data: {
             customerEmail: data.customerEmail,
             customerPhone: data.customerPhone,
             customerAddress: data.customerAddress,
-            status: "PAID", // In-store orders are usually paid immediately
+            status: "PAID",
             total: data.total,
             items: {
                 create: data.items.map(item => ({
@@ -338,7 +361,15 @@ export async function createInStoreOrder(data: {
             }
         },
         include: {
-            items: true
+            items: {
+                include: {
+                    product: {
+                        include: {
+                            category: true
+                        }
+                    }
+                }
+            }
         }
     })
 
@@ -356,14 +387,6 @@ export async function createInStoreOrder(data: {
 
     revalidatePath('/admin/orders')
     revalidatePath('/admin/stock')
-    revalidatePath('/admin')
 
-    return {
-        ...order,
-        total: order.total.toNumber(),
-        items: order.items.map(item => ({
-            ...item,
-            price: item.price.toNumber()
-        }))
-    }
+    return serializeOrder(order)
 }

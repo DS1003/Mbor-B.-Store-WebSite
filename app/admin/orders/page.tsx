@@ -49,7 +49,7 @@ import { Switch } from "@/components/ui/switch"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { motion, AnimatePresence } from "framer-motion"
-import { getAdminOrders, updateOrderStatus, deleteOrder, getAdminProducts, createInStoreOrder } from "../actions"
+import { getAdminOrders, updateOrderStatus, deleteOrder } from "../actions"
 import { toast } from "sonner"
 import {
     Sheet,
@@ -65,11 +65,9 @@ import { Receipt } from "@/components/admin/receipt"
 
 export default function AdminOrdersPage() {
     const [ordersData, setOrdersData] = React.useState<any[]>([])
-    const [products, setProducts] = React.useState<any[]>([])
     const [isLoading, setIsLoading] = React.useState(true)
     const [selectedOrder, setSelectedOrder] = React.useState<any>(null)
     const [isDetailsOpen, setIsDetailsOpen] = React.useState(false)
-    const [isPosOpen, setIsPosOpen] = React.useState(false)
     const [searchQuery, setSearchQuery] = React.useState("")
     const [mounted, setMounted] = React.useState(false)
 
@@ -78,26 +76,17 @@ export default function AdminOrdersPage() {
     const [idToDelete, setIdToDelete] = React.useState<string | null>(null)
     const [isDeleting, setIsDeleting] = React.useState(false)
 
-    // POS state
-    const [posCustomerName, setPosCustomerName] = React.useState("")
-    const [posCustomerPhone, setPosCustomerPhone] = React.useState("")
-    const [posCustomerAddress, setPosCustomerAddress] = React.useState("")
-    const [posItems, setPosItems] = React.useState<any[]>([])
-    const [posSearchSearch, setPosSearch] = React.useState("")
-    const [isSavingPos, setIsSavingPos] = React.useState(false)
     const [config, setConfig] = React.useState<any>(null)
     const [printOrder, setPrintOrder] = React.useState<any>(null)
 
     const loadOrders = React.useCallback(async () => {
         setIsLoading(true)
         try {
-            const [oData, pData, cData] = await Promise.all([
+            const [oData, cData] = await Promise.all([
                 getAdminOrders(),
-                getAdminProducts(),
                 getStoreConfig()
             ])
             setOrdersData(oData)
-            setProducts(pData)
             setConfig(cData)
         } catch (error) {
             console.error("Failed to load orders:", error)
@@ -145,96 +134,9 @@ export default function AdminOrdersPage() {
         }
     }
 
-    // POS Logic
-    const addToPos = (product: any) => {
-        const existing = posItems.find(i => i.productId === product.id)
-        if (existing) {
-            setPosItems(posItems.map(i => i.productId === product.id ? { ...i, quantity: i.quantity + 1 } : i))
-        } else {
-            setPosItems([...posItems, {
-                productId: product.id,
-                name: product.name,
-                price: product.price,
-                quantity: 1,
-                hasCustomization: false,
-                customName: "",
-                customNumber: ""
-            }])
-        }
-        toast.info(`${product.name} ajouté`)
-    }
-
-    const removeFromPos = (productId: string) => {
-        setPosItems(posItems.filter(i => i.productId !== productId))
-    }
-
-    const updatePosQty = (productId: string, delta: number) => {
-        setPosItems(posItems.map(i => {
-            if (i.productId === productId) {
-                const newQty = Math.max(1, i.quantity + delta)
-                return { ...i, quantity: newQty }
-            }
-            return i
-        }))
-    }
-
-    const updatePosItemCustomization = (productId: string, data: any) => {
-        setPosItems(posItems.map(item =>
-            item.productId === productId ? { ...item, ...data } : item
-        ))
-    }
-
-    const posTotal = posItems.reduce((acc, current) => acc + (current.price * current.quantity), 0)
-
-    const handleCreatePosOrder = async () => {
-        if (!posCustomerName) return toast.error("Nom du client requis")
-        if (posItems.length === 0) return toast.error("Aucun article")
-
-        setIsSavingPos(true)
-        try {
-            const order = await createInStoreOrder({
-                customerName: posCustomerName,
-                customerPhone: posCustomerPhone,
-                customerAddress: posCustomerAddress,
-                items: posItems.map(i => ({
-                    productId: i.productId,
-                    quantity: i.quantity,
-                    price: i.price,
-                    customName: i.hasCustomization ? i.customName : undefined,
-                    customNumber: i.hasCustomization ? i.customNumber : undefined
-                })),
-                total: posTotal
-            })
-            toast.success("Commande Boutique Enregistrée")
-
-            // Auto-print receipt
-            setPrintOrder(order)
-            setTimeout(() => {
-                window.print()
-                setTimeout(() => {
-                    setPrintOrder(null)
-                    setIsPosOpen(false)
-                    setPosItems([])
-                    setPosCustomerName("")
-                    setPosCustomerPhone("")
-                    setPosCustomerAddress("")
-                    loadOrders()
-                }, 1000)
-            }, 500)
-        } catch (error) {
-            toast.error("Erreur POS")
-        } finally {
-            setIsSavingPos(false)
-        }
-    }
-
     const filteredOrders = ordersData.filter(o =>
         (o.id.toLowerCase() || "").includes(searchQuery.toLowerCase()) ||
         (o.user?.name?.toLowerCase() || o.customerName?.toLowerCase() || "").includes(searchQuery.toLowerCase())
-    )
-
-    const filteredProductsPos = products.filter(p =>
-        p.name.toLowerCase().includes(posSearchSearch.toLowerCase()) && p.stock > 0
     )
 
     const stats = [
@@ -262,12 +164,13 @@ export default function AdminOrdersPage() {
                 </div>
 
                 <div className="flex items-center gap-3">
-                    <Button
-                        onClick={() => setIsPosOpen(true)}
-                        className="h-11 px-6 rounded-2xl bg-indigo-600 text-white text-[12px] font-bold hover:bg-indigo-700 hover:shadow-2xl transition-all flex items-center gap-2 uppercase tracking-widest shadow-xl"
-                    >
-                        <Store className="h-4 w-4" /> Vente Boutique (POS)
-                    </Button>
+                    <Link href="/admin/pos">
+                        <Button
+                            className="h-11 px-6 rounded-2xl bg-indigo-600 text-white text-[12px] font-bold hover:bg-indigo-700 hover:shadow-2xl transition-all flex items-center gap-2 uppercase tracking-widest shadow-xl"
+                        >
+                            <Store className="h-4 w-4" /> Vente Boutique (POS)
+                        </Button>
+                    </Link>
                     <Button variant="outline" className="h-11 px-6 rounded-2xl text-[12px] font-bold border-gray-100 hover:bg-white hover:shadow-xl transition-all flex items-center gap-2 uppercase tracking-widest bg-white shadow-sm">
                         <Download className="h-4 w-4 text-gray-400" /> Export
                     </Button>
@@ -590,194 +493,6 @@ export default function AdminOrdersPage() {
                             `}</style>
                         </div>
                     )}
-                </SheetContent>
-            </Sheet>
-
-            {/* POS Modal (Boutique) */}
-            <Sheet open={isPosOpen} onOpenChange={setIsPosOpen}>
-                <SheetContent className="sm:max-w-4xl overflow-y-auto">
-                    <SheetHeader>
-                        <SheetTitle className="text-xl font-black uppercase italic tracking-tight">Terminal <span className="text-indigo-600">Vente Boutique.</span></SheetTitle>
-                        <SheetDescription className="font-medium text-gray-400">
-                            Génération immédiate de facture et encaissement en point de vente.
-                        </SheetDescription>
-                    </SheetHeader>
-
-                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 py-10">
-                        {/* Selector */}
-                        <div className="space-y-6">
-                            <div className="relative group">
-                                <Search className="absolute left-4 h-4 w-4 text-gray-400 group-focus-within:text-indigo-600 transition-colors" />
-                                <Input
-                                    placeholder="Scann ou recherche produit..."
-                                    className="h-12 pl-12 rounded-2xl bg-gray-50/50 border-gray-100"
-                                    value={posSearchSearch}
-                                    onChange={(e) => setPosSearch(e.target.value)}
-                                />
-                            </div>
-
-                            <div className="space-y-3 h-[450px] overflow-y-auto pr-2 custom-scrollbar">
-                                {filteredProductsPos.map((p) => (
-                                    <div
-                                        key={p.id}
-                                        className="flex items-center justify-between p-4 bg-white border border-gray-50 rounded-2xl hover:border-indigo-100 hover:shadow-xl transition-all cursor-pointer group"
-                                        onClick={() => addToPos(p)}
-                                    >
-                                        <div className="flex items-center gap-4">
-                                            <div className="h-12 w-12 rounded-xl bg-gray-50 overflow-hidden relative shrink-0">
-                                                {p.images?.[0] && <img src={p.images[0]} className="object-cover h-full w-full" />}
-                                            </div>
-                                            <div>
-                                                <p className="text-[13px] font-bold text-gray-900 leading-tight">{p.name}</p>
-                                                <p className="text-[11px] text-gray-400 font-bold">{p.stock} en stock</p>
-                                            </div>
-                                        </div>
-                                        <div className="text-right">
-                                            <p className="text-[14px] font-black text-gray-900">{Number(p.price).toLocaleString()} F</p>
-                                            <div className="h-6 w-6 rounded-lg bg-gray-900 text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity ml-auto mt-1">
-                                                <Plus className="h-3 w-3" />
-                                            </div>
-                                        </div>
-                                    </div>
-                                ))}
-                            </div>
-                        </div>
-
-                        {/* Cart & Billing */}
-                        <div className="bg-white rounded-[2.5rem] p-8 border border-indigo-50 shadow-sm flex flex-col h-full space-y-8">
-                            {/* Customer Info Section */}
-                            <div className="space-y-4">
-                                <h4 className="text-[11px] font-black text-indigo-600 uppercase tracking-widest flex items-center gap-2">
-                                    <User className="h-3 w-3" /> Informations Client
-                                </h4>
-                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                                    <div className="space-y-1.5">
-                                        <Label className="text-[10px] font-bold text-gray-500 uppercase ml-1">Nom Complet</Label>
-                                        <Input
-                                            placeholder="ex: Moussa Diop"
-                                            className="h-11 rounded-xl bg-gray-50/50 border-gray-100 shadow-none font-medium focus:bg-white transition-all"
-                                            value={posCustomerName}
-                                            onChange={(e) => setPosCustomerName(e.target.value)}
-                                        />
-                                    </div>
-                                    <div className="space-y-1.5">
-                                        <Label className="text-[10px] font-bold text-gray-500 uppercase ml-1">Téléphone</Label>
-                                        <Input
-                                            placeholder="+221 ..."
-                                            className="h-11 rounded-xl bg-gray-50/50 border-gray-100 shadow-none font-medium focus:bg-white transition-all"
-                                            value={posCustomerPhone}
-                                            onChange={(e) => setPosCustomerPhone(e.target.value)}
-                                        />
-                                    </div>
-                                </div>
-                                <div className="space-y-1.5">
-                                    <Label className="text-[10px] font-bold text-gray-500 uppercase ml-1">Adresse de Livraison</Label>
-                                    <Input
-                                        placeholder="Quartier, Rue, Ville..."
-                                        className="h-11 rounded-xl bg-gray-50/50 border-gray-100 shadow-none font-medium focus:bg-white transition-all"
-                                        value={posCustomerAddress}
-                                        onChange={(e) => setPosCustomerAddress(e.target.value)}
-                                    />
-                                </div>
-                            </div>
-
-                            <Separator className="bg-gray-100" />
-
-                            <div className="flex-1 space-y-6 min-h-[350px] overflow-y-auto pr-2 custom-scrollbar">
-                                <h4 className="text-[11px] font-black text-indigo-600 uppercase tracking-widest flex items-center gap-2 sticky top-0 bg-white pb-2 z-10">
-                                    <ShoppingBag className="h-3 w-3" /> Panier Actuel ({posItems.length})
-                                </h4>
-                                {posItems.length === 0 ? (
-                                    <div className="flex flex-col items-center justify-center h-full opacity-30 italic text-[13px] py-20">
-                                        <Box className="h-10 w-10 mb-2 opacity-20" />
-                                        Panier vide
-                                    </div>
-                                ) : (
-                                    <div className="space-y-6">
-                                        {posItems.map((item) => (
-                                            <div key={item.productId} className="space-y-4 p-4 bg-gray-50/50 rounded-2xl border border-gray-50/50">
-                                                <div className="flex items-center justify-between">
-                                                    <div className="flex items-center gap-3">
-                                                        <div className="h-10 w-10 rounded-lg bg-gray-200 shrink-0">
-                                                            {/* Placeholder for image if needed */}
-                                                        </div>
-                                                        <div className="space-y-0.5">
-                                                            <p className="text-[12px] font-black text-gray-900 line-clamp-1">{item.name}</p>
-                                                            <p className="text-[10px] text-gray-400 font-bold tabular-nums">{Number(item.price).toLocaleString()} F / unité</p>
-                                                        </div>
-                                                    </div>
-                                                    <div className="flex items-center gap-3">
-                                                        <div className="flex items-center gap-2 bg-white rounded-xl p-1 shadow-sm border border-gray-100">
-                                                            <Button variant="ghost" size="icon" className="h-6 w-6 rounded-lg" onClick={() => updatePosQty(item.productId, -1)}><Minus className="h-3 w-3" /></Button>
-                                                            <span className="text-[11px] font-black tabular-nums min-w-[1.5rem] text-center">{item.quantity}</span>
-                                                            <Button variant="ghost" size="icon" className="h-6 w-6 rounded-lg" onClick={() => updatePosQty(item.productId, 1)}><Plus className="h-3 w-3" /></Button>
-                                                        </div>
-                                                        <Button variant="ghost" size="icon" className="h-8 w-8 text-rose-500 hover:bg-rose-50 hover:text-rose-600 rounded-xl transition-colors" onClick={() => removeFromPos(item.productId)}><Trash className="h-4 w-4" /></Button>
-                                                    </div>
-                                                </div>
-
-                                                {/* Customization Toggle */}
-                                                <div className="pt-2 border-t border-gray-100">
-                                                    <div className="flex items-center justify-between pointer-events-auto">
-                                                        <div className="flex items-center gap-2">
-                                                            <Shirt className="h-3.5 w-3.5 text-indigo-500" />
-                                                            <Label className="text-[10px] font-black uppercase tracking-tight text-gray-600">Personnalisation (Flocage)</Label>
-                                                        </div>
-                                                        <Switch
-                                                            checked={item.hasCustomization}
-                                                            onCheckedChange={(val) => updatePosItemCustomization(item.productId, { hasCustomization: val })}
-                                                        />
-                                                    </div>
-
-                                                    {item.hasCustomization && (
-                                                        <motion.div
-                                                            initial={{ opacity: 0, height: 0 }}
-                                                            animate={{ opacity: 1, height: 'auto' }}
-                                                            className="grid grid-cols-2 gap-3 mt-3 pt-3"
-                                                        >
-                                                            <div className="space-y-1">
-                                                                <Label className="text-[9px] font-bold text-gray-400 uppercase ml-1">Nom / Texte</Label>
-                                                                <Input
-                                                                    placeholder="ex: MBAPPE"
-                                                                    className="h-9 text-[11px] rounded-lg bg-white border-gray-100"
-                                                                    value={item.customName}
-                                                                    onChange={(e) => updatePosItemCustomization(item.productId, { customName: e.target.value })}
-                                                                />
-                                                            </div>
-                                                            <div className="space-y-1">
-                                                                <Label className="text-[9px] font-bold text-gray-400 uppercase ml-1">Numéro</Label>
-                                                                <Input
-                                                                    placeholder="ex: 10"
-                                                                    className="h-9 text-[11px] rounded-lg bg-white border-gray-100"
-                                                                    value={item.customNumber}
-                                                                    onChange={(e) => updatePosItemCustomization(item.productId, { customNumber: e.target.value })}
-                                                                />
-                                                            </div>
-                                                        </motion.div>
-                                                    )}
-                                                </div>
-                                            </div>
-                                        ))}
-                                    </div>
-                                )}
-                            </div>
-
-                            <div className="pt-6 space-y-4 border-t border-gray-100">
-                                <div className="flex justify-between items-center">
-                                    <span className="text-[13px] font-bold text-gray-400 uppercase">Calcul Total</span>
-                                    <span className="text-3xl font-black text-gray-900 tabular-nums italic tracking-tighter">{Number(posTotal).toLocaleString()} F</span>
-                                </div>
-                                <Button
-                                    className="w-full h-14 bg-gray-900 text-white rounded-[1.5rem] font-black uppercase tracking-widest shadow-2xl hover:scale-[1.02] active:scale-95 transition-all flex items-center gap-3"
-                                    disabled={isSavingPos || posItems.length === 0}
-                                    onClick={handleCreatePosOrder}
-                                >
-                                    {isSavingPos ? <Zap className="h-5 w-5 animate-pulse" /> : <Printer className="h-5 w-5" />}
-                                    {isSavingPos ? "Traitement..." : "Encaisser & Imprimer"}
-                                </Button>
-                            </div>
-                        </div>
-                    </div>
                 </SheetContent>
             </Sheet>
 

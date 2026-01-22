@@ -25,7 +25,8 @@ import {
     Activity,
     Shield,
     Calendar,
-    Command
+    Command,
+    ShoppingBag
 } from "lucide-react"
 import { useTheme } from "next-themes"
 import { cn } from "@/lib/utils"
@@ -59,6 +60,7 @@ export default function AdminLayout({
         { icon: Layers, label: "Catégories", href: "/admin/categories" },
         { icon: Database, label: "Stock", href: "/admin/stock" },
         { icon: ImageIcon, label: "Médiathèque", href: "/admin/media" },
+        { icon: ShoppingBag, label: "Vente (POS)", href: "/admin/pos" },
         { icon: ShoppingCart, label: "Commandes", href: "/admin/orders" },
         { icon: Users, label: "Clients", href: "/admin/customers" },
         { icon: BarChart3, label: "Analytiques", href: "/admin/analytics" },

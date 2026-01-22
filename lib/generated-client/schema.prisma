@@ -52,10 +52,23 @@ model Product {
   allowFlocage Boolean @default(false)
   allowGravure Boolean @default(false)
 
+  // Sizes and Stock
+  sizes ProductSize[]
+
   orderItems OrderItem[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+model ProductSize {
+  id        String  @id @default(cuid())
+  productId String
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+  size      String
+  stock     Int     @default(0)
+
+  @@unique([productId, size])
 }
 
 model Order {
@@ -89,6 +102,7 @@ model OrderItem {
   // Customization fields
   customName   String?
   customNumber String?
+  size         String?
 }
 
 model StoreConfig {

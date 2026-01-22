@@ -1,5 +1,5 @@
 import * as React from "react"
-import { Phone, MapPin, Globe } from "lucide-react"
+import { Phone, MapPin, Globe, User } from "lucide-react"
 
 interface ReceiptProps {
     order: any
@@ -38,14 +38,35 @@ export function Receipt({ order, config }: ReceiptProps) {
 
             <div className="border-b border-dashed border-black w-full my-3" />
 
-            {/* Order Identity */}
-            <div className="flex justify-between text-[10px] mb-1">
-                <span>TICKET: #{order.id.slice(-6).toUpperCase()}</span>
-                <span>CAISSE: 01</span>
+            {/* Order Identity & Customer Info */}
+            <div className="space-y-1 mb-3">
+                <div className="flex justify-between text-[10px] font-bold">
+                    <span>TICKET: #{order.id.slice(-6).toUpperCase()}</span>
+                    <span>CAISSE: 01</span>
+                </div>
+                <div className="text-[10px]">
+                    <span>DATE: {new Date(order.createdAt).toLocaleString('fr-FR')}</span>
+                </div>
+
+                {/* Customer Details section */}
+                <div className="mt-2 pt-2 border-t border-gray-100 space-y-0.5">
+                    <p className="text-[10px] font-black uppercase">CLIENT: {order.customerName || order.user?.name || "INVITÉ"}</p>
+                    {order.customerPhone && (
+                        <div className="flex items-center gap-1 text-[9px]">
+                            <Phone className="h-2 w-2" />
+                            <span>{order.customerPhone}</span>
+                        </div>
+                    )}
+                    {order.customerAddress && (
+                        <div className="flex items-center gap-1 text-[9px]">
+                            <MapPin className="h-2 w-2" />
+                            <span className="line-clamp-1 italic">{order.customerAddress}</span>
+                        </div>
+                    )}
+                </div>
             </div>
-            <div className="flex justify-between text-[10px] mb-3">
-                <span>DATE: {new Date(order.createdAt).toLocaleString('fr-FR')}</span>
-            </div>
+
+            <div className="border-b border-dashed border-black w-full my-3" />
 
             {/* Items Table */}
             <div className="space-y-2">
@@ -54,18 +75,28 @@ export function Receipt({ order, config }: ReceiptProps) {
                     <span className="w-[10%] text-center">QT</span>
                     <span className="w-[40%] text-right">MONTANT</span>
                 </div>
-                {order.items?.map((item: any, idx: number) => (
-                    <div key={idx} className="space-y-1">
-                        <div className="flex justify-between items-start">
-                            <span className="w-[60%] uppercase font-bold leading-none">{item.product?.name || item.name}</span>
-                            <span className="w-[10%] text-center text-[9px]">x{item.quantity}</span>
-                            <span className="w-[30%] text-right font-bold">{(item.price * item.quantity).toLocaleString()}</span>
+                {order.items?.map((item: any, idx: number) => {
+                    const itemName = item.product?.name || item.name || "Article sans nom";
+                    const categoryName = item.product?.category?.name ? `(${item.product.category.name})` : "";
+
+                    return (
+                        <div key={idx} className="space-y-1">
+                            <div className="flex justify-between items-start">
+                                <div className="w-[60%] flex flex-col">
+                                    <span className="uppercase font-bold leading-tight">{itemName}</span>
+                                    {categoryName && <span className="text-[8px] text-gray-500">{categoryName}</span>}
+                                </div>
+                                <span className="w-[10%] text-center text-[9px]">x{item.quantity}</span>
+                                <span className="w-[30%] text-right font-bold">{(item.price * item.quantity).toLocaleString()}</span>
+                            </div>
+                            {(item.customName || item.customNumber) && (
+                                <p className="text-[8px] italic ml-2 text-gray-700 bg-gray-50 px-1">
+                                    FLO: {item.customName} {item.customNumber && `#${item.customNumber}`}
+                                </p>
+                            )}
                         </div>
-                        {(item.customName || item.customNumber) && (
-                            <p className="text-[8px] italic ml-2">FLO: {item.customName} ({item.customNumber})</p>
-                        )}
-                    </div>
-                ))}
+                    );
+                })}
             </div>
 
             <div className="border-b border-dashed border-black w-full my-4" />
@@ -103,7 +134,7 @@ export function Receipt({ order, config }: ReceiptProps) {
                         <span>www.mborstore.sn</span>
                     </div>
                 </div>
-                <p className="text-[7px] leading-tight text-gray-500 uppercase">
+                <p className="text-[7px] leading-tight text-gray-500 uppercase italic">
                     Les articles vendus ne sont ni repris ni échangés<br />
                     après un délai de 24h et sans le ticket de caisse.<br />
                     Mbor Business Store - L'excellence au Sénégal.

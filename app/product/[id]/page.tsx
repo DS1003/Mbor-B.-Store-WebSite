@@ -8,11 +8,12 @@ import { ScrollReveal } from "@/components/scroll-reveal"
 import { prisma } from "@/lib/prisma"
 import { notFound } from "next/navigation"
 
-export default async function ProductPage({ params }: { params: { id: string } }) {
-    const { id } = params
+export default async function ProductPage({ params }: { params: Promise<{ id: string }> }) {
+    const { id } = await params
 
     const product = await prisma.product.findUnique({
-        where: { id }
+        where: { id },
+        include: { category: true }
     })
 
     if (!product) {
@@ -23,7 +24,7 @@ export default async function ProductPage({ params }: { params: { id: string } }
         id: product.id,
         name: product.name,
         price: Number(product.price),
-        category: product.category,
+        category: product.category?.name || "Sport",
         description: product.description ?? "",
         images: product.images.length > 0 ? product.images : ["/placeholder.svg"],
         allowFlocage: product.allowFlocage,
