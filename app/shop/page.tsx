@@ -1,51 +1,117 @@
 import * as React from "react"
 import { ShopFilters } from "@/components/shop-filters"
-import { ChevronDown, LayoutGrid, List, SlidersHorizontal } from "lucide-react"
+import { ChevronDown, LayoutGrid, List, SlidersHorizontal, ArrowRight } from "lucide-react"
 import { ScrollReveal } from "@/components/scroll-reveal"
 import { Button } from "@/components/ui/button"
 import { ShopProductGrid, ShopProductGridSkeleton } from "@/components/shop-product-grid"
 import { Suspense } from "react"
+import Link from "next/link"
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
+import {
+    Sheet,
+    SheetContent,
+    SheetHeader,
+    SheetTitle,
+    SheetTrigger,
+} from "@/components/ui/sheet"
 
-export default function ShopPage() {
+interface ShopPageProps {
+    searchParams: Promise<{
+        category?: string
+        size?: string
+        minPrice?: string
+        maxPrice?: string
+        sort?: string
+        view?: "grid" | "list"
+    }>
+}
+
+export default async function ShopPage({ searchParams }: ShopPageProps) {
+    const params = await searchParams
+    const currentSort = params.sort || "newest"
+    const currentView = params.view || "grid"
+
+    const sortOptions = [
+        { label: "Nouveautés", value: "newest" },
+        { label: "Prix croissant", value: "price_asc" },
+        { label: "Prix décroissant", value: "price_desc" },
+        { label: "Plus anciens", value: "oldest" },
+    ]
+
+    const activeSortLabel = sortOptions.find(opt => opt.value === currentSort)?.label
+
     return (
         <div className="flex flex-col w-full bg-background min-h-screen">
             <div className="container-custom py-16 md:py-24">
                 <div className="flex flex-col space-y-12">
                     {/* Page Header */}
-                    <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 pb-12 border-b">
+                    <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 pb-12 border-b border-muted/60">
                         <div className="space-y-4">
                             <ScrollReveal direction="left">
-                                <h1 className="font-heading text-5xl md:text-7xl font-bold tracking-tight leading-none">
-                                    Catalogue <span className="text-primary">Mbor Store</span>
+                                <div className="flex items-center space-x-2 text-[10px] font-black uppercase tracking-[0.3em] text-primary mb-2">
+                                    <span>Store</span>
+                                    <ArrowRight className="h-2.5 w-2.5" />
+                                    <span className="text-foreground">Catalogue</span>
+                                </div>
+                                <h1 className="font-heading text-5xl md:text-8xl font-black tracking-tighter leading-none">
+                                    ELITE <span className="text-primary italic">STORE</span>
                                 </h1>
                             </ScrollReveal>
                             <ScrollReveal direction="left" delay={0.1}>
-                                <p className="text-muted-foreground font-medium text-lg max-w-xl">
-                                    L'excellence du football et du streetwear sélectionnée pour vous.
+                                <p className="text-muted-foreground font-medium text-lg max-w-xl italic">
+                                    L'excellence du football et du streetwear sélectionnée pour l'élite.
                                 </p>
                             </ScrollReveal>
                         </div>
 
                         <ScrollReveal direction="right" className="flex items-center space-x-4">
-                            <div className="hidden sm:flex items-center bg-muted/50 p-1 rounded-xl">
-                                <Button variant="ghost" size="icon" className="h-9 w-9 rounded-lg bg-background shadow-sm">
+                            <div className="hidden sm:flex items-center bg-muted/30 p-1.5 rounded-2xl border border-muted/40">
+                                <Link
+                                    href={{ query: { ...params, view: "grid" } }}
+                                    className={`h-10 w-10 flex items-center justify-center rounded-xl transition-all ${currentView === "grid" ? "bg-white shadow-sm text-primary" : "text-muted-foreground hover:text-foreground"}`}
+                                >
                                     <LayoutGrid className="h-4 w-4" />
-                                </Button>
-                                <Button variant="ghost" size="icon" className="h-9 w-9 rounded-lg text-muted-foreground">
+                                </Link>
+                                <Link
+                                    href={{ query: { ...params, view: "list" } }}
+                                    className={`h-10 w-10 flex items-center justify-center rounded-xl transition-all ${currentView === "list" ? "bg-white shadow-sm text-primary" : "text-muted-foreground hover:text-foreground"}`}
+                                >
                                     <List className="h-4 w-4" />
-                                </Button>
+                                </Link>
                             </div>
 
-                            <Button variant="outline" className="h-12 px-6 rounded-xl text-[13px] font-bold tracking-tight border-muted hover:bg-muted group">
-                                <span>Trier : Nouveautés</span>
-                                <ChevronDown className="ml-2 h-4 w-4 text-primary transition-transform group-hover:translate-y-0.5" />
-                            </Button>
+                            <DropdownMenu>
+                                <DropdownMenuTrigger asChild>
+                                    <Button variant="outline" className="h-14 px-8 rounded-2xl text-[12px] font-black uppercase tracking-widest border-muted/80 hover:bg-muted/20 group">
+                                        <span>Trier : {activeSortLabel}</span>
+                                        <ChevronDown className="ml-3 h-4 w-4 text-primary transition-transform group-data-[state=open]:rotate-180" />
+                                    </Button>
+                                </DropdownMenuTrigger>
+                                <DropdownMenuContent align="end" className="w-56 rounded-2xl p-2 bg-white/80 backdrop-blur-xl border-muted/60 shadow-2xl">
+                                    {sortOptions.map((opt) => (
+                                        <DropdownMenuItem key={opt.value} asChild>
+                                            <Link
+                                                href={{ query: { ...params, sort: opt.value } }}
+                                                className={`flex items-center justify-between px-4 py-3 rounded-xl cursor-pointer text-sm font-bold tracking-tight transition-colors ${currentSort === opt.value ? "bg-primary/10 text-primary" : "hover:bg-muted/50"}`}
+                                            >
+                                                {opt.label}
+                                                {currentSort === opt.value && <div className="h-1.5 w-1.5 rounded-full bg-primary" />}
+                                            </Link>
+                                        </DropdownMenuItem>
+                                    ))}
+                                </DropdownMenuContent>
+                            </DropdownMenu>
                         </ScrollReveal>
                     </div>
 
                     <div className="grid grid-cols-1 gap-12 lg:grid-cols-4 lg:items-start">
                         {/* Filters Sidebar */}
-                        <aside className="hidden lg:block lg:sticky lg:top-32 h-fit">
+                        <aside className="hidden lg:block lg:sticky lg:top-32 h-fit bg-muted/5 p-8 rounded-[2.5rem] border border-muted/40 shadow-sm">
                             <ScrollReveal direction="left">
                                 <ShopFilters />
                             </ScrollReveal>
@@ -54,14 +120,28 @@ export default function ShopPage() {
                         {/* Product Grid - Streamed */}
                         <div className="lg:col-span-3">
                             {/* Mobile Filter Trigger */}
-                            <div className="lg:hidden flex justify-between items-center mb-6">
-                                <Button variant="outline" className="flex-1 h-12 rounded-xl font-bold tracking-tight mr-4">
-                                    <SlidersHorizontal className="mr-2 h-4 w-4" /> Filtrer
-                                </Button>
+                            <div className="lg:hidden flex justify-between items-center mb-8">
+                                <Sheet>
+                                    <SheetTrigger asChild>
+                                        <Button variant="outline" className="flex-1 h-16 rounded-2xl font-black uppercase tracking-widest bg-muted/20 border-muted/40 shadow-sm">
+                                            <SlidersHorizontal className="mr-3 h-5 w-5 text-primary" /> Filtrer & Explorer
+                                        </Button>
+                                    </SheetTrigger>
+                                    <SheetContent side="left" className="w-full sm:max-w-md p-0 bg-background border-r-0">
+                                        <div className="h-full overflow-y-auto p-10">
+                                            <SheetHeader className="mb-12">
+                                                <SheetTitle className="font-heading text-4xl font-black italic tracking-tighter uppercase">
+                                                    Mbor<span className="text-primary">.Filters</span>
+                                                </SheetTitle>
+                                            </SheetHeader>
+                                            <ShopFilters />
+                                        </div>
+                                    </SheetContent>
+                                </Sheet>
                             </div>
 
-                            <Suspense fallback={<ShopProductGridSkeleton />}>
-                                <ShopProductGrid />
+                            <Suspense key={JSON.stringify(params)} fallback={<ShopProductGridSkeleton />}>
+                                <ShopProductGrid searchParams={params} />
                             </Suspense>
                         </div>
                     </div>
@@ -70,4 +150,3 @@ export default function ShopPage() {
         </div>
     )
 }
-
