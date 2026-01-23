@@ -3,7 +3,7 @@
 import * as React from "react"
 import Link from "next/link"
 import Image from "next/image"
-import { useRouter } from "next/navigation"
+import { useRouter, useSearchParams } from "next/navigation"
 import { signIn } from "next-auth/react"
 import { motion } from "framer-motion"
 import { toast } from "sonner"
@@ -14,10 +14,32 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { ScrollReveal } from "@/components/scroll-reveal"
 
-export default function LoginPage() {
+function LoginContent() {
     const router = useRouter()
+    const searchParams = useSearchParams()
     const [isLoading, setIsLoading] = React.useState(false)
     const [showPassword, setShowPassword] = React.useState(false)
+
+    React.useEffect(() => {
+        const error = searchParams.get("error")
+        if (error) {
+            if (error === "OAuthSignin") {
+                toast.error("Erreur d'authentification Google. Veuillez réessayer.")
+            } else if (error === "OAuthCallback") {
+                toast.error("Erreur lors de la récupération des informations Google.")
+            } else if (error === "OAuthCreateAccount") {
+                toast.error("Impossible de créer un compte avec ces informations.")
+            } else if (error === "EmailSignin") {
+                toast.error("Le lien de connexion n'est plus valide.")
+            } else if (error === "CredentialsSignin") {
+                toast.error("Identifiants incorrects.")
+            } else {
+                toast.error("Une erreur d'authentification est survenue.")
+            }
+            // Clear the error from URL without refreshing
+            router.replace("/login")
+        }
+    }, [searchParams, router])
 
     async function onSubmit(event: React.FormEvent<HTMLFormElement>) {
         event.preventDefault()
@@ -211,6 +233,14 @@ export default function LoginPage() {
                 </div>
             </div>
         </div>
+    )
+}
+
+export default function LoginPage() {
+    return (
+        <React.Suspense fallback={<div className="min-h-screen flex items-center justify-center bg-background"><div className="h-8 w-8 border-4 border-primary/30 border-t-primary rounded-full animate-spin" /></div>}>
+            <LoginContent />
+        </React.Suspense>
     )
 }
 
