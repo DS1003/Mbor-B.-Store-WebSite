@@ -39,13 +39,32 @@ export default function CheckoutPage() {
 
         setIsSubmitting(true)
 
-        // Mocking order creation
-        setTimeout(() => {
-            setIsSubmitting(false)
+        try {
+            const response = await fetch("/api/orders", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    items,
+                    subtotal,
+                    totalAmount: total,
+                    formData,
+                    paymentMethod
+                })
+            })
+
+            if (!response.ok) {
+                throw new Error("Erreur lors de la création de la commande")
+            }
+
             setIsSuccess(true)
             toast.success("Commande confirmée !")
             clearCart()
-        }, 2000)
+        } catch (error) {
+            console.error(error)
+            toast.error("Une erreur est survenue. Veuillez réessayer.")
+        } finally {
+            setIsSubmitting(false)
+        }
     }
 
     if (items.length === 0 && !isSuccess) {

@@ -1,6 +1,7 @@
 import { AuthOptions, DefaultSession } from "next-auth"
 import { Adapter } from "next-auth/adapters"
 import CredentialsProvider from "next-auth/providers/credentials"
+import GoogleProvider from "next-auth/providers/google"
 import { PrismaAdapter } from "@auth/prisma-adapter"
 import { prisma } from "@/lib/prisma"
 import bcrypt from "bcryptjs"
@@ -21,6 +22,10 @@ declare module "next-auth" {
 export const authOptions: AuthOptions = {
     adapter: PrismaAdapter(prisma as any) as Adapter,
     providers: [
+        GoogleProvider({
+            clientId: process.env.GOOGLE_CLIENT_ID!,
+            clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
+        }),
         CredentialsProvider({
             name: "credentials",
             credentials: {

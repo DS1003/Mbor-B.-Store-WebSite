@@ -16,8 +16,12 @@ interface ProductCardProps {
     isNew?: boolean
 }
 
+import { useWishlist } from "./wishlist-context"
+
 export function ProductCard({ id, name, price, image, category, isNew }: ProductCardProps) {
     const [isHovered, setIsHovered] = React.useState(false)
+    const { toggleFavorite, isFavorite } = useWishlist()
+    const favorited = isFavorite(id)
 
     return (
         <motion.div
@@ -39,8 +43,19 @@ export function ProductCard({ id, name, price, image, category, isNew }: Product
                     </div>
                 )}
 
-                <button className="absolute top-5 right-5 z-20 h-10 w-10 bg-white/10 backdrop-blur-md border border-white/20 text-white rounded-xl flex items-center justify-center transition-all hover:bg-rose-500 hover:text-white hover:border-rose-500 cursor-pointer">
-                    <Heart className="h-4 w-4" />
+                <button
+                    onClick={(e) => {
+                        e.preventDefault()
+                        toggleFavorite(id)
+                    }}
+                    className={cn(
+                        "absolute top-5 right-5 z-20 h-10 w-10 backdrop-blur-md border rounded-xl flex items-center justify-center transition-all cursor-pointer",
+                        favorited
+                            ? "bg-rose-500 text-white border-rose-500 scale-110"
+                            : "bg-white/10 text-white border-white/20 hover:bg-rose-500 hover:border-rose-500"
+                    )}
+                >
+                    <Heart className={cn("h-4 w-4", favorited && "fill-current")} />
                 </button>
 
                 <div className="block h-full relative group/img">

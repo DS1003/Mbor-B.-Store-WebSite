@@ -26,8 +26,11 @@ interface ProductInfoProps {
     }
 }
 
+import { useWishlist } from "./wishlist-context"
+
 export function ProductInfo({ product }: ProductInfoProps) {
     const { addItem } = useCart()
+    const { toggleFavorite, isFavorite } = useWishlist()
     const [selectedSize, setSelectedSize] = React.useState("")
     const [isCustomizing, setIsCustomizing] = React.useState(false)
     const [customName, setCustomName] = React.useState("")
@@ -45,6 +48,8 @@ export function ProductInfo({ product }: ProductInfoProps) {
         allowFlocage: false,
         sizes: []
     }
+
+    const favorited = isFavorite(data.id)
 
     const availableSizes = data.sizes && data.sizes.length > 0
         ? data.sizes
@@ -243,8 +248,17 @@ export function ProductInfo({ product }: ProductInfoProps) {
                     </button>
                 </Magnetic>
                 <Magnetic>
-                    <button className="h-16 px-8 border border-muted rounded-2xl flex items-center justify-center hover:bg-muted transition-all active:scale-90 group">
-                        <Heart className="h-5 w-5 group-hover:fill-rose-500 group-hover:text-rose-500 transition-colors" />
+                    <button
+                        onClick={() => toggleFavorite(data.id)}
+                        className={cn(
+                            "h-16 px-8 border rounded-2xl flex items-center justify-center transition-all active:scale-90 group",
+                            favorited ? "border-rose-500 bg-rose-50" : "border-muted hover:bg-muted"
+                        )}
+                    >
+                        <Heart className={cn(
+                            "h-5 w-5 transition-colors",
+                            favorited ? "fill-rose-500 text-rose-500" : "group-hover:fill-rose-500 group-hover:text-rose-500"
+                        )} />
                     </button>
                 </Magnetic>
             </div>

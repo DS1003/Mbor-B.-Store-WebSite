@@ -1,7 +1,7 @@
 "use client"
 
 import * as React from "react"
-import { useSession } from "next-auth/react"
+import { useSession, signOut } from "next-auth/react"
 import { useRouter } from "next/navigation"
 import {
     User,
@@ -24,7 +24,8 @@ import {
     Clock,
     Activity,
     LogOut,
-    Crown
+    Crown,
+    ExternalLink
 } from "lucide-react"
 import { motion, AnimatePresence } from "framer-motion"
 import { ScrollReveal } from "@/components/scroll-reveal"
@@ -32,10 +33,41 @@ import { Magnetic } from "@/components/interactions"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 
 export default function AccountPage() {
     const { data: session, status } = useSession()
     const router = useRouter()
+
+    const [realStats, setRealStats] = React.useState({
+        ordersCount: 0,
+        wishlistCount: 0,
+    })
+
+    React.useEffect(() => {
+        if (status === "authenticated") {
+            const fetchStats = async () => {
+                try {
+                    // Fetch Orders
+                    const ordersRes = await fetch("/api/user/orders")
+                    if (ordersRes.ok) {
+                        const orders = await ordersRes.json()
+                        setRealStats(prev => ({ ...prev, ordersCount: orders.length }))
+                    }
+
+                    // Fetch Wishlist
+                    const wishlistRes = await fetch("/api/user/favorites")
+                    if (wishlistRes.ok) {
+                        const favorites = await wishlistRes.json()
+                        setRealStats(prev => ({ ...prev, wishlistCount: favorites.length }))
+                    }
+                } catch (error) {
+                    console.error("Failed to fetch stats:", error)
+                }
+            }
+            fetchStats()
+        }
+    }, [status])
 
     React.useEffect(() => {
         if (status === "unauthenticated") {
@@ -47,7 +79,7 @@ export default function AccountPage() {
         return (
             <div className="min-h-screen flex items-center justify-center bg-background">
                 <div className="relative">
-                    <div className="h-20 w-20 border-2 border-primary/20 rounded-full animate-ping absolute inset-0" />
+                    <div className="h-20 w-20 border-2 border-primary/20 rounded-full animate-pulse absolute inset-0" />
                     <div className="h-20 w-20 border-t-2 border-primary rounded-full animate-spin flex items-center justify-center">
                         <Star className="h-6 w-6 text-primary animate-pulse" />
                     </div>
@@ -59,9 +91,9 @@ export default function AccountPage() {
     if (!session) return null
 
     const stats = [
-        { label: "Historique", value: "14", icon: Package, color: "text-amber-500", bg: "bg-amber-500/10" },
-        { label: "Mbor XP", value: "2,450", icon: Crown, color: "text-primary", bg: "bg-primary/10" },
-        { label: "Wishlist", value: "08", icon: Heart, color: "text-rose-500", bg: "bg-rose-500/10" },
+        { label: "Commandes", value: realStats.ordersCount.toString().padStart(2, "0"), icon: Package, color: "text-amber-600", bg: "bg-amber-50" },
+        { label: "Points Mbor", value: "2,450", icon: Crown, color: "text-primary", bg: "bg-primary/5" },
+        { label: "Favoris", value: realStats.wishlistCount.toString().padStart(2, "0"), icon: Heart, color: "text-rose-600", bg: "bg-rose-50" },
     ]
 
     const containerVariants = {
@@ -74,17 +106,29 @@ export default function AccountPage() {
         }
     }
 
-    const itemVariants = {
-        hidden: { opacity: 0, y: 20 },
-        visible: { opacity: 1, y: 0 }
+    const itemVariants: any = {
+        hidden: { opacity: 0, y: 10 },
+        visible: {
+            opacity: 1,
+            y: 0,
+            transition: {
+                duration: 0.5,
+                ease: [0.33, 1, 0.68, 1]
+            }
+        }
     }
 
+    const first_name = session.user?.name?.split(" ")[0] || "Client"
+    const userInitials = session.user?.name
+        ? session.user.name.split(" ").map((n: string) => n[0]).join("").toUpperCase().slice(0, 2)
+        : "MS"
+
     return (
-        <div className="min-h-screen bg-[#fafafa] dark:bg-[#050505] pt-28 pb-32 selection:bg-primary selection:text-black">
-            {/* Background elements */}
-            <div className="fixed inset-0 overflow-hidden pointer-events-none -z-10">
-                <div className="absolute top-[10%] left-[-5%] w-[40%] h-[40%] bg-primary/5 rounded-full blur-[120px]" />
-                <div className="absolute bottom-[5%] right-[-5%] w-[30%] h-[30%] bg-blue-500/5 rounded-full blur-[100px]" />
+        <div className="min-h-screen bg-[#FAFAFA] pt-24 pb-32 text-foreground overflow-hidden">
+            {/* Elegant Background Accents */}
+            <div className="fixed inset-0 pointer-events-none -z-10 overflow-hidden">
+                <div className="absolute top-[-10%] right-[-10%] w-[60%] h-[60%] bg-primary/5 rounded-full blur-[150px]" />
+                <div className="absolute bottom-[-10%] left-[-10%] w-[50%] h-[50%] bg-primary/3 rounded-full blur-[120px]" />
             </div>
 
             <div className="container-custom">
@@ -92,132 +136,146 @@ export default function AccountPage() {
                     initial="hidden"
                     animate="visible"
                     variants={containerVariants}
-                    className="space-y-16"
+                    className="space-y-12 lg:space-y-20"
                 >
-                    {/* Header / Identity Hub */}
-                    <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-10">
-                        <motion.div variants={itemVariants} className="space-y-6">
-                            <div className="flex items-center gap-4">
-                                <span className="h-px w-10 bg-primary rounded-full" />
-                                <span className="text-[10px] font-black uppercase tracking-[0.5em] text-primary italic">Mbor.Studio Personal OS v2.0</span>
+                    {/* Welcome Header */}
+                    <header className="flex flex-col md:flex-row md:items-end justify-between gap-8 py-4">
+                        <motion.div variants={itemVariants} className="space-y-4">
+                            <div className="flex items-center gap-3">
+                                <span className="h-1.5 w-1.5 rounded-full bg-primary" />
+                                <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-primary">Espace Privé Membre</span>
                             </div>
-                            <h1 className="text-6xl md:text-8xl font-black uppercase italic tracking-tighter leading-none">
-                                Salut, <span className="text-primary italic">{session.user?.name?.split(" ")[0]}</span>
+                            <h1 className="text-5xl md:text-7xl lg:text-8xl font-heading font-bold tracking-tight leading-none">
+                                Bonjour, <span className="text-primary italic font-semibold">{first_name}</span>
                             </h1>
-                            <p className="text-sm font-medium text-muted-foreground/60 max-w-md italic uppercase tracking-widest text-[10px]">Accès exclusif à votre écosystème de performance & style.</p>
+                            <p className="text-sm text-muted-foreground max-w-lg font-medium">
+                                Bienvenue dans votre univers Mbor Store. Gérez vos commandes, vos préférences et votre fidélité en toute élégance.
+                            </p>
                         </motion.div>
 
-                        <motion.div variants={itemVariants} className="flex gap-4">
+                        <motion.div variants={itemVariants} className="flex items-center gap-4">
                             <Magnetic>
-                                <button className="h-16 px-10 rounded-2xl bg-black text-white dark:bg-white dark:text-black text-[10px] font-black uppercase tracking-widest hover:bg-primary hover:text-black transition-all flex items-center gap-3 shadow-2xl relative group overflow-hidden border border-white/5">
-                                    <div className="absolute inset-0 bg-gradient-to-r from-primary/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-                                    <Edit3 className="h-4 w-4 relative z-10" />
-                                    <span className="relative z-10">Modifier Profil</span>
-                                </button>
+                                <Button className="h-12 px-8 rounded-xl bg-black text-white hover:bg-primary hover:text-black transition-all font-bold text-xs uppercase tracking-widest shadow-xl flex items-center gap-2 group">
+                                    <Edit3 className="h-4 w-4 transition-transform group-hover:-translate-y-0.5" />
+                                    <span>Modifier Profil</span>
+                                </Button>
                             </Magnetic>
                         </motion.div>
-                    </div>
+                    </header>
 
-                    <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16">
-                        {/* LEFT COLUMN: Profile & Real-time Stats */}
-                        <div className="lg:col-span-4 space-y-8">
-                            {/* Profile Card / Glass */}
-                            <motion.div variants={itemVariants} className="group bg-card/60 backdrop-blur-3xl border-2 border-muted/50 rounded-[3.5rem] p-12 shadow-2xl relative overflow-hidden transition-all duration-700 hover:border-primary/30">
-                                <div className="absolute top-0 right-0 h-40 w-40 bg-primary/5 rounded-bl-[100%] transition-transform group-hover:scale-125 duration-700" />
+                    {/* Main Interface Grid */}
+                    <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16">
+                        {/* LEFT: Identity & Status */}
+                        <div className="lg:col-span-4 space-y-10">
+                            {/* Profile Card */}
+                            <motion.div variants={itemVariants} className="bg-white border border-border rounded-[2.5rem] p-10 lg:p-12 shadow-[0_10px_40px_-15px_rgba(0,0,0,0.05)] relative overflow-hidden group">
+                                <div className="absolute top-0 right-0 h-40 w-40 bg-primary/3 rounded-bl-full translate-x-10 -translate-y-10 group-hover:translate-x-5 group-hover:-translate-y-5 transition-transform duration-700" />
 
                                 <div className="relative space-y-10">
-                                    <div className="relative inline-block group/avatar">
-                                        <div className="h-28 w-28 rounded-[2.5rem] bg-black text-white flex items-center justify-center text-3xl font-black italic border-4 border-white dark:border-white/10 shadow-2xl rotate-3 group-hover/avatar:rotate-0 transition-transform duration-500 overflow-hidden">
-                                            {session.user?.image ? (
-                                                <img src={session.user.image} alt="" className="h-full w-full object-cover" />
-                                            ) : (
-                                                session.user?.name?.substring(0, 2).toUpperCase()
-                                            )}
+                                    <div className="flex items-start justify-between">
+                                        <div className="relative">
+                                            <Avatar className="h-24 w-24 rounded-3xl border-4 border-white shadow-2xl">
+                                                <AvatarImage src={session.user?.image || ""} alt={session.user?.name || ""} />
+                                                <AvatarFallback className="bg-primary text-white text-2xl font-bold">
+                                                    {userInitials}
+                                                </AvatarFallback>
+                                            </Avatar>
+                                            <div className="absolute -bottom-2 -right-2 h-9 w-9 bg-primary text-white rounded-xl flex items-center justify-center shadow-lg border-4 border-white">
+                                                <ShieldCheck className="h-5 w-5" />
+                                            </div>
                                         </div>
-                                        <div className="absolute -bottom-2 -right-2 h-10 w-10 bg-primary text-black rounded-xl flex items-center justify-center shadow-xl border-4 border-card animate-pulse">
-                                            <ShieldCheck className="h-5 w-5" />
+                                        <div className="bg-muted/30 px-4 py-2 rounded-full border border-border">
+                                            <span className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground flex items-center gap-2">
+                                                <div className="h-1.5 w-1.5 rounded-full bg-green-500 animate-pulse" />
+                                                Actif
+                                            </span>
                                         </div>
                                     </div>
 
-                                    <div className="space-y-8">
+                                    <div className="space-y-6">
                                         <div className="space-y-1">
-                                            <p className="text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground/40 italic">Client Identité</p>
-                                            <p className="text-2xl font-black tracking-tight leading-none italic">{session.user?.name}</p>
-                                        </div>
-                                        <div className="space-y-1">
-                                            <p className="text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground/40 italic">Signature Numérique</p>
-                                            <p className="text-sm font-semibold text-muted-foreground leading-none">{session.user?.email}</p>
+                                            <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground hover:text-primary transition-colors cursor-default">Membre Officiel</p>
+                                            <h3 className="text-2xl font-bold tracking-tight">{session.user?.name}</h3>
+                                            <p className="text-sm font-medium text-muted-foreground">{session.user?.email}</p>
                                         </div>
 
-                                        <div className="pt-6 flex flex-col gap-3">
-                                            <div className="flex items-center gap-3 bg-primary/5 border border-primary/10 px-6 py-4 rounded-2xl group/btn hover:bg-primary/10 transition-all cursor-default">
-                                                <Crown className="h-4 w-4 text-primary" />
-                                                <span className="text-[9px] font-black uppercase tracking-[0.3em] text-primary">Membre Elite LVL 2</span>
+                                        <div className="pt-4 space-y-3">
+                                            <div className="flex items-center gap-4 bg-muted/20 hover:bg-muted/40 transition-colors p-4 rounded-2xl border border-border/50 group/status">
+                                                <div className="h-10 w-10 rounded-xl bg-white border border-border flex items-center justify-center text-primary shadow-sm group-hover/status:scale-110 transition-transform">
+                                                    <Crown className="h-5 w-5" />
+                                                </div>
+                                                <div className="flex-1">
+                                                    <p className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">Fidélité</p>
+                                                    <p className="text-xs font-bold text-foreground">Client Elite Bronze</p>
+                                                </div>
+                                                <ChevronRight className="h-4 w-4 text-muted-foreground/40" />
                                             </div>
+
                                             <button
-                                                onClick={() => router.push('/api/auth/signout')}
-                                                className="flex items-center gap-3 text-rose-500/40 hover:text-rose-500 transition-colors px-6 py-2 text-[9px] font-black uppercase tracking-[0.3em]"
+                                                onClick={() => signOut()}
+                                                className="w-full flex items-center gap-3 text-destructive/60 hover:text-destructive transition-colors px-4 py-2 text-[10px] font-bold uppercase tracking-[0.2em] group/logout mt-4"
                                             >
-                                                <LogOut className="h-4 w-4" /> Déconnexion Système
+                                                <LogOut className="h-4 w-4 group-hover:-translate-x-1 transition-transform" />
+                                                <span>Déconnexion sécurisée</span>
                                             </button>
                                         </div>
                                     </div>
                                 </div>
                             </motion.div>
 
-                            {/* Mini Stats Matrix */}
+                            {/* Stats */}
                             <motion.div variants={itemVariants} className="grid grid-cols-1 gap-4">
                                 {stats.map((stat, i) => (
-                                    <div key={i} className="group bg-card/40 backdrop-blur-2xl border-2 border-muted/50 p-6 rounded-[2rem] flex items-center justify-between hover:shadow-xl hover:border-primary/20 transition-all duration-500">
-                                        <div className="flex items-center gap-5">
-                                            <div className={cn("h-14 w-14 rounded-2xl flex items-center justify-center shadow-lg transition-transform group-hover:rotate-6", stat.bg, stat.color)}>
-                                                <stat.icon className="h-6 w-6" />
-                                            </div>
-                                            <div>
-                                                <p className="text-[9px] font-black uppercase tracking-widest text-muted-foreground/40 italic">{stat.label}</p>
-                                                <h3 className="text-2xl font-black italic tracking-tighter tabular-nums leading-none">{stat.value}</h3>
-                                            </div>
+                                    <div key={i} className="group bg-white border border-border p-6 rounded-2xl flex items-center gap-5 hover:border-primary/40 hover:shadow-lg transition-all duration-300">
+                                        <div className={cn("h-14 w-14 rounded-xl flex items-center justify-center shadow-sm group-hover:scale-110 transition-transform", stat.bg, stat.color)}>
+                                            <stat.icon className="h-6 w-6" />
                                         </div>
-                                        <div className="h-10 w-10 rounded-xl bg-muted/20 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all">
-                                            <ArrowUpRight className="h-4 w-4 text-muted-foreground" />
+                                        <div className="flex-1">
+                                            <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">{stat.label}</p>
+                                            <h3 className="text-2xl font-bold tracking-tight tabular-nums">{stat.value}</h3>
                                         </div>
+                                        <ArrowUpRight className="h-5 w-5 text-muted-foreground/20 group-hover:text-primary transition-colors" />
                                     </div>
                                 ))}
                             </motion.div>
                         </div>
 
-                        {/* RIGHT COLUMN: Nav Matrix & Actions */}
+                        {/* RIGHT: Navigation & Services */}
                         <div className="lg:col-span-8 space-y-12">
-                            {/* Command Grid */}
+                            {/* Navigation Grid */}
                             <div className="space-y-8">
-                                <motion.div variants={itemVariants} className="flex items-center gap-4">
-                                    <Activity className="h-5 w-5 text-primary animate-pulse" />
-                                    <h2 className="text-3xl font-black uppercase italic tracking-tighter">Accès <span className="text-primary italic">Tactique</span></h2>
+                                <motion.div variants={itemVariants} className="flex items-center justify-between border-b border-border pb-6">
+                                    <div className="flex items-center gap-4">
+                                        <Activity className="h-5 w-5 text-primary" />
+                                        <h2 className="text-2xl font-bold tracking-tight">Services & Alertes</h2>
+                                    </div>
+                                    <button className="text-xs font-bold text-muted-foreground uppercase tracking-widest hover:text-primary transition-colors flex items-center gap-2">
+                                        <Bell className="h-4 w-4" />
+                                        <span>Gérer</span>
+                                    </button>
                                 </motion.div>
 
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8">
                                     {[
-                                        { title: "Mes Commandes", desc: "Suivi & Flux Transactionnel", icon: Package, href: "/account/orders", color: "from-amber-500/10 to-transparent", iconColor: "text-amber-500" },
-                                        { title: "Point de Chute", desc: "Adresses & Zones de Livraison", icon: MapPin, href: "/account/address", color: "from-blue-500/10 to-transparent", iconColor: "text-blue-500" },
-                                        { title: "Moyens de Flux", desc: "Wave, OM, Cash Intelligence", icon: CreditCard, href: "/account/billing", color: "from-emerald-500/10 to-transparent", iconColor: "text-emerald-500" },
-                                        { title: "Paramètres OS", desc: "Sécurité & Profil Métadata", icon: Settings, href: "/account/settings", color: "from-purple-500/10 to-transparent", iconColor: "text-purple-500" },
+                                        { title: "Commandes", desc: "Suivez vos achats et retours", icon: Package, href: "/account/orders", color: "hover:bg-amber-50 hover:border-amber-100", iconColor: "text-amber-600" },
+                                        { title: "Livraisons", desc: "Gérez vos points de chute", icon: MapPin, href: "/account/address", color: "hover:bg-blue-50 hover:border-blue-100", iconColor: "text-blue-600" },
+                                        { title: "Paiements", desc: "Wave, OM & Cartes bancaires", icon: CreditCard, href: "/account/payments", color: "hover:bg-emerald-50 hover:border-emerald-100", iconColor: "text-emerald-600" },
+                                        { title: "Paramètres", desc: "Sécurité & Confidentialité", icon: Settings, href: "/account/settings", color: "hover:bg-purple-50 hover:border-purple-100", iconColor: "text-purple-600" },
                                     ].map((item, i) => (
                                         <motion.div key={i} variants={itemVariants}>
                                             <Link href={item.href} className="group block">
-                                                <div className="bg-card/40 backdrop-blur-2xl border-2 border-muted/50 hover:border-primary/30 p-10 rounded-[2.5rem] transition-all duration-700 flex flex-col justify-between h-56 relative overflow-hidden shadow-sm hover:shadow-2xl">
-                                                    <div className={cn("absolute inset-0 bg-gradient-to-br opacity-0 group-hover:opacity-100 transition-opacity duration-700", item.color)} />
-
-                                                    <div className={cn("h-14 w-14 rounded-2xl flex items-center justify-center bg-muted/20 shadow-lg relative z-10 group-hover:scale-110 transition-transform duration-500", item.iconColor)}>
-                                                        <item.icon className="h-6 w-6" />
+                                                <div className={cn("bg-white border border-border p-8 lg:p-10 rounded-[2rem] transition-all duration-500 h-full flex flex-col gap-8 shadow-[0_2px_10px_-5px_rgba(0,0,0,0.02)] group-hover:shadow-xl", item.color)}>
+                                                    <div className="flex items-start justify-between">
+                                                        <div className={cn("h-14 w-14 rounded-xl flex items-center justify-center bg-muted/30 group-hover:bg-white shadow-sm transition-all duration-500", item.iconColor)}>
+                                                            <item.icon className="h-6 w-6" />
+                                                        </div>
+                                                        <div className="h-10 w-10 rounded-full border border-border opacity-0 group-hover:opacity-100 group-hover:scale-100 scale-90 transition-all duration-300 flex items-center justify-center">
+                                                            <ChevronRight className="h-5 w-5 text-muted-foreground" />
+                                                        </div>
                                                     </div>
-
-                                                    <div className="space-y-2 relative z-10 transition-transform duration-500 group-hover:translate-x-2">
-                                                        <h3 className="text-2xl font-black italic tracking-tighter">{item.title}</h3>
-                                                        <p className="text-[10px] font-black text-muted-foreground/60 uppercase tracking-widest italic">{item.desc}</p>
-                                                    </div>
-
-                                                    <div className="absolute top-8 right-8 h-10 w-10 rounded-full border border-muted opacity-0 group-hover:opacity-100 transition-all duration-500 flex items-center justify-center relative z-10">
-                                                        <ChevronRight className="h-5 w-5 text-muted-foreground" />
+                                                    <div className="space-y-1">
+                                                        <h3 className="text-xl font-bold tracking-tight">{item.title}</h3>
+                                                        <p className="text-xs text-muted-foreground font-medium">{item.desc}</p>
                                                     </div>
                                                 </div>
                                             </Link>
@@ -226,34 +284,53 @@ export default function AccountPage() {
                                 </div>
                             </div>
 
-                            {/* Conciergerie Section */}
-                            <motion.div variants={itemVariants} className="bg-black text-white p-16 rounded-[4rem] relative overflow-hidden shadow-2xl group">
-                                <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(204,153,51,0.15)_0%,transparent_100%)]" />
-                                <div className="absolute -right-20 -bottom-20 h-80 w-80 bg-primary/20 rounded-full blur-[100px] animate-pulse" />
+                            {/* Conciergerie Premium Banner */}
+                            <motion.div variants={itemVariants} className="bg-black text-white p-12 lg:p-16 rounded-[3rem] relative overflow-hidden group shadow-2xl">
+                                <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(204,153,51,0.2),transparent_70%)]" />
+                                <div className="absolute top-0 right-0 w-1/2 h-full bg-gradient-to-l from-primary/5 to-transparent pointer-events-none" />
 
-                                <div className="relative z-10 flex flex-col md:flex-row gap-12 items-center">
-                                    <div className="space-y-8 flex-1">
+                                <div className="relative z-10 flex flex-col md:flex-row gap-12 items-center justify-between">
+                                    <div className="space-y-8 max-w-xl">
                                         <div className="flex items-center gap-3">
-                                            <Zap className="h-6 w-6 text-primary fill-primary" />
-                                            <span className="text-[11px] font-black uppercase tracking-[0.4em] text-primary">Mbor 24/7 Conciergerie</span>
+                                            <Zap className="h-5 w-5 text-primary fill-primary animate-pulse" />
+                                            <span className="text-[10px] font-bold uppercase tracking-[0.4em] text-primary">Mbor Service Concierge</span>
                                         </div>
                                         <div className="space-y-4">
-                                            <h3 className="text-4xl lg:text-5xl font-black uppercase italic tracking-tighter leading-none">Besoin d'un <span className="text-primary italic">Support ?</span></h3>
-                                            <p className="text-white/50 font-medium italic text-sm leading-relaxed max-w-lg">Une question sur un flex, une commande ou un drop ? Notre équipe de conciergerie digitale est activée en permanence pour vous.</p>
+                                            <h3 className="text-4xl lg:text-5xl font-heading font-bold tracking-tight leading-none italic">
+                                                Un Service <span className="text-primary">Sur Mesure</span>
+                                            </h3>
+                                            <p className="text-white/60 font-medium text-sm leading-relaxed">
+                                                Drop spécial ? Personnalisation de maillot ? Notre équipe est prête à vous accompagner en priorité sur WhatsApp.
+                                            </p>
                                         </div>
-                                        <button className="h-16 px-12 rounded-2xl bg-primary text-black font-black uppercase tracking-[0.2em] text-[11px] hover:scale-105 transition-all shadow-[0_0_30px_rgba(204,153,51,0.3)] group-hover:shadow-[0_0_50px_rgba(204,153,51,0.5)]">
-                                            Activer Support WhatsApp
-                                        </button>
+                                        <Button className="h-14 px-10 rounded-xl bg-primary text-black font-bold uppercase tracking-widest text-[10px] hover:scale-105 transition-all shadow-glow">
+                                            Contacter un Expert
+                                        </Button>
                                     </div>
-                                    <div className="hidden lg:flex justify-center relative">
-                                        <div className="h-56 w-56 rounded-full border-2 border-primary/20 flex items-center justify-center border-dashed animate-[spin_30s_linear_infinite] group-hover:border-primary/40 transition-colors">
-                                            <ShoppingBag className="h-16 w-16 text-primary animate-pulse" />
+                                    <div className="hidden lg:flex relative">
+                                        <div className="h-48 w-48 rounded-full border border-primary/20 flex items-center justify-center animate-[spin_20s_linear_infinite]">
+                                            <div className="h-4 w-4 bg-primary rounded-full absolute top-0" />
                                         </div>
                                         <div className="absolute inset-0 flex items-center justify-center">
-                                            <div className="h-40 w-40 rounded-full bg-primary/5 blur-2xl" />
+                                            <ShoppingBag className="h-16 w-16 text-primary/30" />
                                         </div>
                                     </div>
                                 </div>
+                            </motion.div>
+
+                            {/* Secondary Actions */}
+                            <motion.div variants={itemVariants} className="flex flex-wrap items-center gap-6 justify-center lg:justify-start">
+                                <Link href="/shop" className="text-xs font-bold text-muted-foreground hover:text-primary transition-colors flex items-center gap-2 group">
+                                    Continuer mes achats <ExternalLink className="h-3 w-3 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
+                                </Link>
+                                <span className="text-muted-foreground/20">|</span>
+                                <Link href="/contact" className="text-xs font-bold text-muted-foreground hover:text-primary transition-colors border-b border-transparent hover:border-primary">
+                                    Support Client
+                                </Link>
+                                <span className="text-muted-foreground/20">|</span>
+                                <Link href="/faq" className="text-xs font-bold text-muted-foreground hover:text-primary transition-colors border-b border-transparent hover:border-primary">
+                                    Questions Fréquentes
+                                </Link>
                             </motion.div>
                         </div>
                     </div>
@@ -262,4 +339,5 @@ export default function AccountPage() {
         </div>
     )
 }
+
 

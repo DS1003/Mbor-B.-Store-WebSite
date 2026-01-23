@@ -1,26 +1,12 @@
 import * as React from "react"
-import { ProductCard } from "@/components/product-card"
 import { ShopFilters } from "@/components/shop-filters"
 import { ChevronDown, LayoutGrid, List, SlidersHorizontal } from "lucide-react"
 import { ScrollReveal } from "@/components/scroll-reveal"
-import { prisma } from "@/lib/prisma"
 import { Button } from "@/components/ui/button"
+import { ShopProductGrid, ShopProductGridSkeleton } from "@/components/shop-product-grid"
+import { Suspense } from "react"
 
-export default async function ShopPage() {
-    const productsFromDb = await prisma.product.findMany({
-        orderBy: { createdAt: 'desc' },
-        include: { category: true }
-    })
-
-    const products = productsFromDb.map(p => ({
-        id: p.id,
-        name: p.name,
-        price: Number(p.price),
-        category: p.category?.name || "Sans catégorie",
-        image: p.images[0] || "/placeholder.svg",
-        isNew: true // Simplified for seed data
-    }))
-
+export default function ShopPage() {
     return (
         <div className="flex flex-col w-full bg-background min-h-screen">
             <div className="container-custom py-16 md:py-24">
@@ -65,32 +51,18 @@ export default async function ShopPage() {
                             </ScrollReveal>
                         </aside>
 
-                        {/* Product Grid */}
-                        <div className="lg:col-span-3 space-y-20">
+                        {/* Product Grid - Streamed */}
+                        <div className="lg:col-span-3">
                             {/* Mobile Filter Trigger */}
                             <div className="lg:hidden flex justify-between items-center mb-6">
                                 <Button variant="outline" className="flex-1 h-12 rounded-xl font-bold tracking-tight mr-4">
                                     <SlidersHorizontal className="mr-2 h-4 w-4" /> Filtrer
                                 </Button>
-                                <p className="text-sm font-medium text-muted-foreground">{products.length} produits</p>
                             </div>
 
-                            <div className="grid grid-cols-1 gap-x-6 gap-y-12 sm:grid-cols-2 xl:grid-cols-3">
-                                {products.map((product, i) => (
-                                    <ScrollReveal key={product.id} delay={i * 0.05}>
-                                        <ProductCard {...product} />
-                                    </ScrollReveal>
-                                ))}
-                            </div>
-
-                            {/* Load More */}
-                            <div className="flex justify-center pt-12">
-                                <ScrollReveal direction="up">
-                                    <Button variant="outline" className="h-14 px-12 rounded-2xl text-[13px] font-bold tracking-tight border-primary/20 hover:bg-primary hover:text-primary-foreground hover:border-primary transition-all active:scale-95 shadow-md">
-                                        Charger plus de produits
-                                    </Button>
-                                </ScrollReveal>
-                            </div>
+                            <Suspense fallback={<ShopProductGridSkeleton />}>
+                                <ShopProductGrid />
+                            </Suspense>
                         </div>
                     </div>
                 </div>
@@ -98,3 +70,4 @@ export default async function ShopPage() {
         </div>
     )
 }
+

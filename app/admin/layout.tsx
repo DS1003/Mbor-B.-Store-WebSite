@@ -38,7 +38,19 @@ import {
     SheetTitle,
     SheetTrigger,
 } from "@/components/ui/sheet"
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuGroup,
+    DropdownMenuItem,
+    DropdownMenuLabel,
+    DropdownMenuSeparator,
+    DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { motion, AnimatePresence } from "framer-motion"
+
+import { useSession, signOut } from "next-auth/react"
 
 export default function AdminLayout({
     children,
@@ -48,6 +60,13 @@ export default function AdminLayout({
     const { setTheme } = useTheme()
     const pathname = usePathname()
     const [isSidebarOpen, setIsSidebarOpen] = React.useState(true)
+    const { data: session } = useSession()
+
+    // Derived user data
+    const user = session?.user
+    const userInitials = user?.name
+        ? user.name.split(" ").map((n: string) => n[0]).join("").toUpperCase().slice(0, 2)
+        : "AD" // AD for Admin
 
     // Force light theme for admin
     React.useEffect(() => {
@@ -125,25 +144,7 @@ export default function AdminLayout({
                 })}
             </nav>
 
-            {/* Footer Sidebar */}
-            <div className="p-4 border-t border-gray-100">
-                <div className={cn("flex items-center gap-3 p-2", !isSidebarOpen && !isMobile && "justify-center")}>
-                    <div className="h-8 w-8 rounded-full bg-gray-100 flex items-center justify-center text-[10px] font-bold text-gray-600">
-                        JS
-                    </div>
-                    {(isSidebarOpen || isMobile) && (
-                        <div className="flex-1 overflow-hidden">
-                            <p className="text-[12px] font-semibold text-gray-900 truncate tracking-tight">Jean Sarr</p>
-                            <p className="text-[10px] text-gray-400 truncate tracking-tight">Administrateur</p>
-                        </div>
-                    )}
-                    {(isSidebarOpen || isMobile) && (
-                        <button className="text-gray-400 hover:text-gray-900 transition-colors">
-                            <LogOut className="h-3.5 w-3.5" />
-                        </button>
-                    )}
-                </div>
-            </div>
+
         </div>
     )
 
@@ -190,20 +191,93 @@ export default function AdminLayout({
                             </div>
                         </div>
 
-                        <div className="flex items-center gap-3">
-                            <button className="relative h-9 w-9 flex items-center justify-center rounded-lg hover:bg-gray-50 text-gray-400 hover:text-gray-900 transition-colors">
-                                <Bell className="h-4 w-4" />
-                                <span className="absolute top-2.5 right-2.5 h-1.5 w-1.5 rounded-full bg-red-500 ring-2 ring-white" />
-                            </button>
-
-                            <div className="h-8 w-px bg-gray-100 mx-1" />
-
-                            <Link href="/">
-                                <Button variant="outline" className="h-9 px-4 rounded-lg text-[13px] font-medium border-gray-200 hover:bg-gray-50 flex items-center gap-2">
-                                    <ExternalLink className="h-3.5 w-3.5" />
-                                    <span className="hidden sm:inline">Voir le store</span>
+                        <div className="flex items-center gap-2 lg:gap-4">
+                            <Link href="/" target="_blank">
+                                <Button variant="ghost" size="sm" className="hidden sm:flex items-center gap-2 text-gray-500 hover:text-gray-900 hover:bg-gray-100/50">
+                                    <ExternalLink className="h-4 w-4" />
+                                    <span className="text-xs font-medium">Voir le store</span>
                                 </Button>
                             </Link>
+
+                            <div className="h-8 w-px bg-gray-100 hidden sm:block" />
+
+                            {/* Notifications */}
+                            <DropdownMenu>
+                                <DropdownMenuTrigger asChild>
+                                    <Button variant="ghost" size="icon" className="relative h-9 w-9 rounded-full text-gray-400 hover:text-gray-900 hover:bg-gray-100/50">
+                                        <Bell className="h-4.5 w-4.5" />
+                                        <span className="absolute top-2.5 right-2.5 h-2 w-2 rounded-full bg-red-500 border-2 border-white" />
+                                    </Button>
+                                </DropdownMenuTrigger>
+                                <DropdownMenuContent align="end" className="w-80">
+                                    <DropdownMenuLabel>Notifications</DropdownMenuLabel>
+                                    <DropdownMenuSeparator />
+                                    <div className="flex flex-col gap-1 p-1">
+                                        <div className="px-3 py-3 hover:bg-gray-50 rounded-md cursor-pointer transition-colors">
+                                            <div className="flex items-start gap-3">
+                                                <div className="h-8 w-8 bg-blue-50 text-blue-600 rounded-full flex items-center justify-center shrink-0">
+                                                    <ShoppingCart className="h-4 w-4" />
+                                                </div>
+                                                <div className="space-y-1">
+                                                    <p className="text-sm font-medium leading-none">Nouvelle commande #4291</p>
+                                                    <p className="text-xs text-muted-foreground">Il y a 2 minutes • 25,000 FCFA</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div className="px-3 py-3 hover:bg-gray-50 rounded-md cursor-pointer transition-colors">
+                                            <div className="flex items-start gap-3">
+                                                <div className="h-8 w-8 bg-green-50 text-green-600 rounded-full flex items-center justify-center shrink-0">
+                                                    <Users className="h-4 w-4" />
+                                                </div>
+                                                <div className="space-y-1">
+                                                    <p className="text-sm font-medium leading-none">Nouveau client inscrit</p>
+                                                    <p className="text-xs text-muted-foreground">Il y a 15 minutes • Mamadou Diop</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <DropdownMenuSeparator />
+                                    <DropdownMenuItem className="w-full text-center justify-center cursor-pointer text-xs text-muted-foreground">
+                                        Voir toutes les notifications
+                                    </DropdownMenuItem>
+                                </DropdownMenuContent>
+                            </DropdownMenu>
+
+                            {/* User Profile */}
+                            <DropdownMenu>
+                                <DropdownMenuTrigger asChild>
+                                    <Button variant="ghost" className="relative h-9 w-9 rounded-full ring-2 ring-gray-100 hover:ring-gray-200 transition-all p-0 overflow-hidden">
+                                        <Avatar className="h-9 w-9">
+                                            <AvatarImage src={user?.image || ""} alt={user?.name || "Admin"} />
+                                            <AvatarFallback className="bg-gray-900 text-white font-bold">{userInitials}</AvatarFallback>
+                                        </Avatar>
+                                    </Button>
+                                </DropdownMenuTrigger>
+                                <DropdownMenuContent align="end" className="w-56" forceMount>
+                                    <DropdownMenuLabel className="font-normal">
+                                        <div className="flex flex-col space-y-1">
+                                            <p className="text-sm font-medium leading-none">{user?.name || "Administrateur"}</p>
+                                            <p className="text-xs leading-none text-muted-foreground">{user?.email || "admin@example.com"}</p>
+                                        </div>
+                                    </DropdownMenuLabel>
+                                    <DropdownMenuSeparator />
+                                    <DropdownMenuGroup>
+                                        <DropdownMenuItem className="cursor-pointer">
+                                            <Users className="mr-2 h-4 w-4" />
+                                            <span>Profil</span>
+                                        </DropdownMenuItem>
+                                        <DropdownMenuItem className="cursor-pointer">
+                                            <Settings className="mr-2 h-4 w-4" />
+                                            <span>Paramètres</span>
+                                        </DropdownMenuItem>
+                                    </DropdownMenuGroup>
+                                    <DropdownMenuSeparator />
+                                    <DropdownMenuItem onClick={() => signOut()} className="text-red-600 focus:text-red-600 cursor-pointer bg-red-50/50 hover:bg-red-50 focus:bg-red-50">
+                                        <LogOut className="mr-2 h-4 w-4" />
+                                        <span>Se déconnecter</span>
+                                    </DropdownMenuItem>
+                                </DropdownMenuContent>
+                            </DropdownMenu>
                         </div>
                     </header>
 
