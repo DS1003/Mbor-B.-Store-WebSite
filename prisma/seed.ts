@@ -70,7 +70,7 @@ async function main() {
         "Street wear"
     ]
 
-    const categories = {}
+    const categories: { [key: string]: string } = {}
 
     for (const name of categoryNames) {
         const cat = await prisma.category.upsert({

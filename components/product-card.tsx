@@ -28,6 +28,9 @@ export function ProductCard({ id, name, price, image, category, isNew }: Product
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-20px" }}
         >
+            {/* Full Card Link */}
+            <Link href={`/product/${id}`} className="absolute inset-0 z-10" aria-label={`View ${name}`} />
+
             {/* Image Container */}
             <div className="relative aspect-[4/5] overflow-hidden bg-muted/10">
                 {isNew && (
@@ -36,11 +39,11 @@ export function ProductCard({ id, name, price, image, category, isNew }: Product
                     </div>
                 )}
 
-                <button className="absolute top-5 right-5 z-20 h-10 w-10 bg-white/10 backdrop-blur-md border border-white/20 text-white rounded-xl flex items-center justify-center transition-all hover:bg-rose-500 hover:text-white hover:border-rose-500">
+                <button className="absolute top-5 right-5 z-20 h-10 w-10 bg-white/10 backdrop-blur-md border border-white/20 text-white rounded-xl flex items-center justify-center transition-all hover:bg-rose-500 hover:text-white hover:border-rose-500 cursor-pointer">
                     <Heart className="h-4 w-4" />
                 </button>
 
-                <Link href={`/product/${id}`} className="block h-full relative group/img">
+                <div className="block h-full relative group/img">
                     <Image
                         src={image}
                         alt={name}
@@ -49,10 +52,10 @@ export function ProductCard({ id, name, price, image, category, isNew }: Product
                         sizes="(max-width: 640px) 50vw, 25vw"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover/img:opacity-100 transition-opacity duration-700" />
-                </Link>
+                </div>
 
                 {/* Mobile Quick Add */}
-                <button className="lg:hidden absolute bottom-5 right-5 z-20 h-12 w-12 bg-primary text-black rounded-2xl flex items-center justify-center shadow-2xl active:scale-90 transition-transform">
+                <button className="lg:hidden absolute bottom-5 right-5 z-20 h-12 w-12 bg-primary text-black rounded-2xl flex items-center justify-center shadow-2xl active:scale-90 transition-transform cursor-pointer">
                     <Plus className="h-6 w-6" />
                 </button>
 
@@ -61,7 +64,7 @@ export function ProductCard({ id, name, price, image, category, isNew }: Product
                     "hidden lg:flex absolute inset-x-6 bottom-6 z-20 transition-all duration-700",
                     isHovered ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4 pointer-events-none"
                 )}>
-                    <button className="w-full h-14 bg-white text-black rounded-[1.25rem] flex items-center justify-center text-[10px] font-black uppercase tracking-widest hover:bg-primary hover:text-black transition-all shadow-2xl group/btn">
+                    <button className="w-full h-14 bg-white text-black rounded-[1.25rem] flex items-center justify-center text-[10px] font-black uppercase tracking-widest hover:bg-primary hover:text-black transition-all shadow-2xl group/btn cursor-pointer">
                         <ShoppingBag className="h-4 w-4 mr-3 transition-transform group-hover/btn:-translate-y-0.5" />
                         Choisir la Taille
                     </button>
@@ -84,11 +87,11 @@ export function ProductCard({ id, name, price, image, category, isNew }: Product
                         </div>
                     </div>
 
-                    <Link href={`/product/${id}`} className="block">
+                    <div className="block">
                         <h3 className="text-xl font-black italic tracking-tighter leading-[1.1] transition-all group-hover:text-primary line-clamp-2">
                             {name}
                         </h3>
-                    </Link>
+                    </div>
                 </div>
 
                 <div className="flex items-end justify-between pt-5 border-t-2 border-muted/30">
