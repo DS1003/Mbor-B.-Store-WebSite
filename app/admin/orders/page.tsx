@@ -32,7 +32,8 @@ import {
     Trash,
     ShoppingBag,
     Minus,
-    Store
+    Store,
+    MessageCircle
 } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
@@ -423,26 +424,40 @@ export default function AdminOrdersPage() {
                                 </div>
                             </div>
 
-                            <div className="flex items-center gap-4 pt-4 pb-10 sticky bottom-0 bg-white py-4 -mx-6 px-6 border-t border-gray-50 z-20 print:hidden">
+                            <div className="flex flex-col gap-4 pt-4 pb-10 sticky bottom-0 bg-white py-4 -mx-6 px-6 border-t border-gray-50 z-20 print:hidden">
+                                <div className="flex gap-4">
+                                    <Button
+                                        variant="outline"
+                                        className="flex-1 h-14 rounded-[1.5rem] font-black uppercase tracking-widest border-gray-100 shadow-sm"
+                                        onClick={() => window.print()}
+                                    >
+                                        <Printer className="mr-3 h-4 w-4" /> Facture
+                                    </Button>
+                                    <Button
+                                        variant="outline"
+                                        className="flex-1 h-14 rounded-[1.5rem] border-gray-100 font-black uppercase tracking-widest"
+                                        onClick={() => {
+                                            setPrintOrder(selectedOrder)
+                                            setTimeout(() => {
+                                                window.print()
+                                                setPrintOrder(null)
+                                            }, 100)
+                                        }}
+                                    >
+                                        Imprimer Reçu
+                                    </Button>
+                                </div>
                                 <Button
-                                    variant="outline"
-                                    className="flex-1 h-14 rounded-[1.5rem] font-black uppercase tracking-widest border-gray-100 shadow-sm"
-                                    onClick={() => window.print()}
-                                >
-                                    <Printer className="mr-3 h-4 w-4" /> Facture
-                                </Button>
-                                <Button
-                                    variant="outline"
-                                    className="flex-1 h-14 rounded-[1.5rem] border-gray-100 font-black uppercase tracking-widest"
+                                    className="w-full h-14 rounded-[1.5rem] bg-[#25D366] text-white hover:bg-[#128C7E] font-black uppercase tracking-widest shadow-xl shadow-[#25D366]/20 transition-all active:scale-95"
                                     onClick={() => {
-                                        setPrintOrder(selectedOrder)
-                                        setTimeout(() => {
-                                            window.print()
-                                            setPrintOrder(null)
-                                        }, 100)
+                                        const url = `${window.location.origin}/receipt/${selectedOrder.id}`;
+                                        const message = `*MBOR B. STORE - REÇU DE COMMANDE*\n\nBonjour ${selectedOrder.customerName || selectedOrder.user?.name || "Cher client"},\nVotre commande #${selectedOrder.id.slice(-6).toUpperCase()} est validée.\n\nConsultez votre reçu digital ici :\n🔗 ${url}\n\nL'excellence du sport au Sénégal.`;
+                                        const phone = selectedOrder.customerPhone || "";
+                                        const cleanPhone = phone.replace(/\s+/g, '').replace('+', '');
+                                        window.open(`https://wa.me/${cleanPhone}?text=${encodeURIComponent(message)}`, '_blank');
                                     }}
                                 >
-                                    Imprimer Reçu
+                                    <MessageCircle className="mr-3 h-5 w-5 fill-current" /> Envoyer Reçu sur WhatsApp
                                 </Button>
                             </div>
 
