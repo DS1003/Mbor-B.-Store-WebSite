@@ -34,8 +34,13 @@ export default function CheckoutPage() {
     })
 
     const handleConfirmOrder = async () => {
-        if (!formData.phone || !formData.address) {
-            toast.error("Veuillez remplir les informations de livraison")
+        if (!formData.phone) {
+            toast.error("Veuillez renseigner votre numéro de téléphone")
+            return
+        }
+
+        if (deliveryType === "delivery" && !formData.address) {
+            toast.error("Veuillez renseigner l'adresse de livraison")
             return
         }
 
@@ -250,9 +255,9 @@ export default function CheckoutPage() {
                                 </div>
                                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                                     {[
-                                        { id: "wave", label: "Wave", desc: "Digital", logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/c/ca/Wave_Logo.svg/2560px-Wave_Logo.svg.png" },
-                                        { id: "om", label: "O. Money", desc: "Digital", logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e0/Orange_Money_logo.svg/2048px-Orange_Money_logo.svg.png" },
-                                        { id: "cash", label: "Espèce", desc: "Cash", logo: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRkY8O_08x7F-KOfhG4_KiwU8N5C93l23p33g&s" }
+                                        { id: "wave", label: "Wave", desc: "Mobile Money", logo: "/payment-wave.png" },
+                                        { id: "om", label: "Orange Money", desc: "Mobile Money", logo: "/payment-om.png" },
+                                        { id: "cash", label: "Espèces", desc: "Paiement à la livraison", logo: "/payment-cash.png" }
                                     ].map((m) => (
                                         <button
                                             key={m.id}

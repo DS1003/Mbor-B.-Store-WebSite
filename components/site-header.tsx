@@ -2,6 +2,7 @@
 
 import * as React from "react"
 import Link from "next/link"
+import Image from "next/image"
 import { usePathname } from "next/navigation"
 import { useSession, signOut } from "next-auth/react"
 import {
@@ -96,9 +97,18 @@ export function SiteHeader() {
                     scrolled && "h-14"
                 )}>
                     {/* Main Header Grid - Prevent Overlap */}
-                    <div className="hidden lg:grid grid-cols-3 items-center w-full h-full pointer-events-none">
-                        {/* 1. Left: Navigation */}
-                        <nav className="flex items-center space-x-6 pointer-events-auto">
+                    <div className="hidden lg:flex items-center gap-8 mr-auto">
+                        <Link href="/" className="flex items-center group">
+                            <Image
+                                src="/mbor-logo-new.png"
+                                alt="Mbor.Store"
+                                width={120}
+                                height={40}
+                                className="h-10 w-auto object-contain"
+                            />
+                        </Link>
+
+                        <nav className="flex items-center space-x-6">
                             {navLinks.slice(0, 4).map((link) => (
                                 <Link
                                     key={link.href}
@@ -116,20 +126,6 @@ export function SiteHeader() {
                                 </Link>
                             ))}
                         </nav>
-
-                        {/* 2. Center: Logo */}
-                        <div className="flex justify-center pointer-events-auto">
-                            <Link href="/" className="flex items-center group">
-                                <span className="font-heading text-xl xl:text-2xl font-bold tracking-tight">
-                                    Mbor<span className="text-primary font-medium">.Store</span>
-                                </span>
-                            </Link>
-                        </div>
-
-                        {/* 3. Right: Actions Spacer (Actions are absolute or flex-end) */}
-                        <div className="flex justify-end pointer-events-auto grayscale-0">
-                            {/* Empty div to fill the grid - actual actions are below or could be moved here */}
-                        </div>
                     </div>
 
                     {/* Mobile/Tablet Fallback & Actions */}
@@ -259,9 +255,13 @@ export function SiteHeader() {
                         {/* Center Logo for Mobile */}
                         <div className="absolute left-1/2 -translate-x-1/2 flex-shrink-0 z-20">
                             <Link href="/" className="flex items-center group">
-                                <span className="font-heading text-xl sm:text-2xl font-bold tracking-tight">
-                                    Mbor<span className="text-primary font-medium">.Store</span>
-                                </span>
+                                <Image
+                                    src="/mbor-logo-new.png"
+                                    alt="Mbor.Store"
+                                    width={100}
+                                    height={36}
+                                    className="h-9 w-auto object-contain"
+                                />
                             </Link>
                         </div>
                     </div>
@@ -363,4 +363,3 @@ export function SiteHeader() {
         </header>
     )
 }
-

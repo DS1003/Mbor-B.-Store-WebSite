@@ -1,6 +1,7 @@
 "use client"
 
 import * as React from "react"
+import { createPortal } from "react-dom"
 import Link from "next/link"
 import { useParams, useRouter } from "next/navigation"
 import {
@@ -38,27 +39,35 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { getAdminOrder, updateOrderStatus } from "../../actions"
+import { getAdminOrder, updateOrderStatus, getStoreConfig } from "../../actions"
+import { Receipt } from "@/components/admin/receipt"
 
 export default function OrderDetailsPage() {
     const params = useParams()
     const router = useRouter()
     const orderId = params.id as string
     const [order, setOrder] = React.useState<any>(null)
+    const [config, setConfig] = React.useState<any>(null)
     const [isLoading, setIsLoading] = React.useState(true)
     const [isUpdating, setIsUpdating] = React.useState(false)
+    const [mounted, setMounted] = React.useState(false)
 
-    const loadOrder = React.useCallback(async () => {
+    const loadData = React.useCallback(async () => {
         try {
-            const data = await getAdminOrder(orderId)
-            if (!data) {
+            const [orderData, configData] = await Promise.all([
+                getAdminOrder(orderId),
+                getStoreConfig()
+            ])
+
+            if (!orderData) {
                 toast.error("Commande non trouvée")
                 router.push("/admin/orders")
                 return
             }
-            setOrder(data)
+            setOrder(orderData)
+            setConfig(configData)
         } catch (error) {
-            console.error("Failed to load order:", error)
+            console.error("Failed to load data:", error)
             toast.error("Erreur de chargement")
         } finally {
             setIsLoading(false)
@@ -66,15 +75,16 @@ export default function OrderDetailsPage() {
     }, [orderId, router])
 
     React.useEffect(() => {
-        loadOrder()
-    }, [loadOrder])
+        loadData()
+        setMounted(true)
+    }, [loadData])
 
     const handleStatusChange = async (newStatus: string) => {
         setIsUpdating(true)
         try {
             await updateOrderStatus(orderId, newStatus)
             toast.success(`Statut mis à jour : ${newStatus}`)
-            loadOrder()
+            loadData()
         } catch (error) {
             toast.error("Erreur lors de la mise à jour")
         } finally {
@@ -103,6 +113,14 @@ export default function OrderDetailsPage() {
 
     return (
         <div className="space-y-8 pb-20">
+            {/* Hidden Receipt for Printing - Portaled */}
+            {mounted && createPortal(
+                <div id="thermal-receipt" className="receipt-print-only">
+                    <Receipt order={order} config={config} />
+                </div>,
+                document.body
+            )}
+
             {/* Top Navigation & Status Bar */}
             <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
                 <div className="space-y-3">
@@ -120,7 +138,12 @@ export default function OrderDetailsPage() {
                 </div>
 
                 <div className="flex items-center gap-2">
-                    <Button variant="outline" size="icon" className="h-9 w-9 rounded-lg border-gray-200 text-gray-400 hover:text-gray-900">
+                    <Button
+                        variant="outline"
+                        size="icon"
+                        className="h-9 w-9 rounded-lg border-gray-200 text-gray-400 hover:text-gray-900"
+                        onClick={() => window.print()}
+                    >
                         <Printer className="h-4 w-4" />
                     </Button>
                     <DropdownMenu>
@@ -140,6 +163,41 @@ export default function OrderDetailsPage() {
                     </DropdownMenu>
                 </div>
             </div>
+
+            {/* Global Print Styles */}
+            <style jsx global>{`
+                @media print {
+                    body > *:not(#thermal-receipt) {
+                        display: none !important;
+                    }
+                    #thermal-receipt {
+                        display: block !important;
+                        position: absolute !important;
+                        top: 0 !important;
+                        left: 0 !important;
+                        width: 80mm !important;
+                        margin: 0 !important;
+                        padding: 0 !important;
+                        background: white !important;
+                        visibility: visible !important;
+                    }
+                    #thermal-receipt * {
+                        visibility: visible !important;
+                    }
+                    @page {
+                        size: 80mm auto;
+                        margin: 0;
+                    }
+                    html, body {
+                        background: white !important;
+                        margin: 0 !important;
+                        padding: 0 !important;
+                    }
+                }
+                .receipt-print-only {
+                    display: none;
+                }
+            `}</style>
 
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
                 {/* Left Column: Items & Timeline */}
@@ -193,18 +251,27 @@ export default function OrderDetailsPage() {
                                 <div className="space-y-1">
                                     <h4 className="text-[12px] font-bold text-amber-900">Note Interne</h4>
                                     <p className="text-[11px] text-amber-800/80 leading-relaxed font-medium">
-                                        Commande validée par le système. Vérifier la disponibilité du flocage avant expédition.
+                                        Commande validée par le système.
+                                        {order.deliveryType === 'PICKUP' && <span className="block mt-1 font-bold text-indigo-700">⚠️ RETRAIT EN BOUTIQUE</span>}
                                     </p>
                                 </div>
                             </div>
                             <div className="space-y-3 w-full sm:w-64 bg-gray-50/50 p-5 rounded-xl border border-gray-100">
                                 <div className="flex justify-between items-center text-[13px] font-medium">
                                     <span className="text-gray-400 uppercase tracking-wider text-[10px] font-bold">Total Brut</span>
-                                    <span className="text-gray-900 tabular-nums">{order.total.toLocaleString()} F</span>
+                                    {/* Calculated subtotal */}
+                                    <span className="text-gray-900 tabular-nums">
+                                        {order.items.reduce((acc: number, item: any) => acc + (item.price * item.quantity), 0).toLocaleString()} F
+                                    </span>
                                 </div>
                                 <div className="flex justify-between items-center text-[13px] font-medium">
-                                    <span className="text-gray-400 uppercase tracking-wider text-[10px] font-bold">Livraison</span>
-                                    <span className="text-emerald-600 tabular-nums">OFFERT</span>
+                                    <span className="text-gray-400 uppercase tracking-wider text-[10px] font-bold">
+                                        Livraison {order.deliveryType === 'PICKUP' ? '(Retrait)' : ''}
+                                    </span>
+                                    {/* Check strictly for 0 or null, otherwise show fee */}
+                                    <span className={cn("tabular-nums font-bold", (order.deliveryFee && order.deliveryFee > 0) ? "text-gray-900" : "text-emerald-600")}>
+                                        {(order.deliveryFee && order.deliveryFee > 0) ? `${order.deliveryFee.toLocaleString()} F` : "OFFERT"}
+                                    </span>
                                 </div>
                                 <div className="h-px w-full bg-gray-200" />
                                 <div className="flex justify-between items-center pt-1">
@@ -307,13 +374,29 @@ export default function OrderDetailsPage() {
                                     <p className="text-[13px] font-semibold text-gray-900 break-all">{order.user?.email || order.customerEmail || "N/A"}</p>
                                 </div>
                             </div>
+
+                            <div className="flex items-center gap-4 group">
+                                <div className="h-10 w-10 rounded-xl bg-gray-50 flex items-center justify-center text-gray-400 group-hover:text-amber-600 group-hover:bg-amber-50 transition-all border border-transparent group-hover:border-amber-100">
+                                    <Phone className="h-4.5 w-4.5" />
+                                </div>
+                                <div className="space-y-1">
+                                    <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Téléphone</p>
+                                    <p className="text-[13px] font-bold text-gray-900 font-mono tracking-tight">{order.customerPhone || order.user?.phone || "Non renseigné"}</p>
+                                </div>
+                            </div>
+
                             <div className="flex items-start gap-4 group">
                                 <div className="h-10 w-10 rounded-xl bg-gray-50 flex items-center justify-center text-gray-400 group-hover:text-indigo-600 group-hover:bg-indigo-50 transition-all border border-transparent group-hover:border-indigo-100 mt-0.5">
                                     <MapPin className="h-4.5 w-4.5" />
                                 </div>
                                 <div className="space-y-1">
                                     <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Adresse de Livraison</p>
-                                    <p className="text-[13px] font-semibold text-gray-900 leading-relaxed italic">Information confidentielle non stockée ou accessible via passerelle.</p>
+                                    <p className="text-[12px] font-semibold text-gray-900 leading-relaxed">
+                                        {order.deliveryType === 'PICKUP' ?
+                                            <span className="text-indigo-600 italic">Retrait en Boutique</span> :
+                                            (order.customerAddress || order.user?.address || "Adresse non fournie")
+                                        }
+                                    </p>
                                 </div>
                             </div>
                         </div>
