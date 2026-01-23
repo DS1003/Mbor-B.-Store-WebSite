@@ -205,11 +205,22 @@ export default function AdminProductsPage() {
             return 0
         })
 
+    // Pagination logic
+    const [currentPage, setCurrentPage] = React.useState(1)
+    const itemsPerPage = 10
+    const totalPages = Math.ceil(filteredProducts.length / itemsPerPage)
+    const currentItems = filteredProducts.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage)
+
+    // Reset to page 1 when filters change
+    React.useEffect(() => {
+        setCurrentPage(1)
+    }, [searchQuery, selectedCategory, stockFilter, sortBy])
+
     const stats = [
-        { label: "Articles Total", value: productsData.length.toString(), icon: Package, color: "text-gray-600", bg: "bg-gray-50" },
-        { label: "En Stock", value: productsData.filter(p => p.stock > 10).length.toString(), icon: CheckCircle2, color: "text-emerald-600", bg: "bg-emerald-50" },
-        { label: "Stock Faible", value: productsData.filter(p => p.stock > 0 && p.stock <= 10).length.toString(), icon: AlertTriangle, color: "text-amber-600", bg: "bg-amber-50" },
-        { label: "Ruptures", value: productsData.filter(p => p.stock === 0).length.toString(), icon: Zap, color: "text-rose-600", bg: "bg-rose-50" },
+        { label: "Total Produits", value: productsData.length, icon: Package, color: "text-blue-600", bg: "bg-blue-50" },
+        { label: "Stock Faible", value: productsData.filter(p => p.stock > 0 && p.stock <= 10).length, icon: AlertTriangle, color: "text-amber-600", bg: "bg-amber-50" },
+        { label: "En Rupture", value: productsData.filter(p => p.stock === 0).length, icon: Zap, color: "text-rose-600", bg: "bg-rose-50" },
+        { label: "Catégories", value: categories.length, icon: Layers, color: "text-indigo-600", bg: "bg-indigo-50" },
     ]
 
     return (
@@ -330,10 +341,10 @@ export default function AdminProductsPage() {
                                 [...Array(5)].map((_, i) => (
                                     <tr key={i}><td colSpan={6} className="px-8 py-6"><div className="h-12 w-full bg-gray-50 animate-pulse rounded-2xl" /></td></tr>
                                 ))
-                            ) : filteredProducts.length === 0 ? (
+                            ) : currentItems.length === 0 ? (
                                 <tr><td colSpan={6} className="px-8 py-20 text-center text-gray-400 font-bold uppercase tracking-widest">Aucune entité trouvée</td></tr>
                             ) : (
-                                filteredProducts.map((p) => (
+                                currentItems.map((p) => (
                                     <tr key={p.id} className="group hover:bg-gray-50/30 transition-all cursor-pointer">
                                         <td className="px-8 py-5" onClick={() => handleOpenModal(p)}>
                                             <div className="flex items-center gap-5">
@@ -415,13 +426,42 @@ export default function AdminProductsPage() {
                 </div>
 
                 <div className="p-6 border-t border-gray-50 flex items-center justify-between bg-gray-50/20">
-                    <p className="text-[11px] font-black text-gray-400 uppercase tracking-widest opacity-60">Filtre actif : Tout le catalogue ({filteredProducts.length})</p>
+                    <p className="text-[11px] font-black text-gray-400 uppercase tracking-widest opacity-60">
+                        Affichage : {Math.min(currentItems.length, itemsPerPage)} sur {filteredProducts.length} articles
+                    </p>
                     <div className="flex items-center gap-2">
-                        <Button variant="outline" size="icon" className="h-10 w-10 rounded-xl border-gray-100 hover:bg-white shadow-sm" disabled>
+                        <Button
+                            variant="outline"
+                            size="icon"
+                            className="h-10 w-10 rounded-xl border-gray-100 hover:bg-white shadow-sm"
+                            onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
+                            disabled={currentPage === 1}
+                        >
                             <ChevronLeft className="h-4 w-4" />
                         </Button>
-                        <Button className="h-10 w-10 rounded-xl bg-gray-900 text-white font-black text-[11px] shadow-xl">1</Button>
-                        <Button variant="outline" size="icon" className="h-10 w-10 rounded-xl border-gray-100 hover:bg-white shadow-sm">
+                        <div className="flex items-center gap-1">
+                            {[...Array(totalPages)].map((_, i) => (
+                                <Button
+                                    key={i}
+                                    onClick={() => setCurrentPage(i + 1)}
+                                    className={cn(
+                                        "h-10 w-10 rounded-xl font-black text-[11px] transition-all",
+                                        currentPage === i + 1
+                                            ? "bg-gray-900 text-white shadow-xl"
+                                            : "bg-white text-gray-400 border border-gray-100 hover:bg-gray-50"
+                                    )}
+                                >
+                                    {i + 1}
+                                </Button>
+                            )).slice(Math.max(0, currentPage - 3), Math.min(totalPages, currentPage + 2))}
+                        </div>
+                        <Button
+                            variant="outline"
+                            size="icon"
+                            className="h-10 w-10 rounded-xl border-gray-100 hover:bg-white shadow-sm"
+                            onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
+                            disabled={currentPage === totalPages || totalPages === 0}
+                        >
                             <ChevronRight className="h-4 w-4" />
                         </Button>
                     </div>

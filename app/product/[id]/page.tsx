@@ -52,13 +52,13 @@ export default async function ProductPage({ params }: { params: Promise<{ id: st
                 </ScrollReveal>
 
                 {/* Main product experience */}
-                <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-20 mb-32">
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 xl:gap-20 mb-32 items-start">
                     <div className="lg:col-span-7">
                         <ScrollReveal direction="left">
                             <ProductGallery images={productData.images} />
                         </ScrollReveal>
                     </div>
-                    <div className="lg:col-span-5">
+                    <div className="lg:col-span-5 sticky top-24 z-10 self-start">
                         <ScrollReveal direction="right" delay={0.2}>
                             <ProductInfo product={productData} />
                         </ScrollReveal>

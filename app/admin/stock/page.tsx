@@ -18,7 +18,9 @@ import {
     MoreHorizontal,
     Edit,
     Plus,
-    RefreshCw
+    RefreshCw,
+    ChevronLeft,
+    ChevronRight
 } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
@@ -41,6 +43,10 @@ export default function AdminStockPage() {
     const [isLoading, setIsLoading] = React.useState(true)
     const [searchQuery, setSearchQuery] = React.useState("")
     const [isUpdating, setIsUpdating] = React.useState<string | null>(null)
+
+    // Pagination state
+    const [currentPage, setCurrentPage] = React.useState(1)
+    const itemsPerPage = 10
 
     const loadData = React.useCallback(async () => {
         setIsLoading(true)
@@ -75,6 +81,14 @@ export default function AdminStockPage() {
         p.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
         p.id.toLowerCase().includes(searchQuery.toLowerCase())
     )
+
+    const totalPages = Math.ceil(filteredProducts.length / itemsPerPage)
+    const currentProducts = filteredProducts.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage)
+
+    // Reset to page 1 when filters change
+    React.useEffect(() => {
+        setCurrentPage(1)
+    }, [searchQuery])
 
     const criticalCount = productsData.filter(p => (p.stock || 0) === 0).length
     const lowCount = productsData.filter(p => (p.stock || 0) > 0 && (p.stock || 0) <= 5).length
@@ -166,10 +180,10 @@ export default function AdminStockPage() {
                                 [...Array(5)].map((_, i) => (
                                     <tr key={i}><td colSpan={5} className="px-8 py-6"><div className="h-12 w-full bg-gray-50 animate-pulse rounded-2xl" /></td></tr>
                                 ))
-                            ) : filteredProducts.length === 0 ? (
+                            ) : currentProducts.length === 0 ? (
                                 <tr><td colSpan={5} className="px-8 py-20 text-center text-gray-400 font-bold uppercase tracking-widest">Aucun produit trouvé</td></tr>
                             ) : (
-                                filteredProducts.map((item) => (
+                                currentProducts.map((item) => (
                                     <tr key={item.id} className="group hover:bg-gray-50/30 transition-all cursor-pointer">
                                         <td className="px-8 py-5">
                                             <div className="px-3 py-1.5 rounded-xl bg-gray-50 text-[10px] font-black text-gray-500 uppercase tracking-widest w-fit border border-gray-100/50">
@@ -261,8 +275,46 @@ export default function AdminStockPage() {
                     </table>
                 </div>
 
-                <div className="p-6 border-t border-gray-50 flex items-center justify-between bg-gray-50/20 text-[11px] font-black text-gray-400 uppercase tracking-widest">
-                    <p>Database Flux : {filteredProducts.length} Entités en audit temps-réel</p>
+                <div className="p-8 border-t border-gray-50 flex flex-col sm:flex-row items-center justify-between bg-gray-50/20 gap-6">
+                    <p className="text-[11px] font-black text-gray-400 uppercase tracking-widest">
+                        Affichage : {Math.min(currentProducts.length, itemsPerPage)} sur {filteredProducts.length} Entités
+                    </p>
+                    <div className="flex items-center gap-2">
+                        <Button
+                            variant="outline"
+                            size="icon"
+                            className="h-10 w-10 rounded-xl border-gray-100 hover:bg-white shadow-sm"
+                            onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
+                            disabled={currentPage === 1}
+                        >
+                            <ChevronLeft className="h-4 w-4" />
+                        </Button>
+                        <div className="flex items-center gap-1">
+                            {[...Array(totalPages)].map((_, i) => (
+                                <Button
+                                    key={i}
+                                    onClick={() => setCurrentPage(i + 1)}
+                                    className={cn(
+                                        "h-10 w-10 rounded-xl font-black text-[11px] transition-all",
+                                        currentPage === i + 1
+                                            ? "bg-gray-900 text-white shadow-xl"
+                                            : "bg-white text-gray-400 border border-gray-100 hover:bg-gray-50"
+                                    )}
+                                >
+                                    {i + 1}
+                                </Button>
+                            )).slice(Math.max(0, currentPage - 3), Math.min(totalPages, currentPage + 2))}
+                        </div>
+                        <Button
+                            variant="outline"
+                            size="icon"
+                            className="h-10 w-10 rounded-xl border-gray-100 hover:bg-white shadow-sm"
+                            onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
+                            disabled={currentPage === totalPages || totalPages === 0}
+                        >
+                            <ChevronRight className="h-4 w-4" />
+                        </Button>
+                    </div>
                 </div>
             </div>
         </div>

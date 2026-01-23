@@ -11,6 +11,8 @@ export async function POST(req: Request) {
         const {
             items,
             subtotal,
+            deliveryType,
+            deliveryFee,
             totalAmount,
             formData,
             paymentMethod
@@ -34,6 +36,8 @@ export async function POST(req: Request) {
             data: {
                 userId: userId as string,
                 total: totalAmount,
+                deliveryType: (deliveryType || "DELIVERY").toUpperCase(),
+                deliveryFee: deliveryFee || 0,
                 customerName: `${formData.firstName} ${formData.lastName}`,
                 customerPhone: formData.phone,
                 customerAddress: formData.address,

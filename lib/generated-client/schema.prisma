@@ -1,6 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
   output   = "../lib/generated-client"
@@ -10,69 +7,51 @@ datasource db {
   provider = "postgresql"
 }
 
-enum Role {
-  USER
-  ADMIN
-}
-
-enum OrderStatus {
-  PENDING
-  PAID
-  SHIPPED
-  DELIVERED
-  CANCELLED
-}
-
 model User {
-  id            String    @id @default(cuid())
-  name          String?
-  email         String?   @unique
-  emailVerified DateTime?
-  image         String?
-  password      String?
-  role          Role      @default(USER)
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
-
+  id             String          @id @default(cuid())
+  email          String?         @unique
+  password       String?
+  name           String?
+  role           Role            @default(USER)
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
+  emailVerified  DateTime?
+  image          String?
   accounts       Account[]
-  sessions       Session[]
-  orders         Order[]
   addresses      Address[]
-  reviews        Review[]
-  favorites      Product[]       @relation("UserFavorites")
+  orders         Order[]
   paymentMethods PaymentMethod[]
+  reviews        Review[]
+  sessions       Session[]
+  favorites      Product[]       @relation("UserFavorites")
 }
 
 model Address {
-  id     String @id @default(cuid())
-  userId String
-  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  name      String? // Label like "Home", "Work"
+  id        String   @id @default(cuid())
+  userId    String
+  name      String?
   firstName String
   lastName  String
   street    String
   city      String
   phone     String
-  isDefault Boolean @default(false)
-
+  isDefault Boolean  @default(false)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model PaymentMethod {
-  id     String @id @default(cuid())
-  userId String
-  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  type          String // "Mobile Money", "Bank Card"
-  provider      String // "Wave", "Orange Money", "Visa", "Mastercard"
+  id            String   @id @default(cuid())
+  userId        String
+  type          String
+  provider      String
   accountNumber String
-  expiryDate    String? // For cards
-  isDefault     Boolean @default(false)
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  expiryDate    String?
+  isDefault     Boolean  @default(false)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model Account {
@@ -81,15 +60,14 @@ model Account {
   type              String
   provider          String
   providerAccountId String
-  refresh_token     String? @db.Text
-  access_token      String? @db.Text
+  refresh_token     String?
+  access_token      String?
   expires_at        Int?
   token_type        String?
   scope             String?
-  id_token          String? @db.Text
+  id_token          String?
   session_state     String?
-
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([provider, providerAccountId])
 }
@@ -111,45 +89,37 @@ model VerificationToken {
 }
 
 model Product {
-  id            String   @id @default(cuid())
+  id            String        @id @default(cuid())
   name          String
   description   String?
   price         Decimal
+  stock         Int           @default(0)
+  images        String[]
+  featured      Boolean       @default(false)
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+  allowFlocage  Boolean       @default(false)
+  allowGravure  Boolean       @default(false)
   discountPrice Decimal?
-  stock         Int      @default(0)
-
-  categoryId String?
-  category   Category? @relation(fields: [categoryId], references: [id])
-
-  subCategory String?
-  images      String[] // Array of image URLs
-  featured    Boolean  @default(false)
-
-  allowFlocage Boolean @default(false)
-  allowGravure Boolean @default(false)
-
-  // Sizes and Stock
-  sizes ProductSize[]
-
-  orderItems  OrderItem[]
-  reviews     Review[]
-  favoritedBy User[]      @relation("UserFavorites")
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  subCategory   String?
+  categoryId    String?
+  orderItems    OrderItem[]
+  category      Category?     @relation(fields: [categoryId], references: [id])
+  sizes         ProductSize[]
+  reviews       Review[]
+  favoritedBy   User[]        @relation("UserFavorites")
 }
 
 model Review {
-  id        String  @id @default(cuid())
-  rating    Int     @default(5)
+  id        String   @id @default(cuid())
+  rating    Int      @default(5)
   comment   String?
   userId    String
-  user      User    @relation(fields: [userId], references: [id], onDelete: Cascade)
   productId String
-  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
-
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([userId, productId])
 }
@@ -157,77 +127,65 @@ model Review {
 model ProductSize {
   id        String  @id @default(cuid())
   productId String
-  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
   size      String
   stock     Int     @default(0)
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
 
   @@unique([productId, size])
 }
 
 model Order {
-  id              String  @id @default(cuid())
+  id              String      @id @default(cuid())
   userId          String?
-  user            User?   @relation(fields: [userId], references: [id])
-  customerName    String? // For guest checkout
-  customerEmail   String? // For guest checkout
-  customerPhone   String? // For POS/Guest
-  customerAddress String? // For POS/Guest
-  paymentMethod   String? // CASH, WAVE, OM
-
-  status OrderStatus @default(PENDING)
-  total  Decimal
-
-  items OrderItem[]
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  customerName    String?
+  customerEmail   String?
+  status          OrderStatus @default(PENDING)
+  total           Decimal
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+  customerAddress String?
+  customerPhone   String?
+  paymentMethod   String?
+  user            User?       @relation(fields: [userId], references: [id])
+  items           OrderItem[]
 }
 
 model OrderItem {
-  id        String  @id @default(cuid())
-  orderId   String
-  order     Order   @relation(fields: [orderId], references: [id])
-  productId String
-  product   Product @relation(fields: [productId], references: [id])
-
-  quantity Int
-  price    Decimal // Price at time of purchase
-
-  // Customization fields
+  id           String  @id @default(cuid())
+  orderId      String
+  productId    String
+  quantity     Int
+  price        Decimal
   customName   String?
   customNumber String?
   size         String?
+  order        Order   @relation(fields: [orderId], references: [id])
+  product      Product @relation(fields: [productId], references: [id])
 }
 
 model StoreConfig {
-  id             String  @id @default("singleton")
-  name           String  @default("Mbor B. Store")
-  slogan         String? @default("L'excellence du sport au Sénégal")
-  description    String?
-  logoUrl        String?
-  contactEmail   String?
-  contactPhone   String?
-  address        String?
-  facebookUrl    String?
-  instagramUrl   String?
-  tiktokUrl      String?
-  whatsappNumber String?
-  workingHours   String?
-
-  // Shipping Settings
+  id               String  @id @default("singleton")
+  name             String  @default("Mbor B. Store")
+  slogan           String? @default("L'excellence du sport au Sénégal")
+  description      String?
+  logoUrl          String?
+  contactEmail     String?
+  contactPhone     String?
+  address          String?
+  facebookUrl      String?
+  instagramUrl     String?
+  whatsappNumber   String?
+  aboutUs          String?
+  bankAccount      String?
   deliveryFee      Decimal @default(2000)
   freeDeliveryOver Decimal @default(50000)
+  omNumber         String?
+  paymentPolicy    String?
+  returnPolicy     String?
   shippingPolicy   String?
-
-  // Payment Settings
-  waveNumber    String?
-  omNumber      String?
-  bankAccount   String?
-  paymentPolicy String?
-
-  // Corporate
-  returnPolicy String?
-  aboutUs      String?
+  waveNumber       String?
+  tiktokUrl        String?
+  workingHours     String?
 }
 
 model Category {
@@ -235,7 +193,20 @@ model Category {
   name        String    @unique
   description String?
   image       String?
-  products    Product[]
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
+  products    Product[]
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+enum OrderStatus {
+  PENDING
+  PAID
+  SHIPPED
+  DELIVERED
+  CANCELLED
 }

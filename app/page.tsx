@@ -34,11 +34,11 @@ export default function HomePage() {
             {/* Categories Selection */}
             <section className="py-20 lg:py-32 overflow-hidden">
                 <div className="container-custom">
-                    <ScrollReveal className="flex flex-col items-center text-center space-y-6 mb-16 lg:mb-24">
-                        <span className="text-primary font-bold uppercase tracking-[0.2em] text-[10px]">
+                    <ScrollReveal className="flex flex-col items-center text-center space-y-4 sm:space-y-6 mb-12 sm:mb-16 lg:mb-24">
+                        <span className="text-primary font-bold uppercase tracking-[0.2em] text-[10px] sm:text-xs">
                             Univers Mbor Store
                         </span>
-                        <h2 className="font-heading text-4xl sm:text-6xl lg:text-7xl font-bold tracking-tight leading-tight max-w-4xl">
+                        <h2 className="font-heading text-3xl sm:text-6xl lg:text-7xl font-bold tracking-tight leading-tight max-w-4xl">
                             Dominez le terrain avec une élégance <span className="text-primary italic">signature</span>
                         </h2>
                     </ScrollReveal>
@@ -56,15 +56,15 @@ export default function HomePage() {
                                     priority
                                 />
                                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
-                                <div className="absolute bottom-8 lg:bottom-12 left-8 lg:left-12 max-w-md space-y-4 lg:space-y-6">
-                                    <div className="inline-block bg-primary/20 backdrop-blur-md text-primary border border-primary/20 px-4 py-1.5 rounded-full text-[10px] font-bold uppercase tracking-widest">
+                                <div className="absolute bottom-6 sm:bottom-12 left-6 sm:left-12 max-w-md space-y-4 sm:space-y-6">
+                                    <div className="inline-block bg-primary/20 backdrop-blur-md text-primary border border-primary/20 px-3 sm:px-4 py-1 sm:py-1.5 rounded-full text-[9px] sm:text-[10px] font-bold uppercase tracking-widest">
                                         Exclusivité
                                     </div>
-                                    <h3 className="text-4xl lg:text-6xl font-bold tracking-tight text-white leading-tight">
+                                    <h3 className="text-3xl sm:text-6xl font-bold tracking-tight text-white leading-tight">
                                         Pack Lion <br /> du Sénégal
                                     </h3>
-                                    <p className="text-base lg:text-lg text-white/80 font-medium tracking-tight">L'armure officielle pour la victoire. Authenticité et performance réunies.</p>
-                                    <div className="inline-flex h-12 lg:h-14 items-center justify-center bg-white text-black px-8 lg:px-10 rounded-xl text-sm font-bold tracking-tight transition-all group-hover:bg-primary group-hover:text-primary-foreground">
+                                    <p className="text-sm sm:text-lg text-white/80 font-medium tracking-tight">L'armure officielle pour la victoire. Authenticité et performance réunies.</p>
+                                    <div className="inline-flex h-12 lg:h-14 items-center justify-center bg-white text-black px-6 sm:px-10 rounded-xl text-sm font-bold tracking-tight transition-all group-hover:bg-primary group-hover:text-primary-foreground active:scale-95">
                                         Voir la collection
                                     </div>
                                 </div>
@@ -121,17 +121,17 @@ export default function HomePage() {
                 />
                 <div className="absolute inset-0 bg-black/30 z-10" />
                 <div className="container-custom relative z-20 h-full flex items-center">
-                    <ScrollReveal direction="left" className="max-w-3xl space-y-8">
-                        <span className="text-white/60 font-bold uppercase tracking-[0.2em] text-[10px] lg:text-xs">
+                    <ScrollReveal direction="left" className="max-w-3xl space-y-6 sm:space-y-8">
+                        <span className="text-white/60 font-bold uppercase tracking-[0.2em] text-[9px] sm:text-xs">
                             Haute Performance
                         </span>
-                        <h2 className="font-heading text-5xl lg:text-8xl font-bold tracking-tight text-white leading-tight">
+                        <h2 className="font-heading text-4xl sm:text-8xl font-bold tracking-tight text-white leading-tight">
                             L'équipement <br /> des <span className="text-primary italic">champions</span>
                         </h2>
-                        <p className="text-lg lg:text-xl text-white/80 font-medium tracking-tight max-w-2xl leading-relaxed">
+                        <p className="text-base sm:text-xl text-white/80 font-medium tracking-tight max-w-2xl leading-relaxed">
                             La précision au service de l'excellence. Découvrez les tenues d'entraînement et équipements officiels des plus grands clubs.
                         </p>
-                        <Link href="/shop" className="inline-flex h-12 lg:h-14 items-center justify-center bg-primary text-black px-10 rounded-xl text-sm font-bold tracking-tight transition-all hover:bg-white">
+                        <Link href="/shop" className="inline-flex h-12 sm:h-14 items-center justify-center bg-primary text-black px-8 sm:px-10 rounded-xl text-sm font-bold tracking-tight transition-all hover:bg-white active:scale-95">
                             Explorer la gamme Pro
                         </Link>
                     </ScrollReveal>

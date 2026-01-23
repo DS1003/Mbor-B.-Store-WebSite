@@ -3,6 +3,7 @@
 import * as React from "react"
 import { createPortal } from "react-dom"
 import Link from "next/link"
+import { useRouter } from "next/navigation"
 import {
     Plus,
     Search,
@@ -65,17 +66,24 @@ import { getStoreConfig } from "../actions"
 import { Receipt } from "@/components/admin/receipt"
 
 export default function AdminOrdersPage() {
+    const router = useRouter()
     const [ordersData, setOrdersData] = React.useState<any[]>([])
     const [isLoading, setIsLoading] = React.useState(true)
     const [selectedOrder, setSelectedOrder] = React.useState<any>(null)
     const [isDetailsOpen, setIsDetailsOpen] = React.useState(false)
     const [searchQuery, setSearchQuery] = React.useState("")
+    const [statusFilter, setStatusFilter] = React.useState("all")
+    const [dateFilter, setDateFilter] = React.useState("all")
     const [mounted, setMounted] = React.useState(false)
 
     // Delete state
     const [isDeleteDialogOpen, setIsDeleteDialogOpen] = React.useState(false)
     const [idToDelete, setIdToDelete] = React.useState<string | null>(null)
     const [isDeleting, setIsDeleting] = React.useState(false)
+
+    // Pagination state
+    const [currentPage, setCurrentPage] = React.useState(1)
+    const itemsPerPage = 10
 
     const [config, setConfig] = React.useState<any>(null)
     const [printOrder, setPrintOrder] = React.useState<any>(null)
@@ -135,10 +143,37 @@ export default function AdminOrdersPage() {
         }
     }
 
-    const filteredOrders = ordersData.filter(o =>
-        (o.id.toLowerCase() || "").includes(searchQuery.toLowerCase()) ||
-        (o.user?.name?.toLowerCase() || o.customerName?.toLowerCase() || "").includes(searchQuery.toLowerCase())
-    )
+    const filteredOrders = ordersData.filter(o => {
+        const matchesSearch = (o.id.toLowerCase() || "").includes(searchQuery.toLowerCase()) ||
+            (o.user?.name?.toLowerCase() || o.customerName?.toLowerCase() || "").includes(searchQuery.toLowerCase())
+
+        const matchesStatus = statusFilter === "all" || o.status === statusFilter
+
+        let matchesDate = true
+        if (dateFilter !== "all") {
+            const orderDate = new Date(o.createdAt)
+            const now = new Date()
+            if (dateFilter === "today") {
+                matchesDate = orderDate.toDateString() === now.toDateString()
+            } else if (dateFilter === "week") {
+                const sevenDaysAgo = new Date(now.setDate(now.getDate() - 7))
+                matchesDate = orderDate >= sevenDaysAgo
+            } else if (dateFilter === "month") {
+                const thirtyDaysAgo = new Date(now.setDate(now.getDate() - 30))
+                matchesDate = orderDate >= thirtyDaysAgo
+            }
+        }
+
+        return matchesSearch && matchesStatus && matchesDate
+    })
+
+    const totalPages = Math.ceil(filteredOrders.length / itemsPerPage)
+    const currentOrders = filteredOrders.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage)
+
+    // Reset to page 1 when filters change
+    React.useEffect(() => {
+        setCurrentPage(1)
+    }, [searchQuery, statusFilter, dateFilter])
 
     const stats = [
         { label: "En Attente", value: ordersData.filter(o => o.status === "PENDING").length.toString(), icon: Clock, color: "text-amber-600", bg: "bg-amber-50" },
@@ -218,6 +253,41 @@ export default function AdminOrdersPage() {
                             onChange={(e) => setSearchQuery(e.target.value)}
                         />
                     </div>
+                    <div className="flex items-center gap-3 w-full md:w-auto">
+                        <DropdownMenu>
+                            <DropdownMenuTrigger asChild>
+                                <Button variant="outline" className="h-12 px-5 rounded-2xl border-gray-100 bg-white text-[13px] font-bold text-gray-600 hover:bg-gray-50 transition-all flex items-center gap-2">
+                                    <Filter className="h-4 w-4 text-gray-400" />
+                                    {statusFilter === "all" ? "Tous les statuts" : statusFilter === "PENDING" ? "En attente" : statusFilter === "PAID" ? "Payé" : statusFilter === "SHIPPED" ? "Expédié" : statusFilter === "DELIVERED" ? "Livré" : statusFilter === "CANCELLED" ? "Annulé" : "Inconnu"}
+                                </Button>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent align="end" className="w-56 rounded-2xl p-2 border-gray-100 shadow-2xl">
+                                <DropdownMenuLabel className="text-[10px] font-black uppercase tracking-widest text-gray-400 px-3 py-2">Filtrer par statut</DropdownMenuLabel>
+                                <DropdownMenuItem onClick={() => setStatusFilter("all")} className="rounded-xl px-3 py-2 text-[13px] font-medium transition-all focus:bg-indigo-50 focus:text-indigo-600">Tous les statuts</DropdownMenuItem>
+                                <DropdownMenuItem onClick={() => setStatusFilter("PENDING")} className="rounded-xl px-3 py-2 text-[13px] font-medium transition-all focus:bg-indigo-50 focus:text-indigo-600">En attente</DropdownMenuItem>
+                                <DropdownMenuItem onClick={() => setStatusFilter("PAID")} className="rounded-xl px-3 py-2 text-[13px] font-medium transition-all focus:bg-indigo-50 focus:text-indigo-600">Payé</DropdownMenuItem>
+                                <DropdownMenuItem onClick={() => setStatusFilter("SHIPPED")} className="rounded-xl px-3 py-2 text-[13px] font-medium transition-all focus:bg-indigo-50 focus:text-indigo-600">Expédié</DropdownMenuItem>
+                                <DropdownMenuItem onClick={() => setStatusFilter("DELIVERED")} className="rounded-xl px-3 py-2 text-[13px] font-medium transition-all focus:bg-indigo-50 focus:text-indigo-600">Livré</DropdownMenuItem>
+                                <DropdownMenuItem onClick={() => setStatusFilter("CANCELLED")} className="rounded-xl px-3 py-2 text-[13px] font-medium transition-all focus:bg-indigo-50 focus:text-indigo-600 font-bold text-rose-500">Annulé</DropdownMenuItem>
+                            </DropdownMenuContent>
+                        </DropdownMenu>
+
+                        <DropdownMenu>
+                            <DropdownMenuTrigger asChild>
+                                <Button variant="outline" className="h-12 px-5 rounded-2xl border-gray-100 bg-white text-[13px] font-bold text-gray-600 hover:bg-gray-50 transition-all flex items-center gap-2">
+                                    <Clock className="h-4 w-4 text-gray-400" />
+                                    {dateFilter === "all" ? "Toute période" : dateFilter === "today" ? "Aujourd'hui" : dateFilter === "week" ? "Cette semaine" : "Ce mois"}
+                                </Button>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent align="end" className="w-56 rounded-2xl p-2 border-gray-100 shadow-2xl">
+                                <DropdownMenuLabel className="text-[10px] font-black uppercase tracking-widest text-gray-400 px-3 py-2">Période temporelle</DropdownMenuLabel>
+                                <DropdownMenuItem onClick={() => setDateFilter("all")} className="rounded-xl px-3 py-2 text-[13px] font-medium transition-all focus:bg-indigo-50 focus:text-indigo-600">Toute période</DropdownMenuItem>
+                                <DropdownMenuItem onClick={() => setDateFilter("today")} className="rounded-xl px-3 py-2 text-[13px] font-medium transition-all focus:bg-indigo-50 focus:text-indigo-600">Aujourd'hui</DropdownMenuItem>
+                                <DropdownMenuItem onClick={() => setDateFilter("week")} className="rounded-xl px-3 py-2 text-[13px] font-medium transition-all focus:bg-indigo-50 focus:text-indigo-600">Cette semaine</DropdownMenuItem>
+                                <DropdownMenuItem onClick={() => setDateFilter("month")} className="rounded-xl px-3 py-2 text-[13px] font-medium transition-all focus:bg-indigo-50 focus:text-indigo-600">Ce mois</DropdownMenuItem>
+                            </DropdownMenuContent>
+                        </DropdownMenu>
+                    </div>
                 </div>
 
                 <div className="overflow-x-auto">
@@ -237,18 +307,18 @@ export default function AdminOrdersPage() {
                                 [...Array(5)].map((_, i) => (
                                     <tr key={i}><td colSpan={6} className="px-8 py-6"><div className="h-12 w-full bg-gray-50 animate-pulse rounded-2xl" /></td></tr>
                                 ))
-                            ) : filteredOrders.length === 0 ? (
+                            ) : currentOrders.length === 0 ? (
                                 <tr><td colSpan={6} className="px-8 py-20 text-center text-gray-400 font-bold uppercase tracking-widest">Aucune transaction trouvée</td></tr>
                             ) : (
-                                filteredOrders.map((order) => (
-                                    <tr key={order.id} className="group hover:bg-gray-50/30 transition-all cursor-pointer">
-                                        <td className="px-8 py-5" onClick={() => { setSelectedOrder(order); setIsDetailsOpen(true); }}>
+                                currentOrders.map((order) => (
+                                    <tr key={order.id} className="group hover:bg-gray-50/30 transition-all cursor-pointer" onClick={() => router.push(`/admin/orders/${order.id}`)}>
+                                        <td className="px-8 py-5">
                                             <div className="space-y-1">
                                                 <p className="text-[14px] font-black text-gray-900 leading-tight">#{order.id.slice(-6).toUpperCase()}</p>
                                                 <p className="text-[10px] text-indigo-600 font-bold tracking-widest uppercase">{new Date(order.createdAt).toLocaleDateString()}</p>
                                             </div>
                                         </td>
-                                        <td className="px-8 py-5" onClick={() => { setSelectedOrder(order); setIsDetailsOpen(true); }}>
+                                        <td className="px-8 py-5">
                                             <div className="flex items-center gap-4">
                                                 <div className="h-10 w-10 rounded-xl bg-gray-100 flex items-center justify-center font-black text-[11px] text-gray-500 uppercase rotate-6 group-hover:rotate-0 transition-all shadow-sm">
                                                     {(order.user?.name || order.customerName || "G").split(' ').map((n: string) => n[0]).join('')}
@@ -259,7 +329,7 @@ export default function AdminOrdersPage() {
                                                 </div>
                                             </div>
                                         </td>
-                                        <td className="px-8 py-5" onClick={() => { setSelectedOrder(order); setIsDetailsOpen(true); }}>
+                                        <td className="px-8 py-5">
                                             <div className="flex -space-x-2">
                                                 {order.items?.map((item: any, idx: number) => (
                                                     <div key={idx} className="h-8 w-8 rounded-lg bg-white border border-gray-100 flex items-center justify-center shadow-sm relative z-[1] hover:z-[10] hover:-translate-y-1 transition-all group/icon">
@@ -269,8 +339,8 @@ export default function AdminOrdersPage() {
                                                 {order.items?.length > 3 && <div className="h-8 w-8 rounded-lg bg-gray-50 border border-gray-100 flex items-center justify-center text-[10px] font-black text-gray-400">+{order.items.length - 3}</div>}
                                             </div>
                                         </td>
-                                        <td className="px-8 py-5" onClick={() => { setSelectedOrder(order); setIsDetailsOpen(true); }}>
-                                            <p className="text-[15px] font-black text-gray-900 tabular-nums">{Number(order.total).toLocaleString()} F</p>
+                                        <td className="px-8 py-5">
+                                            <p className="text-[15px] font-black text-gray-900 tabular-nums" suppressHydrationWarning>{Number(order.total).toLocaleString()} F</p>
                                         </td>
                                         <td className="px-8 py-5 text-center">
                                             <span className={cn(
@@ -291,7 +361,7 @@ export default function AdminOrdersPage() {
                                                 </DropdownMenuTrigger>
                                                 <DropdownMenuContent align="end" className="w-[200px] rounded-[1.5rem] shadow-2xl border-gray-50 p-2">
                                                     <DropdownMenuLabel className="text-[10px] font-black text-gray-400 px-3 py-2 uppercase tracking-widest border-b border-gray-50 mb-1">Audit Flux</DropdownMenuLabel>
-                                                    <DropdownMenuItem onClick={() => { setSelectedOrder(order); setIsDetailsOpen(true); }} className="text-[12px] font-bold py-3 px-3 focus:bg-indigo-50 focus:text-indigo-600 rounded-xl transition-colors cursor-pointer">
+                                                    <DropdownMenuItem onClick={(e) => { e.stopPropagation(); router.push(`/admin/orders/${order.id}`); }} className="text-[12px] font-bold py-3 px-3 focus:bg-indigo-50 focus:text-indigo-600 rounded-xl transition-colors cursor-pointer">
                                                         <Eye className="mr-3 h-4 w-4" /> Détails Transaction
                                                     </DropdownMenuItem>
                                                     <DropdownMenuItem onClick={() => handleStatusUpdate(order.id, "PAID")} className="text-[12px] font-bold py-3 px-3 focus:bg-emerald-50 focus:text-emerald-600 rounded-xl transition-colors cursor-pointer">
@@ -313,8 +383,46 @@ export default function AdminOrdersPage() {
                     </table>
                 </div>
 
-                <div className="p-6 border-t border-gray-50 flex items-center justify-between bg-gray-50/20 text-[11px] font-black text-gray-400 uppercase tracking-widest">
-                    <p>Historique Flow : {filteredOrders.length} Transactions Répertoriées</p>
+                <div className="p-8 border-t border-gray-50 flex flex-col sm:flex-row items-center justify-between bg-gray-50/20 gap-6">
+                    <p className="text-[11px] font-black text-gray-400 uppercase tracking-widest">
+                        Affichage : {Math.min(currentOrders.length, itemsPerPage)} sur {filteredOrders.length} Transactions
+                    </p>
+                    <div className="flex items-center gap-2">
+                        <Button
+                            variant="outline"
+                            size="icon"
+                            className="h-10 w-10 rounded-xl border-gray-100 hover:bg-white shadow-sm"
+                            onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
+                            disabled={currentPage === 1}
+                        >
+                            <ChevronLeft className="h-4 w-4" />
+                        </Button>
+                        <div className="flex items-center gap-1">
+                            {[...Array(totalPages)].map((_, i) => (
+                                <Button
+                                    key={i}
+                                    onClick={() => setCurrentPage(i + 1)}
+                                    className={cn(
+                                        "h-10 w-10 rounded-xl font-black text-[11px] transition-all",
+                                        currentPage === i + 1
+                                            ? "bg-gray-900 text-white shadow-xl"
+                                            : "bg-white text-gray-400 border border-gray-100 hover:bg-gray-50"
+                                    )}
+                                >
+                                    {i + 1}
+                                </Button>
+                            )).slice(Math.max(0, currentPage - 3), Math.min(totalPages, currentPage + 2))}
+                        </div>
+                        <Button
+                            variant="outline"
+                            size="icon"
+                            className="h-10 w-10 rounded-xl border-gray-100 hover:bg-white shadow-sm"
+                            onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
+                            disabled={currentPage === totalPages || totalPages === 0}
+                        >
+                            <ChevronRight className="h-4 w-4" />
+                        </Button>
+                    </div>
                 </div>
             </div>
 
@@ -391,7 +499,7 @@ export default function AdminOrdersPage() {
                                                 </div>
                                                 <div>
                                                     <p className="text-[14px] font-black text-gray-900 leading-tight mb-1">{item.product?.name}</p>
-                                                    <p className="text-[11px] text-gray-400 font-bold tracking-tight">
+                                                    <p className="text-[11px] text-gray-400 font-bold tracking-tight" suppressHydrationWarning>
                                                         Unité: {Number(item.price).toLocaleString()} F • Qté: {item.quantity}
                                                     </p>
                                                     {(item.customName || item.customNumber) && (
@@ -410,17 +518,20 @@ export default function AdminOrdersPage() {
                             {/* Final Balance */}
                             <div className="bg-gray-50/50 rounded-[2.5rem] p-8 space-y-4 border border-gray-50">
                                 <div className="flex justify-between items-center text-[11px] font-black text-gray-400 uppercase tracking-widest">
-                                    <span>Valeur Brut</span>
-                                    <span className="tabular-nums">{Number(selectedOrder.total).toLocaleString()} F</span>
+                                    <span>Valeur Brut (Articles)</span>
+                                    <span className="tabular-nums" suppressHydrationWarning>{(Number(selectedOrder.total) - Number(selectedOrder.deliveryFee || 0)).toLocaleString()} F</span>
                                 </div>
                                 <div className="flex justify-between items-center text-[11px] font-black text-gray-400 uppercase tracking-widest">
-                                    <span>Logistique Express</span>
-                                    <span className="text-emerald-500">OFFERT</span>
+                                    <span>Logistique : {selectedOrder.deliveryType === "PICKUP" ? "Retrait" : "Dakar (+2000)"}</span>
+                                    <span className={selectedOrder.deliveryType === "PICKUP" || Number(selectedOrder.deliveryFee) === 0 ? "text-emerald-500" : "text-gray-900 tabular-nums"}>
+                                        {selectedOrder.deliveryType === "PICKUP" ? "GRATUIT" :
+                                            (Number(selectedOrder.deliveryFee) === 0 ? "OFFERTE" : `${Number(selectedOrder.deliveryFee).toLocaleString()} F`)}
+                                    </span>
                                 </div>
                                 <Separator className="bg-gray-100" />
                                 <div className="flex justify-between items-center pt-2">
                                     <span className="text-[16px] font-black text-gray-900 uppercase italic">Total Facturé</span>
-                                    <span className="text-2xl font-black text-gray-900 tabular-nums tracking-tighter shadow-indigo-100 italic">{Number(selectedOrder.total).toLocaleString()} F</span>
+                                    <span className="text-2xl font-black text-gray-900 tabular-nums tracking-tighter shadow-indigo-100 italic" suppressHydrationWarning>{Number(selectedOrder.total).toLocaleString()} F</span>
                                 </div>
                             </div>
 

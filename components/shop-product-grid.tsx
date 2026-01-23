@@ -78,8 +78,8 @@ export async function ShopProductGrid({ searchParams }: ShopProductGridProps) {
     return (
         <div className="space-y-20">
             <div className={cn(
-                "grid gap-x-6 gap-y-12",
-                view === "grid" ? "grid-cols-1 sm:grid-cols-2 xl:grid-cols-3" : "grid-cols-1"
+                "grid gap-3 sm:gap-6 gap-y-8 sm:gap-y-12",
+                view === "grid" ? "grid-cols-2 sm:grid-cols-2 lg:grid-cols-3" : "grid-cols-1"
             )}>
                 {products.map((product, i) => (
                     <ScrollReveal key={product.id} delay={i * 0.05} distance={20}>
@@ -104,9 +104,9 @@ export async function ShopProductGrid({ searchParams }: ShopProductGridProps) {
 
 export function ShopProductGridSkeleton() {
     return (
-        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-3">
+        <div className="grid grid-cols-2 gap-3 sm:gap-6 gap-y-8 sm:gap-y-12 sm:grid-cols-2 lg:grid-cols-3">
             {[...Array(6)].map((_, i) => (
-                <div key={i} className="aspect-[4/5] bg-muted animate-pulse rounded-[2.5rem]" />
+                <div key={i} className="aspect-[4/5] bg-muted animate-pulse rounded-2xl sm:rounded-[2.5rem]" />
             ))}
         </div>
     )

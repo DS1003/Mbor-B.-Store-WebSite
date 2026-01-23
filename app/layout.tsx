@@ -84,7 +84,7 @@ export default function RootLayout({
                     </main>
                     <SiteFooter />
                     <MobileNavbar />
-                    <Toaster />
+                    <Toaster position="top-right" richColors />
                 </Providers>
 
             </body>

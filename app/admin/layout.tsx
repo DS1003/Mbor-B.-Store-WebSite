@@ -2,7 +2,7 @@
 
 import * as React from "react"
 import Link from "next/link"
-import { usePathname } from "next/navigation"
+import { usePathname, useRouter } from "next/navigation"
 import {
     LayoutDashboard,
     Package,
@@ -48,45 +48,28 @@ import {
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { Badge } from "@/components/ui/badge"
 import { motion, AnimatePresence } from "framer-motion"
 
 import { useSession, signOut } from "next-auth/react"
+import { getNotifications } from "./actions"
+import { toast } from "sonner"
 
-export default function AdminLayout({
-    children,
-}: {
-    children: React.ReactNode
-}) {
-    const { setTheme } = useTheme()
-    const pathname = usePathname()
-    const [isSidebarOpen, setIsSidebarOpen] = React.useState(true)
-    const { data: session } = useSession()
+const menuItems = [
+    { icon: LayoutDashboard, label: "Dashboard", href: "/admin" },
+    { icon: Package, label: "Produits", href: "/admin/products" },
+    { icon: Layers, label: "Catégories", href: "/admin/categories" },
+    { icon: Database, label: "Stock", href: "/admin/stock" },
+    { icon: ImageIcon, label: "Médiathèque", href: "/admin/media" },
+    { icon: ShoppingBag, label: "Vente (POS)", href: "/admin/pos" },
+    { icon: ShoppingCart, label: "Commandes", href: "/admin/orders" },
+    { icon: Users, label: "Clients", href: "/admin/customers" },
+    { icon: BarChart3, label: "Analytiques", href: "/admin/analytics" },
+    { icon: Settings, label: "Paramètres", href: "/admin/settings" },
+]
 
-    // Derived user data
-    const user = session?.user
-    const userInitials = user?.name
-        ? user.name.split(" ").map((n: string) => n[0]).join("").toUpperCase().slice(0, 2)
-        : "AD" // AD for Admin
-
-    // Force light theme for admin
-    React.useEffect(() => {
-        setTheme("light")
-    }, [setTheme])
-
-    const menuItems = [
-        { icon: LayoutDashboard, label: "Dashboard", href: "/admin" },
-        { icon: Package, label: "Produits", href: "/admin/products" },
-        { icon: Layers, label: "Catégories", href: "/admin/categories" },
-        { icon: Database, label: "Stock", href: "/admin/stock" },
-        { icon: ImageIcon, label: "Médiathèque", href: "/admin/media" },
-        { icon: ShoppingBag, label: "Vente (POS)", href: "/admin/pos" },
-        { icon: ShoppingCart, label: "Commandes", href: "/admin/orders" },
-        { icon: Users, label: "Clients", href: "/admin/customers" },
-        { icon: BarChart3, label: "Analytiques", href: "/admin/analytics" },
-        { icon: Settings, label: "Paramètres", href: "/admin/settings" },
-    ]
-
-    const SidebarContent = ({ isMobile = false }) => (
+function SidebarContent({ isSidebarOpen, isMobile, pathname, setIsMobileMenuOpen }: any) {
+    return (
         <div className="flex flex-col h-full bg-white border-r border-gray-100">
             {/* Branding */}
             <div className={cn("px-6 py-8 flex items-center justify-between", !isSidebarOpen && !isMobile && "px-4")}>
@@ -100,14 +83,6 @@ export default function AdminLayout({
                         </span>
                     </div>
                 </Link>
-                {!isMobile && (
-                    <button
-                        onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-                        className="h-8 w-8 flex items-center justify-center text-gray-400 hover:text-gray-900 transition-colors"
-                    >
-                        <Menu className="h-4 w-4" />
-                    </button>
-                )}
             </div>
 
             {/* Navigation */}
@@ -118,6 +93,7 @@ export default function AdminLayout({
                         <Link
                             key={item.href}
                             href={item.href}
+                            onClick={() => isMobile && setIsMobileMenuOpen(false)}
                             className={cn(
                                 "flex items-center px-4 py-3 rounded-2xl transition-all group relative overflow-hidden",
                                 isActive
@@ -143,25 +119,235 @@ export default function AdminLayout({
                     )
                 })}
             </nav>
-
-
         </div>
     )
+}
+
+export default function AdminLayout({
+    children,
+}: {
+    children: React.ReactNode
+}) {
+    const { setTheme } = useTheme()
+    const pathname = usePathname()
+    const [isSidebarOpen, setIsSidebarOpen] = React.useState(true)
+    const [isMobileMenuOpen, setIsMobileMenuOpen] = React.useState(false)
+    const { data: session } = useSession()
+
+    // Derived user data
+    const user = session?.user
+    const userInitials = user?.name
+        ? user.name.split(" ").map((n: string) => n[0]).join("").toUpperCase().slice(0, 2)
+        : "AD" // AD for Admin
+
+    // Force light theme for admin
+    React.useEffect(() => {
+        setTheme("light")
+    }, [setTheme])
+
+    const router = useRouter()
+    const audioRef = React.useRef<HTMLAudioElement | null>(null)
+
+    // Initialize audio once
+    React.useEffect(() => {
+        audioRef.current = new Audio("https://res.cloudinary.com/dgro5x4h8/video/upload/v1769202662/mixkit-correct-answer-tone-2870_xaxd8b.wav")
+        audioRef.current.crossOrigin = "anonymous"
+        audioRef.current.volume = 1.0
+        audioRef.current.load()
+    }, [])
+
+    // Notifications state
+    const [notifications, setNotifications] = React.useState<any[]>([])
+    const [lastChecked, setLastChecked] = React.useState<string>(new Date().toISOString())
+
+    // Initial load of notifications (Server Action)
+    React.useEffect(() => {
+        const fetchInitialNotifications = async () => {
+            try {
+                const data = await getNotifications()
+                if (data) {
+                    setNotifications(data)
+                }
+                // Set the initial checkpoint to now
+                setLastChecked(new Date().toISOString())
+            } catch (error) {
+                console.error("Failed to load initial notifications:", error)
+            }
+        }
+        fetchInitialNotifications()
+    }, [])
+
+    // Poll for NEW notifications
+    const checkForNewNotifications = React.useCallback(async () => {
+        try {
+            const res = await fetch(`/api/admin/notifications/check?lastChecked=${lastChecked}`)
+            if (!res.ok) return
+
+            const data = await res.json()
+            const { newOrders, newUsers, timestamp } = data
+
+            if (newOrders.length === 0 && newUsers.length === 0) {
+                // Update timestamp even if empty to avoid refetching old window if this call took time
+                setLastChecked(timestamp)
+                return
+            }
+
+            // Play sound
+            if (newOrders.length > 0 || newUsers.length > 0) {
+                try {
+                    if (audioRef.current) {
+                        const playPromise = audioRef.current.play()
+                        if (playPromise !== undefined) {
+                            playPromise.catch(e => console.log("Audio waiting for interaction"))
+                        }
+                    }
+                } catch (e) {
+                    console.log("Audio error", e)
+                }
+            }
+
+            const newNotificationItems: any[] = []
+
+            // Process New Orders
+            newOrders.forEach((order: any) => {
+                const formattedPrice = new Intl.NumberFormat("fr-FR", { style: "currency", currency: "XOF" }).format(Number(order.total))
+
+                toast(
+                    <div className="flex items-center w-full gap-3 p-1">
+                        <div className="h-10 w-10 bg-blue-50 rounded-full flex items-center justify-center border border-blue-100 shrink-0">
+                            <ShoppingCart className="h-5 w-5 text-blue-600 animate-bounce" />
+                        </div>
+                        <div className="flex-1 flex flex-col justify-center min-w-0">
+                            <p className="font-bold text-sm text-gray-900 leading-none mb-1">Nouvelle commande !</p>
+                            <p className="text-xs text-gray-500 font-medium truncate">
+                                {order.customerName || 'Client'} • <span className="text-green-600 font-bold">{formattedPrice}</span>
+                            </p>
+                        </div>
+                        <Button
+                            size="sm"
+                            onClick={() => router.push(`/admin/orders/${order.id}`)}
+                            className="h-7 px-3 text-xs font-bold bg-gray-900 text-white hover:bg-black shrink-0 rounded-lg shadow-sm"
+                        >
+                            Voir
+                        </Button>
+                    </div>,
+                    {
+                        duration: 30000,
+                        closeButton: true,
+                        className: "!bg-white !border !border-gray-100 !shadow-[0_8px_30px_rgb(0,0,0,0.06)] !rounded-xl !p-2 !w-full !max-w-md",
+                    }
+                )
+
+                newNotificationItems.push({
+                    id: `order-${order.id}`,
+                    type: 'ORDER',
+                    title: `Nouvelle commande #${order.id.slice(-4).toUpperCase()}`,
+                    description: `${order.customerName || 'Client'} • ${formattedPrice.replace('F\u202FCFA', '').trim()} FCFA`,
+                    time: order.createdAt,
+                    icon: 'ShoppingCart',
+                    color: 'text-blue-600',
+                    bg: 'bg-blue-50'
+                })
+            })
+
+            // Process New Users
+            newUsers.forEach((user: any) => {
+                toast(
+                    <div className="flex items-center w-full gap-3 p-1">
+                        <div className="h-10 w-10 bg-green-50 rounded-full flex items-center justify-center border border-green-100 shrink-0">
+                            <Users className="h-5 w-5 text-green-600 animate-bounce" />
+                        </div>
+                        <div className="flex-1 flex flex-col justify-center min-w-0">
+                            <p className="font-bold text-sm text-gray-900 leading-none mb-1">Nouvel utilisateur !</p>
+                            <p className="text-xs text-gray-500 font-medium truncate">
+                                {user.name || 'Nouveau membre'} a rejoint.
+                            </p>
+                        </div>
+                        <Button
+                            size="sm"
+                            onClick={() => router.push(`/admin/customers`)}
+                            className="h-7 px-3 text-xs font-bold bg-gray-900 text-white hover:bg-black shrink-0 rounded-lg shadow-sm"
+                        >
+                            Profil
+                        </Button>
+                    </div>,
+                    {
+                        duration: 30000,
+                        closeButton: true,
+                        className: "!bg-white !border !border-gray-100 !shadow-[0_8px_30px_rgb(0,0,0,0.06)] !rounded-xl !p-2 !w-full !max-w-md",
+                    }
+                )
+
+                newNotificationItems.push({
+                    id: `user-${user.id}`,
+                    type: 'USER',
+                    title: 'Nouveau client inscrit',
+                    description: `${user.name || (user.email ? user.email.split('@')[0] : 'Inconnu')}`,
+                    time: user.createdAt,
+                    icon: 'Users',
+                    color: 'text-green-600',
+                    bg: 'bg-green-50'
+                })
+            })
+
+            // Update state: existing + new items at the top
+            if (newNotificationItems.length > 0) {
+                setNotifications(prev => [...newNotificationItems, ...prev])
+            }
+
+            // Update checkpoint
+            setLastChecked(timestamp)
+
+        } catch (error) {
+            console.error("Polling error:", error)
+        }
+    }, [lastChecked])
+
+    // Set up polling interval
+    React.useEffect(() => {
+        const interval = setInterval(checkForNewNotifications, 30000) // Poll every 30s
+        return () => clearInterval(interval)
+    }, [checkForNewNotifications])
 
     return (
-        <div className="fixed inset-0 flex bg-[#F9FAFB] overflow-hidden font-sans selection:bg-gray-900 selection:text-white z-[50]">
-            {/* Desktop Sidebar */}
-            <aside
-                className={cn(
-                    "hidden lg:flex transition-all duration-300 flex-col z-50 relative",
-                    isSidebarOpen ? "w-60" : "w-16"
-                )}
-            >
-                <SidebarContent />
-            </aside>
+        <Sheet open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>
+            <div className="fixed inset-0 flex bg-[#F9FAFB] overflow-hidden font-sans selection:bg-gray-900 selection:text-white z-[50]">
+                {/* Desktop Sidebar */}
+                <aside
+                    className={cn(
+                        "hidden lg:flex transition-all duration-300 flex-col z-50 relative",
+                        isSidebarOpen ? "w-60" : "w-16"
+                    )}
+                >
+                    <SidebarContent
+                        isSidebarOpen={isSidebarOpen}
+                        isMobile={false}
+                        pathname={pathname}
+                        setIsMobileMenuOpen={setIsMobileMenuOpen}
+                    />
 
-            {/* Mobile Sidebar (Sheet) */}
-            <Sheet>
+                    {/* Toggle Button for Desktop Sidebar */}
+                    <button
+                        onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+                        className="absolute -right-3 top-10 h-6 w-6 bg-white border border-gray-100 rounded-full flex items-center justify-center text-gray-400 hover:text-gray-900 shadow-sm z-[60] hover:scale-110 transition-all"
+                    >
+                        <ChevronRight className={cn("h-3.5 w-3.5 transition-transform duration-300", isSidebarOpen && "rotate-180")} />
+                    </button>
+                </aside>
+
+                {/* Mobile Sidebar (SheetContent) */}
+                <SheetContent side="left" className="p-0 w-64">
+                    <SheetHeader className="sr-only">
+                        <SheetTitle>Navigation Admin</SheetTitle>
+                    </SheetHeader>
+                    <SidebarContent
+                        isSidebarOpen={true}
+                        isMobile={true}
+                        pathname={pathname}
+                        setIsMobileMenuOpen={setIsMobileMenuOpen}
+                    />
+                </SheetContent>
+
                 {/* Main Content Area */}
                 <main className="flex-1 flex flex-col min-w-0 overflow-hidden relative">
                     {/* Header */}
@@ -210,36 +396,45 @@ export default function AdminLayout({
                                     </Button>
                                 </DropdownMenuTrigger>
                                 <DropdownMenuContent align="end" className="w-80">
-                                    <DropdownMenuLabel>Notifications</DropdownMenuLabel>
+                                    <DropdownMenuLabel className="flex items-center justify-between">
+                                        <span>Notifications</span>
+                                        {notifications.length > 0 && (
+                                            <Badge variant="outline" className="text-[10px] font-black bg-indigo-50 text-indigo-600 border-none">
+                                                {notifications.length} Live
+                                            </Badge>
+                                        )}
+                                    </DropdownMenuLabel>
                                     <DropdownMenuSeparator />
-                                    <div className="flex flex-col gap-1 p-1">
-                                        <div className="px-3 py-3 hover:bg-gray-50 rounded-md cursor-pointer transition-colors">
-                                            <div className="flex items-start gap-3">
-                                                <div className="h-8 w-8 bg-blue-50 text-blue-600 rounded-full flex items-center justify-center shrink-0">
-                                                    <ShoppingCart className="h-4 w-4" />
-                                                </div>
-                                                <div className="space-y-1">
-                                                    <p className="text-sm font-medium leading-none">Nouvelle commande #4291</p>
-                                                    <p className="text-xs text-muted-foreground">Il y a 2 minutes • 25,000 FCFA</p>
-                                                </div>
+                                    <div className="flex flex-col gap-1 p-1 max-h-[400px] overflow-y-auto custom-scrollbar">
+                                        {notifications.length === 0 ? (
+                                            <div className="py-10 text-center opacity-30 italic text-xs font-medium">
+                                                Aucun signal détecté.
                                             </div>
-                                        </div>
-                                        <div className="px-3 py-3 hover:bg-gray-50 rounded-md cursor-pointer transition-colors">
-                                            <div className="flex items-start gap-3">
-                                                <div className="h-8 w-8 bg-green-50 text-green-600 rounded-full flex items-center justify-center shrink-0">
-                                                    <Users className="h-4 w-4" />
+                                        ) : (
+                                            notifications.map((n) => (
+                                                <div key={n.id} className="px-3 py-3 hover:bg-gray-50 rounded-md cursor-pointer transition-colors group">
+                                                    <div className="flex items-start gap-3">
+                                                        <div className={cn("h-8 w-8 rounded-full flex items-center justify-center shrink-0 shadow-inner", n.bg, n.color)}>
+                                                            {n.icon === 'ShoppingCart' ? <ShoppingCart className="h-3.5 w-3.5" /> : <Users className="h-3.5 w-3.5" />}
+                                                        </div>
+                                                        <div className="space-y-0.5">
+                                                            <p className="text-[12px] font-bold leading-tight group-hover:text-indigo-600 transition-colors">{n.title}</p>
+                                                            <p className="text-[11px] text-gray-400 font-medium line-clamp-1">{n.description}</p>
+                                                            <p className="text-[9px] text-gray-300 font-black uppercase tracking-widest pt-1">
+                                                                {new Date(n.time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                                                            </p>
+                                                        </div>
+                                                    </div>
                                                 </div>
-                                                <div className="space-y-1">
-                                                    <p className="text-sm font-medium leading-none">Nouveau client inscrit</p>
-                                                    <p className="text-xs text-muted-foreground">Il y a 15 minutes • Mamadou Diop</p>
-                                                </div>
-                                            </div>
-                                        </div>
+                                            ))
+                                        )}
                                     </div>
                                     <DropdownMenuSeparator />
-                                    <DropdownMenuItem className="w-full text-center justify-center cursor-pointer text-xs text-muted-foreground">
-                                        Voir toutes les notifications
-                                    </DropdownMenuItem>
+                                    <Link href="/admin/orders">
+                                        <DropdownMenuItem className="w-full text-center justify-center cursor-pointer text-xs font-black uppercase tracking-widest text-gray-400 hover:text-gray-900 py-3">
+                                            Audit Complet Flux
+                                        </DropdownMenuItem>
+                                    </Link>
                                 </DropdownMenuContent>
                             </DropdownMenu>
 
@@ -281,13 +476,6 @@ export default function AdminLayout({
                         </div>
                     </header>
 
-                    <SheetContent side="left" className="p-0 w-64">
-                        <SheetHeader className="sr-only">
-                            <SheetTitle>Navigation Admin</SheetTitle>
-                        </SheetHeader>
-                        <SidebarContent isMobile />
-                    </SheetContent>
-
                     {/* Content View */}
                     <div className="flex-1 overflow-y-auto p-6 lg:p-10 custom-scrollbar">
                         <div className="max-w-[1400px] mx-auto">
@@ -305,9 +493,7 @@ export default function AdminLayout({
                         </div>
                     </div>
                 </main>
-            </Sheet>
-        </div>
+            </div>
+        </Sheet>
     )
 }
-
-

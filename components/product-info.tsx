@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Switch } from "@/components/ui/switch"
+import { motion } from "framer-motion"
 import { useCart } from "./cart-context"
 import { toast } from "sonner"
 
@@ -155,24 +156,33 @@ export function ProductInfo({ product }: ProductInfoProps) {
                         <Ruler className="h-3.5 w-3.5 mr-2" /> Guide des Tailles
                     </Link>
                 </div>
-                <div className="grid grid-cols-3 sm:grid-cols-6 gap-3">
+                <div className="flex flex-nowrap gap-2 overflow-x-auto pb-2 scrollbar-hide -mx-4 px-4 sm:mx-0 sm:px-0 sm:grid sm:grid-cols-6 sm:gap-3 sm:pb-0 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
                     {availableSizes.map((item) => (
                         <button
                             key={item.size}
                             onClick={() => item.stock > 0 && setSelectedSize(item.size)}
                             disabled={item.stock <= 0}
                             className={cn(
-                                "h-14 flex flex-col items-center justify-center rounded-2xl border text-[13px] font-bold transition-all duration-300 relative overflow-hidden",
+                                "h-10 min-w-[54px] sm:h-14 sm:min-w-0 flex items-center justify-center rounded-lg sm:rounded-2xl border-2 text-[13px] sm:text-[14px] font-black transition-all duration-300 relative overflow-hidden active:scale-95 flex-shrink-0 sm:flex-shrink",
                                 selectedSize === item.size
-                                    ? "border-primary bg-primary text-primary-foreground shadow-lg shadow-primary/20 scale-105"
+                                    ? "border-primary bg-primary text-primary-foreground shadow-[0_10px_20px_-10px_rgba(var(--primary),0.5)] z-10"
                                     : item.stock <= 0
-                                        ? "border-muted bg-muted/50 text-muted-foreground/40 cursor-not-allowed"
-                                        : "border-muted hover:border-foreground/40 bg-background text-foreground/70"
+                                        ? "border-muted/50 bg-muted/20 text-muted-foreground/30 cursor-not-allowed opacity-50"
+                                        : "border-muted hover:border-foreground/20 bg-card/50 backdrop-blur-sm text-foreground/60 hover:text-foreground"
                             )}
                         >
-                            <span>{item.size}</span>
+                            <span className="relative z-10">{item.size}</span>
                             {item.stock <= 0 && (
-                                <span className="absolute inset-0 flex items-center justify-center bg-background/50 text-[9px] font-black uppercase -rotate-45 text-rose-500">Épuisé</span>
+                                <div className="absolute inset-0 bg-muted/40 backdrop-blur-[1px] flex items-center justify-center">
+                                    <div className="h-px w-full bg-rose-500/30 rotate-45 absolute" />
+                                </div>
+                            )}
+                            {selectedSize === item.size && (
+                                <motion.div
+                                    layoutId="size-active"
+                                    className="absolute inset-0 bg-primary"
+                                    transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
+                                />
                             )}
                         </button>
                     ))}
@@ -181,20 +191,50 @@ export function ProductInfo({ product }: ProductInfoProps) {
 
             {/* Personalization Section */}
             {data.allowFlocage && (
-                <div className="p-6 bg-primary/5 rounded-3xl border border-primary/10 space-y-6 animate-in fade-in slide-in-from-bottom-2 duration-500">
-                    <div className="flex items-center justify-between">
-                        <div className="space-y-1">
-                            <h4 className="text-[14px] font-bold tracking-tight flex items-center">
-                                Personnaliser ce produit
-                                <span className="ml-2 text-[9px] bg-primary text-white px-2 py-0.5 rounded-full uppercase tracking-widest font-black">+ 2 000 F</span>
-                            </h4>
-                            <p className="text-[11px] text-muted-foreground font-medium">Ajoutez votre nom et numéro officiel</p>
+                <div className="p-6 bg-secondary/30 backdrop-blur-xl rounded-[2rem] border border-muted/50 transition-all hover:bg-secondary/40 group/personalize">
+                    <div className="flex items-center justify-between gap-4">
+                        <div className="flex items-center gap-3 sm:gap-4 flex-1 min-w-0">
+                            <div className="h-10 w-10 sm:h-12 sm:w-12 rounded-xl bg-primary/10 flex items-center justify-center flex-shrink-0 group-hover/personalize:scale-110 transition-transform duration-500">
+                                <span className="text-lg">👕</span>
+                            </div>
+                            <div className="space-y-1 min-w-0">
+                                <h4 className="text-[12px] sm:text-[13px] font-black tracking-tighter uppercase italic truncate">
+                                    Flocage Personnalisé
+                                </h4>
+                                <div className="flex items-center gap-2">
+                                    <div className="px-2 py-0.5 rounded-full bg-background border border-muted text-foreground text-[8px] font-black uppercase tracking-tighter whitespace-nowrap shadow-sm">
+                                        + 2 000 FCFA
+                                    </div>
+                                    <p className="text-[9px] text-muted-foreground font-semibold leading-tight line-clamp-1 opacity-60 italic">
+                                        Nom & Numéro
+                                    </p>
+                                </div>
+                            </div>
                         </div>
-                        <Switch
-                            checked={isCustomizing}
-                            onCheckedChange={setIsCustomizing}
-                            className="data-[state=checked]:bg-primary"
-                        />
+                        <button
+                            onClick={() => setIsCustomizing(!isCustomizing)}
+                            className={cn(
+                                "relative h-6 w-11 flex-shrink-0 rounded-full transition-all duration-500 flex items-center px-1 border-2 !min-h-0",
+                                isCustomizing
+                                    ? "bg-primary border-primary shadow-[0_5px_15px_-5px_rgba(var(--primary),0.5)]"
+                                    : "bg-muted-foreground/10 border-transparent"
+                            )}
+                            aria-label="Toggle personalization"
+                        >
+                            <motion.div
+                                animate={{ x: isCustomizing ? 20 : 0 }}
+                                transition={{ type: "spring", stiffness: 500, damping: 30 }}
+                                className="h-4 w-4 rounded-full bg-white shadow-sm flex items-center justify-center"
+                            >
+                                {isCustomizing && (
+                                    <motion.div
+                                        initial={{ scale: 0 }}
+                                        animate={{ scale: 1 }}
+                                        className="h-1.5 w-1.5 rounded-full bg-primary"
+                                    />
+                                )}
+                            </motion.div>
+                        </button>
                     </div>
 
                     {isCustomizing && (
@@ -230,37 +270,36 @@ export function ProductInfo({ product }: ProductInfoProps) {
             )}
 
             {/* CTA's */}
-            <div className="flex flex-col sm:flex-row gap-5">
-                <Magnetic>
-                    <button
-                        onClick={handleAddToCart}
-                        disabled={isLoading}
-                        className="flex-1 h-16 bg-black text-white dark:bg-white dark:text-black rounded-2xl text-[14px] font-bold tracking-tight transition-all hover:scale-[1.02] active:scale-95 flex items-center justify-center px-10 group disabled:opacity-50 disabled:cursor-not-allowed"
-                    >
-                        {isLoading ? (
-                            <div className="h-5 w-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                        ) : (
-                            <>
-                                <ShoppingBag className="h-5 w-5 mr-3 transition-transform group-hover:scale-110" />
-                                Ajouter au panier
-                            </>
-                        )}
-                    </button>
-                </Magnetic>
-                <Magnetic>
-                    <button
-                        onClick={() => toggleFavorite(data.id)}
-                        className={cn(
-                            "h-16 px-8 border rounded-2xl flex items-center justify-center transition-all active:scale-90 group",
-                            favorited ? "border-rose-500 bg-rose-50" : "border-muted hover:bg-muted"
-                        )}
-                    >
-                        <Heart className={cn(
-                            "h-5 w-5 transition-colors",
-                            favorited ? "fill-rose-500 text-rose-500" : "group-hover:fill-rose-500 group-hover:text-rose-500"
-                        )} />
-                    </button>
-                </Magnetic>
+            <div className="flex items-center gap-4 pt-4">
+                <button
+                    onClick={handleAddToCart}
+                    disabled={isLoading}
+                    className="flex-[4] h-16 bg-foreground text-background rounded-2xl text-[14px] font-black uppercase tracking-widest transition-all hover:shadow-[0_20px_40px_-10px_rgba(0,0,0,0.3)] dark:hover:shadow-[0_20px_40px_-10px_rgba(255,255,255,0.1)] active:scale-[0.98] flex items-center justify-center group disabled:opacity-50 disabled:cursor-not-allowed overflow-hidden relative"
+                >
+                    <div className="absolute inset-0 bg-gradient-to-r from-primary/0 via-primary/10 to-primary/0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000" />
+                    {isLoading ? (
+                        <div className="h-5 w-5 border-2 border-background/20 border-t-background rounded-full animate-spin" />
+                    ) : (
+                        <>
+                            <ShoppingBag className="h-4 w-4 mr-3 transition-transform group-hover:scale-110 group-hover:-translate-y-0.5" />
+                            Ajouter au panier
+                        </>
+                    )}
+                </button>
+                <button
+                    onClick={() => toggleFavorite(data.id)}
+                    className={cn(
+                        "flex-1 h-16 border-2 rounded-2xl flex items-center justify-center transition-all active:scale-90 group relative overflow-hidden backdrop-blur-sm",
+                        favorited
+                            ? "border-rose-500/50 bg-rose-500/10 text-rose-500"
+                            : "border-muted hover:border-rose-500/30 hover:bg-rose-500/5 text-muted-foreground hover:text-rose-500"
+                    )}
+                >
+                    <Heart className={cn(
+                        "h-5 w-5 transition-all duration-500",
+                        favorited ? "fill-rose-500 scale-110" : "group-hover:scale-110"
+                    )} />
+                </button>
             </div>
 
             {/* Trust Badges */}

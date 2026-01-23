@@ -103,11 +103,29 @@ export function Receipt({ order, config }: ReceiptProps) {
 
             {/* Totals */}
             <div className="space-y-1">
-                <div className="flex justify-between text-base font-black italic">
+                <div className="flex justify-between text-[10px] font-bold">
+                    <span>SOUS-TOTAL:</span>
+                    <span>{Number(subtotal).toLocaleString()} F</span>
+                </div>
+
+                {order.deliveryType === "DELIVERY" ? (
+                    <div className="flex justify-between text-[10px] font-bold">
+                        <span>LIVRAISON DAKAR:</span>
+                        <span>{Number(order.deliveryFee).toLocaleString()} F</span>
+                    </div>
+                ) : (
+                    <div className="flex justify-between text-[9px] italic text-gray-400">
+                        <span>MODE:</span>
+                        <span>RETRAIT MAGASIN (GRATUIT)</span>
+                    </div>
+                )}
+
+                <div className="flex justify-between text-base font-black italic pt-2">
                     <span>TOTAL NET:</span>
                     <span>{Number(order.total).toLocaleString()} F CFA</span>
                 </div>
-                <div className="flex justify-between text-[9px] pt-2">
+
+                <div className="flex justify-between text-[9px] pt-2 border-t border-dotted border-gray-300">
                     <span>DONT TVA (18%):</span>
                     <span>{Math.round(tva).toLocaleString()} F</span>
                 </div>

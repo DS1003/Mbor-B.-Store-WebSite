@@ -19,7 +19,9 @@ import {
     History,
     FileImage,
     ImagePlus,
-    RefreshCw
+    RefreshCw,
+    ChevronLeft,
+    ChevronRight
 } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
@@ -45,6 +47,8 @@ export default function AdminMediaPage() {
     const [isLoading, setIsLoading] = React.useState(true)
     const [mediaItems, setMediaItems] = React.useState<any[]>([])
     const [searchQuery, setSearchQuery] = React.useState("")
+    const [currentPage, setCurrentPage] = React.useState(1)
+    const itemsPerPage = 12
 
     const [isDeleteDialogOpen, setIsDeleteDialogOpen] = React.useState(false)
     const [itemToDelete, setItemToDelete] = React.useState<any>(null)
@@ -96,6 +100,16 @@ export default function AdminMediaPage() {
         item.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
         item.productName.toLowerCase().includes(searchQuery.toLowerCase())
     )
+
+    const totalPages = Math.ceil(filteredMedia.length / itemsPerPage)
+    const currentMedia = filteredMedia.slice(
+        (currentPage - 1) * itemsPerPage,
+        currentPage * itemsPerPage
+    )
+
+    React.useEffect(() => {
+        setCurrentPage(1)
+    }, [searchQuery])
 
     const stats = [
         { label: "Assets Référencés", value: mediaItems.length.toString(), icon: FileImage, color: "text-indigo-600", bg: "bg-indigo-50" },
@@ -202,7 +216,7 @@ export default function AdminMediaPage() {
                                 exit={{ opacity: 0 }}
                                 className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-6"
                             >
-                                {filteredMedia.map((item, i) => (
+                                {currentMedia.map((item, i) => (
                                     <motion.div
                                         key={item.id}
                                         layout
@@ -249,7 +263,7 @@ export default function AdminMediaPage() {
                                         </tr>
                                     </thead>
                                     <tbody className="divide-y divide-gray-50">
-                                        {filteredMedia.map((item) => (
+                                        {currentMedia.map((item) => (
                                             <tr key={item.id} className="group hover:bg-gray-50/50 transition-all cursor-pointer">
                                                 <td className="px-8 py-4">
                                                     <div className="h-14 w-14 rounded-2xl border border-gray-100 overflow-hidden shadow-sm group-hover:rotate-6 transition-transform duration-500">
@@ -264,8 +278,20 @@ export default function AdminMediaPage() {
                                                     <Badge className="bg-gray-50 text-gray-500 text-[9px] font-black tracking-widest px-3 py-1.5 rounded-xl uppercase border border-gray-100/50">{item.type}</Badge>
                                                 </td>
                                                 <td className="px-8 py-4 text-right">
-                                                    <p className="text-[13px] font-black text-gray-900 tabular-nums">{item.size}</p>
-                                                    <p className="text-[10px] text-gray-400 font-bold">{item.date}</p>
+                                                    <div className="flex flex-col items-end">
+                                                        <p className="text-[13px] font-black text-gray-900 tabular-nums">{item.size}</p>
+                                                        <p className="text-[10px] text-gray-400 font-bold">{item.date}</p>
+                                                    </div>
+                                                </td>
+                                                <td className="px-8 py-4 text-right">
+                                                    <div className="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                                                        <Button variant="ghost" size="icon" className="h-9 w-9 text-gray-400 hover:text-indigo-600 hover:bg-indigo-50 rounded-xl" onClick={(e) => { e.stopPropagation(); handleCopyUrl(item.url); }}>
+                                                            <Copy className="h-4 w-4" />
+                                                        </Button>
+                                                        <Button variant="ghost" size="icon" className="h-9 w-9 text-gray-400 hover:text-rose-600 hover:bg-rose-50 rounded-xl" onClick={(e) => { e.stopPropagation(); confirmDelete(item); }}>
+                                                            <Trash2 className="h-4 w-4" />
+                                                        </Button>
+                                                    </div>
                                                 </td>
                                             </tr>
                                         ))}
@@ -276,13 +302,76 @@ export default function AdminMediaPage() {
                     </AnimatePresence>
                 </div>
 
-                <div className="p-8 border-t border-gray-50 flex items-center justify-between bg-gray-50/20 text-[11px] font-black text-gray-400 uppercase tracking-widest">
-                    <p>Audit Assets : {filteredMedia.length} Ressources Actives</p>
-                    <div className="flex items-center gap-4">
-                        <Button variant="ghost" onClick={loadMedia} className="h-8 px-3 rounded-lg text-[10px] font-black uppercase tracking-widest hover:bg-white">
-                            <RefreshCw className={cn("h-3 w-3 mr-2", isLoading && "animate-spin")} /> Database Refresh
+                {/* Advanced Pagination & Audit Bar */}
+                <div className="p-8 border-t border-gray-50 bg-gray-50/20 flex flex-col md:flex-row items-center justify-between gap-6">
+                    <div className="flex items-center gap-6">
+                        <div className="flex flex-col">
+                            <span className="text-[10px] font-black text-gray-400 uppercase tracking-widest leading-none mb-1">Audit Global</span>
+                            <p className="text-[13px] font-black text-gray-900 italic">{filteredMedia.length} Assets <span className="text-gray-300 mx-1">/</span> {mediaItems.length} Total</p>
+                        </div>
+                        <div className="h-8 w-px bg-gray-100 hidden md:block" />
+                        <Button variant="ghost" onClick={loadMedia} className="h-9 px-4 rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-white text-indigo-600">
+                            <RefreshCw className={cn("h-4 w-4 mr-2", isLoading && "animate-spin")} /> Refresh
                         </Button>
                     </div>
+
+                    {totalPages > 1 && (
+                        <div className="flex items-center gap-2">
+                            <Button
+                                variant="outline"
+                                size="sm"
+                                onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
+                                disabled={currentPage === 1}
+                                className="h-10 w-10 p-0 rounded-2xl border-gray-100 hover:bg-white disabled:opacity-30 transition-all"
+                            >
+                                <ChevronLeft className="h-4 w-4" />
+                            </Button>
+
+                            <div className="flex items-center gap-2 px-2">
+                                {[...Array(totalPages)].map((_, i) => {
+                                    const page = i + 1;
+                                    if (
+                                        page === 1 ||
+                                        page === totalPages ||
+                                        (page >= currentPage - 1 && page <= currentPage + 1)
+                                    ) {
+                                        return (
+                                            <Button
+                                                key={page}
+                                                variant={currentPage === page ? "default" : "ghost"}
+                                                size="sm"
+                                                onClick={() => setCurrentPage(page)}
+                                                className={cn(
+                                                    "h-10 w-10 p-0 rounded-2xl transition-all font-black text-[12px] italic",
+                                                    currentPage === page
+                                                        ? "bg-indigo-600 text-white shadow-xl shadow-indigo-100"
+                                                        : "text-gray-400 hover:text-indigo-600 hover:bg-white"
+                                                )}
+                                            >
+                                                {page}
+                                            </Button>
+                                        );
+                                    } else if (
+                                        page === currentPage - 2 ||
+                                        page === currentPage + 2
+                                    ) {
+                                        return <span key={page} className="text-gray-300 text-[10px] font-black">•••</span>;
+                                    }
+                                    return null;
+                                })}
+                            </div>
+
+                            <Button
+                                variant="outline"
+                                size="sm"
+                                onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
+                                disabled={currentPage === totalPages}
+                                className="h-10 w-10 p-0 rounded-2xl border-gray-100 hover:bg-white disabled:opacity-30 transition-all"
+                            >
+                                <ChevronRight className="h-4 w-4" />
+                            </Button>
+                        </div>
+                    )}
                 </div>
             </div>
 

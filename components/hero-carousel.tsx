@@ -91,14 +91,14 @@ export function HeroCarousel() {
                             <div className="container-custom relative z-20 h-full flex flex-col justify-center">
                                 <AnimatePresence mode="wait">
                                     {selectedIndex === index && (
-                                        <div className="max-w-2xl space-y-6">
+                                        <div className="max-w-2xl space-y-4 sm:space-y-6">
                                             <motion.div
                                                 initial={{ opacity: 0, y: 20 }}
                                                 animate={{ opacity: 1, y: 0 }}
                                                 exit={{ opacity: 0, y: -10 }}
                                                 transition={{ duration: 0.8, ease: "easeOut" }}
                                             >
-                                                <h2 className="font-heading text-5xl sm:text-7xl lg:text-8xl font-bold tracking-tight leading-tight text-white drop-shadow-sm">
+                                                <h2 className="font-heading text-4xl sm:text-7xl lg:text-8xl font-bold tracking-tight leading-tight text-white drop-shadow-sm">
                                                     {slide.title}
                                                 </h2>
                                             </motion.div>
@@ -108,7 +108,7 @@ export function HeroCarousel() {
                                                 animate={{ opacity: 1, y: 0 }}
                                                 exit={{ opacity: 0, y: 5 }}
                                                 transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
-                                                className="text-lg sm:text-xl text-white/90 max-w-lg font-medium tracking-tight"
+                                                className="text-base sm:text-xl text-white/90 max-w-lg font-medium tracking-tight"
                                             >
                                                 {slide.subtitle}
                                             </motion.p>
@@ -118,12 +118,12 @@ export function HeroCarousel() {
                                                 animate={{ opacity: 1, scale: 1 }}
                                                 exit={{ opacity: 0, scale: 0.98 }}
                                                 transition={{ duration: 0.6, delay: 0.4 }}
-                                                className="pt-4"
+                                                className="pt-2 sm:pt-4"
                                             >
                                                 <Magnetic>
                                                     <Link
                                                         href={slide.link}
-                                                        className="inline-flex h-14 items-center justify-center bg-white text-black px-10 rounded-xl text-sm font-bold tracking-tight transition-all hover:bg-primary hover:text-primary-foreground shadow-lg"
+                                                        className="inline-flex h-12 sm:h-14 items-center justify-center bg-white text-black px-8 sm:px-10 rounded-xl text-sm font-bold tracking-tight transition-all hover:bg-primary hover:text-primary-foreground shadow-lg active:scale-95"
                                                     >
                                                         {slide.cta}
                                                         <ArrowRight className="ml-2 h-4 w-4" />
@@ -139,24 +139,24 @@ export function HeroCarousel() {
                 </div>
             </div>
 
-            {/* Navigation Arrows */}
-            <div className="absolute bottom-12 right-12 z-30 flex gap-4">
+            {/* Navigation Arrows - Responsive visibility */}
+            <div className="hidden sm:flex absolute bottom-12 right-12 z-30 gap-4">
                 <button
                     onClick={scrollPrev}
-                    className="h-14 w-14 rounded-full border border-white/20 bg-black/20 backdrop-blur-md flex items-center justify-center text-white hover:bg-primary hover:border-transparent transition-all group/btn"
+                    className="h-12 w-12 sm:h-14 sm:w-14 rounded-full border border-white/20 bg-black/20 backdrop-blur-md flex items-center justify-center text-white hover:bg-primary hover:border-transparent transition-all group/btn"
                 >
-                    <ChevronLeft className="h-6 w-6 group-hover/btn:-translate-x-1 transition-transform" />
+                    <ChevronLeft className="h-5 w-5 sm:h-6 sm:w-6 group-hover/btn:-translate-x-1 transition-transform" />
                 </button>
                 <button
                     onClick={scrollNext}
-                    className="h-14 w-14 rounded-full border border-white/20 bg-black/20 backdrop-blur-md flex items-center justify-center text-white hover:bg-primary hover:border-transparent transition-all group/btn"
+                    className="h-12 w-12 sm:h-14 sm:w-14 rounded-full border border-white/20 bg-black/20 backdrop-blur-md flex items-center justify-center text-white hover:bg-primary hover:border-transparent transition-all group/btn"
                 >
-                    <ChevronRight className="h-6 w-6 group-hover/btn:translate-x-1 transition-transform" />
+                    <ChevronRight className="h-5 w-5 sm:h-6 sm:w-6 group-hover/btn:translate-x-1 transition-transform" />
                 </button>
             </div>
 
-            {/* Pagination Dots */}
-            <div className="absolute bottom-12 left-1/2 -translate-x-1/2 z-30 flex items-center gap-4 bg-black/20 backdrop-blur-sm px-6 py-3 rounded-full border border-white/10">
+            {/* Pagination Dots - Positioned for thumb reach */}
+            <div className="absolute bottom-10 sm:bottom-12 left-1/2 -translate-x-1/2 z-30 flex items-center gap-3 bg-black/20 backdrop-blur-sm px-4 sm:px-6 py-2.5 sm:py-3 rounded-full border border-white/10">
                 {HERO_SLIDES.map((_, index) => (
                     <button
                         key={index}

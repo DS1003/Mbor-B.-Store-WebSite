@@ -11,17 +11,19 @@ import { Magnetic } from "@/components/interactions"
 import { Button } from "@/components/ui/button"
 import { useCart } from "@/components/cart-context"
 import { toast } from "sonner"
+import { motion, AnimatePresence } from "framer-motion"
 
 export default function CheckoutPage() {
     const router = useRouter()
     const { data: session } = useSession()
     const { items, subtotal, clearCart } = useCart()
     const [paymentMethod, setPaymentMethod] = React.useState("wave")
+    const [deliveryType, setDeliveryType] = React.useState("delivery") // delivery, pickup
     const [isSubmitting, setIsSubmitting] = React.useState(false)
     const [isSuccess, setIsSuccess] = React.useState(false)
 
-    const delivery = subtotal > 50000 ? 0 : 2500
-    const total = subtotal + delivery
+    const deliveryFee = deliveryType === "delivery" ? (subtotal > 50000 ? 0 : 2000) : 0
+    const total = subtotal + deliveryFee
 
     const [formData, setFormData] = React.useState({
         firstName: session?.user?.name?.split(" ")[0] || "",
@@ -46,6 +48,8 @@ export default function CheckoutPage() {
                 body: JSON.stringify({
                     items,
                     subtotal,
+                    deliveryFee,
+                    deliveryType,
                     totalAmount: total,
                     formData,
                     paymentMethod
@@ -171,33 +175,69 @@ export default function CheckoutPage() {
                                 <div className="flex items-center space-x-5 mb-4">
                                     <div className="h-12 w-12 bg-primary text-primary-foreground rounded-2xl flex items-center justify-center text-lg font-bold">02</div>
                                     <div>
-                                        <h2 className="font-heading text-2xl font-bold tracking-tight">Adresse <span className="text-primary font-medium">Dakar</span></h2>
-                                        <p className="text-[11px] font-bold tracking-widest text-muted-foreground/40 uppercase">Destination du colis</p>
+                                        <h2 className="font-heading text-2xl font-bold tracking-tight">Mode de <span className="text-primary font-medium">Réception</span></h2>
+                                        <p className="text-[11px] font-bold tracking-widest text-muted-foreground/40 uppercase">Dakar & Banlieue</p>
                                     </div>
                                 </div>
-                                <div className="space-y-6">
-                                    <div className="space-y-3">
-                                        <label className="text-[12px] font-bold tracking-tight text-muted-foreground uppercase ml-1">Quartier & Adresse précise</label>
-                                        <input
-                                            type="text"
-                                            value={formData.address}
-                                            onChange={(e) => setFormData({ ...formData, address: e.target.value })}
-                                            className="w-full h-14 bg-muted/40 border border-transparent focus:border-primary/20 focus:bg-background rounded-2xl px-6 text-sm font-semibold outline-none transition-all"
-                                            placeholder="Ex: Sacré-Cœur 3, Villa 900"
-                                            required
-                                        />
-                                    </div>
-                                    <div className="space-y-3">
-                                        <label className="text-[12px] font-bold tracking-tight text-muted-foreground uppercase ml-1">Notes complémentaires (facultatif)</label>
-                                        <textarea
-                                            rows={3}
-                                            value={formData.notes}
-                                            onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
-                                            className="w-full bg-muted/40 border border-transparent focus:border-primary/20 focus:bg-background rounded-[2rem] p-6 text-sm font-semibold outline-none transition-all"
-                                            placeholder="Précisez un étage ou un point de repère..."
-                                        />
-                                    </div>
+
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <button
+                                        onClick={() => setDeliveryType("delivery")}
+                                        className={`p-6 rounded-[2rem] border-2 text-left transition-all ${deliveryType === "delivery" ? "border-primary bg-primary/5 shadow-lg" : "border-muted/20 bg-muted/5 hover:border-muted/40"}`}
+                                    >
+                                        <div className="flex items-center justify-between mb-2">
+                                            <Truck className={`h-6 w-6 ${deliveryType === "delivery" ? "text-primary" : "text-muted-foreground"}`} />
+                                            {deliveryType === "delivery" && <CheckCircle2 className="h-5 w-5 text-primary" />}
+                                        </div>
+                                        <p className="font-bold text-sm">Livraison à domicile</p>
+                                        <p className="text-[11px] text-muted-foreground font-medium">Dakar (+2.000 FCFA)</p>
+                                    </button>
+
+                                    <button
+                                        onClick={() => setDeliveryType("pickup")}
+                                        className={`p-6 rounded-[2rem] border-2 text-left transition-all ${deliveryType === "pickup" ? "border-primary bg-primary/5 shadow-lg" : "border-muted/20 bg-muted/5 hover:border-muted/40"}`}
+                                    >
+                                        <div className="flex items-center justify-between mb-2">
+                                            <ShoppingBag className={`h-6 w-6 ${deliveryType === "pickup" ? "text-primary" : "text-muted-foreground"}`} />
+                                            {deliveryType === "pickup" && <CheckCircle2 className="h-5 w-5 text-primary" />}
+                                        </div>
+                                        <p className="font-bold text-sm">Récupérer sur place</p>
+                                        <p className="text-[11px] text-muted-foreground font-medium">Boutique (Gratuit)</p>
+                                    </button>
                                 </div>
+
+                                <AnimatePresence mode="wait">
+                                    {deliveryType === "delivery" && (
+                                        <motion.div
+                                            initial={{ opacity: 0, height: 0 }}
+                                            animate={{ opacity: 1, height: "auto" }}
+                                            exit={{ opacity: 0, height: 0 }}
+                                            className="space-y-6 pt-4"
+                                        >
+                                            <div className="space-y-3">
+                                                <label className="text-[12px] font-bold tracking-tight text-muted-foreground uppercase ml-1">Quartier & Adresse précise</label>
+                                                <input
+                                                    type="text"
+                                                    value={formData.address}
+                                                    onChange={(e) => setFormData({ ...formData, address: e.target.value })}
+                                                    className="w-full h-14 bg-muted/40 border border-transparent focus:border-primary/20 focus:bg-background rounded-2xl px-6 text-sm font-semibold outline-none transition-all"
+                                                    placeholder="Ex: Sacré-Cœur 3, Villa 900"
+                                                    required
+                                                />
+                                            </div>
+                                            <div className="space-y-3">
+                                                <label className="text-[12px] font-bold tracking-tight text-muted-foreground uppercase ml-1">Notes complémentaires (facultatif)</label>
+                                                <textarea
+                                                    rows={3}
+                                                    value={formData.notes}
+                                                    onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
+                                                    className="w-full bg-muted/40 border border-transparent focus:border-primary/20 focus:bg-background rounded-[2rem] p-6 text-sm font-semibold outline-none transition-all"
+                                                    placeholder="Précisez un étage ou un point de repère..."
+                                                />
+                                            </div>
+                                        </motion.div>
+                                    )}
+                                </AnimatePresence>
                             </ScrollReveal>
 
                             <ScrollReveal direction="left" delay={0.3} className="space-y-8 bg-card border border-muted/60 p-10 rounded-[2.5rem] shadow-sm shadow-black/5">
@@ -210,9 +250,9 @@ export default function CheckoutPage() {
                                 </div>
                                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                                     {[
-                                        { id: "wave", label: "Wave", desc: "Paiement direct", color: "bg-[#1E90FF]" },
-                                        { id: "om", label: "O. Money", desc: "Instantané", color: "bg-[#FF6600]" },
-                                        { id: "cash", label: "Espèce", desc: "À la livraison", color: "bg-black" }
+                                        { id: "wave", label: "Wave", desc: "Digital", logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/c/ca/Wave_Logo.svg/2560px-Wave_Logo.svg.png" },
+                                        { id: "om", label: "O. Money", desc: "Digital", logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e0/Orange_Money_logo.svg/2048px-Orange_Money_logo.svg.png" },
+                                        { id: "cash", label: "Espèce", desc: "Cash", logo: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRkY8O_08x7F-KOfhG4_KiwU8N5C93l23p33g&s" }
                                     ].map((m) => (
                                         <button
                                             key={m.id}
@@ -222,8 +262,8 @@ export default function CheckoutPage() {
                                                 : "border-muted/60 bg-muted/10 hover:bg-muted/30"
                                                 }`}
                                         >
-                                            <div className={`h-11 w-11 ${m.color} rounded-xl flex items-center justify-center text-[10px] font-bold text-white uppercase`}>
-                                                {m.label.substring(0, 2)}
+                                            <div className="h-16 w-16 relative overflow-hidden rounded-2xl">
+                                                <Image src={m.logo} alt={m.label} fill className="object-contain p-1" />
                                             </div>
                                             <div className="text-center">
                                                 <p className="text-[13px] font-bold tracking-tight leading-none mb-1">{m.label}</p>
@@ -276,7 +316,7 @@ export default function CheckoutPage() {
                                         </div>
                                         <div className="flex justify-between text-[13px] font-medium text-white/40 px-2">
                                             <span>Livraison (Dakar)</span>
-                                            <span className="text-white font-bold">{delivery === 0 ? "Offerte" : `${delivery.toLocaleString()} FCFA`}</span>
+                                            <span className="text-white font-bold">{deliveryFee === 0 ? (deliveryType === "pickup" ? "Gratuit" : "Offerte") : `${deliveryFee.toLocaleString()} FCFA`}</span>
                                         </div>
                                         <div className="pt-6 flex justify-between items-end px-2">
                                             <span className="text-[11px] font-bold tracking-widest text-primary uppercase">Total</span>

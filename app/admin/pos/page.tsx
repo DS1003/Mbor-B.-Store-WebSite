@@ -46,6 +46,7 @@ export default function POSPage() {
     const [printOrder, setPrintOrder] = React.useState<any>(null)
     const [paymentMethod, setPaymentMethod] = React.useState("CASH")
     const [globalDiscount, setGlobalDiscount] = React.useState<number>(0) // 0, 5, 10, 20 percentage
+    const [deliveryType, setDeliveryType] = React.useState("PICKUP") // PICKUP, DELIVERY
 
     const loadData = React.useCallback(async () => {
         setIsLoading(true)
@@ -111,18 +112,24 @@ export default function POSPage() {
         ))
     }
 
-    const posTotal = React.useMemo(() => {
-        const subtotal = posItems.reduce((acc, current) => {
+    const posSubtotal = React.useMemo(() => {
+        return posItems.reduce((acc, current) => {
             const itemPrice = current.hasCustomization ? current.price + 2000 : current.price
             const discountedPrice = Math.max(0, itemPrice - (current.manualDiscount || 0))
             return acc + (discountedPrice * current.quantity)
         }, 0)
+    }, [posItems])
 
+    const posTotal = React.useMemo(() => {
+        let total = posSubtotal
         if (globalDiscount > 0) {
-            return subtotal * (1 - globalDiscount / 100)
+            total = total * (1 - globalDiscount / 100)
         }
-        return subtotal
-    }, [posItems, globalDiscount])
+        if (deliveryType === "DELIVERY") {
+            total += 2000
+        }
+        return total
+    }, [posSubtotal, globalDiscount, deliveryType])
 
     const handleCreatePosOrder = async () => {
         if (!posCustomerName) return toast.error("Nom du client requis")
@@ -135,6 +142,8 @@ export default function POSPage() {
                 customerPhone: posCustomerPhone,
                 customerAddress: posCustomerAddress,
                 paymentMethod: paymentMethod,
+                deliveryType: deliveryType,
+                deliveryFee: deliveryType === "DELIVERY" ? 2000 : 0,
                 items: posItems.map(i => {
                     // Calculate effective unit price with item discount and global discount
                     const basePrice = i.hasCustomization ? i.price + 2000 : i.price
@@ -428,12 +437,34 @@ export default function POSPage() {
 
                         <Separator className="bg-gray-100" />
 
-                        <div className="flex justify-between items-center">
-                            <div className="space-y-0.5">
-                                <p className="text-[11px] font-black text-gray-400 uppercase tracking-widest">Montant Total</p>
-                                <p className="text-[10px] font-bold text-indigo-400 italic">Net à payer immédiatement</p>
+                        <Separator className="bg-gray-100" />
+
+                        <div className="space-y-3">
+                            <div className="flex justify-between items-center">
+                                <span className="text-[11px] font-bold text-gray-400 uppercase">Sous-total</span>
+                                <span className="text-[14px] font-black text-gray-600 tabular-nums">{Math.round(posSubtotal).toLocaleString()} F</span>
                             </div>
-                            <span className="text-4xl font-black text-gray-900 tabular-nums italic tracking-tighter shrink-0">{Number(posTotal).toLocaleString()} F</span>
+
+                            <div className="flex justify-between items-center bg-gray-50 p-4 rounded-2xl border border-gray-100">
+                                <div className="flex flex-col gap-0.5">
+                                    <span className="text-[11px] font-black text-gray-900 uppercase">Livraison Dakar</span>
+                                    <span className="text-[9px] text-gray-400 font-bold">+2.000 FCFA</span>
+                                </div>
+                                <Switch
+                                    checked={deliveryType === "DELIVERY"}
+                                    onCheckedChange={(val) => setDeliveryType(val ? "DELIVERY" : "PICKUP")}
+                                />
+                            </div>
+
+                            <Separator className="bg-gray-100" />
+
+                            <div className="flex justify-between items-center pt-2">
+                                <div className="space-y-0.5">
+                                    <p className="text-[11px] font-black text-gray-400 uppercase tracking-widest">Net à payer</p>
+                                    <p className="text-[10px] font-bold text-indigo-400 italic">Tout inclus</p>
+                                </div>
+                                <span className="text-4xl font-black text-gray-900 tabular-nums italic tracking-tighter shrink-0">{Math.round(posTotal).toLocaleString()} F</span>
+                            </div>
                         </div>
 
                         {/* Global Discount Toggles */}

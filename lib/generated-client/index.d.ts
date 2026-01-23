@@ -1987,22 +1987,22 @@ export namespace Prisma {
 
   export type UserCountOutputType = {
     accounts: number
-    sessions: number
-    orders: number
     addresses: number
-    reviews: number
-    favorites: number
+    orders: number
     paymentMethods: number
+    reviews: number
+    sessions: number
+    favorites: number
   }
 
   export type UserCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     accounts?: boolean | UserCountOutputTypeCountAccountsArgs
-    sessions?: boolean | UserCountOutputTypeCountSessionsArgs
-    orders?: boolean | UserCountOutputTypeCountOrdersArgs
     addresses?: boolean | UserCountOutputTypeCountAddressesArgs
-    reviews?: boolean | UserCountOutputTypeCountReviewsArgs
-    favorites?: boolean | UserCountOutputTypeCountFavoritesArgs
+    orders?: boolean | UserCountOutputTypeCountOrdersArgs
     paymentMethods?: boolean | UserCountOutputTypeCountPaymentMethodsArgs
+    reviews?: boolean | UserCountOutputTypeCountReviewsArgs
+    sessions?: boolean | UserCountOutputTypeCountSessionsArgs
+    favorites?: boolean | UserCountOutputTypeCountFavoritesArgs
   }
 
   // Custom InputTypes
@@ -2026,8 +2026,8 @@ export namespace Prisma {
   /**
    * UserCountOutputType without action
    */
-  export type UserCountOutputTypeCountSessionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: SessionWhereInput
+  export type UserCountOutputTypeCountAddressesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: AddressWhereInput
   }
 
   /**
@@ -2040,8 +2040,8 @@ export namespace Prisma {
   /**
    * UserCountOutputType without action
    */
-  export type UserCountOutputTypeCountAddressesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: AddressWhereInput
+  export type UserCountOutputTypeCountPaymentMethodsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: PaymentMethodWhereInput
   }
 
   /**
@@ -2054,15 +2054,15 @@ export namespace Prisma {
   /**
    * UserCountOutputType without action
    */
-  export type UserCountOutputTypeCountFavoritesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: ProductWhereInput
+  export type UserCountOutputTypeCountSessionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: SessionWhereInput
   }
 
   /**
    * UserCountOutputType without action
    */
-  export type UserCountOutputTypeCountPaymentMethodsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: PaymentMethodWhereInput
+  export type UserCountOutputTypeCountFavoritesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ProductWhereInput
   }
 
 
@@ -2071,15 +2071,15 @@ export namespace Prisma {
    */
 
   export type ProductCountOutputType = {
-    sizes: number
     orderItems: number
+    sizes: number
     reviews: number
     favoritedBy: number
   }
 
   export type ProductCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    sizes?: boolean | ProductCountOutputTypeCountSizesArgs
     orderItems?: boolean | ProductCountOutputTypeCountOrderItemsArgs
+    sizes?: boolean | ProductCountOutputTypeCountSizesArgs
     reviews?: boolean | ProductCountOutputTypeCountReviewsArgs
     favoritedBy?: boolean | ProductCountOutputTypeCountFavoritedByArgs
   }
@@ -2098,15 +2098,15 @@ export namespace Prisma {
   /**
    * ProductCountOutputType without action
    */
-  export type ProductCountOutputTypeCountSizesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: ProductSizeWhereInput
+  export type ProductCountOutputTypeCountOrderItemsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: OrderItemWhereInput
   }
 
   /**
    * ProductCountOutputType without action
    */
-  export type ProductCountOutputTypeCountOrderItemsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: OrderItemWhereInput
+  export type ProductCountOutputTypeCountSizesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ProductSizeWhereInput
   }
 
   /**
@@ -2202,76 +2202,76 @@ export namespace Prisma {
 
   export type UserMinAggregateOutputType = {
     id: string | null
-    name: string | null
     email: string | null
-    emailVerified: Date | null
-    image: string | null
     password: string | null
+    name: string | null
     role: $Enums.Role | null
     createdAt: Date | null
     updatedAt: Date | null
+    emailVerified: Date | null
+    image: string | null
   }
 
   export type UserMaxAggregateOutputType = {
     id: string | null
-    name: string | null
     email: string | null
-    emailVerified: Date | null
-    image: string | null
     password: string | null
+    name: string | null
     role: $Enums.Role | null
     createdAt: Date | null
     updatedAt: Date | null
+    emailVerified: Date | null
+    image: string | null
   }
 
   export type UserCountAggregateOutputType = {
     id: number
-    name: number
     email: number
-    emailVerified: number
-    image: number
     password: number
+    name: number
     role: number
     createdAt: number
     updatedAt: number
+    emailVerified: number
+    image: number
     _all: number
   }
 
 
   export type UserMinAggregateInputType = {
     id?: true
-    name?: true
     email?: true
-    emailVerified?: true
-    image?: true
     password?: true
+    name?: true
     role?: true
     createdAt?: true
     updatedAt?: true
+    emailVerified?: true
+    image?: true
   }
 
   export type UserMaxAggregateInputType = {
     id?: true
-    name?: true
     email?: true
-    emailVerified?: true
-    image?: true
     password?: true
+    name?: true
     role?: true
     createdAt?: true
     updatedAt?: true
+    emailVerified?: true
+    image?: true
   }
 
   export type UserCountAggregateInputType = {
     id?: true
-    name?: true
     email?: true
-    emailVerified?: true
-    image?: true
     password?: true
+    name?: true
     role?: true
     createdAt?: true
     updatedAt?: true
+    emailVerified?: true
+    image?: true
     _all?: true
   }
 
@@ -2349,14 +2349,14 @@ export namespace Prisma {
 
   export type UserGroupByOutputType = {
     id: string
-    name: string | null
     email: string | null
-    emailVerified: Date | null
-    image: string | null
     password: string | null
+    name: string | null
     role: $Enums.Role
     createdAt: Date
     updatedAt: Date
+    emailVerified: Date | null
+    image: string | null
     _count: UserCountAggregateOutputType | null
     _min: UserMinAggregateOutputType | null
     _max: UserMaxAggregateOutputType | null
@@ -2378,69 +2378,69 @@ export namespace Prisma {
 
   export type UserSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    name?: boolean
     email?: boolean
-    emailVerified?: boolean
-    image?: boolean
     password?: boolean
+    name?: boolean
     role?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    emailVerified?: boolean
+    image?: boolean
     accounts?: boolean | User$accountsArgs<ExtArgs>
-    sessions?: boolean | User$sessionsArgs<ExtArgs>
-    orders?: boolean | User$ordersArgs<ExtArgs>
     addresses?: boolean | User$addressesArgs<ExtArgs>
-    reviews?: boolean | User$reviewsArgs<ExtArgs>
-    favorites?: boolean | User$favoritesArgs<ExtArgs>
+    orders?: boolean | User$ordersArgs<ExtArgs>
     paymentMethods?: boolean | User$paymentMethodsArgs<ExtArgs>
+    reviews?: boolean | User$reviewsArgs<ExtArgs>
+    sessions?: boolean | User$sessionsArgs<ExtArgs>
+    favorites?: boolean | User$favoritesArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
   export type UserSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    name?: boolean
     email?: boolean
-    emailVerified?: boolean
-    image?: boolean
     password?: boolean
+    name?: boolean
     role?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    emailVerified?: boolean
+    image?: boolean
   }, ExtArgs["result"]["user"]>
 
   export type UserSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    name?: boolean
     email?: boolean
-    emailVerified?: boolean
-    image?: boolean
     password?: boolean
+    name?: boolean
     role?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    emailVerified?: boolean
+    image?: boolean
   }, ExtArgs["result"]["user"]>
 
   export type UserSelectScalar = {
     id?: boolean
-    name?: boolean
     email?: boolean
-    emailVerified?: boolean
-    image?: boolean
     password?: boolean
+    name?: boolean
     role?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    emailVerified?: boolean
+    image?: boolean
   }
 
-  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "email" | "emailVerified" | "image" | "password" | "role" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
+  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "email" | "password" | "name" | "role" | "createdAt" | "updatedAt" | "emailVerified" | "image", ExtArgs["result"]["user"]>
   export type UserInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     accounts?: boolean | User$accountsArgs<ExtArgs>
-    sessions?: boolean | User$sessionsArgs<ExtArgs>
-    orders?: boolean | User$ordersArgs<ExtArgs>
     addresses?: boolean | User$addressesArgs<ExtArgs>
-    reviews?: boolean | User$reviewsArgs<ExtArgs>
-    favorites?: boolean | User$favoritesArgs<ExtArgs>
+    orders?: boolean | User$ordersArgs<ExtArgs>
     paymentMethods?: boolean | User$paymentMethodsArgs<ExtArgs>
+    reviews?: boolean | User$reviewsArgs<ExtArgs>
+    sessions?: boolean | User$sessionsArgs<ExtArgs>
+    favorites?: boolean | User$favoritesArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type UserIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -2450,23 +2450,23 @@ export namespace Prisma {
     name: "User"
     objects: {
       accounts: Prisma.$AccountPayload<ExtArgs>[]
-      sessions: Prisma.$SessionPayload<ExtArgs>[]
-      orders: Prisma.$OrderPayload<ExtArgs>[]
       addresses: Prisma.$AddressPayload<ExtArgs>[]
-      reviews: Prisma.$ReviewPayload<ExtArgs>[]
-      favorites: Prisma.$ProductPayload<ExtArgs>[]
+      orders: Prisma.$OrderPayload<ExtArgs>[]
       paymentMethods: Prisma.$PaymentMethodPayload<ExtArgs>[]
+      reviews: Prisma.$ReviewPayload<ExtArgs>[]
+      sessions: Prisma.$SessionPayload<ExtArgs>[]
+      favorites: Prisma.$ProductPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
-      name: string | null
       email: string | null
-      emailVerified: Date | null
-      image: string | null
       password: string | null
+      name: string | null
       role: $Enums.Role
       createdAt: Date
       updatedAt: Date
+      emailVerified: Date | null
+      image: string | null
     }, ExtArgs["result"]["user"]>
     composites: {}
   }
@@ -2862,12 +2862,12 @@ export namespace Prisma {
   export interface Prisma__UserClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     accounts<T extends User$accountsArgs<ExtArgs> = {}>(args?: Subset<T, User$accountsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AccountPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    sessions<T extends User$sessionsArgs<ExtArgs> = {}>(args?: Subset<T, User$sessionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SessionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    orders<T extends User$ordersArgs<ExtArgs> = {}>(args?: Subset<T, User$ordersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$OrderPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     addresses<T extends User$addressesArgs<ExtArgs> = {}>(args?: Subset<T, User$addressesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AddressPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    reviews<T extends User$reviewsArgs<ExtArgs> = {}>(args?: Subset<T, User$reviewsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ReviewPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    favorites<T extends User$favoritesArgs<ExtArgs> = {}>(args?: Subset<T, User$favoritesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProductPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    orders<T extends User$ordersArgs<ExtArgs> = {}>(args?: Subset<T, User$ordersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$OrderPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     paymentMethods<T extends User$paymentMethodsArgs<ExtArgs> = {}>(args?: Subset<T, User$paymentMethodsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PaymentMethodPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    reviews<T extends User$reviewsArgs<ExtArgs> = {}>(args?: Subset<T, User$reviewsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ReviewPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    sessions<T extends User$sessionsArgs<ExtArgs> = {}>(args?: Subset<T, User$sessionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SessionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    favorites<T extends User$favoritesArgs<ExtArgs> = {}>(args?: Subset<T, User$favoritesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProductPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2898,14 +2898,14 @@ export namespace Prisma {
    */
   interface UserFieldRefs {
     readonly id: FieldRef<"User", 'String'>
-    readonly name: FieldRef<"User", 'String'>
     readonly email: FieldRef<"User", 'String'>
-    readonly emailVerified: FieldRef<"User", 'DateTime'>
-    readonly image: FieldRef<"User", 'String'>
     readonly password: FieldRef<"User", 'String'>
+    readonly name: FieldRef<"User", 'String'>
     readonly role: FieldRef<"User", 'Role'>
     readonly createdAt: FieldRef<"User", 'DateTime'>
     readonly updatedAt: FieldRef<"User", 'DateTime'>
+    readonly emailVerified: FieldRef<"User", 'DateTime'>
+    readonly image: FieldRef<"User", 'String'>
   }
     
 
@@ -3318,27 +3318,27 @@ export namespace Prisma {
   }
 
   /**
-   * User.sessions
+   * User.addresses
    */
-  export type User$sessionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type User$addressesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Session
+     * Select specific fields to fetch from the Address
      */
-    select?: SessionSelect<ExtArgs> | null
+    select?: AddressSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Session
+     * Omit specific fields from the Address
      */
-    omit?: SessionOmit<ExtArgs> | null
+    omit?: AddressOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: SessionInclude<ExtArgs> | null
-    where?: SessionWhereInput
-    orderBy?: SessionOrderByWithRelationInput | SessionOrderByWithRelationInput[]
-    cursor?: SessionWhereUniqueInput
+    include?: AddressInclude<ExtArgs> | null
+    where?: AddressWhereInput
+    orderBy?: AddressOrderByWithRelationInput | AddressOrderByWithRelationInput[]
+    cursor?: AddressWhereUniqueInput
     take?: number
     skip?: number
-    distinct?: SessionScalarFieldEnum | SessionScalarFieldEnum[]
+    distinct?: AddressScalarFieldEnum | AddressScalarFieldEnum[]
   }
 
   /**
@@ -3366,27 +3366,27 @@ export namespace Prisma {
   }
 
   /**
-   * User.addresses
+   * User.paymentMethods
    */
-  export type User$addressesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type User$paymentMethodsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Address
+     * Select specific fields to fetch from the PaymentMethod
      */
-    select?: AddressSelect<ExtArgs> | null
+    select?: PaymentMethodSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Address
+     * Omit specific fields from the PaymentMethod
      */
-    omit?: AddressOmit<ExtArgs> | null
+    omit?: PaymentMethodOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: AddressInclude<ExtArgs> | null
-    where?: AddressWhereInput
-    orderBy?: AddressOrderByWithRelationInput | AddressOrderByWithRelationInput[]
-    cursor?: AddressWhereUniqueInput
+    include?: PaymentMethodInclude<ExtArgs> | null
+    where?: PaymentMethodWhereInput
+    orderBy?: PaymentMethodOrderByWithRelationInput | PaymentMethodOrderByWithRelationInput[]
+    cursor?: PaymentMethodWhereUniqueInput
     take?: number
     skip?: number
-    distinct?: AddressScalarFieldEnum | AddressScalarFieldEnum[]
+    distinct?: PaymentMethodScalarFieldEnum | PaymentMethodScalarFieldEnum[]
   }
 
   /**
@@ -3414,6 +3414,30 @@ export namespace Prisma {
   }
 
   /**
+   * User.sessions
+   */
+  export type User$sessionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Session
+     */
+    select?: SessionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Session
+     */
+    omit?: SessionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SessionInclude<ExtArgs> | null
+    where?: SessionWhereInput
+    orderBy?: SessionOrderByWithRelationInput | SessionOrderByWithRelationInput[]
+    cursor?: SessionWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: SessionScalarFieldEnum | SessionScalarFieldEnum[]
+  }
+
+  /**
    * User.favorites
    */
   export type User$favoritesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -3435,30 +3459,6 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: ProductScalarFieldEnum | ProductScalarFieldEnum[]
-  }
-
-  /**
-   * User.paymentMethods
-   */
-  export type User$paymentMethodsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the PaymentMethod
-     */
-    select?: PaymentMethodSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the PaymentMethod
-     */
-    omit?: PaymentMethodOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: PaymentMethodInclude<ExtArgs> | null
-    where?: PaymentMethodWhereInput
-    orderBy?: PaymentMethodOrderByWithRelationInput | PaymentMethodOrderByWithRelationInput[]
-    cursor?: PaymentMethodWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: PaymentMethodScalarFieldEnum | PaymentMethodScalarFieldEnum[]
   }
 
   /**
@@ -8937,14 +8937,14 @@ export namespace Prisma {
 
   export type ProductAvgAggregateOutputType = {
     price: Decimal | null
-    discountPrice: Decimal | null
     stock: number | null
+    discountPrice: Decimal | null
   }
 
   export type ProductSumAggregateOutputType = {
     price: Decimal | null
-    discountPrice: Decimal | null
     stock: number | null
+    discountPrice: Decimal | null
   }
 
   export type ProductMinAggregateOutputType = {
@@ -8952,15 +8952,15 @@ export namespace Prisma {
     name: string | null
     description: string | null
     price: Decimal | null
-    discountPrice: Decimal | null
     stock: number | null
-    categoryId: string | null
-    subCategory: string | null
     featured: boolean | null
-    allowFlocage: boolean | null
-    allowGravure: boolean | null
     createdAt: Date | null
     updatedAt: Date | null
+    allowFlocage: boolean | null
+    allowGravure: boolean | null
+    discountPrice: Decimal | null
+    subCategory: string | null
+    categoryId: string | null
   }
 
   export type ProductMaxAggregateOutputType = {
@@ -8968,15 +8968,15 @@ export namespace Prisma {
     name: string | null
     description: string | null
     price: Decimal | null
-    discountPrice: Decimal | null
     stock: number | null
-    categoryId: string | null
-    subCategory: string | null
     featured: boolean | null
-    allowFlocage: boolean | null
-    allowGravure: boolean | null
     createdAt: Date | null
     updatedAt: Date | null
+    allowFlocage: boolean | null
+    allowGravure: boolean | null
+    discountPrice: Decimal | null
+    subCategory: string | null
+    categoryId: string | null
   }
 
   export type ProductCountAggregateOutputType = {
@@ -8984,30 +8984,30 @@ export namespace Prisma {
     name: number
     description: number
     price: number
-    discountPrice: number
     stock: number
-    categoryId: number
-    subCategory: number
     images: number
     featured: number
-    allowFlocage: number
-    allowGravure: number
     createdAt: number
     updatedAt: number
+    allowFlocage: number
+    allowGravure: number
+    discountPrice: number
+    subCategory: number
+    categoryId: number
     _all: number
   }
 
 
   export type ProductAvgAggregateInputType = {
     price?: true
-    discountPrice?: true
     stock?: true
+    discountPrice?: true
   }
 
   export type ProductSumAggregateInputType = {
     price?: true
-    discountPrice?: true
     stock?: true
+    discountPrice?: true
   }
 
   export type ProductMinAggregateInputType = {
@@ -9015,15 +9015,15 @@ export namespace Prisma {
     name?: true
     description?: true
     price?: true
-    discountPrice?: true
     stock?: true
-    categoryId?: true
-    subCategory?: true
     featured?: true
-    allowFlocage?: true
-    allowGravure?: true
     createdAt?: true
     updatedAt?: true
+    allowFlocage?: true
+    allowGravure?: true
+    discountPrice?: true
+    subCategory?: true
+    categoryId?: true
   }
 
   export type ProductMaxAggregateInputType = {
@@ -9031,15 +9031,15 @@ export namespace Prisma {
     name?: true
     description?: true
     price?: true
-    discountPrice?: true
     stock?: true
-    categoryId?: true
-    subCategory?: true
     featured?: true
-    allowFlocage?: true
-    allowGravure?: true
     createdAt?: true
     updatedAt?: true
+    allowFlocage?: true
+    allowGravure?: true
+    discountPrice?: true
+    subCategory?: true
+    categoryId?: true
   }
 
   export type ProductCountAggregateInputType = {
@@ -9047,16 +9047,16 @@ export namespace Prisma {
     name?: true
     description?: true
     price?: true
-    discountPrice?: true
     stock?: true
-    categoryId?: true
-    subCategory?: true
     images?: true
     featured?: true
-    allowFlocage?: true
-    allowGravure?: true
     createdAt?: true
     updatedAt?: true
+    allowFlocage?: true
+    allowGravure?: true
+    discountPrice?: true
+    subCategory?: true
+    categoryId?: true
     _all?: true
   }
 
@@ -9151,16 +9151,16 @@ export namespace Prisma {
     name: string
     description: string | null
     price: Decimal
-    discountPrice: Decimal | null
     stock: number
-    categoryId: string | null
-    subCategory: string | null
     images: string[]
     featured: boolean
-    allowFlocage: boolean
-    allowGravure: boolean
     createdAt: Date
     updatedAt: Date
+    allowFlocage: boolean
+    allowGravure: boolean
+    discountPrice: Decimal | null
+    subCategory: string | null
+    categoryId: string | null
     _count: ProductCountAggregateOutputType | null
     _avg: ProductAvgAggregateOutputType | null
     _sum: ProductSumAggregateOutputType | null
@@ -9187,19 +9187,19 @@ export namespace Prisma {
     name?: boolean
     description?: boolean
     price?: boolean
-    discountPrice?: boolean
     stock?: boolean
-    categoryId?: boolean
-    subCategory?: boolean
     images?: boolean
     featured?: boolean
-    allowFlocage?: boolean
-    allowGravure?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    allowFlocage?: boolean
+    allowGravure?: boolean
+    discountPrice?: boolean
+    subCategory?: boolean
+    categoryId?: boolean
+    orderItems?: boolean | Product$orderItemsArgs<ExtArgs>
     category?: boolean | Product$categoryArgs<ExtArgs>
     sizes?: boolean | Product$sizesArgs<ExtArgs>
-    orderItems?: boolean | Product$orderItemsArgs<ExtArgs>
     reviews?: boolean | Product$reviewsArgs<ExtArgs>
     favoritedBy?: boolean | Product$favoritedByArgs<ExtArgs>
     _count?: boolean | ProductCountOutputTypeDefaultArgs<ExtArgs>
@@ -9210,16 +9210,16 @@ export namespace Prisma {
     name?: boolean
     description?: boolean
     price?: boolean
-    discountPrice?: boolean
     stock?: boolean
-    categoryId?: boolean
-    subCategory?: boolean
     images?: boolean
     featured?: boolean
-    allowFlocage?: boolean
-    allowGravure?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    allowFlocage?: boolean
+    allowGravure?: boolean
+    discountPrice?: boolean
+    subCategory?: boolean
+    categoryId?: boolean
     category?: boolean | Product$categoryArgs<ExtArgs>
   }, ExtArgs["result"]["product"]>
 
@@ -9228,16 +9228,16 @@ export namespace Prisma {
     name?: boolean
     description?: boolean
     price?: boolean
-    discountPrice?: boolean
     stock?: boolean
-    categoryId?: boolean
-    subCategory?: boolean
     images?: boolean
     featured?: boolean
-    allowFlocage?: boolean
-    allowGravure?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    allowFlocage?: boolean
+    allowGravure?: boolean
+    discountPrice?: boolean
+    subCategory?: boolean
+    categoryId?: boolean
     category?: boolean | Product$categoryArgs<ExtArgs>
   }, ExtArgs["result"]["product"]>
 
@@ -9246,23 +9246,23 @@ export namespace Prisma {
     name?: boolean
     description?: boolean
     price?: boolean
-    discountPrice?: boolean
     stock?: boolean
-    categoryId?: boolean
-    subCategory?: boolean
     images?: boolean
     featured?: boolean
-    allowFlocage?: boolean
-    allowGravure?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    allowFlocage?: boolean
+    allowGravure?: boolean
+    discountPrice?: boolean
+    subCategory?: boolean
+    categoryId?: boolean
   }
 
-  export type ProductOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "description" | "price" | "discountPrice" | "stock" | "categoryId" | "subCategory" | "images" | "featured" | "allowFlocage" | "allowGravure" | "createdAt" | "updatedAt", ExtArgs["result"]["product"]>
+  export type ProductOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "description" | "price" | "stock" | "images" | "featured" | "createdAt" | "updatedAt" | "allowFlocage" | "allowGravure" | "discountPrice" | "subCategory" | "categoryId", ExtArgs["result"]["product"]>
   export type ProductInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    orderItems?: boolean | Product$orderItemsArgs<ExtArgs>
     category?: boolean | Product$categoryArgs<ExtArgs>
     sizes?: boolean | Product$sizesArgs<ExtArgs>
-    orderItems?: boolean | Product$orderItemsArgs<ExtArgs>
     reviews?: boolean | Product$reviewsArgs<ExtArgs>
     favoritedBy?: boolean | Product$favoritedByArgs<ExtArgs>
     _count?: boolean | ProductCountOutputTypeDefaultArgs<ExtArgs>
@@ -9277,9 +9277,9 @@ export namespace Prisma {
   export type $ProductPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Product"
     objects: {
+      orderItems: Prisma.$OrderItemPayload<ExtArgs>[]
       category: Prisma.$CategoryPayload<ExtArgs> | null
       sizes: Prisma.$ProductSizePayload<ExtArgs>[]
-      orderItems: Prisma.$OrderItemPayload<ExtArgs>[]
       reviews: Prisma.$ReviewPayload<ExtArgs>[]
       favoritedBy: Prisma.$UserPayload<ExtArgs>[]
     }
@@ -9288,16 +9288,16 @@ export namespace Prisma {
       name: string
       description: string | null
       price: Prisma.Decimal
-      discountPrice: Prisma.Decimal | null
       stock: number
-      categoryId: string | null
-      subCategory: string | null
       images: string[]
       featured: boolean
-      allowFlocage: boolean
-      allowGravure: boolean
       createdAt: Date
       updatedAt: Date
+      allowFlocage: boolean
+      allowGravure: boolean
+      discountPrice: Prisma.Decimal | null
+      subCategory: string | null
+      categoryId: string | null
     }, ExtArgs["result"]["product"]>
     composites: {}
   }
@@ -9692,9 +9692,9 @@ export namespace Prisma {
    */
   export interface Prisma__ProductClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
+    orderItems<T extends Product$orderItemsArgs<ExtArgs> = {}>(args?: Subset<T, Product$orderItemsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$OrderItemPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     category<T extends Product$categoryArgs<ExtArgs> = {}>(args?: Subset<T, Product$categoryArgs<ExtArgs>>): Prisma__CategoryClient<$Result.GetResult<Prisma.$CategoryPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     sizes<T extends Product$sizesArgs<ExtArgs> = {}>(args?: Subset<T, Product$sizesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProductSizePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    orderItems<T extends Product$orderItemsArgs<ExtArgs> = {}>(args?: Subset<T, Product$orderItemsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$OrderItemPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     reviews<T extends Product$reviewsArgs<ExtArgs> = {}>(args?: Subset<T, Product$reviewsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ReviewPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     favoritedBy<T extends Product$favoritedByArgs<ExtArgs> = {}>(args?: Subset<T, Product$favoritedByArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
@@ -9730,16 +9730,16 @@ export namespace Prisma {
     readonly name: FieldRef<"Product", 'String'>
     readonly description: FieldRef<"Product", 'String'>
     readonly price: FieldRef<"Product", 'Decimal'>
-    readonly discountPrice: FieldRef<"Product", 'Decimal'>
     readonly stock: FieldRef<"Product", 'Int'>
-    readonly categoryId: FieldRef<"Product", 'String'>
-    readonly subCategory: FieldRef<"Product", 'String'>
     readonly images: FieldRef<"Product", 'String[]'>
     readonly featured: FieldRef<"Product", 'Boolean'>
-    readonly allowFlocage: FieldRef<"Product", 'Boolean'>
-    readonly allowGravure: FieldRef<"Product", 'Boolean'>
     readonly createdAt: FieldRef<"Product", 'DateTime'>
     readonly updatedAt: FieldRef<"Product", 'DateTime'>
+    readonly allowFlocage: FieldRef<"Product", 'Boolean'>
+    readonly allowGravure: FieldRef<"Product", 'Boolean'>
+    readonly discountPrice: FieldRef<"Product", 'Decimal'>
+    readonly subCategory: FieldRef<"Product", 'String'>
+    readonly categoryId: FieldRef<"Product", 'String'>
   }
     
 
@@ -10136,6 +10136,30 @@ export namespace Prisma {
   }
 
   /**
+   * Product.orderItems
+   */
+  export type Product$orderItemsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OrderItem
+     */
+    select?: OrderItemSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the OrderItem
+     */
+    omit?: OrderItemOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OrderItemInclude<ExtArgs> | null
+    where?: OrderItemWhereInput
+    orderBy?: OrderItemOrderByWithRelationInput | OrderItemOrderByWithRelationInput[]
+    cursor?: OrderItemWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: OrderItemScalarFieldEnum | OrderItemScalarFieldEnum[]
+  }
+
+  /**
    * Product.category
    */
   export type Product$categoryArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -10176,30 +10200,6 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: ProductSizeScalarFieldEnum | ProductSizeScalarFieldEnum[]
-  }
-
-  /**
-   * Product.orderItems
-   */
-  export type Product$orderItemsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the OrderItem
-     */
-    select?: OrderItemSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the OrderItem
-     */
-    omit?: OrderItemOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: OrderItemInclude<ExtArgs> | null
-    where?: OrderItemWhereInput
-    orderBy?: OrderItemOrderByWithRelationInput | OrderItemOrderByWithRelationInput[]
-    cursor?: OrderItemWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: OrderItemScalarFieldEnum | OrderItemScalarFieldEnum[]
   }
 
   /**
@@ -10483,8 +10483,8 @@ export namespace Prisma {
     productId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
-    user?: boolean | UserDefaultArgs<ExtArgs>
     product?: boolean | ProductDefaultArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["review"]>
 
   export type ReviewSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -10495,8 +10495,8 @@ export namespace Prisma {
     productId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
-    user?: boolean | UserDefaultArgs<ExtArgs>
     product?: boolean | ProductDefaultArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["review"]>
 
   export type ReviewSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -10507,8 +10507,8 @@ export namespace Prisma {
     productId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
-    user?: boolean | UserDefaultArgs<ExtArgs>
     product?: boolean | ProductDefaultArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["review"]>
 
   export type ReviewSelectScalar = {
@@ -10523,23 +10523,23 @@ export namespace Prisma {
 
   export type ReviewOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "rating" | "comment" | "userId" | "productId" | "createdAt" | "updatedAt", ExtArgs["result"]["review"]>
   export type ReviewInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    user?: boolean | UserDefaultArgs<ExtArgs>
     product?: boolean | ProductDefaultArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
   }
   export type ReviewIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    user?: boolean | UserDefaultArgs<ExtArgs>
     product?: boolean | ProductDefaultArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
   }
   export type ReviewIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    user?: boolean | UserDefaultArgs<ExtArgs>
     product?: boolean | ProductDefaultArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
   }
 
   export type $ReviewPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Review"
     objects: {
-      user: Prisma.$UserPayload<ExtArgs>
       product: Prisma.$ProductPayload<ExtArgs>
+      user: Prisma.$UserPayload<ExtArgs>
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -10943,8 +10943,8 @@ export namespace Prisma {
    */
   export interface Prisma__ReviewClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
-    user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     product<T extends ProductDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ProductDefaultArgs<ExtArgs>>): Prisma__ProductClient<$Result.GetResult<Prisma.$ProductPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -12499,13 +12499,13 @@ export namespace Prisma {
     userId: string | null
     customerName: string | null
     customerEmail: string | null
-    customerPhone: string | null
-    customerAddress: string | null
-    paymentMethod: string | null
     status: $Enums.OrderStatus | null
     total: Decimal | null
     createdAt: Date | null
     updatedAt: Date | null
+    customerAddress: string | null
+    customerPhone: string | null
+    paymentMethod: string | null
   }
 
   export type OrderMaxAggregateOutputType = {
@@ -12513,13 +12513,13 @@ export namespace Prisma {
     userId: string | null
     customerName: string | null
     customerEmail: string | null
-    customerPhone: string | null
-    customerAddress: string | null
-    paymentMethod: string | null
     status: $Enums.OrderStatus | null
     total: Decimal | null
     createdAt: Date | null
     updatedAt: Date | null
+    customerAddress: string | null
+    customerPhone: string | null
+    paymentMethod: string | null
   }
 
   export type OrderCountAggregateOutputType = {
@@ -12527,13 +12527,13 @@ export namespace Prisma {
     userId: number
     customerName: number
     customerEmail: number
-    customerPhone: number
-    customerAddress: number
-    paymentMethod: number
     status: number
     total: number
     createdAt: number
     updatedAt: number
+    customerAddress: number
+    customerPhone: number
+    paymentMethod: number
     _all: number
   }
 
@@ -12551,13 +12551,13 @@ export namespace Prisma {
     userId?: true
     customerName?: true
     customerEmail?: true
-    customerPhone?: true
-    customerAddress?: true
-    paymentMethod?: true
     status?: true
     total?: true
     createdAt?: true
     updatedAt?: true
+    customerAddress?: true
+    customerPhone?: true
+    paymentMethod?: true
   }
 
   export type OrderMaxAggregateInputType = {
@@ -12565,13 +12565,13 @@ export namespace Prisma {
     userId?: true
     customerName?: true
     customerEmail?: true
-    customerPhone?: true
-    customerAddress?: true
-    paymentMethod?: true
     status?: true
     total?: true
     createdAt?: true
     updatedAt?: true
+    customerAddress?: true
+    customerPhone?: true
+    paymentMethod?: true
   }
 
   export type OrderCountAggregateInputType = {
@@ -12579,13 +12579,13 @@ export namespace Prisma {
     userId?: true
     customerName?: true
     customerEmail?: true
-    customerPhone?: true
-    customerAddress?: true
-    paymentMethod?: true
     status?: true
     total?: true
     createdAt?: true
     updatedAt?: true
+    customerAddress?: true
+    customerPhone?: true
+    paymentMethod?: true
     _all?: true
   }
 
@@ -12680,13 +12680,13 @@ export namespace Prisma {
     userId: string | null
     customerName: string | null
     customerEmail: string | null
-    customerPhone: string | null
-    customerAddress: string | null
-    paymentMethod: string | null
     status: $Enums.OrderStatus
     total: Decimal
     createdAt: Date
     updatedAt: Date
+    customerAddress: string | null
+    customerPhone: string | null
+    paymentMethod: string | null
     _count: OrderCountAggregateOutputType | null
     _avg: OrderAvgAggregateOutputType | null
     _sum: OrderSumAggregateOutputType | null
@@ -12713,13 +12713,13 @@ export namespace Prisma {
     userId?: boolean
     customerName?: boolean
     customerEmail?: boolean
-    customerPhone?: boolean
-    customerAddress?: boolean
-    paymentMethod?: boolean
     status?: boolean
     total?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    customerAddress?: boolean
+    customerPhone?: boolean
+    paymentMethod?: boolean
     user?: boolean | Order$userArgs<ExtArgs>
     items?: boolean | Order$itemsArgs<ExtArgs>
     _count?: boolean | OrderCountOutputTypeDefaultArgs<ExtArgs>
@@ -12730,13 +12730,13 @@ export namespace Prisma {
     userId?: boolean
     customerName?: boolean
     customerEmail?: boolean
-    customerPhone?: boolean
-    customerAddress?: boolean
-    paymentMethod?: boolean
     status?: boolean
     total?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    customerAddress?: boolean
+    customerPhone?: boolean
+    paymentMethod?: boolean
     user?: boolean | Order$userArgs<ExtArgs>
   }, ExtArgs["result"]["order"]>
 
@@ -12745,13 +12745,13 @@ export namespace Prisma {
     userId?: boolean
     customerName?: boolean
     customerEmail?: boolean
-    customerPhone?: boolean
-    customerAddress?: boolean
-    paymentMethod?: boolean
     status?: boolean
     total?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    customerAddress?: boolean
+    customerPhone?: boolean
+    paymentMethod?: boolean
     user?: boolean | Order$userArgs<ExtArgs>
   }, ExtArgs["result"]["order"]>
 
@@ -12760,16 +12760,16 @@ export namespace Prisma {
     userId?: boolean
     customerName?: boolean
     customerEmail?: boolean
-    customerPhone?: boolean
-    customerAddress?: boolean
-    paymentMethod?: boolean
     status?: boolean
     total?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    customerAddress?: boolean
+    customerPhone?: boolean
+    paymentMethod?: boolean
   }
 
-  export type OrderOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "customerName" | "customerEmail" | "customerPhone" | "customerAddress" | "paymentMethod" | "status" | "total" | "createdAt" | "updatedAt", ExtArgs["result"]["order"]>
+  export type OrderOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "customerName" | "customerEmail" | "status" | "total" | "createdAt" | "updatedAt" | "customerAddress" | "customerPhone" | "paymentMethod", ExtArgs["result"]["order"]>
   export type OrderInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     user?: boolean | Order$userArgs<ExtArgs>
     items?: boolean | Order$itemsArgs<ExtArgs>
@@ -12793,13 +12793,13 @@ export namespace Prisma {
       userId: string | null
       customerName: string | null
       customerEmail: string | null
-      customerPhone: string | null
-      customerAddress: string | null
-      paymentMethod: string | null
       status: $Enums.OrderStatus
       total: Prisma.Decimal
       createdAt: Date
       updatedAt: Date
+      customerAddress: string | null
+      customerPhone: string | null
+      paymentMethod: string | null
     }, ExtArgs["result"]["order"]>
     composites: {}
   }
@@ -13229,13 +13229,13 @@ export namespace Prisma {
     readonly userId: FieldRef<"Order", 'String'>
     readonly customerName: FieldRef<"Order", 'String'>
     readonly customerEmail: FieldRef<"Order", 'String'>
-    readonly customerPhone: FieldRef<"Order", 'String'>
-    readonly customerAddress: FieldRef<"Order", 'String'>
-    readonly paymentMethod: FieldRef<"Order", 'String'>
     readonly status: FieldRef<"Order", 'OrderStatus'>
     readonly total: FieldRef<"Order", 'Decimal'>
     readonly createdAt: FieldRef<"Order", 'DateTime'>
     readonly updatedAt: FieldRef<"Order", 'DateTime'>
+    readonly customerAddress: FieldRef<"Order", 'String'>
+    readonly customerPhone: FieldRef<"Order", 'String'>
+    readonly paymentMethod: FieldRef<"Order", 'String'>
   }
     
 
@@ -14869,18 +14869,18 @@ export namespace Prisma {
     address: string | null
     facebookUrl: string | null
     instagramUrl: string | null
-    tiktokUrl: string | null
     whatsappNumber: string | null
-    workingHours: string | null
+    aboutUs: string | null
+    bankAccount: string | null
     deliveryFee: Decimal | null
     freeDeliveryOver: Decimal | null
-    shippingPolicy: string | null
-    waveNumber: string | null
     omNumber: string | null
-    bankAccount: string | null
     paymentPolicy: string | null
     returnPolicy: string | null
-    aboutUs: string | null
+    shippingPolicy: string | null
+    waveNumber: string | null
+    tiktokUrl: string | null
+    workingHours: string | null
   }
 
   export type StoreConfigMaxAggregateOutputType = {
@@ -14894,18 +14894,18 @@ export namespace Prisma {
     address: string | null
     facebookUrl: string | null
     instagramUrl: string | null
-    tiktokUrl: string | null
     whatsappNumber: string | null
-    workingHours: string | null
+    aboutUs: string | null
+    bankAccount: string | null
     deliveryFee: Decimal | null
     freeDeliveryOver: Decimal | null
-    shippingPolicy: string | null
-    waveNumber: string | null
     omNumber: string | null
-    bankAccount: string | null
     paymentPolicy: string | null
     returnPolicy: string | null
-    aboutUs: string | null
+    shippingPolicy: string | null
+    waveNumber: string | null
+    tiktokUrl: string | null
+    workingHours: string | null
   }
 
   export type StoreConfigCountAggregateOutputType = {
@@ -14919,18 +14919,18 @@ export namespace Prisma {
     address: number
     facebookUrl: number
     instagramUrl: number
-    tiktokUrl: number
     whatsappNumber: number
-    workingHours: number
+    aboutUs: number
+    bankAccount: number
     deliveryFee: number
     freeDeliveryOver: number
-    shippingPolicy: number
-    waveNumber: number
     omNumber: number
-    bankAccount: number
     paymentPolicy: number
     returnPolicy: number
-    aboutUs: number
+    shippingPolicy: number
+    waveNumber: number
+    tiktokUrl: number
+    workingHours: number
     _all: number
   }
 
@@ -14956,18 +14956,18 @@ export namespace Prisma {
     address?: true
     facebookUrl?: true
     instagramUrl?: true
-    tiktokUrl?: true
     whatsappNumber?: true
-    workingHours?: true
+    aboutUs?: true
+    bankAccount?: true
     deliveryFee?: true
     freeDeliveryOver?: true
-    shippingPolicy?: true
-    waveNumber?: true
     omNumber?: true
-    bankAccount?: true
     paymentPolicy?: true
     returnPolicy?: true
-    aboutUs?: true
+    shippingPolicy?: true
+    waveNumber?: true
+    tiktokUrl?: true
+    workingHours?: true
   }
 
   export type StoreConfigMaxAggregateInputType = {
@@ -14981,18 +14981,18 @@ export namespace Prisma {
     address?: true
     facebookUrl?: true
     instagramUrl?: true
-    tiktokUrl?: true
     whatsappNumber?: true
-    workingHours?: true
+    aboutUs?: true
+    bankAccount?: true
     deliveryFee?: true
     freeDeliveryOver?: true
-    shippingPolicy?: true
-    waveNumber?: true
     omNumber?: true
-    bankAccount?: true
     paymentPolicy?: true
     returnPolicy?: true
-    aboutUs?: true
+    shippingPolicy?: true
+    waveNumber?: true
+    tiktokUrl?: true
+    workingHours?: true
   }
 
   export type StoreConfigCountAggregateInputType = {
@@ -15006,18 +15006,18 @@ export namespace Prisma {
     address?: true
     facebookUrl?: true
     instagramUrl?: true
-    tiktokUrl?: true
     whatsappNumber?: true
-    workingHours?: true
+    aboutUs?: true
+    bankAccount?: true
     deliveryFee?: true
     freeDeliveryOver?: true
-    shippingPolicy?: true
-    waveNumber?: true
     omNumber?: true
-    bankAccount?: true
     paymentPolicy?: true
     returnPolicy?: true
-    aboutUs?: true
+    shippingPolicy?: true
+    waveNumber?: true
+    tiktokUrl?: true
+    workingHours?: true
     _all?: true
   }
 
@@ -15118,18 +15118,18 @@ export namespace Prisma {
     address: string | null
     facebookUrl: string | null
     instagramUrl: string | null
-    tiktokUrl: string | null
     whatsappNumber: string | null
-    workingHours: string | null
+    aboutUs: string | null
+    bankAccount: string | null
     deliveryFee: Decimal
     freeDeliveryOver: Decimal
-    shippingPolicy: string | null
-    waveNumber: string | null
     omNumber: string | null
-    bankAccount: string | null
     paymentPolicy: string | null
     returnPolicy: string | null
-    aboutUs: string | null
+    shippingPolicy: string | null
+    waveNumber: string | null
+    tiktokUrl: string | null
+    workingHours: string | null
     _count: StoreConfigCountAggregateOutputType | null
     _avg: StoreConfigAvgAggregateOutputType | null
     _sum: StoreConfigSumAggregateOutputType | null
@@ -15162,18 +15162,18 @@ export namespace Prisma {
     address?: boolean
     facebookUrl?: boolean
     instagramUrl?: boolean
-    tiktokUrl?: boolean
     whatsappNumber?: boolean
-    workingHours?: boolean
+    aboutUs?: boolean
+    bankAccount?: boolean
     deliveryFee?: boolean
     freeDeliveryOver?: boolean
-    shippingPolicy?: boolean
-    waveNumber?: boolean
     omNumber?: boolean
-    bankAccount?: boolean
     paymentPolicy?: boolean
     returnPolicy?: boolean
-    aboutUs?: boolean
+    shippingPolicy?: boolean
+    waveNumber?: boolean
+    tiktokUrl?: boolean
+    workingHours?: boolean
   }, ExtArgs["result"]["storeConfig"]>
 
   export type StoreConfigSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -15187,18 +15187,18 @@ export namespace Prisma {
     address?: boolean
     facebookUrl?: boolean
     instagramUrl?: boolean
-    tiktokUrl?: boolean
     whatsappNumber?: boolean
-    workingHours?: boolean
+    aboutUs?: boolean
+    bankAccount?: boolean
     deliveryFee?: boolean
     freeDeliveryOver?: boolean
-    shippingPolicy?: boolean
-    waveNumber?: boolean
     omNumber?: boolean
-    bankAccount?: boolean
     paymentPolicy?: boolean
     returnPolicy?: boolean
-    aboutUs?: boolean
+    shippingPolicy?: boolean
+    waveNumber?: boolean
+    tiktokUrl?: boolean
+    workingHours?: boolean
   }, ExtArgs["result"]["storeConfig"]>
 
   export type StoreConfigSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -15212,18 +15212,18 @@ export namespace Prisma {
     address?: boolean
     facebookUrl?: boolean
     instagramUrl?: boolean
-    tiktokUrl?: boolean
     whatsappNumber?: boolean
-    workingHours?: boolean
+    aboutUs?: boolean
+    bankAccount?: boolean
     deliveryFee?: boolean
     freeDeliveryOver?: boolean
-    shippingPolicy?: boolean
-    waveNumber?: boolean
     omNumber?: boolean
-    bankAccount?: boolean
     paymentPolicy?: boolean
     returnPolicy?: boolean
-    aboutUs?: boolean
+    shippingPolicy?: boolean
+    waveNumber?: boolean
+    tiktokUrl?: boolean
+    workingHours?: boolean
   }, ExtArgs["result"]["storeConfig"]>
 
   export type StoreConfigSelectScalar = {
@@ -15237,21 +15237,21 @@ export namespace Prisma {
     address?: boolean
     facebookUrl?: boolean
     instagramUrl?: boolean
-    tiktokUrl?: boolean
     whatsappNumber?: boolean
-    workingHours?: boolean
+    aboutUs?: boolean
+    bankAccount?: boolean
     deliveryFee?: boolean
     freeDeliveryOver?: boolean
-    shippingPolicy?: boolean
-    waveNumber?: boolean
     omNumber?: boolean
-    bankAccount?: boolean
     paymentPolicy?: boolean
     returnPolicy?: boolean
-    aboutUs?: boolean
+    shippingPolicy?: boolean
+    waveNumber?: boolean
+    tiktokUrl?: boolean
+    workingHours?: boolean
   }
 
-  export type StoreConfigOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "slogan" | "description" | "logoUrl" | "contactEmail" | "contactPhone" | "address" | "facebookUrl" | "instagramUrl" | "tiktokUrl" | "whatsappNumber" | "workingHours" | "deliveryFee" | "freeDeliveryOver" | "shippingPolicy" | "waveNumber" | "omNumber" | "bankAccount" | "paymentPolicy" | "returnPolicy" | "aboutUs", ExtArgs["result"]["storeConfig"]>
+  export type StoreConfigOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "slogan" | "description" | "logoUrl" | "contactEmail" | "contactPhone" | "address" | "facebookUrl" | "instagramUrl" | "whatsappNumber" | "aboutUs" | "bankAccount" | "deliveryFee" | "freeDeliveryOver" | "omNumber" | "paymentPolicy" | "returnPolicy" | "shippingPolicy" | "waveNumber" | "tiktokUrl" | "workingHours", ExtArgs["result"]["storeConfig"]>
 
   export type $StoreConfigPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "StoreConfig"
@@ -15267,18 +15267,18 @@ export namespace Prisma {
       address: string | null
       facebookUrl: string | null
       instagramUrl: string | null
-      tiktokUrl: string | null
       whatsappNumber: string | null
-      workingHours: string | null
+      aboutUs: string | null
+      bankAccount: string | null
       deliveryFee: Prisma.Decimal
       freeDeliveryOver: Prisma.Decimal
-      shippingPolicy: string | null
-      waveNumber: string | null
       omNumber: string | null
-      bankAccount: string | null
       paymentPolicy: string | null
       returnPolicy: string | null
-      aboutUs: string | null
+      shippingPolicy: string | null
+      waveNumber: string | null
+      tiktokUrl: string | null
+      workingHours: string | null
     }, ExtArgs["result"]["storeConfig"]>
     composites: {}
   }
@@ -15712,18 +15712,18 @@ export namespace Prisma {
     readonly address: FieldRef<"StoreConfig", 'String'>
     readonly facebookUrl: FieldRef<"StoreConfig", 'String'>
     readonly instagramUrl: FieldRef<"StoreConfig", 'String'>
-    readonly tiktokUrl: FieldRef<"StoreConfig", 'String'>
     readonly whatsappNumber: FieldRef<"StoreConfig", 'String'>
-    readonly workingHours: FieldRef<"StoreConfig", 'String'>
+    readonly aboutUs: FieldRef<"StoreConfig", 'String'>
+    readonly bankAccount: FieldRef<"StoreConfig", 'String'>
     readonly deliveryFee: FieldRef<"StoreConfig", 'Decimal'>
     readonly freeDeliveryOver: FieldRef<"StoreConfig", 'Decimal'>
-    readonly shippingPolicy: FieldRef<"StoreConfig", 'String'>
-    readonly waveNumber: FieldRef<"StoreConfig", 'String'>
     readonly omNumber: FieldRef<"StoreConfig", 'String'>
-    readonly bankAccount: FieldRef<"StoreConfig", 'String'>
     readonly paymentPolicy: FieldRef<"StoreConfig", 'String'>
     readonly returnPolicy: FieldRef<"StoreConfig", 'String'>
-    readonly aboutUs: FieldRef<"StoreConfig", 'String'>
+    readonly shippingPolicy: FieldRef<"StoreConfig", 'String'>
+    readonly waveNumber: FieldRef<"StoreConfig", 'String'>
+    readonly tiktokUrl: FieldRef<"StoreConfig", 'String'>
+    readonly workingHours: FieldRef<"StoreConfig", 'String'>
   }
     
 
@@ -17189,14 +17189,14 @@ export namespace Prisma {
 
   export const UserScalarFieldEnum: {
     id: 'id',
-    name: 'name',
     email: 'email',
-    emailVerified: 'emailVerified',
-    image: 'image',
     password: 'password',
+    name: 'name',
     role: 'role',
     createdAt: 'createdAt',
-    updatedAt: 'updatedAt'
+    updatedAt: 'updatedAt',
+    emailVerified: 'emailVerified',
+    image: 'image'
   };
 
   export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
@@ -17276,16 +17276,16 @@ export namespace Prisma {
     name: 'name',
     description: 'description',
     price: 'price',
-    discountPrice: 'discountPrice',
     stock: 'stock',
-    categoryId: 'categoryId',
-    subCategory: 'subCategory',
     images: 'images',
     featured: 'featured',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt',
     allowFlocage: 'allowFlocage',
     allowGravure: 'allowGravure',
-    createdAt: 'createdAt',
-    updatedAt: 'updatedAt'
+    discountPrice: 'discountPrice',
+    subCategory: 'subCategory',
+    categoryId: 'categoryId'
   };
 
   export type ProductScalarFieldEnum = (typeof ProductScalarFieldEnum)[keyof typeof ProductScalarFieldEnum]
@@ -17319,13 +17319,13 @@ export namespace Prisma {
     userId: 'userId',
     customerName: 'customerName',
     customerEmail: 'customerEmail',
-    customerPhone: 'customerPhone',
-    customerAddress: 'customerAddress',
-    paymentMethod: 'paymentMethod',
     status: 'status',
     total: 'total',
     createdAt: 'createdAt',
-    updatedAt: 'updatedAt'
+    updatedAt: 'updatedAt',
+    customerAddress: 'customerAddress',
+    customerPhone: 'customerPhone',
+    paymentMethod: 'paymentMethod'
   };
 
   export type OrderScalarFieldEnum = (typeof OrderScalarFieldEnum)[keyof typeof OrderScalarFieldEnum]
@@ -17356,18 +17356,18 @@ export namespace Prisma {
     address: 'address',
     facebookUrl: 'facebookUrl',
     instagramUrl: 'instagramUrl',
-    tiktokUrl: 'tiktokUrl',
     whatsappNumber: 'whatsappNumber',
-    workingHours: 'workingHours',
+    aboutUs: 'aboutUs',
+    bankAccount: 'bankAccount',
     deliveryFee: 'deliveryFee',
     freeDeliveryOver: 'freeDeliveryOver',
-    shippingPolicy: 'shippingPolicy',
-    waveNumber: 'waveNumber',
     omNumber: 'omNumber',
-    bankAccount: 'bankAccount',
     paymentPolicy: 'paymentPolicy',
     returnPolicy: 'returnPolicy',
-    aboutUs: 'aboutUs'
+    shippingPolicy: 'shippingPolicy',
+    waveNumber: 'waveNumber',
+    tiktokUrl: 'tiktokUrl',
+    workingHours: 'workingHours'
   };
 
   export type StoreConfigScalarFieldEnum = (typeof StoreConfigScalarFieldEnum)[keyof typeof StoreConfigScalarFieldEnum]
@@ -17429,20 +17429,6 @@ export namespace Prisma {
 
 
   /**
-   * Reference to a field of type 'DateTime'
-   */
-  export type DateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DateTime'>
-    
-
-
-  /**
-   * Reference to a field of type 'DateTime[]'
-   */
-  export type ListDateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DateTime[]'>
-    
-
-
-  /**
    * Reference to a field of type 'Role'
    */
   export type EnumRoleFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Role'>
@@ -17453,6 +17439,20 @@ export namespace Prisma {
    * Reference to a field of type 'Role[]'
    */
   export type ListEnumRoleFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Role[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'DateTime'
+   */
+  export type DateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DateTime'>
+    
+
+
+  /**
+   * Reference to a field of type 'DateTime[]'
+   */
+  export type ListDateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DateTime[]'>
     
 
 
@@ -17527,40 +17527,40 @@ export namespace Prisma {
     OR?: UserWhereInput[]
     NOT?: UserWhereInput | UserWhereInput[]
     id?: StringFilter<"User"> | string
-    name?: StringNullableFilter<"User"> | string | null
     email?: StringNullableFilter<"User"> | string | null
-    emailVerified?: DateTimeNullableFilter<"User"> | Date | string | null
-    image?: StringNullableFilter<"User"> | string | null
     password?: StringNullableFilter<"User"> | string | null
+    name?: StringNullableFilter<"User"> | string | null
     role?: EnumRoleFilter<"User"> | $Enums.Role
     createdAt?: DateTimeFilter<"User"> | Date | string
     updatedAt?: DateTimeFilter<"User"> | Date | string
+    emailVerified?: DateTimeNullableFilter<"User"> | Date | string | null
+    image?: StringNullableFilter<"User"> | string | null
     accounts?: AccountListRelationFilter
-    sessions?: SessionListRelationFilter
-    orders?: OrderListRelationFilter
     addresses?: AddressListRelationFilter
-    reviews?: ReviewListRelationFilter
-    favorites?: ProductListRelationFilter
+    orders?: OrderListRelationFilter
     paymentMethods?: PaymentMethodListRelationFilter
+    reviews?: ReviewListRelationFilter
+    sessions?: SessionListRelationFilter
+    favorites?: ProductListRelationFilter
   }
 
   export type UserOrderByWithRelationInput = {
     id?: SortOrder
-    name?: SortOrderInput | SortOrder
     email?: SortOrderInput | SortOrder
-    emailVerified?: SortOrderInput | SortOrder
-    image?: SortOrderInput | SortOrder
     password?: SortOrderInput | SortOrder
+    name?: SortOrderInput | SortOrder
     role?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    emailVerified?: SortOrderInput | SortOrder
+    image?: SortOrderInput | SortOrder
     accounts?: AccountOrderByRelationAggregateInput
-    sessions?: SessionOrderByRelationAggregateInput
-    orders?: OrderOrderByRelationAggregateInput
     addresses?: AddressOrderByRelationAggregateInput
-    reviews?: ReviewOrderByRelationAggregateInput
-    favorites?: ProductOrderByRelationAggregateInput
+    orders?: OrderOrderByRelationAggregateInput
     paymentMethods?: PaymentMethodOrderByRelationAggregateInput
+    reviews?: ReviewOrderByRelationAggregateInput
+    sessions?: SessionOrderByRelationAggregateInput
+    favorites?: ProductOrderByRelationAggregateInput
   }
 
   export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -17569,32 +17569,32 @@ export namespace Prisma {
     AND?: UserWhereInput | UserWhereInput[]
     OR?: UserWhereInput[]
     NOT?: UserWhereInput | UserWhereInput[]
-    name?: StringNullableFilter<"User"> | string | null
-    emailVerified?: DateTimeNullableFilter<"User"> | Date | string | null
-    image?: StringNullableFilter<"User"> | string | null
     password?: StringNullableFilter<"User"> | string | null
+    name?: StringNullableFilter<"User"> | string | null
     role?: EnumRoleFilter<"User"> | $Enums.Role
     createdAt?: DateTimeFilter<"User"> | Date | string
     updatedAt?: DateTimeFilter<"User"> | Date | string
+    emailVerified?: DateTimeNullableFilter<"User"> | Date | string | null
+    image?: StringNullableFilter<"User"> | string | null
     accounts?: AccountListRelationFilter
-    sessions?: SessionListRelationFilter
-    orders?: OrderListRelationFilter
     addresses?: AddressListRelationFilter
-    reviews?: ReviewListRelationFilter
-    favorites?: ProductListRelationFilter
+    orders?: OrderListRelationFilter
     paymentMethods?: PaymentMethodListRelationFilter
+    reviews?: ReviewListRelationFilter
+    sessions?: SessionListRelationFilter
+    favorites?: ProductListRelationFilter
   }, "id" | "email">
 
   export type UserOrderByWithAggregationInput = {
     id?: SortOrder
-    name?: SortOrderInput | SortOrder
     email?: SortOrderInput | SortOrder
-    emailVerified?: SortOrderInput | SortOrder
-    image?: SortOrderInput | SortOrder
     password?: SortOrderInput | SortOrder
+    name?: SortOrderInput | SortOrder
     role?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    emailVerified?: SortOrderInput | SortOrder
+    image?: SortOrderInput | SortOrder
     _count?: UserCountOrderByAggregateInput
     _max?: UserMaxOrderByAggregateInput
     _min?: UserMinOrderByAggregateInput
@@ -17605,14 +17605,14 @@ export namespace Prisma {
     OR?: UserScalarWhereWithAggregatesInput[]
     NOT?: UserScalarWhereWithAggregatesInput | UserScalarWhereWithAggregatesInput[]
     id?: StringWithAggregatesFilter<"User"> | string
-    name?: StringNullableWithAggregatesFilter<"User"> | string | null
     email?: StringNullableWithAggregatesFilter<"User"> | string | null
-    emailVerified?: DateTimeNullableWithAggregatesFilter<"User"> | Date | string | null
-    image?: StringNullableWithAggregatesFilter<"User"> | string | null
     password?: StringNullableWithAggregatesFilter<"User"> | string | null
+    name?: StringNullableWithAggregatesFilter<"User"> | string | null
     role?: EnumRoleWithAggregatesFilter<"User"> | $Enums.Role
     createdAt?: DateTimeWithAggregatesFilter<"User"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"User"> | Date | string
+    emailVerified?: DateTimeNullableWithAggregatesFilter<"User"> | Date | string | null
+    image?: StringNullableWithAggregatesFilter<"User"> | string | null
   }
 
   export type AddressWhereInput = {
@@ -17969,19 +17969,19 @@ export namespace Prisma {
     name?: StringFilter<"Product"> | string
     description?: StringNullableFilter<"Product"> | string | null
     price?: DecimalFilter<"Product"> | Decimal | DecimalJsLike | number | string
-    discountPrice?: DecimalNullableFilter<"Product"> | Decimal | DecimalJsLike | number | string | null
     stock?: IntFilter<"Product"> | number
-    categoryId?: StringNullableFilter<"Product"> | string | null
-    subCategory?: StringNullableFilter<"Product"> | string | null
     images?: StringNullableListFilter<"Product">
     featured?: BoolFilter<"Product"> | boolean
-    allowFlocage?: BoolFilter<"Product"> | boolean
-    allowGravure?: BoolFilter<"Product"> | boolean
     createdAt?: DateTimeFilter<"Product"> | Date | string
     updatedAt?: DateTimeFilter<"Product"> | Date | string
+    allowFlocage?: BoolFilter<"Product"> | boolean
+    allowGravure?: BoolFilter<"Product"> | boolean
+    discountPrice?: DecimalNullableFilter<"Product"> | Decimal | DecimalJsLike | number | string | null
+    subCategory?: StringNullableFilter<"Product"> | string | null
+    categoryId?: StringNullableFilter<"Product"> | string | null
+    orderItems?: OrderItemListRelationFilter
     category?: XOR<CategoryNullableScalarRelationFilter, CategoryWhereInput> | null
     sizes?: ProductSizeListRelationFilter
-    orderItems?: OrderItemListRelationFilter
     reviews?: ReviewListRelationFilter
     favoritedBy?: UserListRelationFilter
   }
@@ -17991,19 +17991,19 @@ export namespace Prisma {
     name?: SortOrder
     description?: SortOrderInput | SortOrder
     price?: SortOrder
-    discountPrice?: SortOrderInput | SortOrder
     stock?: SortOrder
-    categoryId?: SortOrderInput | SortOrder
-    subCategory?: SortOrderInput | SortOrder
     images?: SortOrder
     featured?: SortOrder
-    allowFlocage?: SortOrder
-    allowGravure?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    allowFlocage?: SortOrder
+    allowGravure?: SortOrder
+    discountPrice?: SortOrderInput | SortOrder
+    subCategory?: SortOrderInput | SortOrder
+    categoryId?: SortOrderInput | SortOrder
+    orderItems?: OrderItemOrderByRelationAggregateInput
     category?: CategoryOrderByWithRelationInput
     sizes?: ProductSizeOrderByRelationAggregateInput
-    orderItems?: OrderItemOrderByRelationAggregateInput
     reviews?: ReviewOrderByRelationAggregateInput
     favoritedBy?: UserOrderByRelationAggregateInput
   }
@@ -18016,19 +18016,19 @@ export namespace Prisma {
     name?: StringFilter<"Product"> | string
     description?: StringNullableFilter<"Product"> | string | null
     price?: DecimalFilter<"Product"> | Decimal | DecimalJsLike | number | string
-    discountPrice?: DecimalNullableFilter<"Product"> | Decimal | DecimalJsLike | number | string | null
     stock?: IntFilter<"Product"> | number
-    categoryId?: StringNullableFilter<"Product"> | string | null
-    subCategory?: StringNullableFilter<"Product"> | string | null
     images?: StringNullableListFilter<"Product">
     featured?: BoolFilter<"Product"> | boolean
-    allowFlocage?: BoolFilter<"Product"> | boolean
-    allowGravure?: BoolFilter<"Product"> | boolean
     createdAt?: DateTimeFilter<"Product"> | Date | string
     updatedAt?: DateTimeFilter<"Product"> | Date | string
+    allowFlocage?: BoolFilter<"Product"> | boolean
+    allowGravure?: BoolFilter<"Product"> | boolean
+    discountPrice?: DecimalNullableFilter<"Product"> | Decimal | DecimalJsLike | number | string | null
+    subCategory?: StringNullableFilter<"Product"> | string | null
+    categoryId?: StringNullableFilter<"Product"> | string | null
+    orderItems?: OrderItemListRelationFilter
     category?: XOR<CategoryNullableScalarRelationFilter, CategoryWhereInput> | null
     sizes?: ProductSizeListRelationFilter
-    orderItems?: OrderItemListRelationFilter
     reviews?: ReviewListRelationFilter
     favoritedBy?: UserListRelationFilter
   }, "id">
@@ -18038,16 +18038,16 @@ export namespace Prisma {
     name?: SortOrder
     description?: SortOrderInput | SortOrder
     price?: SortOrder
-    discountPrice?: SortOrderInput | SortOrder
     stock?: SortOrder
-    categoryId?: SortOrderInput | SortOrder
-    subCategory?: SortOrderInput | SortOrder
     images?: SortOrder
     featured?: SortOrder
-    allowFlocage?: SortOrder
-    allowGravure?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    allowFlocage?: SortOrder
+    allowGravure?: SortOrder
+    discountPrice?: SortOrderInput | SortOrder
+    subCategory?: SortOrderInput | SortOrder
+    categoryId?: SortOrderInput | SortOrder
     _count?: ProductCountOrderByAggregateInput
     _avg?: ProductAvgOrderByAggregateInput
     _max?: ProductMaxOrderByAggregateInput
@@ -18063,16 +18063,16 @@ export namespace Prisma {
     name?: StringWithAggregatesFilter<"Product"> | string
     description?: StringNullableWithAggregatesFilter<"Product"> | string | null
     price?: DecimalWithAggregatesFilter<"Product"> | Decimal | DecimalJsLike | number | string
-    discountPrice?: DecimalNullableWithAggregatesFilter<"Product"> | Decimal | DecimalJsLike | number | string | null
     stock?: IntWithAggregatesFilter<"Product"> | number
-    categoryId?: StringNullableWithAggregatesFilter<"Product"> | string | null
-    subCategory?: StringNullableWithAggregatesFilter<"Product"> | string | null
     images?: StringNullableListFilter<"Product">
     featured?: BoolWithAggregatesFilter<"Product"> | boolean
-    allowFlocage?: BoolWithAggregatesFilter<"Product"> | boolean
-    allowGravure?: BoolWithAggregatesFilter<"Product"> | boolean
     createdAt?: DateTimeWithAggregatesFilter<"Product"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Product"> | Date | string
+    allowFlocage?: BoolWithAggregatesFilter<"Product"> | boolean
+    allowGravure?: BoolWithAggregatesFilter<"Product"> | boolean
+    discountPrice?: DecimalNullableWithAggregatesFilter<"Product"> | Decimal | DecimalJsLike | number | string | null
+    subCategory?: StringNullableWithAggregatesFilter<"Product"> | string | null
+    categoryId?: StringNullableWithAggregatesFilter<"Product"> | string | null
   }
 
   export type ReviewWhereInput = {
@@ -18086,8 +18086,8 @@ export namespace Prisma {
     productId?: StringFilter<"Review"> | string
     createdAt?: DateTimeFilter<"Review"> | Date | string
     updatedAt?: DateTimeFilter<"Review"> | Date | string
-    user?: XOR<UserScalarRelationFilter, UserWhereInput>
     product?: XOR<ProductScalarRelationFilter, ProductWhereInput>
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
   }
 
   export type ReviewOrderByWithRelationInput = {
@@ -18098,8 +18098,8 @@ export namespace Prisma {
     productId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
-    user?: UserOrderByWithRelationInput
     product?: ProductOrderByWithRelationInput
+    user?: UserOrderByWithRelationInput
   }
 
   export type ReviewWhereUniqueInput = Prisma.AtLeast<{
@@ -18114,8 +18114,8 @@ export namespace Prisma {
     productId?: StringFilter<"Review"> | string
     createdAt?: DateTimeFilter<"Review"> | Date | string
     updatedAt?: DateTimeFilter<"Review"> | Date | string
-    user?: XOR<UserScalarRelationFilter, UserWhereInput>
     product?: XOR<ProductScalarRelationFilter, ProductWhereInput>
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
   }, "id" | "userId_productId">
 
   export type ReviewOrderByWithAggregationInput = {
@@ -18207,13 +18207,13 @@ export namespace Prisma {
     userId?: StringNullableFilter<"Order"> | string | null
     customerName?: StringNullableFilter<"Order"> | string | null
     customerEmail?: StringNullableFilter<"Order"> | string | null
-    customerPhone?: StringNullableFilter<"Order"> | string | null
-    customerAddress?: StringNullableFilter<"Order"> | string | null
-    paymentMethod?: StringNullableFilter<"Order"> | string | null
     status?: EnumOrderStatusFilter<"Order"> | $Enums.OrderStatus
     total?: DecimalFilter<"Order"> | Decimal | DecimalJsLike | number | string
     createdAt?: DateTimeFilter<"Order"> | Date | string
     updatedAt?: DateTimeFilter<"Order"> | Date | string
+    customerAddress?: StringNullableFilter<"Order"> | string | null
+    customerPhone?: StringNullableFilter<"Order"> | string | null
+    paymentMethod?: StringNullableFilter<"Order"> | string | null
     user?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
     items?: OrderItemListRelationFilter
   }
@@ -18223,13 +18223,13 @@ export namespace Prisma {
     userId?: SortOrderInput | SortOrder
     customerName?: SortOrderInput | SortOrder
     customerEmail?: SortOrderInput | SortOrder
-    customerPhone?: SortOrderInput | SortOrder
-    customerAddress?: SortOrderInput | SortOrder
-    paymentMethod?: SortOrderInput | SortOrder
     status?: SortOrder
     total?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    customerAddress?: SortOrderInput | SortOrder
+    customerPhone?: SortOrderInput | SortOrder
+    paymentMethod?: SortOrderInput | SortOrder
     user?: UserOrderByWithRelationInput
     items?: OrderItemOrderByRelationAggregateInput
   }
@@ -18242,13 +18242,13 @@ export namespace Prisma {
     userId?: StringNullableFilter<"Order"> | string | null
     customerName?: StringNullableFilter<"Order"> | string | null
     customerEmail?: StringNullableFilter<"Order"> | string | null
-    customerPhone?: StringNullableFilter<"Order"> | string | null
-    customerAddress?: StringNullableFilter<"Order"> | string | null
-    paymentMethod?: StringNullableFilter<"Order"> | string | null
     status?: EnumOrderStatusFilter<"Order"> | $Enums.OrderStatus
     total?: DecimalFilter<"Order"> | Decimal | DecimalJsLike | number | string
     createdAt?: DateTimeFilter<"Order"> | Date | string
     updatedAt?: DateTimeFilter<"Order"> | Date | string
+    customerAddress?: StringNullableFilter<"Order"> | string | null
+    customerPhone?: StringNullableFilter<"Order"> | string | null
+    paymentMethod?: StringNullableFilter<"Order"> | string | null
     user?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
     items?: OrderItemListRelationFilter
   }, "id">
@@ -18258,13 +18258,13 @@ export namespace Prisma {
     userId?: SortOrderInput | SortOrder
     customerName?: SortOrderInput | SortOrder
     customerEmail?: SortOrderInput | SortOrder
-    customerPhone?: SortOrderInput | SortOrder
-    customerAddress?: SortOrderInput | SortOrder
-    paymentMethod?: SortOrderInput | SortOrder
     status?: SortOrder
     total?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    customerAddress?: SortOrderInput | SortOrder
+    customerPhone?: SortOrderInput | SortOrder
+    paymentMethod?: SortOrderInput | SortOrder
     _count?: OrderCountOrderByAggregateInput
     _avg?: OrderAvgOrderByAggregateInput
     _max?: OrderMaxOrderByAggregateInput
@@ -18280,13 +18280,13 @@ export namespace Prisma {
     userId?: StringNullableWithAggregatesFilter<"Order"> | string | null
     customerName?: StringNullableWithAggregatesFilter<"Order"> | string | null
     customerEmail?: StringNullableWithAggregatesFilter<"Order"> | string | null
-    customerPhone?: StringNullableWithAggregatesFilter<"Order"> | string | null
-    customerAddress?: StringNullableWithAggregatesFilter<"Order"> | string | null
-    paymentMethod?: StringNullableWithAggregatesFilter<"Order"> | string | null
     status?: EnumOrderStatusWithAggregatesFilter<"Order"> | $Enums.OrderStatus
     total?: DecimalWithAggregatesFilter<"Order"> | Decimal | DecimalJsLike | number | string
     createdAt?: DateTimeWithAggregatesFilter<"Order"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Order"> | Date | string
+    customerAddress?: StringNullableWithAggregatesFilter<"Order"> | string | null
+    customerPhone?: StringNullableWithAggregatesFilter<"Order"> | string | null
+    paymentMethod?: StringNullableWithAggregatesFilter<"Order"> | string | null
   }
 
   export type OrderItemWhereInput = {
@@ -18378,18 +18378,18 @@ export namespace Prisma {
     address?: StringNullableFilter<"StoreConfig"> | string | null
     facebookUrl?: StringNullableFilter<"StoreConfig"> | string | null
     instagramUrl?: StringNullableFilter<"StoreConfig"> | string | null
-    tiktokUrl?: StringNullableFilter<"StoreConfig"> | string | null
     whatsappNumber?: StringNullableFilter<"StoreConfig"> | string | null
-    workingHours?: StringNullableFilter<"StoreConfig"> | string | null
+    aboutUs?: StringNullableFilter<"StoreConfig"> | string | null
+    bankAccount?: StringNullableFilter<"StoreConfig"> | string | null
     deliveryFee?: DecimalFilter<"StoreConfig"> | Decimal | DecimalJsLike | number | string
     freeDeliveryOver?: DecimalFilter<"StoreConfig"> | Decimal | DecimalJsLike | number | string
-    shippingPolicy?: StringNullableFilter<"StoreConfig"> | string | null
-    waveNumber?: StringNullableFilter<"StoreConfig"> | string | null
     omNumber?: StringNullableFilter<"StoreConfig"> | string | null
-    bankAccount?: StringNullableFilter<"StoreConfig"> | string | null
     paymentPolicy?: StringNullableFilter<"StoreConfig"> | string | null
     returnPolicy?: StringNullableFilter<"StoreConfig"> | string | null
-    aboutUs?: StringNullableFilter<"StoreConfig"> | string | null
+    shippingPolicy?: StringNullableFilter<"StoreConfig"> | string | null
+    waveNumber?: StringNullableFilter<"StoreConfig"> | string | null
+    tiktokUrl?: StringNullableFilter<"StoreConfig"> | string | null
+    workingHours?: StringNullableFilter<"StoreConfig"> | string | null
   }
 
   export type StoreConfigOrderByWithRelationInput = {
@@ -18403,18 +18403,18 @@ export namespace Prisma {
     address?: SortOrderInput | SortOrder
     facebookUrl?: SortOrderInput | SortOrder
     instagramUrl?: SortOrderInput | SortOrder
-    tiktokUrl?: SortOrderInput | SortOrder
     whatsappNumber?: SortOrderInput | SortOrder
-    workingHours?: SortOrderInput | SortOrder
+    aboutUs?: SortOrderInput | SortOrder
+    bankAccount?: SortOrderInput | SortOrder
     deliveryFee?: SortOrder
     freeDeliveryOver?: SortOrder
-    shippingPolicy?: SortOrderInput | SortOrder
-    waveNumber?: SortOrderInput | SortOrder
     omNumber?: SortOrderInput | SortOrder
-    bankAccount?: SortOrderInput | SortOrder
     paymentPolicy?: SortOrderInput | SortOrder
     returnPolicy?: SortOrderInput | SortOrder
-    aboutUs?: SortOrderInput | SortOrder
+    shippingPolicy?: SortOrderInput | SortOrder
+    waveNumber?: SortOrderInput | SortOrder
+    tiktokUrl?: SortOrderInput | SortOrder
+    workingHours?: SortOrderInput | SortOrder
   }
 
   export type StoreConfigWhereUniqueInput = Prisma.AtLeast<{
@@ -18431,18 +18431,18 @@ export namespace Prisma {
     address?: StringNullableFilter<"StoreConfig"> | string | null
     facebookUrl?: StringNullableFilter<"StoreConfig"> | string | null
     instagramUrl?: StringNullableFilter<"StoreConfig"> | string | null
-    tiktokUrl?: StringNullableFilter<"StoreConfig"> | string | null
     whatsappNumber?: StringNullableFilter<"StoreConfig"> | string | null
-    workingHours?: StringNullableFilter<"StoreConfig"> | string | null
+    aboutUs?: StringNullableFilter<"StoreConfig"> | string | null
+    bankAccount?: StringNullableFilter<"StoreConfig"> | string | null
     deliveryFee?: DecimalFilter<"StoreConfig"> | Decimal | DecimalJsLike | number | string
     freeDeliveryOver?: DecimalFilter<"StoreConfig"> | Decimal | DecimalJsLike | number | string
-    shippingPolicy?: StringNullableFilter<"StoreConfig"> | string | null
-    waveNumber?: StringNullableFilter<"StoreConfig"> | string | null
     omNumber?: StringNullableFilter<"StoreConfig"> | string | null
-    bankAccount?: StringNullableFilter<"StoreConfig"> | string | null
     paymentPolicy?: StringNullableFilter<"StoreConfig"> | string | null
     returnPolicy?: StringNullableFilter<"StoreConfig"> | string | null
-    aboutUs?: StringNullableFilter<"StoreConfig"> | string | null
+    shippingPolicy?: StringNullableFilter<"StoreConfig"> | string | null
+    waveNumber?: StringNullableFilter<"StoreConfig"> | string | null
+    tiktokUrl?: StringNullableFilter<"StoreConfig"> | string | null
+    workingHours?: StringNullableFilter<"StoreConfig"> | string | null
   }, "id">
 
   export type StoreConfigOrderByWithAggregationInput = {
@@ -18456,18 +18456,18 @@ export namespace Prisma {
     address?: SortOrderInput | SortOrder
     facebookUrl?: SortOrderInput | SortOrder
     instagramUrl?: SortOrderInput | SortOrder
-    tiktokUrl?: SortOrderInput | SortOrder
     whatsappNumber?: SortOrderInput | SortOrder
-    workingHours?: SortOrderInput | SortOrder
+    aboutUs?: SortOrderInput | SortOrder
+    bankAccount?: SortOrderInput | SortOrder
     deliveryFee?: SortOrder
     freeDeliveryOver?: SortOrder
-    shippingPolicy?: SortOrderInput | SortOrder
-    waveNumber?: SortOrderInput | SortOrder
     omNumber?: SortOrderInput | SortOrder
-    bankAccount?: SortOrderInput | SortOrder
     paymentPolicy?: SortOrderInput | SortOrder
     returnPolicy?: SortOrderInput | SortOrder
-    aboutUs?: SortOrderInput | SortOrder
+    shippingPolicy?: SortOrderInput | SortOrder
+    waveNumber?: SortOrderInput | SortOrder
+    tiktokUrl?: SortOrderInput | SortOrder
+    workingHours?: SortOrderInput | SortOrder
     _count?: StoreConfigCountOrderByAggregateInput
     _avg?: StoreConfigAvgOrderByAggregateInput
     _max?: StoreConfigMaxOrderByAggregateInput
@@ -18489,18 +18489,18 @@ export namespace Prisma {
     address?: StringNullableWithAggregatesFilter<"StoreConfig"> | string | null
     facebookUrl?: StringNullableWithAggregatesFilter<"StoreConfig"> | string | null
     instagramUrl?: StringNullableWithAggregatesFilter<"StoreConfig"> | string | null
-    tiktokUrl?: StringNullableWithAggregatesFilter<"StoreConfig"> | string | null
     whatsappNumber?: StringNullableWithAggregatesFilter<"StoreConfig"> | string | null
-    workingHours?: StringNullableWithAggregatesFilter<"StoreConfig"> | string | null
+    aboutUs?: StringNullableWithAggregatesFilter<"StoreConfig"> | string | null
+    bankAccount?: StringNullableWithAggregatesFilter<"StoreConfig"> | string | null
     deliveryFee?: DecimalWithAggregatesFilter<"StoreConfig"> | Decimal | DecimalJsLike | number | string
     freeDeliveryOver?: DecimalWithAggregatesFilter<"StoreConfig"> | Decimal | DecimalJsLike | number | string
-    shippingPolicy?: StringNullableWithAggregatesFilter<"StoreConfig"> | string | null
-    waveNumber?: StringNullableWithAggregatesFilter<"StoreConfig"> | string | null
     omNumber?: StringNullableWithAggregatesFilter<"StoreConfig"> | string | null
-    bankAccount?: StringNullableWithAggregatesFilter<"StoreConfig"> | string | null
     paymentPolicy?: StringNullableWithAggregatesFilter<"StoreConfig"> | string | null
     returnPolicy?: StringNullableWithAggregatesFilter<"StoreConfig"> | string | null
-    aboutUs?: StringNullableWithAggregatesFilter<"StoreConfig"> | string | null
+    shippingPolicy?: StringNullableWithAggregatesFilter<"StoreConfig"> | string | null
+    waveNumber?: StringNullableWithAggregatesFilter<"StoreConfig"> | string | null
+    tiktokUrl?: StringNullableWithAggregatesFilter<"StoreConfig"> | string | null
+    workingHours?: StringNullableWithAggregatesFilter<"StoreConfig"> | string | null
   }
 
   export type CategoryWhereInput = {
@@ -18565,114 +18565,114 @@ export namespace Prisma {
 
   export type UserCreateInput = {
     id?: string
-    name?: string | null
     email?: string | null
-    emailVerified?: Date | string | null
-    image?: string | null
     password?: string | null
+    name?: string | null
     role?: $Enums.Role
     createdAt?: Date | string
     updatedAt?: Date | string
+    emailVerified?: Date | string | null
+    image?: string | null
     accounts?: AccountCreateNestedManyWithoutUserInput
-    sessions?: SessionCreateNestedManyWithoutUserInput
-    orders?: OrderCreateNestedManyWithoutUserInput
     addresses?: AddressCreateNestedManyWithoutUserInput
-    reviews?: ReviewCreateNestedManyWithoutUserInput
-    favorites?: ProductCreateNestedManyWithoutFavoritedByInput
+    orders?: OrderCreateNestedManyWithoutUserInput
     paymentMethods?: PaymentMethodCreateNestedManyWithoutUserInput
+    reviews?: ReviewCreateNestedManyWithoutUserInput
+    sessions?: SessionCreateNestedManyWithoutUserInput
+    favorites?: ProductCreateNestedManyWithoutFavoritedByInput
   }
 
   export type UserUncheckedCreateInput = {
     id?: string
-    name?: string | null
     email?: string | null
-    emailVerified?: Date | string | null
-    image?: string | null
     password?: string | null
+    name?: string | null
     role?: $Enums.Role
     createdAt?: Date | string
     updatedAt?: Date | string
+    emailVerified?: Date | string | null
+    image?: string | null
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
-    sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
-    orders?: OrderUncheckedCreateNestedManyWithoutUserInput
     addresses?: AddressUncheckedCreateNestedManyWithoutUserInput
-    reviews?: ReviewUncheckedCreateNestedManyWithoutUserInput
-    favorites?: ProductUncheckedCreateNestedManyWithoutFavoritedByInput
+    orders?: OrderUncheckedCreateNestedManyWithoutUserInput
     paymentMethods?: PaymentMethodUncheckedCreateNestedManyWithoutUserInput
+    reviews?: ReviewUncheckedCreateNestedManyWithoutUserInput
+    sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
+    favorites?: ProductUncheckedCreateNestedManyWithoutFavoritedByInput
   }
 
   export type UserUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
-    name?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
-    emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    image?: NullableStringFieldUpdateOperationsInput | string | null
     password?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: NullableStringFieldUpdateOperationsInput | string | null
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    image?: NullableStringFieldUpdateOperationsInput | string | null
     accounts?: AccountUpdateManyWithoutUserNestedInput
-    sessions?: SessionUpdateManyWithoutUserNestedInput
-    orders?: OrderUpdateManyWithoutUserNestedInput
     addresses?: AddressUpdateManyWithoutUserNestedInput
-    reviews?: ReviewUpdateManyWithoutUserNestedInput
-    favorites?: ProductUpdateManyWithoutFavoritedByNestedInput
+    orders?: OrderUpdateManyWithoutUserNestedInput
     paymentMethods?: PaymentMethodUpdateManyWithoutUserNestedInput
+    reviews?: ReviewUpdateManyWithoutUserNestedInput
+    sessions?: SessionUpdateManyWithoutUserNestedInput
+    favorites?: ProductUpdateManyWithoutFavoritedByNestedInput
   }
 
   export type UserUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
-    name?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
-    emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    image?: NullableStringFieldUpdateOperationsInput | string | null
     password?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: NullableStringFieldUpdateOperationsInput | string | null
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    image?: NullableStringFieldUpdateOperationsInput | string | null
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
-    sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
-    orders?: OrderUncheckedUpdateManyWithoutUserNestedInput
     addresses?: AddressUncheckedUpdateManyWithoutUserNestedInput
-    reviews?: ReviewUncheckedUpdateManyWithoutUserNestedInput
-    favorites?: ProductUncheckedUpdateManyWithoutFavoritedByNestedInput
+    orders?: OrderUncheckedUpdateManyWithoutUserNestedInput
     paymentMethods?: PaymentMethodUncheckedUpdateManyWithoutUserNestedInput
+    reviews?: ReviewUncheckedUpdateManyWithoutUserNestedInput
+    sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
+    favorites?: ProductUncheckedUpdateManyWithoutFavoritedByNestedInput
   }
 
   export type UserCreateManyInput = {
     id?: string
-    name?: string | null
     email?: string | null
-    emailVerified?: Date | string | null
-    image?: string | null
     password?: string | null
+    name?: string | null
     role?: $Enums.Role
     createdAt?: Date | string
     updatedAt?: Date | string
+    emailVerified?: Date | string | null
+    image?: string | null
   }
 
   export type UserUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
-    name?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
-    emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    image?: NullableStringFieldUpdateOperationsInput | string | null
     password?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: NullableStringFieldUpdateOperationsInput | string | null
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    image?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type UserUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
-    name?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
-    emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    image?: NullableStringFieldUpdateOperationsInput | string | null
     password?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: NullableStringFieldUpdateOperationsInput | string | null
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    image?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type AddressCreateInput = {
@@ -19054,18 +19054,18 @@ export namespace Prisma {
     name: string
     description?: string | null
     price: Decimal | DecimalJsLike | number | string
-    discountPrice?: Decimal | DecimalJsLike | number | string | null
     stock?: number
-    subCategory?: string | null
     images?: ProductCreateimagesInput | string[]
     featured?: boolean
-    allowFlocage?: boolean
-    allowGravure?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
+    allowFlocage?: boolean
+    allowGravure?: boolean
+    discountPrice?: Decimal | DecimalJsLike | number | string | null
+    subCategory?: string | null
+    orderItems?: OrderItemCreateNestedManyWithoutProductInput
     category?: CategoryCreateNestedOneWithoutProductsInput
     sizes?: ProductSizeCreateNestedManyWithoutProductInput
-    orderItems?: OrderItemCreateNestedManyWithoutProductInput
     reviews?: ReviewCreateNestedManyWithoutProductInput
     favoritedBy?: UserCreateNestedManyWithoutFavoritesInput
   }
@@ -19075,18 +19075,18 @@ export namespace Prisma {
     name: string
     description?: string | null
     price: Decimal | DecimalJsLike | number | string
-    discountPrice?: Decimal | DecimalJsLike | number | string | null
     stock?: number
-    categoryId?: string | null
-    subCategory?: string | null
     images?: ProductCreateimagesInput | string[]
     featured?: boolean
-    allowFlocage?: boolean
-    allowGravure?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
-    sizes?: ProductSizeUncheckedCreateNestedManyWithoutProductInput
+    allowFlocage?: boolean
+    allowGravure?: boolean
+    discountPrice?: Decimal | DecimalJsLike | number | string | null
+    subCategory?: string | null
+    categoryId?: string | null
     orderItems?: OrderItemUncheckedCreateNestedManyWithoutProductInput
+    sizes?: ProductSizeUncheckedCreateNestedManyWithoutProductInput
     reviews?: ReviewUncheckedCreateNestedManyWithoutProductInput
     favoritedBy?: UserUncheckedCreateNestedManyWithoutFavoritesInput
   }
@@ -19096,18 +19096,18 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    discountPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     stock?: IntFieldUpdateOperationsInput | number
-    subCategory?: NullableStringFieldUpdateOperationsInput | string | null
     images?: ProductUpdateimagesInput | string[]
     featured?: BoolFieldUpdateOperationsInput | boolean
-    allowFlocage?: BoolFieldUpdateOperationsInput | boolean
-    allowGravure?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    allowFlocage?: BoolFieldUpdateOperationsInput | boolean
+    allowGravure?: BoolFieldUpdateOperationsInput | boolean
+    discountPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    subCategory?: NullableStringFieldUpdateOperationsInput | string | null
+    orderItems?: OrderItemUpdateManyWithoutProductNestedInput
     category?: CategoryUpdateOneWithoutProductsNestedInput
     sizes?: ProductSizeUpdateManyWithoutProductNestedInput
-    orderItems?: OrderItemUpdateManyWithoutProductNestedInput
     reviews?: ReviewUpdateManyWithoutProductNestedInput
     favoritedBy?: UserUpdateManyWithoutFavoritesNestedInput
   }
@@ -19117,18 +19117,18 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    discountPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     stock?: IntFieldUpdateOperationsInput | number
-    categoryId?: NullableStringFieldUpdateOperationsInput | string | null
-    subCategory?: NullableStringFieldUpdateOperationsInput | string | null
     images?: ProductUpdateimagesInput | string[]
     featured?: BoolFieldUpdateOperationsInput | boolean
-    allowFlocage?: BoolFieldUpdateOperationsInput | boolean
-    allowGravure?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    sizes?: ProductSizeUncheckedUpdateManyWithoutProductNestedInput
+    allowFlocage?: BoolFieldUpdateOperationsInput | boolean
+    allowGravure?: BoolFieldUpdateOperationsInput | boolean
+    discountPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    subCategory?: NullableStringFieldUpdateOperationsInput | string | null
+    categoryId?: NullableStringFieldUpdateOperationsInput | string | null
     orderItems?: OrderItemUncheckedUpdateManyWithoutProductNestedInput
+    sizes?: ProductSizeUncheckedUpdateManyWithoutProductNestedInput
     reviews?: ReviewUncheckedUpdateManyWithoutProductNestedInput
     favoritedBy?: UserUncheckedUpdateManyWithoutFavoritesNestedInput
   }
@@ -19138,16 +19138,16 @@ export namespace Prisma {
     name: string
     description?: string | null
     price: Decimal | DecimalJsLike | number | string
-    discountPrice?: Decimal | DecimalJsLike | number | string | null
     stock?: number
-    categoryId?: string | null
-    subCategory?: string | null
     images?: ProductCreateimagesInput | string[]
     featured?: boolean
-    allowFlocage?: boolean
-    allowGravure?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
+    allowFlocage?: boolean
+    allowGravure?: boolean
+    discountPrice?: Decimal | DecimalJsLike | number | string | null
+    subCategory?: string | null
+    categoryId?: string | null
   }
 
   export type ProductUpdateManyMutationInput = {
@@ -19155,15 +19155,15 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    discountPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     stock?: IntFieldUpdateOperationsInput | number
-    subCategory?: NullableStringFieldUpdateOperationsInput | string | null
     images?: ProductUpdateimagesInput | string[]
     featured?: BoolFieldUpdateOperationsInput | boolean
-    allowFlocage?: BoolFieldUpdateOperationsInput | boolean
-    allowGravure?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    allowFlocage?: BoolFieldUpdateOperationsInput | boolean
+    allowGravure?: BoolFieldUpdateOperationsInput | boolean
+    discountPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    subCategory?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type ProductUncheckedUpdateManyInput = {
@@ -19171,16 +19171,16 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    discountPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     stock?: IntFieldUpdateOperationsInput | number
-    categoryId?: NullableStringFieldUpdateOperationsInput | string | null
-    subCategory?: NullableStringFieldUpdateOperationsInput | string | null
     images?: ProductUpdateimagesInput | string[]
     featured?: BoolFieldUpdateOperationsInput | boolean
-    allowFlocage?: BoolFieldUpdateOperationsInput | boolean
-    allowGravure?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    allowFlocage?: BoolFieldUpdateOperationsInput | boolean
+    allowGravure?: BoolFieldUpdateOperationsInput | boolean
+    discountPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    subCategory?: NullableStringFieldUpdateOperationsInput | string | null
+    categoryId?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type ReviewCreateInput = {
@@ -19189,8 +19189,8 @@ export namespace Prisma {
     comment?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    user: UserCreateNestedOneWithoutReviewsInput
     product: ProductCreateNestedOneWithoutReviewsInput
+    user: UserCreateNestedOneWithoutReviewsInput
   }
 
   export type ReviewUncheckedCreateInput = {
@@ -19209,8 +19209,8 @@ export namespace Prisma {
     comment?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    user?: UserUpdateOneRequiredWithoutReviewsNestedInput
     product?: ProductUpdateOneRequiredWithoutReviewsNestedInput
+    user?: UserUpdateOneRequiredWithoutReviewsNestedInput
   }
 
   export type ReviewUncheckedUpdateInput = {
@@ -19303,13 +19303,13 @@ export namespace Prisma {
     id?: string
     customerName?: string | null
     customerEmail?: string | null
-    customerPhone?: string | null
-    customerAddress?: string | null
-    paymentMethod?: string | null
     status?: $Enums.OrderStatus
     total: Decimal | DecimalJsLike | number | string
     createdAt?: Date | string
     updatedAt?: Date | string
+    customerAddress?: string | null
+    customerPhone?: string | null
+    paymentMethod?: string | null
     user?: UserCreateNestedOneWithoutOrdersInput
     items?: OrderItemCreateNestedManyWithoutOrderInput
   }
@@ -19319,13 +19319,13 @@ export namespace Prisma {
     userId?: string | null
     customerName?: string | null
     customerEmail?: string | null
-    customerPhone?: string | null
-    customerAddress?: string | null
-    paymentMethod?: string | null
     status?: $Enums.OrderStatus
     total: Decimal | DecimalJsLike | number | string
     createdAt?: Date | string
     updatedAt?: Date | string
+    customerAddress?: string | null
+    customerPhone?: string | null
+    paymentMethod?: string | null
     items?: OrderItemUncheckedCreateNestedManyWithoutOrderInput
   }
 
@@ -19333,13 +19333,13 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     customerName?: NullableStringFieldUpdateOperationsInput | string | null
     customerEmail?: NullableStringFieldUpdateOperationsInput | string | null
-    customerPhone?: NullableStringFieldUpdateOperationsInput | string | null
-    customerAddress?: NullableStringFieldUpdateOperationsInput | string | null
-    paymentMethod?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
     total?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    customerAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    customerPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    paymentMethod?: NullableStringFieldUpdateOperationsInput | string | null
     user?: UserUpdateOneWithoutOrdersNestedInput
     items?: OrderItemUpdateManyWithoutOrderNestedInput
   }
@@ -19349,13 +19349,13 @@ export namespace Prisma {
     userId?: NullableStringFieldUpdateOperationsInput | string | null
     customerName?: NullableStringFieldUpdateOperationsInput | string | null
     customerEmail?: NullableStringFieldUpdateOperationsInput | string | null
-    customerPhone?: NullableStringFieldUpdateOperationsInput | string | null
-    customerAddress?: NullableStringFieldUpdateOperationsInput | string | null
-    paymentMethod?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
     total?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    customerAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    customerPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    paymentMethod?: NullableStringFieldUpdateOperationsInput | string | null
     items?: OrderItemUncheckedUpdateManyWithoutOrderNestedInput
   }
 
@@ -19364,26 +19364,26 @@ export namespace Prisma {
     userId?: string | null
     customerName?: string | null
     customerEmail?: string | null
-    customerPhone?: string | null
-    customerAddress?: string | null
-    paymentMethod?: string | null
     status?: $Enums.OrderStatus
     total: Decimal | DecimalJsLike | number | string
     createdAt?: Date | string
     updatedAt?: Date | string
+    customerAddress?: string | null
+    customerPhone?: string | null
+    paymentMethod?: string | null
   }
 
   export type OrderUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
     customerName?: NullableStringFieldUpdateOperationsInput | string | null
     customerEmail?: NullableStringFieldUpdateOperationsInput | string | null
-    customerPhone?: NullableStringFieldUpdateOperationsInput | string | null
-    customerAddress?: NullableStringFieldUpdateOperationsInput | string | null
-    paymentMethod?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
     total?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    customerAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    customerPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    paymentMethod?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type OrderUncheckedUpdateManyInput = {
@@ -19391,13 +19391,13 @@ export namespace Prisma {
     userId?: NullableStringFieldUpdateOperationsInput | string | null
     customerName?: NullableStringFieldUpdateOperationsInput | string | null
     customerEmail?: NullableStringFieldUpdateOperationsInput | string | null
-    customerPhone?: NullableStringFieldUpdateOperationsInput | string | null
-    customerAddress?: NullableStringFieldUpdateOperationsInput | string | null
-    paymentMethod?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
     total?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    customerAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    customerPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    paymentMethod?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type OrderItemCreateInput = {
@@ -19486,18 +19486,18 @@ export namespace Prisma {
     address?: string | null
     facebookUrl?: string | null
     instagramUrl?: string | null
-    tiktokUrl?: string | null
     whatsappNumber?: string | null
-    workingHours?: string | null
+    aboutUs?: string | null
+    bankAccount?: string | null
     deliveryFee?: Decimal | DecimalJsLike | number | string
     freeDeliveryOver?: Decimal | DecimalJsLike | number | string
-    shippingPolicy?: string | null
-    waveNumber?: string | null
     omNumber?: string | null
-    bankAccount?: string | null
     paymentPolicy?: string | null
     returnPolicy?: string | null
-    aboutUs?: string | null
+    shippingPolicy?: string | null
+    waveNumber?: string | null
+    tiktokUrl?: string | null
+    workingHours?: string | null
   }
 
   export type StoreConfigUncheckedCreateInput = {
@@ -19511,18 +19511,18 @@ export namespace Prisma {
     address?: string | null
     facebookUrl?: string | null
     instagramUrl?: string | null
-    tiktokUrl?: string | null
     whatsappNumber?: string | null
-    workingHours?: string | null
+    aboutUs?: string | null
+    bankAccount?: string | null
     deliveryFee?: Decimal | DecimalJsLike | number | string
     freeDeliveryOver?: Decimal | DecimalJsLike | number | string
-    shippingPolicy?: string | null
-    waveNumber?: string | null
     omNumber?: string | null
-    bankAccount?: string | null
     paymentPolicy?: string | null
     returnPolicy?: string | null
-    aboutUs?: string | null
+    shippingPolicy?: string | null
+    waveNumber?: string | null
+    tiktokUrl?: string | null
+    workingHours?: string | null
   }
 
   export type StoreConfigUpdateInput = {
@@ -19536,18 +19536,18 @@ export namespace Prisma {
     address?: NullableStringFieldUpdateOperationsInput | string | null
     facebookUrl?: NullableStringFieldUpdateOperationsInput | string | null
     instagramUrl?: NullableStringFieldUpdateOperationsInput | string | null
-    tiktokUrl?: NullableStringFieldUpdateOperationsInput | string | null
     whatsappNumber?: NullableStringFieldUpdateOperationsInput | string | null
-    workingHours?: NullableStringFieldUpdateOperationsInput | string | null
+    aboutUs?: NullableStringFieldUpdateOperationsInput | string | null
+    bankAccount?: NullableStringFieldUpdateOperationsInput | string | null
     deliveryFee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     freeDeliveryOver?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    shippingPolicy?: NullableStringFieldUpdateOperationsInput | string | null
-    waveNumber?: NullableStringFieldUpdateOperationsInput | string | null
     omNumber?: NullableStringFieldUpdateOperationsInput | string | null
-    bankAccount?: NullableStringFieldUpdateOperationsInput | string | null
     paymentPolicy?: NullableStringFieldUpdateOperationsInput | string | null
     returnPolicy?: NullableStringFieldUpdateOperationsInput | string | null
-    aboutUs?: NullableStringFieldUpdateOperationsInput | string | null
+    shippingPolicy?: NullableStringFieldUpdateOperationsInput | string | null
+    waveNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    tiktokUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    workingHours?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type StoreConfigUncheckedUpdateInput = {
@@ -19561,18 +19561,18 @@ export namespace Prisma {
     address?: NullableStringFieldUpdateOperationsInput | string | null
     facebookUrl?: NullableStringFieldUpdateOperationsInput | string | null
     instagramUrl?: NullableStringFieldUpdateOperationsInput | string | null
-    tiktokUrl?: NullableStringFieldUpdateOperationsInput | string | null
     whatsappNumber?: NullableStringFieldUpdateOperationsInput | string | null
-    workingHours?: NullableStringFieldUpdateOperationsInput | string | null
+    aboutUs?: NullableStringFieldUpdateOperationsInput | string | null
+    bankAccount?: NullableStringFieldUpdateOperationsInput | string | null
     deliveryFee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     freeDeliveryOver?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    shippingPolicy?: NullableStringFieldUpdateOperationsInput | string | null
-    waveNumber?: NullableStringFieldUpdateOperationsInput | string | null
     omNumber?: NullableStringFieldUpdateOperationsInput | string | null
-    bankAccount?: NullableStringFieldUpdateOperationsInput | string | null
     paymentPolicy?: NullableStringFieldUpdateOperationsInput | string | null
     returnPolicy?: NullableStringFieldUpdateOperationsInput | string | null
-    aboutUs?: NullableStringFieldUpdateOperationsInput | string | null
+    shippingPolicy?: NullableStringFieldUpdateOperationsInput | string | null
+    waveNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    tiktokUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    workingHours?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type StoreConfigCreateManyInput = {
@@ -19586,18 +19586,18 @@ export namespace Prisma {
     address?: string | null
     facebookUrl?: string | null
     instagramUrl?: string | null
-    tiktokUrl?: string | null
     whatsappNumber?: string | null
-    workingHours?: string | null
+    aboutUs?: string | null
+    bankAccount?: string | null
     deliveryFee?: Decimal | DecimalJsLike | number | string
     freeDeliveryOver?: Decimal | DecimalJsLike | number | string
-    shippingPolicy?: string | null
-    waveNumber?: string | null
     omNumber?: string | null
-    bankAccount?: string | null
     paymentPolicy?: string | null
     returnPolicy?: string | null
-    aboutUs?: string | null
+    shippingPolicy?: string | null
+    waveNumber?: string | null
+    tiktokUrl?: string | null
+    workingHours?: string | null
   }
 
   export type StoreConfigUpdateManyMutationInput = {
@@ -19611,18 +19611,18 @@ export namespace Prisma {
     address?: NullableStringFieldUpdateOperationsInput | string | null
     facebookUrl?: NullableStringFieldUpdateOperationsInput | string | null
     instagramUrl?: NullableStringFieldUpdateOperationsInput | string | null
-    tiktokUrl?: NullableStringFieldUpdateOperationsInput | string | null
     whatsappNumber?: NullableStringFieldUpdateOperationsInput | string | null
-    workingHours?: NullableStringFieldUpdateOperationsInput | string | null
+    aboutUs?: NullableStringFieldUpdateOperationsInput | string | null
+    bankAccount?: NullableStringFieldUpdateOperationsInput | string | null
     deliveryFee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     freeDeliveryOver?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    shippingPolicy?: NullableStringFieldUpdateOperationsInput | string | null
-    waveNumber?: NullableStringFieldUpdateOperationsInput | string | null
     omNumber?: NullableStringFieldUpdateOperationsInput | string | null
-    bankAccount?: NullableStringFieldUpdateOperationsInput | string | null
     paymentPolicy?: NullableStringFieldUpdateOperationsInput | string | null
     returnPolicy?: NullableStringFieldUpdateOperationsInput | string | null
-    aboutUs?: NullableStringFieldUpdateOperationsInput | string | null
+    shippingPolicy?: NullableStringFieldUpdateOperationsInput | string | null
+    waveNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    tiktokUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    workingHours?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type StoreConfigUncheckedUpdateManyInput = {
@@ -19636,18 +19636,18 @@ export namespace Prisma {
     address?: NullableStringFieldUpdateOperationsInput | string | null
     facebookUrl?: NullableStringFieldUpdateOperationsInput | string | null
     instagramUrl?: NullableStringFieldUpdateOperationsInput | string | null
-    tiktokUrl?: NullableStringFieldUpdateOperationsInput | string | null
     whatsappNumber?: NullableStringFieldUpdateOperationsInput | string | null
-    workingHours?: NullableStringFieldUpdateOperationsInput | string | null
+    aboutUs?: NullableStringFieldUpdateOperationsInput | string | null
+    bankAccount?: NullableStringFieldUpdateOperationsInput | string | null
     deliveryFee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     freeDeliveryOver?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    shippingPolicy?: NullableStringFieldUpdateOperationsInput | string | null
-    waveNumber?: NullableStringFieldUpdateOperationsInput | string | null
     omNumber?: NullableStringFieldUpdateOperationsInput | string | null
-    bankAccount?: NullableStringFieldUpdateOperationsInput | string | null
     paymentPolicy?: NullableStringFieldUpdateOperationsInput | string | null
     returnPolicy?: NullableStringFieldUpdateOperationsInput | string | null
-    aboutUs?: NullableStringFieldUpdateOperationsInput | string | null
+    shippingPolicy?: NullableStringFieldUpdateOperationsInput | string | null
+    waveNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    tiktokUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    workingHours?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type CategoryCreateInput = {
@@ -19747,17 +19747,6 @@ export namespace Prisma {
     not?: NestedStringNullableFilter<$PrismaModel> | string | null
   }
 
-  export type DateTimeNullableFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
-    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
-  }
-
   export type EnumRoleFilter<$PrismaModel = never> = {
     equals?: $Enums.Role | EnumRoleFieldRefInput<$PrismaModel>
     in?: $Enums.Role[] | ListEnumRoleFieldRefInput<$PrismaModel>
@@ -19776,22 +19765,21 @@ export namespace Prisma {
     not?: NestedDateTimeFilter<$PrismaModel> | Date | string
   }
 
+  export type DateTimeNullableFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
+  }
+
   export type AccountListRelationFilter = {
     every?: AccountWhereInput
     some?: AccountWhereInput
     none?: AccountWhereInput
-  }
-
-  export type SessionListRelationFilter = {
-    every?: SessionWhereInput
-    some?: SessionWhereInput
-    none?: SessionWhereInput
-  }
-
-  export type OrderListRelationFilter = {
-    every?: OrderWhereInput
-    some?: OrderWhereInput
-    none?: OrderWhereInput
   }
 
   export type AddressListRelationFilter = {
@@ -19800,22 +19788,34 @@ export namespace Prisma {
     none?: AddressWhereInput
   }
 
-  export type ReviewListRelationFilter = {
-    every?: ReviewWhereInput
-    some?: ReviewWhereInput
-    none?: ReviewWhereInput
-  }
-
-  export type ProductListRelationFilter = {
-    every?: ProductWhereInput
-    some?: ProductWhereInput
-    none?: ProductWhereInput
+  export type OrderListRelationFilter = {
+    every?: OrderWhereInput
+    some?: OrderWhereInput
+    none?: OrderWhereInput
   }
 
   export type PaymentMethodListRelationFilter = {
     every?: PaymentMethodWhereInput
     some?: PaymentMethodWhereInput
     none?: PaymentMethodWhereInput
+  }
+
+  export type ReviewListRelationFilter = {
+    every?: ReviewWhereInput
+    some?: ReviewWhereInput
+    none?: ReviewWhereInput
+  }
+
+  export type SessionListRelationFilter = {
+    every?: SessionWhereInput
+    some?: SessionWhereInput
+    none?: SessionWhereInput
+  }
+
+  export type ProductListRelationFilter = {
+    every?: ProductWhereInput
+    some?: ProductWhereInput
+    none?: ProductWhereInput
   }
 
   export type SortOrderInput = {
@@ -19827,7 +19827,7 @@ export namespace Prisma {
     _count?: SortOrder
   }
 
-  export type SessionOrderByRelationAggregateInput = {
+  export type AddressOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -19835,7 +19835,7 @@ export namespace Prisma {
     _count?: SortOrder
   }
 
-  export type AddressOrderByRelationAggregateInput = {
+  export type PaymentMethodOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -19843,48 +19843,48 @@ export namespace Prisma {
     _count?: SortOrder
   }
 
-  export type ProductOrderByRelationAggregateInput = {
+  export type SessionOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
-  export type PaymentMethodOrderByRelationAggregateInput = {
+  export type ProductOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
   export type UserCountOrderByAggregateInput = {
     id?: SortOrder
-    name?: SortOrder
     email?: SortOrder
-    emailVerified?: SortOrder
-    image?: SortOrder
     password?: SortOrder
+    name?: SortOrder
     role?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    emailVerified?: SortOrder
+    image?: SortOrder
   }
 
   export type UserMaxOrderByAggregateInput = {
     id?: SortOrder
-    name?: SortOrder
     email?: SortOrder
-    emailVerified?: SortOrder
-    image?: SortOrder
     password?: SortOrder
+    name?: SortOrder
     role?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    emailVerified?: SortOrder
+    image?: SortOrder
   }
 
   export type UserMinOrderByAggregateInput = {
     id?: SortOrder
-    name?: SortOrder
     email?: SortOrder
-    emailVerified?: SortOrder
-    image?: SortOrder
     password?: SortOrder
+    name?: SortOrder
     role?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    emailVerified?: SortOrder
+    image?: SortOrder
   }
 
   export type StringWithAggregatesFilter<$PrismaModel = never> = {
@@ -19923,20 +19923,6 @@ export namespace Prisma {
     _max?: NestedStringNullableFilter<$PrismaModel>
   }
 
-  export type DateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
-    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeNullableWithAggregatesFilter<$PrismaModel> | Date | string | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedDateTimeNullableFilter<$PrismaModel>
-    _max?: NestedDateTimeNullableFilter<$PrismaModel>
-  }
-
   export type EnumRoleWithAggregatesFilter<$PrismaModel = never> = {
     equals?: $Enums.Role | EnumRoleFieldRefInput<$PrismaModel>
     in?: $Enums.Role[] | ListEnumRoleFieldRefInput<$PrismaModel>
@@ -19959,6 +19945,20 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedDateTimeFilter<$PrismaModel>
     _max?: NestedDateTimeFilter<$PrismaModel>
+  }
+
+  export type DateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableWithAggregatesFilter<$PrismaModel> | Date | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedDateTimeNullableFilter<$PrismaModel>
+    _max?: NestedDateTimeNullableFilter<$PrismaModel>
   }
 
   export type BoolFilter<$PrismaModel = never> = {
@@ -20197,17 +20197,6 @@ export namespace Prisma {
     not?: NestedDecimalFilter<$PrismaModel> | Decimal | DecimalJsLike | number | string
   }
 
-  export type DecimalNullableFilter<$PrismaModel = never> = {
-    equals?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel> | null
-    in?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel> | null
-    notIn?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel> | null
-    lt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    lte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    gt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    gte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    not?: NestedDecimalNullableFilter<$PrismaModel> | Decimal | DecimalJsLike | number | string | null
-  }
-
   export type IntFilter<$PrismaModel = never> = {
     equals?: number | IntFieldRefInput<$PrismaModel>
     in?: number[] | ListIntFieldRefInput<$PrismaModel>
@@ -20227,6 +20216,23 @@ export namespace Prisma {
     isEmpty?: boolean
   }
 
+  export type DecimalNullableFilter<$PrismaModel = never> = {
+    equals?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel> | null
+    in?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel> | null
+    notIn?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel> | null
+    lt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    lte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    gt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    gte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    not?: NestedDecimalNullableFilter<$PrismaModel> | Decimal | DecimalJsLike | number | string | null
+  }
+
+  export type OrderItemListRelationFilter = {
+    every?: OrderItemWhereInput
+    some?: OrderItemWhereInput
+    none?: OrderItemWhereInput
+  }
+
   export type CategoryNullableScalarRelationFilter = {
     is?: CategoryWhereInput | null
     isNot?: CategoryWhereInput | null
@@ -20238,23 +20244,17 @@ export namespace Prisma {
     none?: ProductSizeWhereInput
   }
 
-  export type OrderItemListRelationFilter = {
-    every?: OrderItemWhereInput
-    some?: OrderItemWhereInput
-    none?: OrderItemWhereInput
-  }
-
   export type UserListRelationFilter = {
     every?: UserWhereInput
     some?: UserWhereInput
     none?: UserWhereInput
   }
 
-  export type ProductSizeOrderByRelationAggregateInput = {
+  export type OrderItemOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
-  export type OrderItemOrderByRelationAggregateInput = {
+  export type ProductSizeOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -20267,22 +20267,22 @@ export namespace Prisma {
     name?: SortOrder
     description?: SortOrder
     price?: SortOrder
-    discountPrice?: SortOrder
     stock?: SortOrder
-    categoryId?: SortOrder
-    subCategory?: SortOrder
     images?: SortOrder
     featured?: SortOrder
-    allowFlocage?: SortOrder
-    allowGravure?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    allowFlocage?: SortOrder
+    allowGravure?: SortOrder
+    discountPrice?: SortOrder
+    subCategory?: SortOrder
+    categoryId?: SortOrder
   }
 
   export type ProductAvgOrderByAggregateInput = {
     price?: SortOrder
-    discountPrice?: SortOrder
     stock?: SortOrder
+    discountPrice?: SortOrder
   }
 
   export type ProductMaxOrderByAggregateInput = {
@@ -20290,15 +20290,15 @@ export namespace Prisma {
     name?: SortOrder
     description?: SortOrder
     price?: SortOrder
-    discountPrice?: SortOrder
     stock?: SortOrder
-    categoryId?: SortOrder
-    subCategory?: SortOrder
     featured?: SortOrder
-    allowFlocage?: SortOrder
-    allowGravure?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    allowFlocage?: SortOrder
+    allowGravure?: SortOrder
+    discountPrice?: SortOrder
+    subCategory?: SortOrder
+    categoryId?: SortOrder
   }
 
   export type ProductMinOrderByAggregateInput = {
@@ -20306,21 +20306,21 @@ export namespace Prisma {
     name?: SortOrder
     description?: SortOrder
     price?: SortOrder
-    discountPrice?: SortOrder
     stock?: SortOrder
-    categoryId?: SortOrder
-    subCategory?: SortOrder
     featured?: SortOrder
-    allowFlocage?: SortOrder
-    allowGravure?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    allowFlocage?: SortOrder
+    allowGravure?: SortOrder
+    discountPrice?: SortOrder
+    subCategory?: SortOrder
+    categoryId?: SortOrder
   }
 
   export type ProductSumOrderByAggregateInput = {
     price?: SortOrder
-    discountPrice?: SortOrder
     stock?: SortOrder
+    discountPrice?: SortOrder
   }
 
   export type DecimalWithAggregatesFilter<$PrismaModel = never> = {
@@ -20339,22 +20339,6 @@ export namespace Prisma {
     _max?: NestedDecimalFilter<$PrismaModel>
   }
 
-  export type DecimalNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel> | null
-    in?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel> | null
-    notIn?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel> | null
-    lt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    lte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    gt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    gte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    not?: NestedDecimalNullableWithAggregatesFilter<$PrismaModel> | Decimal | DecimalJsLike | number | string | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _avg?: NestedDecimalNullableFilter<$PrismaModel>
-    _sum?: NestedDecimalNullableFilter<$PrismaModel>
-    _min?: NestedDecimalNullableFilter<$PrismaModel>
-    _max?: NestedDecimalNullableFilter<$PrismaModel>
-  }
-
   export type IntWithAggregatesFilter<$PrismaModel = never> = {
     equals?: number | IntFieldRefInput<$PrismaModel>
     in?: number[] | ListIntFieldRefInput<$PrismaModel>
@@ -20369,6 +20353,22 @@ export namespace Prisma {
     _sum?: NestedIntFilter<$PrismaModel>
     _min?: NestedIntFilter<$PrismaModel>
     _max?: NestedIntFilter<$PrismaModel>
+  }
+
+  export type DecimalNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel> | null
+    in?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel> | null
+    notIn?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel> | null
+    lt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    lte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    gt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    gte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    not?: NestedDecimalNullableWithAggregatesFilter<$PrismaModel> | Decimal | DecimalJsLike | number | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _avg?: NestedDecimalNullableFilter<$PrismaModel>
+    _sum?: NestedDecimalNullableFilter<$PrismaModel>
+    _min?: NestedDecimalNullableFilter<$PrismaModel>
+    _max?: NestedDecimalNullableFilter<$PrismaModel>
   }
 
   export type ProductScalarRelationFilter = {
@@ -20470,13 +20470,13 @@ export namespace Prisma {
     userId?: SortOrder
     customerName?: SortOrder
     customerEmail?: SortOrder
-    customerPhone?: SortOrder
-    customerAddress?: SortOrder
-    paymentMethod?: SortOrder
     status?: SortOrder
     total?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    customerAddress?: SortOrder
+    customerPhone?: SortOrder
+    paymentMethod?: SortOrder
   }
 
   export type OrderAvgOrderByAggregateInput = {
@@ -20488,13 +20488,13 @@ export namespace Prisma {
     userId?: SortOrder
     customerName?: SortOrder
     customerEmail?: SortOrder
-    customerPhone?: SortOrder
-    customerAddress?: SortOrder
-    paymentMethod?: SortOrder
     status?: SortOrder
     total?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    customerAddress?: SortOrder
+    customerPhone?: SortOrder
+    paymentMethod?: SortOrder
   }
 
   export type OrderMinOrderByAggregateInput = {
@@ -20502,13 +20502,13 @@ export namespace Prisma {
     userId?: SortOrder
     customerName?: SortOrder
     customerEmail?: SortOrder
-    customerPhone?: SortOrder
-    customerAddress?: SortOrder
-    paymentMethod?: SortOrder
     status?: SortOrder
     total?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    customerAddress?: SortOrder
+    customerPhone?: SortOrder
+    paymentMethod?: SortOrder
   }
 
   export type OrderSumOrderByAggregateInput = {
@@ -20584,18 +20584,18 @@ export namespace Prisma {
     address?: SortOrder
     facebookUrl?: SortOrder
     instagramUrl?: SortOrder
-    tiktokUrl?: SortOrder
     whatsappNumber?: SortOrder
-    workingHours?: SortOrder
+    aboutUs?: SortOrder
+    bankAccount?: SortOrder
     deliveryFee?: SortOrder
     freeDeliveryOver?: SortOrder
-    shippingPolicy?: SortOrder
-    waveNumber?: SortOrder
     omNumber?: SortOrder
-    bankAccount?: SortOrder
     paymentPolicy?: SortOrder
     returnPolicy?: SortOrder
-    aboutUs?: SortOrder
+    shippingPolicy?: SortOrder
+    waveNumber?: SortOrder
+    tiktokUrl?: SortOrder
+    workingHours?: SortOrder
   }
 
   export type StoreConfigAvgOrderByAggregateInput = {
@@ -20614,18 +20614,18 @@ export namespace Prisma {
     address?: SortOrder
     facebookUrl?: SortOrder
     instagramUrl?: SortOrder
-    tiktokUrl?: SortOrder
     whatsappNumber?: SortOrder
-    workingHours?: SortOrder
+    aboutUs?: SortOrder
+    bankAccount?: SortOrder
     deliveryFee?: SortOrder
     freeDeliveryOver?: SortOrder
-    shippingPolicy?: SortOrder
-    waveNumber?: SortOrder
     omNumber?: SortOrder
-    bankAccount?: SortOrder
     paymentPolicy?: SortOrder
     returnPolicy?: SortOrder
-    aboutUs?: SortOrder
+    shippingPolicy?: SortOrder
+    waveNumber?: SortOrder
+    tiktokUrl?: SortOrder
+    workingHours?: SortOrder
   }
 
   export type StoreConfigMinOrderByAggregateInput = {
@@ -20639,18 +20639,18 @@ export namespace Prisma {
     address?: SortOrder
     facebookUrl?: SortOrder
     instagramUrl?: SortOrder
-    tiktokUrl?: SortOrder
     whatsappNumber?: SortOrder
-    workingHours?: SortOrder
+    aboutUs?: SortOrder
+    bankAccount?: SortOrder
     deliveryFee?: SortOrder
     freeDeliveryOver?: SortOrder
-    shippingPolicy?: SortOrder
-    waveNumber?: SortOrder
     omNumber?: SortOrder
-    bankAccount?: SortOrder
     paymentPolicy?: SortOrder
     returnPolicy?: SortOrder
-    aboutUs?: SortOrder
+    shippingPolicy?: SortOrder
+    waveNumber?: SortOrder
+    tiktokUrl?: SortOrder
+    workingHours?: SortOrder
   }
 
   export type StoreConfigSumOrderByAggregateInput = {
@@ -20692,11 +20692,11 @@ export namespace Prisma {
     connect?: AccountWhereUniqueInput | AccountWhereUniqueInput[]
   }
 
-  export type SessionCreateNestedManyWithoutUserInput = {
-    create?: XOR<SessionCreateWithoutUserInput, SessionUncheckedCreateWithoutUserInput> | SessionCreateWithoutUserInput[] | SessionUncheckedCreateWithoutUserInput[]
-    connectOrCreate?: SessionCreateOrConnectWithoutUserInput | SessionCreateOrConnectWithoutUserInput[]
-    createMany?: SessionCreateManyUserInputEnvelope
-    connect?: SessionWhereUniqueInput | SessionWhereUniqueInput[]
+  export type AddressCreateNestedManyWithoutUserInput = {
+    create?: XOR<AddressCreateWithoutUserInput, AddressUncheckedCreateWithoutUserInput> | AddressCreateWithoutUserInput[] | AddressUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: AddressCreateOrConnectWithoutUserInput | AddressCreateOrConnectWithoutUserInput[]
+    createMany?: AddressCreateManyUserInputEnvelope
+    connect?: AddressWhereUniqueInput | AddressWhereUniqueInput[]
   }
 
   export type OrderCreateNestedManyWithoutUserInput = {
@@ -20706,11 +20706,11 @@ export namespace Prisma {
     connect?: OrderWhereUniqueInput | OrderWhereUniqueInput[]
   }
 
-  export type AddressCreateNestedManyWithoutUserInput = {
-    create?: XOR<AddressCreateWithoutUserInput, AddressUncheckedCreateWithoutUserInput> | AddressCreateWithoutUserInput[] | AddressUncheckedCreateWithoutUserInput[]
-    connectOrCreate?: AddressCreateOrConnectWithoutUserInput | AddressCreateOrConnectWithoutUserInput[]
-    createMany?: AddressCreateManyUserInputEnvelope
-    connect?: AddressWhereUniqueInput | AddressWhereUniqueInput[]
+  export type PaymentMethodCreateNestedManyWithoutUserInput = {
+    create?: XOR<PaymentMethodCreateWithoutUserInput, PaymentMethodUncheckedCreateWithoutUserInput> | PaymentMethodCreateWithoutUserInput[] | PaymentMethodUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: PaymentMethodCreateOrConnectWithoutUserInput | PaymentMethodCreateOrConnectWithoutUserInput[]
+    createMany?: PaymentMethodCreateManyUserInputEnvelope
+    connect?: PaymentMethodWhereUniqueInput | PaymentMethodWhereUniqueInput[]
   }
 
   export type ReviewCreateNestedManyWithoutUserInput = {
@@ -20720,17 +20720,17 @@ export namespace Prisma {
     connect?: ReviewWhereUniqueInput | ReviewWhereUniqueInput[]
   }
 
+  export type SessionCreateNestedManyWithoutUserInput = {
+    create?: XOR<SessionCreateWithoutUserInput, SessionUncheckedCreateWithoutUserInput> | SessionCreateWithoutUserInput[] | SessionUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: SessionCreateOrConnectWithoutUserInput | SessionCreateOrConnectWithoutUserInput[]
+    createMany?: SessionCreateManyUserInputEnvelope
+    connect?: SessionWhereUniqueInput | SessionWhereUniqueInput[]
+  }
+
   export type ProductCreateNestedManyWithoutFavoritedByInput = {
     create?: XOR<ProductCreateWithoutFavoritedByInput, ProductUncheckedCreateWithoutFavoritedByInput> | ProductCreateWithoutFavoritedByInput[] | ProductUncheckedCreateWithoutFavoritedByInput[]
     connectOrCreate?: ProductCreateOrConnectWithoutFavoritedByInput | ProductCreateOrConnectWithoutFavoritedByInput[]
     connect?: ProductWhereUniqueInput | ProductWhereUniqueInput[]
-  }
-
-  export type PaymentMethodCreateNestedManyWithoutUserInput = {
-    create?: XOR<PaymentMethodCreateWithoutUserInput, PaymentMethodUncheckedCreateWithoutUserInput> | PaymentMethodCreateWithoutUserInput[] | PaymentMethodUncheckedCreateWithoutUserInput[]
-    connectOrCreate?: PaymentMethodCreateOrConnectWithoutUserInput | PaymentMethodCreateOrConnectWithoutUserInput[]
-    createMany?: PaymentMethodCreateManyUserInputEnvelope
-    connect?: PaymentMethodWhereUniqueInput | PaymentMethodWhereUniqueInput[]
   }
 
   export type AccountUncheckedCreateNestedManyWithoutUserInput = {
@@ -20740,11 +20740,11 @@ export namespace Prisma {
     connect?: AccountWhereUniqueInput | AccountWhereUniqueInput[]
   }
 
-  export type SessionUncheckedCreateNestedManyWithoutUserInput = {
-    create?: XOR<SessionCreateWithoutUserInput, SessionUncheckedCreateWithoutUserInput> | SessionCreateWithoutUserInput[] | SessionUncheckedCreateWithoutUserInput[]
-    connectOrCreate?: SessionCreateOrConnectWithoutUserInput | SessionCreateOrConnectWithoutUserInput[]
-    createMany?: SessionCreateManyUserInputEnvelope
-    connect?: SessionWhereUniqueInput | SessionWhereUniqueInput[]
+  export type AddressUncheckedCreateNestedManyWithoutUserInput = {
+    create?: XOR<AddressCreateWithoutUserInput, AddressUncheckedCreateWithoutUserInput> | AddressCreateWithoutUserInput[] | AddressUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: AddressCreateOrConnectWithoutUserInput | AddressCreateOrConnectWithoutUserInput[]
+    createMany?: AddressCreateManyUserInputEnvelope
+    connect?: AddressWhereUniqueInput | AddressWhereUniqueInput[]
   }
 
   export type OrderUncheckedCreateNestedManyWithoutUserInput = {
@@ -20754,11 +20754,11 @@ export namespace Prisma {
     connect?: OrderWhereUniqueInput | OrderWhereUniqueInput[]
   }
 
-  export type AddressUncheckedCreateNestedManyWithoutUserInput = {
-    create?: XOR<AddressCreateWithoutUserInput, AddressUncheckedCreateWithoutUserInput> | AddressCreateWithoutUserInput[] | AddressUncheckedCreateWithoutUserInput[]
-    connectOrCreate?: AddressCreateOrConnectWithoutUserInput | AddressCreateOrConnectWithoutUserInput[]
-    createMany?: AddressCreateManyUserInputEnvelope
-    connect?: AddressWhereUniqueInput | AddressWhereUniqueInput[]
+  export type PaymentMethodUncheckedCreateNestedManyWithoutUserInput = {
+    create?: XOR<PaymentMethodCreateWithoutUserInput, PaymentMethodUncheckedCreateWithoutUserInput> | PaymentMethodCreateWithoutUserInput[] | PaymentMethodUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: PaymentMethodCreateOrConnectWithoutUserInput | PaymentMethodCreateOrConnectWithoutUserInput[]
+    createMany?: PaymentMethodCreateManyUserInputEnvelope
+    connect?: PaymentMethodWhereUniqueInput | PaymentMethodWhereUniqueInput[]
   }
 
   export type ReviewUncheckedCreateNestedManyWithoutUserInput = {
@@ -20768,17 +20768,17 @@ export namespace Prisma {
     connect?: ReviewWhereUniqueInput | ReviewWhereUniqueInput[]
   }
 
+  export type SessionUncheckedCreateNestedManyWithoutUserInput = {
+    create?: XOR<SessionCreateWithoutUserInput, SessionUncheckedCreateWithoutUserInput> | SessionCreateWithoutUserInput[] | SessionUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: SessionCreateOrConnectWithoutUserInput | SessionCreateOrConnectWithoutUserInput[]
+    createMany?: SessionCreateManyUserInputEnvelope
+    connect?: SessionWhereUniqueInput | SessionWhereUniqueInput[]
+  }
+
   export type ProductUncheckedCreateNestedManyWithoutFavoritedByInput = {
     create?: XOR<ProductCreateWithoutFavoritedByInput, ProductUncheckedCreateWithoutFavoritedByInput> | ProductCreateWithoutFavoritedByInput[] | ProductUncheckedCreateWithoutFavoritedByInput[]
     connectOrCreate?: ProductCreateOrConnectWithoutFavoritedByInput | ProductCreateOrConnectWithoutFavoritedByInput[]
     connect?: ProductWhereUniqueInput | ProductWhereUniqueInput[]
-  }
-
-  export type PaymentMethodUncheckedCreateNestedManyWithoutUserInput = {
-    create?: XOR<PaymentMethodCreateWithoutUserInput, PaymentMethodUncheckedCreateWithoutUserInput> | PaymentMethodCreateWithoutUserInput[] | PaymentMethodUncheckedCreateWithoutUserInput[]
-    connectOrCreate?: PaymentMethodCreateOrConnectWithoutUserInput | PaymentMethodCreateOrConnectWithoutUserInput[]
-    createMany?: PaymentMethodCreateManyUserInputEnvelope
-    connect?: PaymentMethodWhereUniqueInput | PaymentMethodWhereUniqueInput[]
   }
 
   export type StringFieldUpdateOperationsInput = {
@@ -20789,16 +20789,16 @@ export namespace Prisma {
     set?: string | null
   }
 
-  export type NullableDateTimeFieldUpdateOperationsInput = {
-    set?: Date | string | null
-  }
-
   export type EnumRoleFieldUpdateOperationsInput = {
     set?: $Enums.Role
   }
 
   export type DateTimeFieldUpdateOperationsInput = {
     set?: Date | string
+  }
+
+  export type NullableDateTimeFieldUpdateOperationsInput = {
+    set?: Date | string | null
   }
 
   export type AccountUpdateManyWithoutUserNestedInput = {
@@ -20815,18 +20815,18 @@ export namespace Prisma {
     deleteMany?: AccountScalarWhereInput | AccountScalarWhereInput[]
   }
 
-  export type SessionUpdateManyWithoutUserNestedInput = {
-    create?: XOR<SessionCreateWithoutUserInput, SessionUncheckedCreateWithoutUserInput> | SessionCreateWithoutUserInput[] | SessionUncheckedCreateWithoutUserInput[]
-    connectOrCreate?: SessionCreateOrConnectWithoutUserInput | SessionCreateOrConnectWithoutUserInput[]
-    upsert?: SessionUpsertWithWhereUniqueWithoutUserInput | SessionUpsertWithWhereUniqueWithoutUserInput[]
-    createMany?: SessionCreateManyUserInputEnvelope
-    set?: SessionWhereUniqueInput | SessionWhereUniqueInput[]
-    disconnect?: SessionWhereUniqueInput | SessionWhereUniqueInput[]
-    delete?: SessionWhereUniqueInput | SessionWhereUniqueInput[]
-    connect?: SessionWhereUniqueInput | SessionWhereUniqueInput[]
-    update?: SessionUpdateWithWhereUniqueWithoutUserInput | SessionUpdateWithWhereUniqueWithoutUserInput[]
-    updateMany?: SessionUpdateManyWithWhereWithoutUserInput | SessionUpdateManyWithWhereWithoutUserInput[]
-    deleteMany?: SessionScalarWhereInput | SessionScalarWhereInput[]
+  export type AddressUpdateManyWithoutUserNestedInput = {
+    create?: XOR<AddressCreateWithoutUserInput, AddressUncheckedCreateWithoutUserInput> | AddressCreateWithoutUserInput[] | AddressUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: AddressCreateOrConnectWithoutUserInput | AddressCreateOrConnectWithoutUserInput[]
+    upsert?: AddressUpsertWithWhereUniqueWithoutUserInput | AddressUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: AddressCreateManyUserInputEnvelope
+    set?: AddressWhereUniqueInput | AddressWhereUniqueInput[]
+    disconnect?: AddressWhereUniqueInput | AddressWhereUniqueInput[]
+    delete?: AddressWhereUniqueInput | AddressWhereUniqueInput[]
+    connect?: AddressWhereUniqueInput | AddressWhereUniqueInput[]
+    update?: AddressUpdateWithWhereUniqueWithoutUserInput | AddressUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: AddressUpdateManyWithWhereWithoutUserInput | AddressUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: AddressScalarWhereInput | AddressScalarWhereInput[]
   }
 
   export type OrderUpdateManyWithoutUserNestedInput = {
@@ -20843,18 +20843,18 @@ export namespace Prisma {
     deleteMany?: OrderScalarWhereInput | OrderScalarWhereInput[]
   }
 
-  export type AddressUpdateManyWithoutUserNestedInput = {
-    create?: XOR<AddressCreateWithoutUserInput, AddressUncheckedCreateWithoutUserInput> | AddressCreateWithoutUserInput[] | AddressUncheckedCreateWithoutUserInput[]
-    connectOrCreate?: AddressCreateOrConnectWithoutUserInput | AddressCreateOrConnectWithoutUserInput[]
-    upsert?: AddressUpsertWithWhereUniqueWithoutUserInput | AddressUpsertWithWhereUniqueWithoutUserInput[]
-    createMany?: AddressCreateManyUserInputEnvelope
-    set?: AddressWhereUniqueInput | AddressWhereUniqueInput[]
-    disconnect?: AddressWhereUniqueInput | AddressWhereUniqueInput[]
-    delete?: AddressWhereUniqueInput | AddressWhereUniqueInput[]
-    connect?: AddressWhereUniqueInput | AddressWhereUniqueInput[]
-    update?: AddressUpdateWithWhereUniqueWithoutUserInput | AddressUpdateWithWhereUniqueWithoutUserInput[]
-    updateMany?: AddressUpdateManyWithWhereWithoutUserInput | AddressUpdateManyWithWhereWithoutUserInput[]
-    deleteMany?: AddressScalarWhereInput | AddressScalarWhereInput[]
+  export type PaymentMethodUpdateManyWithoutUserNestedInput = {
+    create?: XOR<PaymentMethodCreateWithoutUserInput, PaymentMethodUncheckedCreateWithoutUserInput> | PaymentMethodCreateWithoutUserInput[] | PaymentMethodUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: PaymentMethodCreateOrConnectWithoutUserInput | PaymentMethodCreateOrConnectWithoutUserInput[]
+    upsert?: PaymentMethodUpsertWithWhereUniqueWithoutUserInput | PaymentMethodUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: PaymentMethodCreateManyUserInputEnvelope
+    set?: PaymentMethodWhereUniqueInput | PaymentMethodWhereUniqueInput[]
+    disconnect?: PaymentMethodWhereUniqueInput | PaymentMethodWhereUniqueInput[]
+    delete?: PaymentMethodWhereUniqueInput | PaymentMethodWhereUniqueInput[]
+    connect?: PaymentMethodWhereUniqueInput | PaymentMethodWhereUniqueInput[]
+    update?: PaymentMethodUpdateWithWhereUniqueWithoutUserInput | PaymentMethodUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: PaymentMethodUpdateManyWithWhereWithoutUserInput | PaymentMethodUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: PaymentMethodScalarWhereInput | PaymentMethodScalarWhereInput[]
   }
 
   export type ReviewUpdateManyWithoutUserNestedInput = {
@@ -20871,6 +20871,20 @@ export namespace Prisma {
     deleteMany?: ReviewScalarWhereInput | ReviewScalarWhereInput[]
   }
 
+  export type SessionUpdateManyWithoutUserNestedInput = {
+    create?: XOR<SessionCreateWithoutUserInput, SessionUncheckedCreateWithoutUserInput> | SessionCreateWithoutUserInput[] | SessionUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: SessionCreateOrConnectWithoutUserInput | SessionCreateOrConnectWithoutUserInput[]
+    upsert?: SessionUpsertWithWhereUniqueWithoutUserInput | SessionUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: SessionCreateManyUserInputEnvelope
+    set?: SessionWhereUniqueInput | SessionWhereUniqueInput[]
+    disconnect?: SessionWhereUniqueInput | SessionWhereUniqueInput[]
+    delete?: SessionWhereUniqueInput | SessionWhereUniqueInput[]
+    connect?: SessionWhereUniqueInput | SessionWhereUniqueInput[]
+    update?: SessionUpdateWithWhereUniqueWithoutUserInput | SessionUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: SessionUpdateManyWithWhereWithoutUserInput | SessionUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: SessionScalarWhereInput | SessionScalarWhereInput[]
+  }
+
   export type ProductUpdateManyWithoutFavoritedByNestedInput = {
     create?: XOR<ProductCreateWithoutFavoritedByInput, ProductUncheckedCreateWithoutFavoritedByInput> | ProductCreateWithoutFavoritedByInput[] | ProductUncheckedCreateWithoutFavoritedByInput[]
     connectOrCreate?: ProductCreateOrConnectWithoutFavoritedByInput | ProductCreateOrConnectWithoutFavoritedByInput[]
@@ -20882,20 +20896,6 @@ export namespace Prisma {
     update?: ProductUpdateWithWhereUniqueWithoutFavoritedByInput | ProductUpdateWithWhereUniqueWithoutFavoritedByInput[]
     updateMany?: ProductUpdateManyWithWhereWithoutFavoritedByInput | ProductUpdateManyWithWhereWithoutFavoritedByInput[]
     deleteMany?: ProductScalarWhereInput | ProductScalarWhereInput[]
-  }
-
-  export type PaymentMethodUpdateManyWithoutUserNestedInput = {
-    create?: XOR<PaymentMethodCreateWithoutUserInput, PaymentMethodUncheckedCreateWithoutUserInput> | PaymentMethodCreateWithoutUserInput[] | PaymentMethodUncheckedCreateWithoutUserInput[]
-    connectOrCreate?: PaymentMethodCreateOrConnectWithoutUserInput | PaymentMethodCreateOrConnectWithoutUserInput[]
-    upsert?: PaymentMethodUpsertWithWhereUniqueWithoutUserInput | PaymentMethodUpsertWithWhereUniqueWithoutUserInput[]
-    createMany?: PaymentMethodCreateManyUserInputEnvelope
-    set?: PaymentMethodWhereUniqueInput | PaymentMethodWhereUniqueInput[]
-    disconnect?: PaymentMethodWhereUniqueInput | PaymentMethodWhereUniqueInput[]
-    delete?: PaymentMethodWhereUniqueInput | PaymentMethodWhereUniqueInput[]
-    connect?: PaymentMethodWhereUniqueInput | PaymentMethodWhereUniqueInput[]
-    update?: PaymentMethodUpdateWithWhereUniqueWithoutUserInput | PaymentMethodUpdateWithWhereUniqueWithoutUserInput[]
-    updateMany?: PaymentMethodUpdateManyWithWhereWithoutUserInput | PaymentMethodUpdateManyWithWhereWithoutUserInput[]
-    deleteMany?: PaymentMethodScalarWhereInput | PaymentMethodScalarWhereInput[]
   }
 
   export type AccountUncheckedUpdateManyWithoutUserNestedInput = {
@@ -20912,18 +20912,18 @@ export namespace Prisma {
     deleteMany?: AccountScalarWhereInput | AccountScalarWhereInput[]
   }
 
-  export type SessionUncheckedUpdateManyWithoutUserNestedInput = {
-    create?: XOR<SessionCreateWithoutUserInput, SessionUncheckedCreateWithoutUserInput> | SessionCreateWithoutUserInput[] | SessionUncheckedCreateWithoutUserInput[]
-    connectOrCreate?: SessionCreateOrConnectWithoutUserInput | SessionCreateOrConnectWithoutUserInput[]
-    upsert?: SessionUpsertWithWhereUniqueWithoutUserInput | SessionUpsertWithWhereUniqueWithoutUserInput[]
-    createMany?: SessionCreateManyUserInputEnvelope
-    set?: SessionWhereUniqueInput | SessionWhereUniqueInput[]
-    disconnect?: SessionWhereUniqueInput | SessionWhereUniqueInput[]
-    delete?: SessionWhereUniqueInput | SessionWhereUniqueInput[]
-    connect?: SessionWhereUniqueInput | SessionWhereUniqueInput[]
-    update?: SessionUpdateWithWhereUniqueWithoutUserInput | SessionUpdateWithWhereUniqueWithoutUserInput[]
-    updateMany?: SessionUpdateManyWithWhereWithoutUserInput | SessionUpdateManyWithWhereWithoutUserInput[]
-    deleteMany?: SessionScalarWhereInput | SessionScalarWhereInput[]
+  export type AddressUncheckedUpdateManyWithoutUserNestedInput = {
+    create?: XOR<AddressCreateWithoutUserInput, AddressUncheckedCreateWithoutUserInput> | AddressCreateWithoutUserInput[] | AddressUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: AddressCreateOrConnectWithoutUserInput | AddressCreateOrConnectWithoutUserInput[]
+    upsert?: AddressUpsertWithWhereUniqueWithoutUserInput | AddressUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: AddressCreateManyUserInputEnvelope
+    set?: AddressWhereUniqueInput | AddressWhereUniqueInput[]
+    disconnect?: AddressWhereUniqueInput | AddressWhereUniqueInput[]
+    delete?: AddressWhereUniqueInput | AddressWhereUniqueInput[]
+    connect?: AddressWhereUniqueInput | AddressWhereUniqueInput[]
+    update?: AddressUpdateWithWhereUniqueWithoutUserInput | AddressUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: AddressUpdateManyWithWhereWithoutUserInput | AddressUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: AddressScalarWhereInput | AddressScalarWhereInput[]
   }
 
   export type OrderUncheckedUpdateManyWithoutUserNestedInput = {
@@ -20940,18 +20940,18 @@ export namespace Prisma {
     deleteMany?: OrderScalarWhereInput | OrderScalarWhereInput[]
   }
 
-  export type AddressUncheckedUpdateManyWithoutUserNestedInput = {
-    create?: XOR<AddressCreateWithoutUserInput, AddressUncheckedCreateWithoutUserInput> | AddressCreateWithoutUserInput[] | AddressUncheckedCreateWithoutUserInput[]
-    connectOrCreate?: AddressCreateOrConnectWithoutUserInput | AddressCreateOrConnectWithoutUserInput[]
-    upsert?: AddressUpsertWithWhereUniqueWithoutUserInput | AddressUpsertWithWhereUniqueWithoutUserInput[]
-    createMany?: AddressCreateManyUserInputEnvelope
-    set?: AddressWhereUniqueInput | AddressWhereUniqueInput[]
-    disconnect?: AddressWhereUniqueInput | AddressWhereUniqueInput[]
-    delete?: AddressWhereUniqueInput | AddressWhereUniqueInput[]
-    connect?: AddressWhereUniqueInput | AddressWhereUniqueInput[]
-    update?: AddressUpdateWithWhereUniqueWithoutUserInput | AddressUpdateWithWhereUniqueWithoutUserInput[]
-    updateMany?: AddressUpdateManyWithWhereWithoutUserInput | AddressUpdateManyWithWhereWithoutUserInput[]
-    deleteMany?: AddressScalarWhereInput | AddressScalarWhereInput[]
+  export type PaymentMethodUncheckedUpdateManyWithoutUserNestedInput = {
+    create?: XOR<PaymentMethodCreateWithoutUserInput, PaymentMethodUncheckedCreateWithoutUserInput> | PaymentMethodCreateWithoutUserInput[] | PaymentMethodUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: PaymentMethodCreateOrConnectWithoutUserInput | PaymentMethodCreateOrConnectWithoutUserInput[]
+    upsert?: PaymentMethodUpsertWithWhereUniqueWithoutUserInput | PaymentMethodUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: PaymentMethodCreateManyUserInputEnvelope
+    set?: PaymentMethodWhereUniqueInput | PaymentMethodWhereUniqueInput[]
+    disconnect?: PaymentMethodWhereUniqueInput | PaymentMethodWhereUniqueInput[]
+    delete?: PaymentMethodWhereUniqueInput | PaymentMethodWhereUniqueInput[]
+    connect?: PaymentMethodWhereUniqueInput | PaymentMethodWhereUniqueInput[]
+    update?: PaymentMethodUpdateWithWhereUniqueWithoutUserInput | PaymentMethodUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: PaymentMethodUpdateManyWithWhereWithoutUserInput | PaymentMethodUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: PaymentMethodScalarWhereInput | PaymentMethodScalarWhereInput[]
   }
 
   export type ReviewUncheckedUpdateManyWithoutUserNestedInput = {
@@ -20968,6 +20968,20 @@ export namespace Prisma {
     deleteMany?: ReviewScalarWhereInput | ReviewScalarWhereInput[]
   }
 
+  export type SessionUncheckedUpdateManyWithoutUserNestedInput = {
+    create?: XOR<SessionCreateWithoutUserInput, SessionUncheckedCreateWithoutUserInput> | SessionCreateWithoutUserInput[] | SessionUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: SessionCreateOrConnectWithoutUserInput | SessionCreateOrConnectWithoutUserInput[]
+    upsert?: SessionUpsertWithWhereUniqueWithoutUserInput | SessionUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: SessionCreateManyUserInputEnvelope
+    set?: SessionWhereUniqueInput | SessionWhereUniqueInput[]
+    disconnect?: SessionWhereUniqueInput | SessionWhereUniqueInput[]
+    delete?: SessionWhereUniqueInput | SessionWhereUniqueInput[]
+    connect?: SessionWhereUniqueInput | SessionWhereUniqueInput[]
+    update?: SessionUpdateWithWhereUniqueWithoutUserInput | SessionUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: SessionUpdateManyWithWhereWithoutUserInput | SessionUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: SessionScalarWhereInput | SessionScalarWhereInput[]
+  }
+
   export type ProductUncheckedUpdateManyWithoutFavoritedByNestedInput = {
     create?: XOR<ProductCreateWithoutFavoritedByInput, ProductUncheckedCreateWithoutFavoritedByInput> | ProductCreateWithoutFavoritedByInput[] | ProductUncheckedCreateWithoutFavoritedByInput[]
     connectOrCreate?: ProductCreateOrConnectWithoutFavoritedByInput | ProductCreateOrConnectWithoutFavoritedByInput[]
@@ -20979,20 +20993,6 @@ export namespace Prisma {
     update?: ProductUpdateWithWhereUniqueWithoutFavoritedByInput | ProductUpdateWithWhereUniqueWithoutFavoritedByInput[]
     updateMany?: ProductUpdateManyWithWhereWithoutFavoritedByInput | ProductUpdateManyWithWhereWithoutFavoritedByInput[]
     deleteMany?: ProductScalarWhereInput | ProductScalarWhereInput[]
-  }
-
-  export type PaymentMethodUncheckedUpdateManyWithoutUserNestedInput = {
-    create?: XOR<PaymentMethodCreateWithoutUserInput, PaymentMethodUncheckedCreateWithoutUserInput> | PaymentMethodCreateWithoutUserInput[] | PaymentMethodUncheckedCreateWithoutUserInput[]
-    connectOrCreate?: PaymentMethodCreateOrConnectWithoutUserInput | PaymentMethodCreateOrConnectWithoutUserInput[]
-    upsert?: PaymentMethodUpsertWithWhereUniqueWithoutUserInput | PaymentMethodUpsertWithWhereUniqueWithoutUserInput[]
-    createMany?: PaymentMethodCreateManyUserInputEnvelope
-    set?: PaymentMethodWhereUniqueInput | PaymentMethodWhereUniqueInput[]
-    disconnect?: PaymentMethodWhereUniqueInput | PaymentMethodWhereUniqueInput[]
-    delete?: PaymentMethodWhereUniqueInput | PaymentMethodWhereUniqueInput[]
-    connect?: PaymentMethodWhereUniqueInput | PaymentMethodWhereUniqueInput[]
-    update?: PaymentMethodUpdateWithWhereUniqueWithoutUserInput | PaymentMethodUpdateWithWhereUniqueWithoutUserInput[]
-    updateMany?: PaymentMethodUpdateManyWithWhereWithoutUserInput | PaymentMethodUpdateManyWithWhereWithoutUserInput[]
-    deleteMany?: PaymentMethodScalarWhereInput | PaymentMethodScalarWhereInput[]
   }
 
   export type UserCreateNestedOneWithoutAddressesInput = {
@@ -21067,6 +21067,13 @@ export namespace Prisma {
     set: string[]
   }
 
+  export type OrderItemCreateNestedManyWithoutProductInput = {
+    create?: XOR<OrderItemCreateWithoutProductInput, OrderItemUncheckedCreateWithoutProductInput> | OrderItemCreateWithoutProductInput[] | OrderItemUncheckedCreateWithoutProductInput[]
+    connectOrCreate?: OrderItemCreateOrConnectWithoutProductInput | OrderItemCreateOrConnectWithoutProductInput[]
+    createMany?: OrderItemCreateManyProductInputEnvelope
+    connect?: OrderItemWhereUniqueInput | OrderItemWhereUniqueInput[]
+  }
+
   export type CategoryCreateNestedOneWithoutProductsInput = {
     create?: XOR<CategoryCreateWithoutProductsInput, CategoryUncheckedCreateWithoutProductsInput>
     connectOrCreate?: CategoryCreateOrConnectWithoutProductsInput
@@ -21078,13 +21085,6 @@ export namespace Prisma {
     connectOrCreate?: ProductSizeCreateOrConnectWithoutProductInput | ProductSizeCreateOrConnectWithoutProductInput[]
     createMany?: ProductSizeCreateManyProductInputEnvelope
     connect?: ProductSizeWhereUniqueInput | ProductSizeWhereUniqueInput[]
-  }
-
-  export type OrderItemCreateNestedManyWithoutProductInput = {
-    create?: XOR<OrderItemCreateWithoutProductInput, OrderItemUncheckedCreateWithoutProductInput> | OrderItemCreateWithoutProductInput[] | OrderItemUncheckedCreateWithoutProductInput[]
-    connectOrCreate?: OrderItemCreateOrConnectWithoutProductInput | OrderItemCreateOrConnectWithoutProductInput[]
-    createMany?: OrderItemCreateManyProductInputEnvelope
-    connect?: OrderItemWhereUniqueInput | OrderItemWhereUniqueInput[]
   }
 
   export type ReviewCreateNestedManyWithoutProductInput = {
@@ -21100,18 +21100,18 @@ export namespace Prisma {
     connect?: UserWhereUniqueInput | UserWhereUniqueInput[]
   }
 
-  export type ProductSizeUncheckedCreateNestedManyWithoutProductInput = {
-    create?: XOR<ProductSizeCreateWithoutProductInput, ProductSizeUncheckedCreateWithoutProductInput> | ProductSizeCreateWithoutProductInput[] | ProductSizeUncheckedCreateWithoutProductInput[]
-    connectOrCreate?: ProductSizeCreateOrConnectWithoutProductInput | ProductSizeCreateOrConnectWithoutProductInput[]
-    createMany?: ProductSizeCreateManyProductInputEnvelope
-    connect?: ProductSizeWhereUniqueInput | ProductSizeWhereUniqueInput[]
-  }
-
   export type OrderItemUncheckedCreateNestedManyWithoutProductInput = {
     create?: XOR<OrderItemCreateWithoutProductInput, OrderItemUncheckedCreateWithoutProductInput> | OrderItemCreateWithoutProductInput[] | OrderItemUncheckedCreateWithoutProductInput[]
     connectOrCreate?: OrderItemCreateOrConnectWithoutProductInput | OrderItemCreateOrConnectWithoutProductInput[]
     createMany?: OrderItemCreateManyProductInputEnvelope
     connect?: OrderItemWhereUniqueInput | OrderItemWhereUniqueInput[]
+  }
+
+  export type ProductSizeUncheckedCreateNestedManyWithoutProductInput = {
+    create?: XOR<ProductSizeCreateWithoutProductInput, ProductSizeUncheckedCreateWithoutProductInput> | ProductSizeCreateWithoutProductInput[] | ProductSizeUncheckedCreateWithoutProductInput[]
+    connectOrCreate?: ProductSizeCreateOrConnectWithoutProductInput | ProductSizeCreateOrConnectWithoutProductInput[]
+    createMany?: ProductSizeCreateManyProductInputEnvelope
+    connect?: ProductSizeWhereUniqueInput | ProductSizeWhereUniqueInput[]
   }
 
   export type ReviewUncheckedCreateNestedManyWithoutProductInput = {
@@ -21135,14 +21135,6 @@ export namespace Prisma {
     divide?: Decimal | DecimalJsLike | number | string
   }
 
-  export type NullableDecimalFieldUpdateOperationsInput = {
-    set?: Decimal | DecimalJsLike | number | string | null
-    increment?: Decimal | DecimalJsLike | number | string
-    decrement?: Decimal | DecimalJsLike | number | string
-    multiply?: Decimal | DecimalJsLike | number | string
-    divide?: Decimal | DecimalJsLike | number | string
-  }
-
   export type IntFieldUpdateOperationsInput = {
     set?: number
     increment?: number
@@ -21154,6 +21146,28 @@ export namespace Prisma {
   export type ProductUpdateimagesInput = {
     set?: string[]
     push?: string | string[]
+  }
+
+  export type NullableDecimalFieldUpdateOperationsInput = {
+    set?: Decimal | DecimalJsLike | number | string | null
+    increment?: Decimal | DecimalJsLike | number | string
+    decrement?: Decimal | DecimalJsLike | number | string
+    multiply?: Decimal | DecimalJsLike | number | string
+    divide?: Decimal | DecimalJsLike | number | string
+  }
+
+  export type OrderItemUpdateManyWithoutProductNestedInput = {
+    create?: XOR<OrderItemCreateWithoutProductInput, OrderItemUncheckedCreateWithoutProductInput> | OrderItemCreateWithoutProductInput[] | OrderItemUncheckedCreateWithoutProductInput[]
+    connectOrCreate?: OrderItemCreateOrConnectWithoutProductInput | OrderItemCreateOrConnectWithoutProductInput[]
+    upsert?: OrderItemUpsertWithWhereUniqueWithoutProductInput | OrderItemUpsertWithWhereUniqueWithoutProductInput[]
+    createMany?: OrderItemCreateManyProductInputEnvelope
+    set?: OrderItemWhereUniqueInput | OrderItemWhereUniqueInput[]
+    disconnect?: OrderItemWhereUniqueInput | OrderItemWhereUniqueInput[]
+    delete?: OrderItemWhereUniqueInput | OrderItemWhereUniqueInput[]
+    connect?: OrderItemWhereUniqueInput | OrderItemWhereUniqueInput[]
+    update?: OrderItemUpdateWithWhereUniqueWithoutProductInput | OrderItemUpdateWithWhereUniqueWithoutProductInput[]
+    updateMany?: OrderItemUpdateManyWithWhereWithoutProductInput | OrderItemUpdateManyWithWhereWithoutProductInput[]
+    deleteMany?: OrderItemScalarWhereInput | OrderItemScalarWhereInput[]
   }
 
   export type CategoryUpdateOneWithoutProductsNestedInput = {
@@ -21178,20 +21192,6 @@ export namespace Prisma {
     update?: ProductSizeUpdateWithWhereUniqueWithoutProductInput | ProductSizeUpdateWithWhereUniqueWithoutProductInput[]
     updateMany?: ProductSizeUpdateManyWithWhereWithoutProductInput | ProductSizeUpdateManyWithWhereWithoutProductInput[]
     deleteMany?: ProductSizeScalarWhereInput | ProductSizeScalarWhereInput[]
-  }
-
-  export type OrderItemUpdateManyWithoutProductNestedInput = {
-    create?: XOR<OrderItemCreateWithoutProductInput, OrderItemUncheckedCreateWithoutProductInput> | OrderItemCreateWithoutProductInput[] | OrderItemUncheckedCreateWithoutProductInput[]
-    connectOrCreate?: OrderItemCreateOrConnectWithoutProductInput | OrderItemCreateOrConnectWithoutProductInput[]
-    upsert?: OrderItemUpsertWithWhereUniqueWithoutProductInput | OrderItemUpsertWithWhereUniqueWithoutProductInput[]
-    createMany?: OrderItemCreateManyProductInputEnvelope
-    set?: OrderItemWhereUniqueInput | OrderItemWhereUniqueInput[]
-    disconnect?: OrderItemWhereUniqueInput | OrderItemWhereUniqueInput[]
-    delete?: OrderItemWhereUniqueInput | OrderItemWhereUniqueInput[]
-    connect?: OrderItemWhereUniqueInput | OrderItemWhereUniqueInput[]
-    update?: OrderItemUpdateWithWhereUniqueWithoutProductInput | OrderItemUpdateWithWhereUniqueWithoutProductInput[]
-    updateMany?: OrderItemUpdateManyWithWhereWithoutProductInput | OrderItemUpdateManyWithWhereWithoutProductInput[]
-    deleteMany?: OrderItemScalarWhereInput | OrderItemScalarWhereInput[]
   }
 
   export type ReviewUpdateManyWithoutProductNestedInput = {
@@ -21221,20 +21221,6 @@ export namespace Prisma {
     deleteMany?: UserScalarWhereInput | UserScalarWhereInput[]
   }
 
-  export type ProductSizeUncheckedUpdateManyWithoutProductNestedInput = {
-    create?: XOR<ProductSizeCreateWithoutProductInput, ProductSizeUncheckedCreateWithoutProductInput> | ProductSizeCreateWithoutProductInput[] | ProductSizeUncheckedCreateWithoutProductInput[]
-    connectOrCreate?: ProductSizeCreateOrConnectWithoutProductInput | ProductSizeCreateOrConnectWithoutProductInput[]
-    upsert?: ProductSizeUpsertWithWhereUniqueWithoutProductInput | ProductSizeUpsertWithWhereUniqueWithoutProductInput[]
-    createMany?: ProductSizeCreateManyProductInputEnvelope
-    set?: ProductSizeWhereUniqueInput | ProductSizeWhereUniqueInput[]
-    disconnect?: ProductSizeWhereUniqueInput | ProductSizeWhereUniqueInput[]
-    delete?: ProductSizeWhereUniqueInput | ProductSizeWhereUniqueInput[]
-    connect?: ProductSizeWhereUniqueInput | ProductSizeWhereUniqueInput[]
-    update?: ProductSizeUpdateWithWhereUniqueWithoutProductInput | ProductSizeUpdateWithWhereUniqueWithoutProductInput[]
-    updateMany?: ProductSizeUpdateManyWithWhereWithoutProductInput | ProductSizeUpdateManyWithWhereWithoutProductInput[]
-    deleteMany?: ProductSizeScalarWhereInput | ProductSizeScalarWhereInput[]
-  }
-
   export type OrderItemUncheckedUpdateManyWithoutProductNestedInput = {
     create?: XOR<OrderItemCreateWithoutProductInput, OrderItemUncheckedCreateWithoutProductInput> | OrderItemCreateWithoutProductInput[] | OrderItemUncheckedCreateWithoutProductInput[]
     connectOrCreate?: OrderItemCreateOrConnectWithoutProductInput | OrderItemCreateOrConnectWithoutProductInput[]
@@ -21247,6 +21233,20 @@ export namespace Prisma {
     update?: OrderItemUpdateWithWhereUniqueWithoutProductInput | OrderItemUpdateWithWhereUniqueWithoutProductInput[]
     updateMany?: OrderItemUpdateManyWithWhereWithoutProductInput | OrderItemUpdateManyWithWhereWithoutProductInput[]
     deleteMany?: OrderItemScalarWhereInput | OrderItemScalarWhereInput[]
+  }
+
+  export type ProductSizeUncheckedUpdateManyWithoutProductNestedInput = {
+    create?: XOR<ProductSizeCreateWithoutProductInput, ProductSizeUncheckedCreateWithoutProductInput> | ProductSizeCreateWithoutProductInput[] | ProductSizeUncheckedCreateWithoutProductInput[]
+    connectOrCreate?: ProductSizeCreateOrConnectWithoutProductInput | ProductSizeCreateOrConnectWithoutProductInput[]
+    upsert?: ProductSizeUpsertWithWhereUniqueWithoutProductInput | ProductSizeUpsertWithWhereUniqueWithoutProductInput[]
+    createMany?: ProductSizeCreateManyProductInputEnvelope
+    set?: ProductSizeWhereUniqueInput | ProductSizeWhereUniqueInput[]
+    disconnect?: ProductSizeWhereUniqueInput | ProductSizeWhereUniqueInput[]
+    delete?: ProductSizeWhereUniqueInput | ProductSizeWhereUniqueInput[]
+    connect?: ProductSizeWhereUniqueInput | ProductSizeWhereUniqueInput[]
+    update?: ProductSizeUpdateWithWhereUniqueWithoutProductInput | ProductSizeUpdateWithWhereUniqueWithoutProductInput[]
+    updateMany?: ProductSizeUpdateManyWithWhereWithoutProductInput | ProductSizeUpdateManyWithWhereWithoutProductInput[]
+    deleteMany?: ProductSizeScalarWhereInput | ProductSizeScalarWhereInput[]
   }
 
   export type ReviewUncheckedUpdateManyWithoutProductNestedInput = {
@@ -21276,24 +21276,16 @@ export namespace Prisma {
     deleteMany?: UserScalarWhereInput | UserScalarWhereInput[]
   }
 
-  export type UserCreateNestedOneWithoutReviewsInput = {
-    create?: XOR<UserCreateWithoutReviewsInput, UserUncheckedCreateWithoutReviewsInput>
-    connectOrCreate?: UserCreateOrConnectWithoutReviewsInput
-    connect?: UserWhereUniqueInput
-  }
-
   export type ProductCreateNestedOneWithoutReviewsInput = {
     create?: XOR<ProductCreateWithoutReviewsInput, ProductUncheckedCreateWithoutReviewsInput>
     connectOrCreate?: ProductCreateOrConnectWithoutReviewsInput
     connect?: ProductWhereUniqueInput
   }
 
-  export type UserUpdateOneRequiredWithoutReviewsNestedInput = {
+  export type UserCreateNestedOneWithoutReviewsInput = {
     create?: XOR<UserCreateWithoutReviewsInput, UserUncheckedCreateWithoutReviewsInput>
     connectOrCreate?: UserCreateOrConnectWithoutReviewsInput
-    upsert?: UserUpsertWithoutReviewsInput
     connect?: UserWhereUniqueInput
-    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutReviewsInput, UserUpdateWithoutReviewsInput>, UserUncheckedUpdateWithoutReviewsInput>
   }
 
   export type ProductUpdateOneRequiredWithoutReviewsNestedInput = {
@@ -21302,6 +21294,14 @@ export namespace Prisma {
     upsert?: ProductUpsertWithoutReviewsInput
     connect?: ProductWhereUniqueInput
     update?: XOR<XOR<ProductUpdateToOneWithWhereWithoutReviewsInput, ProductUpdateWithoutReviewsInput>, ProductUncheckedUpdateWithoutReviewsInput>
+  }
+
+  export type UserUpdateOneRequiredWithoutReviewsNestedInput = {
+    create?: XOR<UserCreateWithoutReviewsInput, UserUncheckedCreateWithoutReviewsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutReviewsInput
+    upsert?: UserUpsertWithoutReviewsInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutReviewsInput, UserUpdateWithoutReviewsInput>, UserUncheckedUpdateWithoutReviewsInput>
   }
 
   export type ProductCreateNestedOneWithoutSizesInput = {
@@ -21478,17 +21478,6 @@ export namespace Prisma {
     not?: NestedStringNullableFilter<$PrismaModel> | string | null
   }
 
-  export type NestedDateTimeNullableFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
-    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
-  }
-
   export type NestedEnumRoleFilter<$PrismaModel = never> = {
     equals?: $Enums.Role | EnumRoleFieldRefInput<$PrismaModel>
     in?: $Enums.Role[] | ListEnumRoleFieldRefInput<$PrismaModel>
@@ -21505,6 +21494,17 @@ export namespace Prisma {
     gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     not?: NestedDateTimeFilter<$PrismaModel> | Date | string
+  }
+
+  export type NestedDateTimeNullableFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
   }
 
   export type NestedStringWithAggregatesFilter<$PrismaModel = never> = {
@@ -21563,20 +21563,6 @@ export namespace Prisma {
     not?: NestedIntNullableFilter<$PrismaModel> | number | null
   }
 
-  export type NestedDateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
-    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeNullableWithAggregatesFilter<$PrismaModel> | Date | string | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedDateTimeNullableFilter<$PrismaModel>
-    _max?: NestedDateTimeNullableFilter<$PrismaModel>
-  }
-
   export type NestedEnumRoleWithAggregatesFilter<$PrismaModel = never> = {
     equals?: $Enums.Role | EnumRoleFieldRefInput<$PrismaModel>
     in?: $Enums.Role[] | ListEnumRoleFieldRefInput<$PrismaModel>
@@ -21599,6 +21585,20 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedDateTimeFilter<$PrismaModel>
     _max?: NestedDateTimeFilter<$PrismaModel>
+  }
+
+  export type NestedDateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableWithAggregatesFilter<$PrismaModel> | Date | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedDateTimeNullableFilter<$PrismaModel>
+    _max?: NestedDateTimeNullableFilter<$PrismaModel>
   }
 
   export type NestedBoolFilter<$PrismaModel = never> = {
@@ -21679,22 +21679,6 @@ export namespace Prisma {
     _max?: NestedDecimalFilter<$PrismaModel>
   }
 
-  export type NestedDecimalNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel> | null
-    in?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel> | null
-    notIn?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel> | null
-    lt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    lte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    gt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    gte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    not?: NestedDecimalNullableWithAggregatesFilter<$PrismaModel> | Decimal | DecimalJsLike | number | string | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _avg?: NestedDecimalNullableFilter<$PrismaModel>
-    _sum?: NestedDecimalNullableFilter<$PrismaModel>
-    _min?: NestedDecimalNullableFilter<$PrismaModel>
-    _max?: NestedDecimalNullableFilter<$PrismaModel>
-  }
-
   export type NestedIntWithAggregatesFilter<$PrismaModel = never> = {
     equals?: number | IntFieldRefInput<$PrismaModel>
     in?: number[] | ListIntFieldRefInput<$PrismaModel>
@@ -21720,6 +21704,22 @@ export namespace Prisma {
     gt?: number | FloatFieldRefInput<$PrismaModel>
     gte?: number | FloatFieldRefInput<$PrismaModel>
     not?: NestedFloatFilter<$PrismaModel> | number
+  }
+
+  export type NestedDecimalNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel> | null
+    in?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel> | null
+    notIn?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel> | null
+    lt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    lte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    gt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    gte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    not?: NestedDecimalNullableWithAggregatesFilter<$PrismaModel> | Decimal | DecimalJsLike | number | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _avg?: NestedDecimalNullableFilter<$PrismaModel>
+    _sum?: NestedDecimalNullableFilter<$PrismaModel>
+    _min?: NestedDecimalNullableFilter<$PrismaModel>
+    _max?: NestedDecimalNullableFilter<$PrismaModel>
   }
 
   export type NestedEnumOrderStatusFilter<$PrismaModel = never> = {
@@ -21777,66 +21777,6 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
-  export type SessionCreateWithoutUserInput = {
-    id?: string
-    sessionToken: string
-    expires: Date | string
-  }
-
-  export type SessionUncheckedCreateWithoutUserInput = {
-    id?: string
-    sessionToken: string
-    expires: Date | string
-  }
-
-  export type SessionCreateOrConnectWithoutUserInput = {
-    where: SessionWhereUniqueInput
-    create: XOR<SessionCreateWithoutUserInput, SessionUncheckedCreateWithoutUserInput>
-  }
-
-  export type SessionCreateManyUserInputEnvelope = {
-    data: SessionCreateManyUserInput | SessionCreateManyUserInput[]
-    skipDuplicates?: boolean
-  }
-
-  export type OrderCreateWithoutUserInput = {
-    id?: string
-    customerName?: string | null
-    customerEmail?: string | null
-    customerPhone?: string | null
-    customerAddress?: string | null
-    paymentMethod?: string | null
-    status?: $Enums.OrderStatus
-    total: Decimal | DecimalJsLike | number | string
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    items?: OrderItemCreateNestedManyWithoutOrderInput
-  }
-
-  export type OrderUncheckedCreateWithoutUserInput = {
-    id?: string
-    customerName?: string | null
-    customerEmail?: string | null
-    customerPhone?: string | null
-    customerAddress?: string | null
-    paymentMethod?: string | null
-    status?: $Enums.OrderStatus
-    total: Decimal | DecimalJsLike | number | string
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    items?: OrderItemUncheckedCreateNestedManyWithoutOrderInput
-  }
-
-  export type OrderCreateOrConnectWithoutUserInput = {
-    where: OrderWhereUniqueInput
-    create: XOR<OrderCreateWithoutUserInput, OrderUncheckedCreateWithoutUserInput>
-  }
-
-  export type OrderCreateManyUserInputEnvelope = {
-    data: OrderCreateManyUserInput | OrderCreateManyUserInput[]
-    skipDuplicates?: boolean
-  }
-
   export type AddressCreateWithoutUserInput = {
     id?: string
     name?: string | null
@@ -21873,77 +21813,42 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
-  export type ReviewCreateWithoutUserInput = {
+  export type OrderCreateWithoutUserInput = {
     id?: string
-    rating?: number
-    comment?: string | null
+    customerName?: string | null
+    customerEmail?: string | null
+    status?: $Enums.OrderStatus
+    total: Decimal | DecimalJsLike | number | string
     createdAt?: Date | string
     updatedAt?: Date | string
-    product: ProductCreateNestedOneWithoutReviewsInput
+    customerAddress?: string | null
+    customerPhone?: string | null
+    paymentMethod?: string | null
+    items?: OrderItemCreateNestedManyWithoutOrderInput
   }
 
-  export type ReviewUncheckedCreateWithoutUserInput = {
+  export type OrderUncheckedCreateWithoutUserInput = {
     id?: string
-    rating?: number
-    comment?: string | null
-    productId: string
+    customerName?: string | null
+    customerEmail?: string | null
+    status?: $Enums.OrderStatus
+    total: Decimal | DecimalJsLike | number | string
     createdAt?: Date | string
     updatedAt?: Date | string
+    customerAddress?: string | null
+    customerPhone?: string | null
+    paymentMethod?: string | null
+    items?: OrderItemUncheckedCreateNestedManyWithoutOrderInput
   }
 
-  export type ReviewCreateOrConnectWithoutUserInput = {
-    where: ReviewWhereUniqueInput
-    create: XOR<ReviewCreateWithoutUserInput, ReviewUncheckedCreateWithoutUserInput>
+  export type OrderCreateOrConnectWithoutUserInput = {
+    where: OrderWhereUniqueInput
+    create: XOR<OrderCreateWithoutUserInput, OrderUncheckedCreateWithoutUserInput>
   }
 
-  export type ReviewCreateManyUserInputEnvelope = {
-    data: ReviewCreateManyUserInput | ReviewCreateManyUserInput[]
+  export type OrderCreateManyUserInputEnvelope = {
+    data: OrderCreateManyUserInput | OrderCreateManyUserInput[]
     skipDuplicates?: boolean
-  }
-
-  export type ProductCreateWithoutFavoritedByInput = {
-    id?: string
-    name: string
-    description?: string | null
-    price: Decimal | DecimalJsLike | number | string
-    discountPrice?: Decimal | DecimalJsLike | number | string | null
-    stock?: number
-    subCategory?: string | null
-    images?: ProductCreateimagesInput | string[]
-    featured?: boolean
-    allowFlocage?: boolean
-    allowGravure?: boolean
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    category?: CategoryCreateNestedOneWithoutProductsInput
-    sizes?: ProductSizeCreateNestedManyWithoutProductInput
-    orderItems?: OrderItemCreateNestedManyWithoutProductInput
-    reviews?: ReviewCreateNestedManyWithoutProductInput
-  }
-
-  export type ProductUncheckedCreateWithoutFavoritedByInput = {
-    id?: string
-    name: string
-    description?: string | null
-    price: Decimal | DecimalJsLike | number | string
-    discountPrice?: Decimal | DecimalJsLike | number | string | null
-    stock?: number
-    categoryId?: string | null
-    subCategory?: string | null
-    images?: ProductCreateimagesInput | string[]
-    featured?: boolean
-    allowFlocage?: boolean
-    allowGravure?: boolean
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    sizes?: ProductSizeUncheckedCreateNestedManyWithoutProductInput
-    orderItems?: OrderItemUncheckedCreateNestedManyWithoutProductInput
-    reviews?: ReviewUncheckedCreateNestedManyWithoutProductInput
-  }
-
-  export type ProductCreateOrConnectWithoutFavoritedByInput = {
-    where: ProductWhereUniqueInput
-    create: XOR<ProductCreateWithoutFavoritedByInput, ProductUncheckedCreateWithoutFavoritedByInput>
   }
 
   export type PaymentMethodCreateWithoutUserInput = {
@@ -21976,6 +21881,101 @@ export namespace Prisma {
   export type PaymentMethodCreateManyUserInputEnvelope = {
     data: PaymentMethodCreateManyUserInput | PaymentMethodCreateManyUserInput[]
     skipDuplicates?: boolean
+  }
+
+  export type ReviewCreateWithoutUserInput = {
+    id?: string
+    rating?: number
+    comment?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    product: ProductCreateNestedOneWithoutReviewsInput
+  }
+
+  export type ReviewUncheckedCreateWithoutUserInput = {
+    id?: string
+    rating?: number
+    comment?: string | null
+    productId: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ReviewCreateOrConnectWithoutUserInput = {
+    where: ReviewWhereUniqueInput
+    create: XOR<ReviewCreateWithoutUserInput, ReviewUncheckedCreateWithoutUserInput>
+  }
+
+  export type ReviewCreateManyUserInputEnvelope = {
+    data: ReviewCreateManyUserInput | ReviewCreateManyUserInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type SessionCreateWithoutUserInput = {
+    id?: string
+    sessionToken: string
+    expires: Date | string
+  }
+
+  export type SessionUncheckedCreateWithoutUserInput = {
+    id?: string
+    sessionToken: string
+    expires: Date | string
+  }
+
+  export type SessionCreateOrConnectWithoutUserInput = {
+    where: SessionWhereUniqueInput
+    create: XOR<SessionCreateWithoutUserInput, SessionUncheckedCreateWithoutUserInput>
+  }
+
+  export type SessionCreateManyUserInputEnvelope = {
+    data: SessionCreateManyUserInput | SessionCreateManyUserInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type ProductCreateWithoutFavoritedByInput = {
+    id?: string
+    name: string
+    description?: string | null
+    price: Decimal | DecimalJsLike | number | string
+    stock?: number
+    images?: ProductCreateimagesInput | string[]
+    featured?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    allowFlocage?: boolean
+    allowGravure?: boolean
+    discountPrice?: Decimal | DecimalJsLike | number | string | null
+    subCategory?: string | null
+    orderItems?: OrderItemCreateNestedManyWithoutProductInput
+    category?: CategoryCreateNestedOneWithoutProductsInput
+    sizes?: ProductSizeCreateNestedManyWithoutProductInput
+    reviews?: ReviewCreateNestedManyWithoutProductInput
+  }
+
+  export type ProductUncheckedCreateWithoutFavoritedByInput = {
+    id?: string
+    name: string
+    description?: string | null
+    price: Decimal | DecimalJsLike | number | string
+    stock?: number
+    images?: ProductCreateimagesInput | string[]
+    featured?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    allowFlocage?: boolean
+    allowGravure?: boolean
+    discountPrice?: Decimal | DecimalJsLike | number | string | null
+    subCategory?: string | null
+    categoryId?: string | null
+    orderItems?: OrderItemUncheckedCreateNestedManyWithoutProductInput
+    sizes?: ProductSizeUncheckedCreateNestedManyWithoutProductInput
+    reviews?: ReviewUncheckedCreateNestedManyWithoutProductInput
+  }
+
+  export type ProductCreateOrConnectWithoutFavoritedByInput = {
+    where: ProductWhereUniqueInput
+    create: XOR<ProductCreateWithoutFavoritedByInput, ProductUncheckedCreateWithoutFavoritedByInput>
   }
 
   export type AccountUpsertWithWhereUniqueWithoutUserInput = {
@@ -22012,65 +22012,6 @@ export namespace Prisma {
     session_state?: StringNullableFilter<"Account"> | string | null
   }
 
-  export type SessionUpsertWithWhereUniqueWithoutUserInput = {
-    where: SessionWhereUniqueInput
-    update: XOR<SessionUpdateWithoutUserInput, SessionUncheckedUpdateWithoutUserInput>
-    create: XOR<SessionCreateWithoutUserInput, SessionUncheckedCreateWithoutUserInput>
-  }
-
-  export type SessionUpdateWithWhereUniqueWithoutUserInput = {
-    where: SessionWhereUniqueInput
-    data: XOR<SessionUpdateWithoutUserInput, SessionUncheckedUpdateWithoutUserInput>
-  }
-
-  export type SessionUpdateManyWithWhereWithoutUserInput = {
-    where: SessionScalarWhereInput
-    data: XOR<SessionUpdateManyMutationInput, SessionUncheckedUpdateManyWithoutUserInput>
-  }
-
-  export type SessionScalarWhereInput = {
-    AND?: SessionScalarWhereInput | SessionScalarWhereInput[]
-    OR?: SessionScalarWhereInput[]
-    NOT?: SessionScalarWhereInput | SessionScalarWhereInput[]
-    id?: StringFilter<"Session"> | string
-    sessionToken?: StringFilter<"Session"> | string
-    userId?: StringFilter<"Session"> | string
-    expires?: DateTimeFilter<"Session"> | Date | string
-  }
-
-  export type OrderUpsertWithWhereUniqueWithoutUserInput = {
-    where: OrderWhereUniqueInput
-    update: XOR<OrderUpdateWithoutUserInput, OrderUncheckedUpdateWithoutUserInput>
-    create: XOR<OrderCreateWithoutUserInput, OrderUncheckedCreateWithoutUserInput>
-  }
-
-  export type OrderUpdateWithWhereUniqueWithoutUserInput = {
-    where: OrderWhereUniqueInput
-    data: XOR<OrderUpdateWithoutUserInput, OrderUncheckedUpdateWithoutUserInput>
-  }
-
-  export type OrderUpdateManyWithWhereWithoutUserInput = {
-    where: OrderScalarWhereInput
-    data: XOR<OrderUpdateManyMutationInput, OrderUncheckedUpdateManyWithoutUserInput>
-  }
-
-  export type OrderScalarWhereInput = {
-    AND?: OrderScalarWhereInput | OrderScalarWhereInput[]
-    OR?: OrderScalarWhereInput[]
-    NOT?: OrderScalarWhereInput | OrderScalarWhereInput[]
-    id?: StringFilter<"Order"> | string
-    userId?: StringNullableFilter<"Order"> | string | null
-    customerName?: StringNullableFilter<"Order"> | string | null
-    customerEmail?: StringNullableFilter<"Order"> | string | null
-    customerPhone?: StringNullableFilter<"Order"> | string | null
-    customerAddress?: StringNullableFilter<"Order"> | string | null
-    paymentMethod?: StringNullableFilter<"Order"> | string | null
-    status?: EnumOrderStatusFilter<"Order"> | $Enums.OrderStatus
-    total?: DecimalFilter<"Order"> | Decimal | DecimalJsLike | number | string
-    createdAt?: DateTimeFilter<"Order"> | Date | string
-    updatedAt?: DateTimeFilter<"Order"> | Date | string
-  }
-
   export type AddressUpsertWithWhereUniqueWithoutUserInput = {
     where: AddressWhereUniqueInput
     update: XOR<AddressUpdateWithoutUserInput, AddressUncheckedUpdateWithoutUserInput>
@@ -22104,69 +22045,37 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"Address"> | Date | string
   }
 
-  export type ReviewUpsertWithWhereUniqueWithoutUserInput = {
-    where: ReviewWhereUniqueInput
-    update: XOR<ReviewUpdateWithoutUserInput, ReviewUncheckedUpdateWithoutUserInput>
-    create: XOR<ReviewCreateWithoutUserInput, ReviewUncheckedCreateWithoutUserInput>
+  export type OrderUpsertWithWhereUniqueWithoutUserInput = {
+    where: OrderWhereUniqueInput
+    update: XOR<OrderUpdateWithoutUserInput, OrderUncheckedUpdateWithoutUserInput>
+    create: XOR<OrderCreateWithoutUserInput, OrderUncheckedCreateWithoutUserInput>
   }
 
-  export type ReviewUpdateWithWhereUniqueWithoutUserInput = {
-    where: ReviewWhereUniqueInput
-    data: XOR<ReviewUpdateWithoutUserInput, ReviewUncheckedUpdateWithoutUserInput>
+  export type OrderUpdateWithWhereUniqueWithoutUserInput = {
+    where: OrderWhereUniqueInput
+    data: XOR<OrderUpdateWithoutUserInput, OrderUncheckedUpdateWithoutUserInput>
   }
 
-  export type ReviewUpdateManyWithWhereWithoutUserInput = {
-    where: ReviewScalarWhereInput
-    data: XOR<ReviewUpdateManyMutationInput, ReviewUncheckedUpdateManyWithoutUserInput>
+  export type OrderUpdateManyWithWhereWithoutUserInput = {
+    where: OrderScalarWhereInput
+    data: XOR<OrderUpdateManyMutationInput, OrderUncheckedUpdateManyWithoutUserInput>
   }
 
-  export type ReviewScalarWhereInput = {
-    AND?: ReviewScalarWhereInput | ReviewScalarWhereInput[]
-    OR?: ReviewScalarWhereInput[]
-    NOT?: ReviewScalarWhereInput | ReviewScalarWhereInput[]
-    id?: StringFilter<"Review"> | string
-    rating?: IntFilter<"Review"> | number
-    comment?: StringNullableFilter<"Review"> | string | null
-    userId?: StringFilter<"Review"> | string
-    productId?: StringFilter<"Review"> | string
-    createdAt?: DateTimeFilter<"Review"> | Date | string
-    updatedAt?: DateTimeFilter<"Review"> | Date | string
-  }
-
-  export type ProductUpsertWithWhereUniqueWithoutFavoritedByInput = {
-    where: ProductWhereUniqueInput
-    update: XOR<ProductUpdateWithoutFavoritedByInput, ProductUncheckedUpdateWithoutFavoritedByInput>
-    create: XOR<ProductCreateWithoutFavoritedByInput, ProductUncheckedCreateWithoutFavoritedByInput>
-  }
-
-  export type ProductUpdateWithWhereUniqueWithoutFavoritedByInput = {
-    where: ProductWhereUniqueInput
-    data: XOR<ProductUpdateWithoutFavoritedByInput, ProductUncheckedUpdateWithoutFavoritedByInput>
-  }
-
-  export type ProductUpdateManyWithWhereWithoutFavoritedByInput = {
-    where: ProductScalarWhereInput
-    data: XOR<ProductUpdateManyMutationInput, ProductUncheckedUpdateManyWithoutFavoritedByInput>
-  }
-
-  export type ProductScalarWhereInput = {
-    AND?: ProductScalarWhereInput | ProductScalarWhereInput[]
-    OR?: ProductScalarWhereInput[]
-    NOT?: ProductScalarWhereInput | ProductScalarWhereInput[]
-    id?: StringFilter<"Product"> | string
-    name?: StringFilter<"Product"> | string
-    description?: StringNullableFilter<"Product"> | string | null
-    price?: DecimalFilter<"Product"> | Decimal | DecimalJsLike | number | string
-    discountPrice?: DecimalNullableFilter<"Product"> | Decimal | DecimalJsLike | number | string | null
-    stock?: IntFilter<"Product"> | number
-    categoryId?: StringNullableFilter<"Product"> | string | null
-    subCategory?: StringNullableFilter<"Product"> | string | null
-    images?: StringNullableListFilter<"Product">
-    featured?: BoolFilter<"Product"> | boolean
-    allowFlocage?: BoolFilter<"Product"> | boolean
-    allowGravure?: BoolFilter<"Product"> | boolean
-    createdAt?: DateTimeFilter<"Product"> | Date | string
-    updatedAt?: DateTimeFilter<"Product"> | Date | string
+  export type OrderScalarWhereInput = {
+    AND?: OrderScalarWhereInput | OrderScalarWhereInput[]
+    OR?: OrderScalarWhereInput[]
+    NOT?: OrderScalarWhereInput | OrderScalarWhereInput[]
+    id?: StringFilter<"Order"> | string
+    userId?: StringNullableFilter<"Order"> | string | null
+    customerName?: StringNullableFilter<"Order"> | string | null
+    customerEmail?: StringNullableFilter<"Order"> | string | null
+    status?: EnumOrderStatusFilter<"Order"> | $Enums.OrderStatus
+    total?: DecimalFilter<"Order"> | Decimal | DecimalJsLike | number | string
+    createdAt?: DateTimeFilter<"Order"> | Date | string
+    updatedAt?: DateTimeFilter<"Order"> | Date | string
+    customerAddress?: StringNullableFilter<"Order"> | string | null
+    customerPhone?: StringNullableFilter<"Order"> | string | null
+    paymentMethod?: StringNullableFilter<"Order"> | string | null
   }
 
   export type PaymentMethodUpsertWithWhereUniqueWithoutUserInput = {
@@ -22200,40 +22109,131 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"PaymentMethod"> | Date | string
   }
 
+  export type ReviewUpsertWithWhereUniqueWithoutUserInput = {
+    where: ReviewWhereUniqueInput
+    update: XOR<ReviewUpdateWithoutUserInput, ReviewUncheckedUpdateWithoutUserInput>
+    create: XOR<ReviewCreateWithoutUserInput, ReviewUncheckedCreateWithoutUserInput>
+  }
+
+  export type ReviewUpdateWithWhereUniqueWithoutUserInput = {
+    where: ReviewWhereUniqueInput
+    data: XOR<ReviewUpdateWithoutUserInput, ReviewUncheckedUpdateWithoutUserInput>
+  }
+
+  export type ReviewUpdateManyWithWhereWithoutUserInput = {
+    where: ReviewScalarWhereInput
+    data: XOR<ReviewUpdateManyMutationInput, ReviewUncheckedUpdateManyWithoutUserInput>
+  }
+
+  export type ReviewScalarWhereInput = {
+    AND?: ReviewScalarWhereInput | ReviewScalarWhereInput[]
+    OR?: ReviewScalarWhereInput[]
+    NOT?: ReviewScalarWhereInput | ReviewScalarWhereInput[]
+    id?: StringFilter<"Review"> | string
+    rating?: IntFilter<"Review"> | number
+    comment?: StringNullableFilter<"Review"> | string | null
+    userId?: StringFilter<"Review"> | string
+    productId?: StringFilter<"Review"> | string
+    createdAt?: DateTimeFilter<"Review"> | Date | string
+    updatedAt?: DateTimeFilter<"Review"> | Date | string
+  }
+
+  export type SessionUpsertWithWhereUniqueWithoutUserInput = {
+    where: SessionWhereUniqueInput
+    update: XOR<SessionUpdateWithoutUserInput, SessionUncheckedUpdateWithoutUserInput>
+    create: XOR<SessionCreateWithoutUserInput, SessionUncheckedCreateWithoutUserInput>
+  }
+
+  export type SessionUpdateWithWhereUniqueWithoutUserInput = {
+    where: SessionWhereUniqueInput
+    data: XOR<SessionUpdateWithoutUserInput, SessionUncheckedUpdateWithoutUserInput>
+  }
+
+  export type SessionUpdateManyWithWhereWithoutUserInput = {
+    where: SessionScalarWhereInput
+    data: XOR<SessionUpdateManyMutationInput, SessionUncheckedUpdateManyWithoutUserInput>
+  }
+
+  export type SessionScalarWhereInput = {
+    AND?: SessionScalarWhereInput | SessionScalarWhereInput[]
+    OR?: SessionScalarWhereInput[]
+    NOT?: SessionScalarWhereInput | SessionScalarWhereInput[]
+    id?: StringFilter<"Session"> | string
+    sessionToken?: StringFilter<"Session"> | string
+    userId?: StringFilter<"Session"> | string
+    expires?: DateTimeFilter<"Session"> | Date | string
+  }
+
+  export type ProductUpsertWithWhereUniqueWithoutFavoritedByInput = {
+    where: ProductWhereUniqueInput
+    update: XOR<ProductUpdateWithoutFavoritedByInput, ProductUncheckedUpdateWithoutFavoritedByInput>
+    create: XOR<ProductCreateWithoutFavoritedByInput, ProductUncheckedCreateWithoutFavoritedByInput>
+  }
+
+  export type ProductUpdateWithWhereUniqueWithoutFavoritedByInput = {
+    where: ProductWhereUniqueInput
+    data: XOR<ProductUpdateWithoutFavoritedByInput, ProductUncheckedUpdateWithoutFavoritedByInput>
+  }
+
+  export type ProductUpdateManyWithWhereWithoutFavoritedByInput = {
+    where: ProductScalarWhereInput
+    data: XOR<ProductUpdateManyMutationInput, ProductUncheckedUpdateManyWithoutFavoritedByInput>
+  }
+
+  export type ProductScalarWhereInput = {
+    AND?: ProductScalarWhereInput | ProductScalarWhereInput[]
+    OR?: ProductScalarWhereInput[]
+    NOT?: ProductScalarWhereInput | ProductScalarWhereInput[]
+    id?: StringFilter<"Product"> | string
+    name?: StringFilter<"Product"> | string
+    description?: StringNullableFilter<"Product"> | string | null
+    price?: DecimalFilter<"Product"> | Decimal | DecimalJsLike | number | string
+    stock?: IntFilter<"Product"> | number
+    images?: StringNullableListFilter<"Product">
+    featured?: BoolFilter<"Product"> | boolean
+    createdAt?: DateTimeFilter<"Product"> | Date | string
+    updatedAt?: DateTimeFilter<"Product"> | Date | string
+    allowFlocage?: BoolFilter<"Product"> | boolean
+    allowGravure?: BoolFilter<"Product"> | boolean
+    discountPrice?: DecimalNullableFilter<"Product"> | Decimal | DecimalJsLike | number | string | null
+    subCategory?: StringNullableFilter<"Product"> | string | null
+    categoryId?: StringNullableFilter<"Product"> | string | null
+  }
+
   export type UserCreateWithoutAddressesInput = {
     id?: string
-    name?: string | null
     email?: string | null
-    emailVerified?: Date | string | null
-    image?: string | null
     password?: string | null
+    name?: string | null
     role?: $Enums.Role
     createdAt?: Date | string
     updatedAt?: Date | string
+    emailVerified?: Date | string | null
+    image?: string | null
     accounts?: AccountCreateNestedManyWithoutUserInput
-    sessions?: SessionCreateNestedManyWithoutUserInput
     orders?: OrderCreateNestedManyWithoutUserInput
-    reviews?: ReviewCreateNestedManyWithoutUserInput
-    favorites?: ProductCreateNestedManyWithoutFavoritedByInput
     paymentMethods?: PaymentMethodCreateNestedManyWithoutUserInput
+    reviews?: ReviewCreateNestedManyWithoutUserInput
+    sessions?: SessionCreateNestedManyWithoutUserInput
+    favorites?: ProductCreateNestedManyWithoutFavoritedByInput
   }
 
   export type UserUncheckedCreateWithoutAddressesInput = {
     id?: string
-    name?: string | null
     email?: string | null
-    emailVerified?: Date | string | null
-    image?: string | null
     password?: string | null
+    name?: string | null
     role?: $Enums.Role
     createdAt?: Date | string
     updatedAt?: Date | string
+    emailVerified?: Date | string | null
+    image?: string | null
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
-    sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     orders?: OrderUncheckedCreateNestedManyWithoutUserInput
-    reviews?: ReviewUncheckedCreateNestedManyWithoutUserInput
-    favorites?: ProductUncheckedCreateNestedManyWithoutFavoritedByInput
     paymentMethods?: PaymentMethodUncheckedCreateNestedManyWithoutUserInput
+    reviews?: ReviewUncheckedCreateNestedManyWithoutUserInput
+    sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
+    favorites?: ProductUncheckedCreateNestedManyWithoutFavoritedByInput
   }
 
   export type UserCreateOrConnectWithoutAddressesInput = {
@@ -22254,73 +22254,73 @@ export namespace Prisma {
 
   export type UserUpdateWithoutAddressesInput = {
     id?: StringFieldUpdateOperationsInput | string
-    name?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
-    emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    image?: NullableStringFieldUpdateOperationsInput | string | null
     password?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: NullableStringFieldUpdateOperationsInput | string | null
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    image?: NullableStringFieldUpdateOperationsInput | string | null
     accounts?: AccountUpdateManyWithoutUserNestedInput
-    sessions?: SessionUpdateManyWithoutUserNestedInput
     orders?: OrderUpdateManyWithoutUserNestedInput
-    reviews?: ReviewUpdateManyWithoutUserNestedInput
-    favorites?: ProductUpdateManyWithoutFavoritedByNestedInput
     paymentMethods?: PaymentMethodUpdateManyWithoutUserNestedInput
+    reviews?: ReviewUpdateManyWithoutUserNestedInput
+    sessions?: SessionUpdateManyWithoutUserNestedInput
+    favorites?: ProductUpdateManyWithoutFavoritedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutAddressesInput = {
     id?: StringFieldUpdateOperationsInput | string
-    name?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
-    emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    image?: NullableStringFieldUpdateOperationsInput | string | null
     password?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: NullableStringFieldUpdateOperationsInput | string | null
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    image?: NullableStringFieldUpdateOperationsInput | string | null
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
-    sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     orders?: OrderUncheckedUpdateManyWithoutUserNestedInput
-    reviews?: ReviewUncheckedUpdateManyWithoutUserNestedInput
-    favorites?: ProductUncheckedUpdateManyWithoutFavoritedByNestedInput
     paymentMethods?: PaymentMethodUncheckedUpdateManyWithoutUserNestedInput
+    reviews?: ReviewUncheckedUpdateManyWithoutUserNestedInput
+    sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
+    favorites?: ProductUncheckedUpdateManyWithoutFavoritedByNestedInput
   }
 
   export type UserCreateWithoutPaymentMethodsInput = {
     id?: string
-    name?: string | null
     email?: string | null
-    emailVerified?: Date | string | null
-    image?: string | null
     password?: string | null
+    name?: string | null
     role?: $Enums.Role
     createdAt?: Date | string
     updatedAt?: Date | string
+    emailVerified?: Date | string | null
+    image?: string | null
     accounts?: AccountCreateNestedManyWithoutUserInput
-    sessions?: SessionCreateNestedManyWithoutUserInput
-    orders?: OrderCreateNestedManyWithoutUserInput
     addresses?: AddressCreateNestedManyWithoutUserInput
+    orders?: OrderCreateNestedManyWithoutUserInput
     reviews?: ReviewCreateNestedManyWithoutUserInput
+    sessions?: SessionCreateNestedManyWithoutUserInput
     favorites?: ProductCreateNestedManyWithoutFavoritedByInput
   }
 
   export type UserUncheckedCreateWithoutPaymentMethodsInput = {
     id?: string
-    name?: string | null
     email?: string | null
-    emailVerified?: Date | string | null
-    image?: string | null
     password?: string | null
+    name?: string | null
     role?: $Enums.Role
     createdAt?: Date | string
     updatedAt?: Date | string
+    emailVerified?: Date | string | null
+    image?: string | null
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
-    sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
-    orders?: OrderUncheckedCreateNestedManyWithoutUserInput
     addresses?: AddressUncheckedCreateNestedManyWithoutUserInput
+    orders?: OrderUncheckedCreateNestedManyWithoutUserInput
     reviews?: ReviewUncheckedCreateNestedManyWithoutUserInput
+    sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     favorites?: ProductUncheckedCreateNestedManyWithoutFavoritedByInput
   }
 
@@ -22342,74 +22342,74 @@ export namespace Prisma {
 
   export type UserUpdateWithoutPaymentMethodsInput = {
     id?: StringFieldUpdateOperationsInput | string
-    name?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
-    emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    image?: NullableStringFieldUpdateOperationsInput | string | null
     password?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: NullableStringFieldUpdateOperationsInput | string | null
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    image?: NullableStringFieldUpdateOperationsInput | string | null
     accounts?: AccountUpdateManyWithoutUserNestedInput
-    sessions?: SessionUpdateManyWithoutUserNestedInput
-    orders?: OrderUpdateManyWithoutUserNestedInput
     addresses?: AddressUpdateManyWithoutUserNestedInput
+    orders?: OrderUpdateManyWithoutUserNestedInput
     reviews?: ReviewUpdateManyWithoutUserNestedInput
+    sessions?: SessionUpdateManyWithoutUserNestedInput
     favorites?: ProductUpdateManyWithoutFavoritedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutPaymentMethodsInput = {
     id?: StringFieldUpdateOperationsInput | string
-    name?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
-    emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    image?: NullableStringFieldUpdateOperationsInput | string | null
     password?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: NullableStringFieldUpdateOperationsInput | string | null
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    image?: NullableStringFieldUpdateOperationsInput | string | null
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
-    sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
-    orders?: OrderUncheckedUpdateManyWithoutUserNestedInput
     addresses?: AddressUncheckedUpdateManyWithoutUserNestedInput
+    orders?: OrderUncheckedUpdateManyWithoutUserNestedInput
     reviews?: ReviewUncheckedUpdateManyWithoutUserNestedInput
+    sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     favorites?: ProductUncheckedUpdateManyWithoutFavoritedByNestedInput
   }
 
   export type UserCreateWithoutAccountsInput = {
     id?: string
-    name?: string | null
     email?: string | null
-    emailVerified?: Date | string | null
-    image?: string | null
     password?: string | null
+    name?: string | null
     role?: $Enums.Role
     createdAt?: Date | string
     updatedAt?: Date | string
-    sessions?: SessionCreateNestedManyWithoutUserInput
-    orders?: OrderCreateNestedManyWithoutUserInput
+    emailVerified?: Date | string | null
+    image?: string | null
     addresses?: AddressCreateNestedManyWithoutUserInput
-    reviews?: ReviewCreateNestedManyWithoutUserInput
-    favorites?: ProductCreateNestedManyWithoutFavoritedByInput
+    orders?: OrderCreateNestedManyWithoutUserInput
     paymentMethods?: PaymentMethodCreateNestedManyWithoutUserInput
+    reviews?: ReviewCreateNestedManyWithoutUserInput
+    sessions?: SessionCreateNestedManyWithoutUserInput
+    favorites?: ProductCreateNestedManyWithoutFavoritedByInput
   }
 
   export type UserUncheckedCreateWithoutAccountsInput = {
     id?: string
-    name?: string | null
     email?: string | null
-    emailVerified?: Date | string | null
-    image?: string | null
     password?: string | null
+    name?: string | null
     role?: $Enums.Role
     createdAt?: Date | string
     updatedAt?: Date | string
-    sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
-    orders?: OrderUncheckedCreateNestedManyWithoutUserInput
+    emailVerified?: Date | string | null
+    image?: string | null
     addresses?: AddressUncheckedCreateNestedManyWithoutUserInput
-    reviews?: ReviewUncheckedCreateNestedManyWithoutUserInput
-    favorites?: ProductUncheckedCreateNestedManyWithoutFavoritedByInput
+    orders?: OrderUncheckedCreateNestedManyWithoutUserInput
     paymentMethods?: PaymentMethodUncheckedCreateNestedManyWithoutUserInput
+    reviews?: ReviewUncheckedCreateNestedManyWithoutUserInput
+    sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
+    favorites?: ProductUncheckedCreateNestedManyWithoutFavoritedByInput
   }
 
   export type UserCreateOrConnectWithoutAccountsInput = {
@@ -22430,74 +22430,74 @@ export namespace Prisma {
 
   export type UserUpdateWithoutAccountsInput = {
     id?: StringFieldUpdateOperationsInput | string
-    name?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
-    emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    image?: NullableStringFieldUpdateOperationsInput | string | null
     password?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: NullableStringFieldUpdateOperationsInput | string | null
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    sessions?: SessionUpdateManyWithoutUserNestedInput
-    orders?: OrderUpdateManyWithoutUserNestedInput
+    emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    image?: NullableStringFieldUpdateOperationsInput | string | null
     addresses?: AddressUpdateManyWithoutUserNestedInput
-    reviews?: ReviewUpdateManyWithoutUserNestedInput
-    favorites?: ProductUpdateManyWithoutFavoritedByNestedInput
+    orders?: OrderUpdateManyWithoutUserNestedInput
     paymentMethods?: PaymentMethodUpdateManyWithoutUserNestedInput
+    reviews?: ReviewUpdateManyWithoutUserNestedInput
+    sessions?: SessionUpdateManyWithoutUserNestedInput
+    favorites?: ProductUpdateManyWithoutFavoritedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutAccountsInput = {
     id?: StringFieldUpdateOperationsInput | string
-    name?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
-    emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    image?: NullableStringFieldUpdateOperationsInput | string | null
     password?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: NullableStringFieldUpdateOperationsInput | string | null
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
-    orders?: OrderUncheckedUpdateManyWithoutUserNestedInput
+    emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    image?: NullableStringFieldUpdateOperationsInput | string | null
     addresses?: AddressUncheckedUpdateManyWithoutUserNestedInput
-    reviews?: ReviewUncheckedUpdateManyWithoutUserNestedInput
-    favorites?: ProductUncheckedUpdateManyWithoutFavoritedByNestedInput
+    orders?: OrderUncheckedUpdateManyWithoutUserNestedInput
     paymentMethods?: PaymentMethodUncheckedUpdateManyWithoutUserNestedInput
+    reviews?: ReviewUncheckedUpdateManyWithoutUserNestedInput
+    sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
+    favorites?: ProductUncheckedUpdateManyWithoutFavoritedByNestedInput
   }
 
   export type UserCreateWithoutSessionsInput = {
     id?: string
-    name?: string | null
     email?: string | null
-    emailVerified?: Date | string | null
-    image?: string | null
     password?: string | null
+    name?: string | null
     role?: $Enums.Role
     createdAt?: Date | string
     updatedAt?: Date | string
+    emailVerified?: Date | string | null
+    image?: string | null
     accounts?: AccountCreateNestedManyWithoutUserInput
-    orders?: OrderCreateNestedManyWithoutUserInput
     addresses?: AddressCreateNestedManyWithoutUserInput
+    orders?: OrderCreateNestedManyWithoutUserInput
+    paymentMethods?: PaymentMethodCreateNestedManyWithoutUserInput
     reviews?: ReviewCreateNestedManyWithoutUserInput
     favorites?: ProductCreateNestedManyWithoutFavoritedByInput
-    paymentMethods?: PaymentMethodCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutSessionsInput = {
     id?: string
-    name?: string | null
     email?: string | null
-    emailVerified?: Date | string | null
-    image?: string | null
     password?: string | null
+    name?: string | null
     role?: $Enums.Role
     createdAt?: Date | string
     updatedAt?: Date | string
+    emailVerified?: Date | string | null
+    image?: string | null
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
-    orders?: OrderUncheckedCreateNestedManyWithoutUserInput
     addresses?: AddressUncheckedCreateNestedManyWithoutUserInput
+    orders?: OrderUncheckedCreateNestedManyWithoutUserInput
+    paymentMethods?: PaymentMethodUncheckedCreateNestedManyWithoutUserInput
     reviews?: ReviewUncheckedCreateNestedManyWithoutUserInput
     favorites?: ProductUncheckedCreateNestedManyWithoutFavoritedByInput
-    paymentMethods?: PaymentMethodUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutSessionsInput = {
@@ -22518,38 +22518,68 @@ export namespace Prisma {
 
   export type UserUpdateWithoutSessionsInput = {
     id?: StringFieldUpdateOperationsInput | string
-    name?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
-    emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    image?: NullableStringFieldUpdateOperationsInput | string | null
     password?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: NullableStringFieldUpdateOperationsInput | string | null
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    image?: NullableStringFieldUpdateOperationsInput | string | null
     accounts?: AccountUpdateManyWithoutUserNestedInput
-    orders?: OrderUpdateManyWithoutUserNestedInput
     addresses?: AddressUpdateManyWithoutUserNestedInput
+    orders?: OrderUpdateManyWithoutUserNestedInput
+    paymentMethods?: PaymentMethodUpdateManyWithoutUserNestedInput
     reviews?: ReviewUpdateManyWithoutUserNestedInput
     favorites?: ProductUpdateManyWithoutFavoritedByNestedInput
-    paymentMethods?: PaymentMethodUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutSessionsInput = {
     id?: StringFieldUpdateOperationsInput | string
-    name?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
-    emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    image?: NullableStringFieldUpdateOperationsInput | string | null
     password?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: NullableStringFieldUpdateOperationsInput | string | null
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    image?: NullableStringFieldUpdateOperationsInput | string | null
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
-    orders?: OrderUncheckedUpdateManyWithoutUserNestedInput
     addresses?: AddressUncheckedUpdateManyWithoutUserNestedInput
+    orders?: OrderUncheckedUpdateManyWithoutUserNestedInput
+    paymentMethods?: PaymentMethodUncheckedUpdateManyWithoutUserNestedInput
     reviews?: ReviewUncheckedUpdateManyWithoutUserNestedInput
     favorites?: ProductUncheckedUpdateManyWithoutFavoritedByNestedInput
-    paymentMethods?: PaymentMethodUncheckedUpdateManyWithoutUserNestedInput
+  }
+
+  export type OrderItemCreateWithoutProductInput = {
+    id?: string
+    quantity: number
+    price: Decimal | DecimalJsLike | number | string
+    customName?: string | null
+    customNumber?: string | null
+    size?: string | null
+    order: OrderCreateNestedOneWithoutItemsInput
+  }
+
+  export type OrderItemUncheckedCreateWithoutProductInput = {
+    id?: string
+    orderId: string
+    quantity: number
+    price: Decimal | DecimalJsLike | number | string
+    customName?: string | null
+    customNumber?: string | null
+    size?: string | null
+  }
+
+  export type OrderItemCreateOrConnectWithoutProductInput = {
+    where: OrderItemWhereUniqueInput
+    create: XOR<OrderItemCreateWithoutProductInput, OrderItemUncheckedCreateWithoutProductInput>
+  }
+
+  export type OrderItemCreateManyProductInputEnvelope = {
+    data: OrderItemCreateManyProductInput | OrderItemCreateManyProductInput[]
+    skipDuplicates?: boolean
   }
 
   export type CategoryCreateWithoutProductsInput = {
@@ -22597,36 +22627,6 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
-  export type OrderItemCreateWithoutProductInput = {
-    id?: string
-    quantity: number
-    price: Decimal | DecimalJsLike | number | string
-    customName?: string | null
-    customNumber?: string | null
-    size?: string | null
-    order: OrderCreateNestedOneWithoutItemsInput
-  }
-
-  export type OrderItemUncheckedCreateWithoutProductInput = {
-    id?: string
-    orderId: string
-    quantity: number
-    price: Decimal | DecimalJsLike | number | string
-    customName?: string | null
-    customNumber?: string | null
-    size?: string | null
-  }
-
-  export type OrderItemCreateOrConnectWithoutProductInput = {
-    where: OrderItemWhereUniqueInput
-    create: XOR<OrderItemCreateWithoutProductInput, OrderItemUncheckedCreateWithoutProductInput>
-  }
-
-  export type OrderItemCreateManyProductInputEnvelope = {
-    data: OrderItemCreateManyProductInput | OrderItemCreateManyProductInput[]
-    skipDuplicates?: boolean
-  }
-
   export type ReviewCreateWithoutProductInput = {
     id?: string
     rating?: number
@@ -22657,43 +22657,73 @@ export namespace Prisma {
 
   export type UserCreateWithoutFavoritesInput = {
     id?: string
-    name?: string | null
     email?: string | null
-    emailVerified?: Date | string | null
-    image?: string | null
     password?: string | null
+    name?: string | null
     role?: $Enums.Role
     createdAt?: Date | string
     updatedAt?: Date | string
+    emailVerified?: Date | string | null
+    image?: string | null
     accounts?: AccountCreateNestedManyWithoutUserInput
-    sessions?: SessionCreateNestedManyWithoutUserInput
-    orders?: OrderCreateNestedManyWithoutUserInput
     addresses?: AddressCreateNestedManyWithoutUserInput
-    reviews?: ReviewCreateNestedManyWithoutUserInput
+    orders?: OrderCreateNestedManyWithoutUserInput
     paymentMethods?: PaymentMethodCreateNestedManyWithoutUserInput
+    reviews?: ReviewCreateNestedManyWithoutUserInput
+    sessions?: SessionCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutFavoritesInput = {
     id?: string
-    name?: string | null
     email?: string | null
-    emailVerified?: Date | string | null
-    image?: string | null
     password?: string | null
+    name?: string | null
     role?: $Enums.Role
     createdAt?: Date | string
     updatedAt?: Date | string
+    emailVerified?: Date | string | null
+    image?: string | null
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
-    sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
-    orders?: OrderUncheckedCreateNestedManyWithoutUserInput
     addresses?: AddressUncheckedCreateNestedManyWithoutUserInput
-    reviews?: ReviewUncheckedCreateNestedManyWithoutUserInput
+    orders?: OrderUncheckedCreateNestedManyWithoutUserInput
     paymentMethods?: PaymentMethodUncheckedCreateNestedManyWithoutUserInput
+    reviews?: ReviewUncheckedCreateNestedManyWithoutUserInput
+    sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutFavoritesInput = {
     where: UserWhereUniqueInput
     create: XOR<UserCreateWithoutFavoritesInput, UserUncheckedCreateWithoutFavoritesInput>
+  }
+
+  export type OrderItemUpsertWithWhereUniqueWithoutProductInput = {
+    where: OrderItemWhereUniqueInput
+    update: XOR<OrderItemUpdateWithoutProductInput, OrderItemUncheckedUpdateWithoutProductInput>
+    create: XOR<OrderItemCreateWithoutProductInput, OrderItemUncheckedCreateWithoutProductInput>
+  }
+
+  export type OrderItemUpdateWithWhereUniqueWithoutProductInput = {
+    where: OrderItemWhereUniqueInput
+    data: XOR<OrderItemUpdateWithoutProductInput, OrderItemUncheckedUpdateWithoutProductInput>
+  }
+
+  export type OrderItemUpdateManyWithWhereWithoutProductInput = {
+    where: OrderItemScalarWhereInput
+    data: XOR<OrderItemUpdateManyMutationInput, OrderItemUncheckedUpdateManyWithoutProductInput>
+  }
+
+  export type OrderItemScalarWhereInput = {
+    AND?: OrderItemScalarWhereInput | OrderItemScalarWhereInput[]
+    OR?: OrderItemScalarWhereInput[]
+    NOT?: OrderItemScalarWhereInput | OrderItemScalarWhereInput[]
+    id?: StringFilter<"OrderItem"> | string
+    orderId?: StringFilter<"OrderItem"> | string
+    productId?: StringFilter<"OrderItem"> | string
+    quantity?: IntFilter<"OrderItem"> | number
+    price?: DecimalFilter<"OrderItem"> | Decimal | DecimalJsLike | number | string
+    customName?: StringNullableFilter<"OrderItem"> | string | null
+    customNumber?: StringNullableFilter<"OrderItem"> | string | null
+    size?: StringNullableFilter<"OrderItem"> | string | null
   }
 
   export type CategoryUpsertWithoutProductsInput = {
@@ -22751,36 +22781,6 @@ export namespace Prisma {
     stock?: IntFilter<"ProductSize"> | number
   }
 
-  export type OrderItemUpsertWithWhereUniqueWithoutProductInput = {
-    where: OrderItemWhereUniqueInput
-    update: XOR<OrderItemUpdateWithoutProductInput, OrderItemUncheckedUpdateWithoutProductInput>
-    create: XOR<OrderItemCreateWithoutProductInput, OrderItemUncheckedCreateWithoutProductInput>
-  }
-
-  export type OrderItemUpdateWithWhereUniqueWithoutProductInput = {
-    where: OrderItemWhereUniqueInput
-    data: XOR<OrderItemUpdateWithoutProductInput, OrderItemUncheckedUpdateWithoutProductInput>
-  }
-
-  export type OrderItemUpdateManyWithWhereWithoutProductInput = {
-    where: OrderItemScalarWhereInput
-    data: XOR<OrderItemUpdateManyMutationInput, OrderItemUncheckedUpdateManyWithoutProductInput>
-  }
-
-  export type OrderItemScalarWhereInput = {
-    AND?: OrderItemScalarWhereInput | OrderItemScalarWhereInput[]
-    OR?: OrderItemScalarWhereInput[]
-    NOT?: OrderItemScalarWhereInput | OrderItemScalarWhereInput[]
-    id?: StringFilter<"OrderItem"> | string
-    orderId?: StringFilter<"OrderItem"> | string
-    productId?: StringFilter<"OrderItem"> | string
-    quantity?: IntFilter<"OrderItem"> | number
-    price?: DecimalFilter<"OrderItem"> | Decimal | DecimalJsLike | number | string
-    customName?: StringNullableFilter<"OrderItem"> | string | null
-    customNumber?: StringNullableFilter<"OrderItem"> | string | null
-    size?: StringNullableFilter<"OrderItem"> | string | null
-  }
-
   export type ReviewUpsertWithWhereUniqueWithoutProductInput = {
     where: ReviewWhereUniqueInput
     update: XOR<ReviewUpdateWithoutProductInput, ReviewUncheckedUpdateWithoutProductInput>
@@ -22818,55 +22818,14 @@ export namespace Prisma {
     OR?: UserScalarWhereInput[]
     NOT?: UserScalarWhereInput | UserScalarWhereInput[]
     id?: StringFilter<"User"> | string
-    name?: StringNullableFilter<"User"> | string | null
     email?: StringNullableFilter<"User"> | string | null
-    emailVerified?: DateTimeNullableFilter<"User"> | Date | string | null
-    image?: StringNullableFilter<"User"> | string | null
     password?: StringNullableFilter<"User"> | string | null
+    name?: StringNullableFilter<"User"> | string | null
     role?: EnumRoleFilter<"User"> | $Enums.Role
     createdAt?: DateTimeFilter<"User"> | Date | string
     updatedAt?: DateTimeFilter<"User"> | Date | string
-  }
-
-  export type UserCreateWithoutReviewsInput = {
-    id?: string
-    name?: string | null
-    email?: string | null
-    emailVerified?: Date | string | null
-    image?: string | null
-    password?: string | null
-    role?: $Enums.Role
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    accounts?: AccountCreateNestedManyWithoutUserInput
-    sessions?: SessionCreateNestedManyWithoutUserInput
-    orders?: OrderCreateNestedManyWithoutUserInput
-    addresses?: AddressCreateNestedManyWithoutUserInput
-    favorites?: ProductCreateNestedManyWithoutFavoritedByInput
-    paymentMethods?: PaymentMethodCreateNestedManyWithoutUserInput
-  }
-
-  export type UserUncheckedCreateWithoutReviewsInput = {
-    id?: string
-    name?: string | null
-    email?: string | null
-    emailVerified?: Date | string | null
-    image?: string | null
-    password?: string | null
-    role?: $Enums.Role
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
-    sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
-    orders?: OrderUncheckedCreateNestedManyWithoutUserInput
-    addresses?: AddressUncheckedCreateNestedManyWithoutUserInput
-    favorites?: ProductUncheckedCreateNestedManyWithoutFavoritedByInput
-    paymentMethods?: PaymentMethodUncheckedCreateNestedManyWithoutUserInput
-  }
-
-  export type UserCreateOrConnectWithoutReviewsInput = {
-    where: UserWhereUniqueInput
-    create: XOR<UserCreateWithoutReviewsInput, UserUncheckedCreateWithoutReviewsInput>
+    emailVerified?: DateTimeNullableFilter<"User"> | Date | string | null
+    image?: StringNullableFilter<"User"> | string | null
   }
 
   export type ProductCreateWithoutReviewsInput = {
@@ -22874,18 +22833,18 @@ export namespace Prisma {
     name: string
     description?: string | null
     price: Decimal | DecimalJsLike | number | string
-    discountPrice?: Decimal | DecimalJsLike | number | string | null
     stock?: number
-    subCategory?: string | null
     images?: ProductCreateimagesInput | string[]
     featured?: boolean
-    allowFlocage?: boolean
-    allowGravure?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
+    allowFlocage?: boolean
+    allowGravure?: boolean
+    discountPrice?: Decimal | DecimalJsLike | number | string | null
+    subCategory?: string | null
+    orderItems?: OrderItemCreateNestedManyWithoutProductInput
     category?: CategoryCreateNestedOneWithoutProductsInput
     sizes?: ProductSizeCreateNestedManyWithoutProductInput
-    orderItems?: OrderItemCreateNestedManyWithoutProductInput
     favoritedBy?: UserCreateNestedManyWithoutFavoritesInput
   }
 
@@ -22894,18 +22853,18 @@ export namespace Prisma {
     name: string
     description?: string | null
     price: Decimal | DecimalJsLike | number | string
-    discountPrice?: Decimal | DecimalJsLike | number | string | null
     stock?: number
-    categoryId?: string | null
-    subCategory?: string | null
     images?: ProductCreateimagesInput | string[]
     featured?: boolean
-    allowFlocage?: boolean
-    allowGravure?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
-    sizes?: ProductSizeUncheckedCreateNestedManyWithoutProductInput
+    allowFlocage?: boolean
+    allowGravure?: boolean
+    discountPrice?: Decimal | DecimalJsLike | number | string | null
+    subCategory?: string | null
+    categoryId?: string | null
     orderItems?: OrderItemUncheckedCreateNestedManyWithoutProductInput
+    sizes?: ProductSizeUncheckedCreateNestedManyWithoutProductInput
     favoritedBy?: UserUncheckedCreateNestedManyWithoutFavoritesInput
   }
 
@@ -22914,51 +22873,45 @@ export namespace Prisma {
     create: XOR<ProductCreateWithoutReviewsInput, ProductUncheckedCreateWithoutReviewsInput>
   }
 
-  export type UserUpsertWithoutReviewsInput = {
-    update: XOR<UserUpdateWithoutReviewsInput, UserUncheckedUpdateWithoutReviewsInput>
+  export type UserCreateWithoutReviewsInput = {
+    id?: string
+    email?: string | null
+    password?: string | null
+    name?: string | null
+    role?: $Enums.Role
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    emailVerified?: Date | string | null
+    image?: string | null
+    accounts?: AccountCreateNestedManyWithoutUserInput
+    addresses?: AddressCreateNestedManyWithoutUserInput
+    orders?: OrderCreateNestedManyWithoutUserInput
+    paymentMethods?: PaymentMethodCreateNestedManyWithoutUserInput
+    sessions?: SessionCreateNestedManyWithoutUserInput
+    favorites?: ProductCreateNestedManyWithoutFavoritedByInput
+  }
+
+  export type UserUncheckedCreateWithoutReviewsInput = {
+    id?: string
+    email?: string | null
+    password?: string | null
+    name?: string | null
+    role?: $Enums.Role
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    emailVerified?: Date | string | null
+    image?: string | null
+    accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
+    addresses?: AddressUncheckedCreateNestedManyWithoutUserInput
+    orders?: OrderUncheckedCreateNestedManyWithoutUserInput
+    paymentMethods?: PaymentMethodUncheckedCreateNestedManyWithoutUserInput
+    sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
+    favorites?: ProductUncheckedCreateNestedManyWithoutFavoritedByInput
+  }
+
+  export type UserCreateOrConnectWithoutReviewsInput = {
+    where: UserWhereUniqueInput
     create: XOR<UserCreateWithoutReviewsInput, UserUncheckedCreateWithoutReviewsInput>
-    where?: UserWhereInput
-  }
-
-  export type UserUpdateToOneWithWhereWithoutReviewsInput = {
-    where?: UserWhereInput
-    data: XOR<UserUpdateWithoutReviewsInput, UserUncheckedUpdateWithoutReviewsInput>
-  }
-
-  export type UserUpdateWithoutReviewsInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    name?: NullableStringFieldUpdateOperationsInput | string | null
-    email?: NullableStringFieldUpdateOperationsInput | string | null
-    emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    image?: NullableStringFieldUpdateOperationsInput | string | null
-    password?: NullableStringFieldUpdateOperationsInput | string | null
-    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    accounts?: AccountUpdateManyWithoutUserNestedInput
-    sessions?: SessionUpdateManyWithoutUserNestedInput
-    orders?: OrderUpdateManyWithoutUserNestedInput
-    addresses?: AddressUpdateManyWithoutUserNestedInput
-    favorites?: ProductUpdateManyWithoutFavoritedByNestedInput
-    paymentMethods?: PaymentMethodUpdateManyWithoutUserNestedInput
-  }
-
-  export type UserUncheckedUpdateWithoutReviewsInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    name?: NullableStringFieldUpdateOperationsInput | string | null
-    email?: NullableStringFieldUpdateOperationsInput | string | null
-    emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    image?: NullableStringFieldUpdateOperationsInput | string | null
-    password?: NullableStringFieldUpdateOperationsInput | string | null
-    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
-    sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
-    orders?: OrderUncheckedUpdateManyWithoutUserNestedInput
-    addresses?: AddressUncheckedUpdateManyWithoutUserNestedInput
-    favorites?: ProductUncheckedUpdateManyWithoutFavoritedByNestedInput
-    paymentMethods?: PaymentMethodUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type ProductUpsertWithoutReviewsInput = {
@@ -22977,18 +22930,18 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    discountPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     stock?: IntFieldUpdateOperationsInput | number
-    subCategory?: NullableStringFieldUpdateOperationsInput | string | null
     images?: ProductUpdateimagesInput | string[]
     featured?: BoolFieldUpdateOperationsInput | boolean
-    allowFlocage?: BoolFieldUpdateOperationsInput | boolean
-    allowGravure?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    allowFlocage?: BoolFieldUpdateOperationsInput | boolean
+    allowGravure?: BoolFieldUpdateOperationsInput | boolean
+    discountPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    subCategory?: NullableStringFieldUpdateOperationsInput | string | null
+    orderItems?: OrderItemUpdateManyWithoutProductNestedInput
     category?: CategoryUpdateOneWithoutProductsNestedInput
     sizes?: ProductSizeUpdateManyWithoutProductNestedInput
-    orderItems?: OrderItemUpdateManyWithoutProductNestedInput
     favoritedBy?: UserUpdateManyWithoutFavoritesNestedInput
   }
 
@@ -22997,19 +22950,66 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    discountPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     stock?: IntFieldUpdateOperationsInput | number
-    categoryId?: NullableStringFieldUpdateOperationsInput | string | null
-    subCategory?: NullableStringFieldUpdateOperationsInput | string | null
     images?: ProductUpdateimagesInput | string[]
     featured?: BoolFieldUpdateOperationsInput | boolean
-    allowFlocage?: BoolFieldUpdateOperationsInput | boolean
-    allowGravure?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    sizes?: ProductSizeUncheckedUpdateManyWithoutProductNestedInput
+    allowFlocage?: BoolFieldUpdateOperationsInput | boolean
+    allowGravure?: BoolFieldUpdateOperationsInput | boolean
+    discountPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    subCategory?: NullableStringFieldUpdateOperationsInput | string | null
+    categoryId?: NullableStringFieldUpdateOperationsInput | string | null
     orderItems?: OrderItemUncheckedUpdateManyWithoutProductNestedInput
+    sizes?: ProductSizeUncheckedUpdateManyWithoutProductNestedInput
     favoritedBy?: UserUncheckedUpdateManyWithoutFavoritesNestedInput
+  }
+
+  export type UserUpsertWithoutReviewsInput = {
+    update: XOR<UserUpdateWithoutReviewsInput, UserUncheckedUpdateWithoutReviewsInput>
+    create: XOR<UserCreateWithoutReviewsInput, UserUncheckedCreateWithoutReviewsInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutReviewsInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutReviewsInput, UserUncheckedUpdateWithoutReviewsInput>
+  }
+
+  export type UserUpdateWithoutReviewsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    password?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    accounts?: AccountUpdateManyWithoutUserNestedInput
+    addresses?: AddressUpdateManyWithoutUserNestedInput
+    orders?: OrderUpdateManyWithoutUserNestedInput
+    paymentMethods?: PaymentMethodUpdateManyWithoutUserNestedInput
+    sessions?: SessionUpdateManyWithoutUserNestedInput
+    favorites?: ProductUpdateManyWithoutFavoritedByNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutReviewsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    password?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
+    addresses?: AddressUncheckedUpdateManyWithoutUserNestedInput
+    orders?: OrderUncheckedUpdateManyWithoutUserNestedInput
+    paymentMethods?: PaymentMethodUncheckedUpdateManyWithoutUserNestedInput
+    sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
+    favorites?: ProductUncheckedUpdateManyWithoutFavoritedByNestedInput
   }
 
   export type ProductCreateWithoutSizesInput = {
@@ -23017,17 +23017,17 @@ export namespace Prisma {
     name: string
     description?: string | null
     price: Decimal | DecimalJsLike | number | string
-    discountPrice?: Decimal | DecimalJsLike | number | string | null
     stock?: number
-    subCategory?: string | null
     images?: ProductCreateimagesInput | string[]
     featured?: boolean
-    allowFlocage?: boolean
-    allowGravure?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
-    category?: CategoryCreateNestedOneWithoutProductsInput
+    allowFlocage?: boolean
+    allowGravure?: boolean
+    discountPrice?: Decimal | DecimalJsLike | number | string | null
+    subCategory?: string | null
     orderItems?: OrderItemCreateNestedManyWithoutProductInput
+    category?: CategoryCreateNestedOneWithoutProductsInput
     reviews?: ReviewCreateNestedManyWithoutProductInput
     favoritedBy?: UserCreateNestedManyWithoutFavoritesInput
   }
@@ -23037,16 +23037,16 @@ export namespace Prisma {
     name: string
     description?: string | null
     price: Decimal | DecimalJsLike | number | string
-    discountPrice?: Decimal | DecimalJsLike | number | string | null
     stock?: number
-    categoryId?: string | null
-    subCategory?: string | null
     images?: ProductCreateimagesInput | string[]
     featured?: boolean
-    allowFlocage?: boolean
-    allowGravure?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
+    allowFlocage?: boolean
+    allowGravure?: boolean
+    discountPrice?: Decimal | DecimalJsLike | number | string | null
+    subCategory?: string | null
+    categoryId?: string | null
     orderItems?: OrderItemUncheckedCreateNestedManyWithoutProductInput
     reviews?: ReviewUncheckedCreateNestedManyWithoutProductInput
     favoritedBy?: UserUncheckedCreateNestedManyWithoutFavoritesInput
@@ -23073,17 +23073,17 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    discountPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     stock?: IntFieldUpdateOperationsInput | number
-    subCategory?: NullableStringFieldUpdateOperationsInput | string | null
     images?: ProductUpdateimagesInput | string[]
     featured?: BoolFieldUpdateOperationsInput | boolean
-    allowFlocage?: BoolFieldUpdateOperationsInput | boolean
-    allowGravure?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    category?: CategoryUpdateOneWithoutProductsNestedInput
+    allowFlocage?: BoolFieldUpdateOperationsInput | boolean
+    allowGravure?: BoolFieldUpdateOperationsInput | boolean
+    discountPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    subCategory?: NullableStringFieldUpdateOperationsInput | string | null
     orderItems?: OrderItemUpdateManyWithoutProductNestedInput
+    category?: CategoryUpdateOneWithoutProductsNestedInput
     reviews?: ReviewUpdateManyWithoutProductNestedInput
     favoritedBy?: UserUpdateManyWithoutFavoritesNestedInput
   }
@@ -23093,16 +23093,16 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    discountPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     stock?: IntFieldUpdateOperationsInput | number
-    categoryId?: NullableStringFieldUpdateOperationsInput | string | null
-    subCategory?: NullableStringFieldUpdateOperationsInput | string | null
     images?: ProductUpdateimagesInput | string[]
     featured?: BoolFieldUpdateOperationsInput | boolean
-    allowFlocage?: BoolFieldUpdateOperationsInput | boolean
-    allowGravure?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    allowFlocage?: BoolFieldUpdateOperationsInput | boolean
+    allowGravure?: BoolFieldUpdateOperationsInput | boolean
+    discountPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    subCategory?: NullableStringFieldUpdateOperationsInput | string | null
+    categoryId?: NullableStringFieldUpdateOperationsInput | string | null
     orderItems?: OrderItemUncheckedUpdateManyWithoutProductNestedInput
     reviews?: ReviewUncheckedUpdateManyWithoutProductNestedInput
     favoritedBy?: UserUncheckedUpdateManyWithoutFavoritesNestedInput
@@ -23110,38 +23110,38 @@ export namespace Prisma {
 
   export type UserCreateWithoutOrdersInput = {
     id?: string
-    name?: string | null
     email?: string | null
-    emailVerified?: Date | string | null
-    image?: string | null
     password?: string | null
+    name?: string | null
     role?: $Enums.Role
     createdAt?: Date | string
     updatedAt?: Date | string
+    emailVerified?: Date | string | null
+    image?: string | null
     accounts?: AccountCreateNestedManyWithoutUserInput
-    sessions?: SessionCreateNestedManyWithoutUserInput
     addresses?: AddressCreateNestedManyWithoutUserInput
-    reviews?: ReviewCreateNestedManyWithoutUserInput
-    favorites?: ProductCreateNestedManyWithoutFavoritedByInput
     paymentMethods?: PaymentMethodCreateNestedManyWithoutUserInput
+    reviews?: ReviewCreateNestedManyWithoutUserInput
+    sessions?: SessionCreateNestedManyWithoutUserInput
+    favorites?: ProductCreateNestedManyWithoutFavoritedByInput
   }
 
   export type UserUncheckedCreateWithoutOrdersInput = {
     id?: string
-    name?: string | null
     email?: string | null
-    emailVerified?: Date | string | null
-    image?: string | null
     password?: string | null
+    name?: string | null
     role?: $Enums.Role
     createdAt?: Date | string
     updatedAt?: Date | string
+    emailVerified?: Date | string | null
+    image?: string | null
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
-    sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     addresses?: AddressUncheckedCreateNestedManyWithoutUserInput
-    reviews?: ReviewUncheckedCreateNestedManyWithoutUserInput
-    favorites?: ProductUncheckedCreateNestedManyWithoutFavoritedByInput
     paymentMethods?: PaymentMethodUncheckedCreateNestedManyWithoutUserInput
+    reviews?: ReviewUncheckedCreateNestedManyWithoutUserInput
+    sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
+    favorites?: ProductUncheckedCreateNestedManyWithoutFavoritedByInput
   }
 
   export type UserCreateOrConnectWithoutOrdersInput = {
@@ -23192,38 +23192,38 @@ export namespace Prisma {
 
   export type UserUpdateWithoutOrdersInput = {
     id?: StringFieldUpdateOperationsInput | string
-    name?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
-    emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    image?: NullableStringFieldUpdateOperationsInput | string | null
     password?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: NullableStringFieldUpdateOperationsInput | string | null
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    image?: NullableStringFieldUpdateOperationsInput | string | null
     accounts?: AccountUpdateManyWithoutUserNestedInput
-    sessions?: SessionUpdateManyWithoutUserNestedInput
     addresses?: AddressUpdateManyWithoutUserNestedInput
-    reviews?: ReviewUpdateManyWithoutUserNestedInput
-    favorites?: ProductUpdateManyWithoutFavoritedByNestedInput
     paymentMethods?: PaymentMethodUpdateManyWithoutUserNestedInput
+    reviews?: ReviewUpdateManyWithoutUserNestedInput
+    sessions?: SessionUpdateManyWithoutUserNestedInput
+    favorites?: ProductUpdateManyWithoutFavoritedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutOrdersInput = {
     id?: StringFieldUpdateOperationsInput | string
-    name?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
-    emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    image?: NullableStringFieldUpdateOperationsInput | string | null
     password?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: NullableStringFieldUpdateOperationsInput | string | null
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    image?: NullableStringFieldUpdateOperationsInput | string | null
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
-    sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     addresses?: AddressUncheckedUpdateManyWithoutUserNestedInput
-    reviews?: ReviewUncheckedUpdateManyWithoutUserNestedInput
-    favorites?: ProductUncheckedUpdateManyWithoutFavoritedByNestedInput
     paymentMethods?: PaymentMethodUncheckedUpdateManyWithoutUserNestedInput
+    reviews?: ReviewUncheckedUpdateManyWithoutUserNestedInput
+    sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
+    favorites?: ProductUncheckedUpdateManyWithoutFavoritedByNestedInput
   }
 
   export type OrderItemUpsertWithWhereUniqueWithoutOrderInput = {
@@ -23246,13 +23246,13 @@ export namespace Prisma {
     id?: string
     customerName?: string | null
     customerEmail?: string | null
-    customerPhone?: string | null
-    customerAddress?: string | null
-    paymentMethod?: string | null
     status?: $Enums.OrderStatus
     total: Decimal | DecimalJsLike | number | string
     createdAt?: Date | string
     updatedAt?: Date | string
+    customerAddress?: string | null
+    customerPhone?: string | null
+    paymentMethod?: string | null
     user?: UserCreateNestedOneWithoutOrdersInput
   }
 
@@ -23261,13 +23261,13 @@ export namespace Prisma {
     userId?: string | null
     customerName?: string | null
     customerEmail?: string | null
-    customerPhone?: string | null
-    customerAddress?: string | null
-    paymentMethod?: string | null
     status?: $Enums.OrderStatus
     total: Decimal | DecimalJsLike | number | string
     createdAt?: Date | string
     updatedAt?: Date | string
+    customerAddress?: string | null
+    customerPhone?: string | null
+    paymentMethod?: string | null
   }
 
   export type OrderCreateOrConnectWithoutItemsInput = {
@@ -23280,15 +23280,15 @@ export namespace Prisma {
     name: string
     description?: string | null
     price: Decimal | DecimalJsLike | number | string
-    discountPrice?: Decimal | DecimalJsLike | number | string | null
     stock?: number
-    subCategory?: string | null
     images?: ProductCreateimagesInput | string[]
     featured?: boolean
-    allowFlocage?: boolean
-    allowGravure?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
+    allowFlocage?: boolean
+    allowGravure?: boolean
+    discountPrice?: Decimal | DecimalJsLike | number | string | null
+    subCategory?: string | null
     category?: CategoryCreateNestedOneWithoutProductsInput
     sizes?: ProductSizeCreateNestedManyWithoutProductInput
     reviews?: ReviewCreateNestedManyWithoutProductInput
@@ -23300,16 +23300,16 @@ export namespace Prisma {
     name: string
     description?: string | null
     price: Decimal | DecimalJsLike | number | string
-    discountPrice?: Decimal | DecimalJsLike | number | string | null
     stock?: number
-    categoryId?: string | null
-    subCategory?: string | null
     images?: ProductCreateimagesInput | string[]
     featured?: boolean
-    allowFlocage?: boolean
-    allowGravure?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
+    allowFlocage?: boolean
+    allowGravure?: boolean
+    discountPrice?: Decimal | DecimalJsLike | number | string | null
+    subCategory?: string | null
+    categoryId?: string | null
     sizes?: ProductSizeUncheckedCreateNestedManyWithoutProductInput
     reviews?: ReviewUncheckedCreateNestedManyWithoutProductInput
     favoritedBy?: UserUncheckedCreateNestedManyWithoutFavoritesInput
@@ -23335,13 +23335,13 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     customerName?: NullableStringFieldUpdateOperationsInput | string | null
     customerEmail?: NullableStringFieldUpdateOperationsInput | string | null
-    customerPhone?: NullableStringFieldUpdateOperationsInput | string | null
-    customerAddress?: NullableStringFieldUpdateOperationsInput | string | null
-    paymentMethod?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
     total?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    customerAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    customerPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    paymentMethod?: NullableStringFieldUpdateOperationsInput | string | null
     user?: UserUpdateOneWithoutOrdersNestedInput
   }
 
@@ -23350,13 +23350,13 @@ export namespace Prisma {
     userId?: NullableStringFieldUpdateOperationsInput | string | null
     customerName?: NullableStringFieldUpdateOperationsInput | string | null
     customerEmail?: NullableStringFieldUpdateOperationsInput | string | null
-    customerPhone?: NullableStringFieldUpdateOperationsInput | string | null
-    customerAddress?: NullableStringFieldUpdateOperationsInput | string | null
-    paymentMethod?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
     total?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    customerAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    customerPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    paymentMethod?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type ProductUpsertWithoutOrderItemsInput = {
@@ -23375,15 +23375,15 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    discountPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     stock?: IntFieldUpdateOperationsInput | number
-    subCategory?: NullableStringFieldUpdateOperationsInput | string | null
     images?: ProductUpdateimagesInput | string[]
     featured?: BoolFieldUpdateOperationsInput | boolean
-    allowFlocage?: BoolFieldUpdateOperationsInput | boolean
-    allowGravure?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    allowFlocage?: BoolFieldUpdateOperationsInput | boolean
+    allowGravure?: BoolFieldUpdateOperationsInput | boolean
+    discountPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    subCategory?: NullableStringFieldUpdateOperationsInput | string | null
     category?: CategoryUpdateOneWithoutProductsNestedInput
     sizes?: ProductSizeUpdateManyWithoutProductNestedInput
     reviews?: ReviewUpdateManyWithoutProductNestedInput
@@ -23395,16 +23395,16 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    discountPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     stock?: IntFieldUpdateOperationsInput | number
-    categoryId?: NullableStringFieldUpdateOperationsInput | string | null
-    subCategory?: NullableStringFieldUpdateOperationsInput | string | null
     images?: ProductUpdateimagesInput | string[]
     featured?: BoolFieldUpdateOperationsInput | boolean
-    allowFlocage?: BoolFieldUpdateOperationsInput | boolean
-    allowGravure?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    allowFlocage?: BoolFieldUpdateOperationsInput | boolean
+    allowGravure?: BoolFieldUpdateOperationsInput | boolean
+    discountPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    subCategory?: NullableStringFieldUpdateOperationsInput | string | null
+    categoryId?: NullableStringFieldUpdateOperationsInput | string | null
     sizes?: ProductSizeUncheckedUpdateManyWithoutProductNestedInput
     reviews?: ReviewUncheckedUpdateManyWithoutProductNestedInput
     favoritedBy?: UserUncheckedUpdateManyWithoutFavoritesNestedInput
@@ -23415,17 +23415,17 @@ export namespace Prisma {
     name: string
     description?: string | null
     price: Decimal | DecimalJsLike | number | string
-    discountPrice?: Decimal | DecimalJsLike | number | string | null
     stock?: number
-    subCategory?: string | null
     images?: ProductCreateimagesInput | string[]
     featured?: boolean
-    allowFlocage?: boolean
-    allowGravure?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
-    sizes?: ProductSizeCreateNestedManyWithoutProductInput
+    allowFlocage?: boolean
+    allowGravure?: boolean
+    discountPrice?: Decimal | DecimalJsLike | number | string | null
+    subCategory?: string | null
     orderItems?: OrderItemCreateNestedManyWithoutProductInput
+    sizes?: ProductSizeCreateNestedManyWithoutProductInput
     reviews?: ReviewCreateNestedManyWithoutProductInput
     favoritedBy?: UserCreateNestedManyWithoutFavoritesInput
   }
@@ -23435,17 +23435,17 @@ export namespace Prisma {
     name: string
     description?: string | null
     price: Decimal | DecimalJsLike | number | string
-    discountPrice?: Decimal | DecimalJsLike | number | string | null
     stock?: number
-    subCategory?: string | null
     images?: ProductCreateimagesInput | string[]
     featured?: boolean
-    allowFlocage?: boolean
-    allowGravure?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
-    sizes?: ProductSizeUncheckedCreateNestedManyWithoutProductInput
+    allowFlocage?: boolean
+    allowGravure?: boolean
+    discountPrice?: Decimal | DecimalJsLike | number | string | null
+    subCategory?: string | null
     orderItems?: OrderItemUncheckedCreateNestedManyWithoutProductInput
+    sizes?: ProductSizeUncheckedCreateNestedManyWithoutProductInput
     reviews?: ReviewUncheckedCreateNestedManyWithoutProductInput
     favoritedBy?: UserUncheckedCreateNestedManyWithoutFavoritesInput
   }
@@ -23490,25 +23490,6 @@ export namespace Prisma {
     session_state?: string | null
   }
 
-  export type SessionCreateManyUserInput = {
-    id?: string
-    sessionToken: string
-    expires: Date | string
-  }
-
-  export type OrderCreateManyUserInput = {
-    id?: string
-    customerName?: string | null
-    customerEmail?: string | null
-    customerPhone?: string | null
-    customerAddress?: string | null
-    paymentMethod?: string | null
-    status?: $Enums.OrderStatus
-    total: Decimal | DecimalJsLike | number | string
-    createdAt?: Date | string
-    updatedAt?: Date | string
-  }
-
   export type AddressCreateManyUserInput = {
     id?: string
     name?: string | null
@@ -23517,6 +23498,30 @@ export namespace Prisma {
     street: string
     city: string
     phone: string
+    isDefault?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type OrderCreateManyUserInput = {
+    id?: string
+    customerName?: string | null
+    customerEmail?: string | null
+    status?: $Enums.OrderStatus
+    total: Decimal | DecimalJsLike | number | string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    customerAddress?: string | null
+    customerPhone?: string | null
+    paymentMethod?: string | null
+  }
+
+  export type PaymentMethodCreateManyUserInput = {
+    id?: string
+    type: string
+    provider: string
+    accountNumber: string
+    expiryDate?: string | null
     isDefault?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -23531,15 +23536,10 @@ export namespace Prisma {
     updatedAt?: Date | string
   }
 
-  export type PaymentMethodCreateManyUserInput = {
+  export type SessionCreateManyUserInput = {
     id?: string
-    type: string
-    provider: string
-    accountNumber: string
-    expiryDate?: string | null
-    isDefault?: boolean
-    createdAt?: Date | string
-    updatedAt?: Date | string
+    sessionToken: string
+    expires: Date | string
   }
 
   export type AccountUpdateWithoutUserInput = {
@@ -23584,65 +23584,6 @@ export namespace Prisma {
     session_state?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
-  export type SessionUpdateWithoutUserInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    sessionToken?: StringFieldUpdateOperationsInput | string
-    expires?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type SessionUncheckedUpdateWithoutUserInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    sessionToken?: StringFieldUpdateOperationsInput | string
-    expires?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type SessionUncheckedUpdateManyWithoutUserInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    sessionToken?: StringFieldUpdateOperationsInput | string
-    expires?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type OrderUpdateWithoutUserInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    customerName?: NullableStringFieldUpdateOperationsInput | string | null
-    customerEmail?: NullableStringFieldUpdateOperationsInput | string | null
-    customerPhone?: NullableStringFieldUpdateOperationsInput | string | null
-    customerAddress?: NullableStringFieldUpdateOperationsInput | string | null
-    paymentMethod?: NullableStringFieldUpdateOperationsInput | string | null
-    status?: EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
-    total?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    items?: OrderItemUpdateManyWithoutOrderNestedInput
-  }
-
-  export type OrderUncheckedUpdateWithoutUserInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    customerName?: NullableStringFieldUpdateOperationsInput | string | null
-    customerEmail?: NullableStringFieldUpdateOperationsInput | string | null
-    customerPhone?: NullableStringFieldUpdateOperationsInput | string | null
-    customerAddress?: NullableStringFieldUpdateOperationsInput | string | null
-    paymentMethod?: NullableStringFieldUpdateOperationsInput | string | null
-    status?: EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
-    total?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    items?: OrderItemUncheckedUpdateManyWithoutOrderNestedInput
-  }
-
-  export type OrderUncheckedUpdateManyWithoutUserInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    customerName?: NullableStringFieldUpdateOperationsInput | string | null
-    customerEmail?: NullableStringFieldUpdateOperationsInput | string | null
-    customerPhone?: NullableStringFieldUpdateOperationsInput | string | null
-    customerAddress?: NullableStringFieldUpdateOperationsInput | string | null
-    paymentMethod?: NullableStringFieldUpdateOperationsInput | string | null
-    status?: EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
-    total?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
   export type AddressUpdateWithoutUserInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: NullableStringFieldUpdateOperationsInput | string | null
@@ -23682,88 +23623,45 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type ReviewUpdateWithoutUserInput = {
+  export type OrderUpdateWithoutUserInput = {
     id?: StringFieldUpdateOperationsInput | string
-    rating?: IntFieldUpdateOperationsInput | number
-    comment?: NullableStringFieldUpdateOperationsInput | string | null
+    customerName?: NullableStringFieldUpdateOperationsInput | string | null
+    customerEmail?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
+    total?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    product?: ProductUpdateOneRequiredWithoutReviewsNestedInput
+    customerAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    customerPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    paymentMethod?: NullableStringFieldUpdateOperationsInput | string | null
+    items?: OrderItemUpdateManyWithoutOrderNestedInput
   }
 
-  export type ReviewUncheckedUpdateWithoutUserInput = {
+  export type OrderUncheckedUpdateWithoutUserInput = {
     id?: StringFieldUpdateOperationsInput | string
-    rating?: IntFieldUpdateOperationsInput | number
-    comment?: NullableStringFieldUpdateOperationsInput | string | null
-    productId?: StringFieldUpdateOperationsInput | string
+    customerName?: NullableStringFieldUpdateOperationsInput | string | null
+    customerEmail?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
+    total?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    customerAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    customerPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    paymentMethod?: NullableStringFieldUpdateOperationsInput | string | null
+    items?: OrderItemUncheckedUpdateManyWithoutOrderNestedInput
   }
 
-  export type ReviewUncheckedUpdateManyWithoutUserInput = {
+  export type OrderUncheckedUpdateManyWithoutUserInput = {
     id?: StringFieldUpdateOperationsInput | string
-    rating?: IntFieldUpdateOperationsInput | number
-    comment?: NullableStringFieldUpdateOperationsInput | string | null
-    productId?: StringFieldUpdateOperationsInput | string
+    customerName?: NullableStringFieldUpdateOperationsInput | string | null
+    customerEmail?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
+    total?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type ProductUpdateWithoutFavoritedByInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    discountPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    stock?: IntFieldUpdateOperationsInput | number
-    subCategory?: NullableStringFieldUpdateOperationsInput | string | null
-    images?: ProductUpdateimagesInput | string[]
-    featured?: BoolFieldUpdateOperationsInput | boolean
-    allowFlocage?: BoolFieldUpdateOperationsInput | boolean
-    allowGravure?: BoolFieldUpdateOperationsInput | boolean
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    category?: CategoryUpdateOneWithoutProductsNestedInput
-    sizes?: ProductSizeUpdateManyWithoutProductNestedInput
-    orderItems?: OrderItemUpdateManyWithoutProductNestedInput
-    reviews?: ReviewUpdateManyWithoutProductNestedInput
-  }
-
-  export type ProductUncheckedUpdateWithoutFavoritedByInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    discountPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    stock?: IntFieldUpdateOperationsInput | number
-    categoryId?: NullableStringFieldUpdateOperationsInput | string | null
-    subCategory?: NullableStringFieldUpdateOperationsInput | string | null
-    images?: ProductUpdateimagesInput | string[]
-    featured?: BoolFieldUpdateOperationsInput | boolean
-    allowFlocage?: BoolFieldUpdateOperationsInput | boolean
-    allowGravure?: BoolFieldUpdateOperationsInput | boolean
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    sizes?: ProductSizeUncheckedUpdateManyWithoutProductNestedInput
-    orderItems?: OrderItemUncheckedUpdateManyWithoutProductNestedInput
-    reviews?: ReviewUncheckedUpdateManyWithoutProductNestedInput
-  }
-
-  export type ProductUncheckedUpdateManyWithoutFavoritedByInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    discountPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    stock?: IntFieldUpdateOperationsInput | number
-    categoryId?: NullableStringFieldUpdateOperationsInput | string | null
-    subCategory?: NullableStringFieldUpdateOperationsInput | string | null
-    images?: ProductUpdateimagesInput | string[]
-    featured?: BoolFieldUpdateOperationsInput | boolean
-    allowFlocage?: BoolFieldUpdateOperationsInput | boolean
-    allowGravure?: BoolFieldUpdateOperationsInput | boolean
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    customerAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    customerPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    paymentMethod?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type PaymentMethodUpdateWithoutUserInput = {
@@ -23799,10 +23697,106 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type ProductSizeCreateManyProductInput = {
-    id?: string
-    size: string
-    stock?: number
+  export type ReviewUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    rating?: IntFieldUpdateOperationsInput | number
+    comment?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    product?: ProductUpdateOneRequiredWithoutReviewsNestedInput
+  }
+
+  export type ReviewUncheckedUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    rating?: IntFieldUpdateOperationsInput | number
+    comment?: NullableStringFieldUpdateOperationsInput | string | null
+    productId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ReviewUncheckedUpdateManyWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    rating?: IntFieldUpdateOperationsInput | number
+    comment?: NullableStringFieldUpdateOperationsInput | string | null
+    productId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SessionUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    sessionToken?: StringFieldUpdateOperationsInput | string
+    expires?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SessionUncheckedUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    sessionToken?: StringFieldUpdateOperationsInput | string
+    expires?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SessionUncheckedUpdateManyWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    sessionToken?: StringFieldUpdateOperationsInput | string
+    expires?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ProductUpdateWithoutFavoritedByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    stock?: IntFieldUpdateOperationsInput | number
+    images?: ProductUpdateimagesInput | string[]
+    featured?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    allowFlocage?: BoolFieldUpdateOperationsInput | boolean
+    allowGravure?: BoolFieldUpdateOperationsInput | boolean
+    discountPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    subCategory?: NullableStringFieldUpdateOperationsInput | string | null
+    orderItems?: OrderItemUpdateManyWithoutProductNestedInput
+    category?: CategoryUpdateOneWithoutProductsNestedInput
+    sizes?: ProductSizeUpdateManyWithoutProductNestedInput
+    reviews?: ReviewUpdateManyWithoutProductNestedInput
+  }
+
+  export type ProductUncheckedUpdateWithoutFavoritedByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    stock?: IntFieldUpdateOperationsInput | number
+    images?: ProductUpdateimagesInput | string[]
+    featured?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    allowFlocage?: BoolFieldUpdateOperationsInput | boolean
+    allowGravure?: BoolFieldUpdateOperationsInput | boolean
+    discountPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    subCategory?: NullableStringFieldUpdateOperationsInput | string | null
+    categoryId?: NullableStringFieldUpdateOperationsInput | string | null
+    orderItems?: OrderItemUncheckedUpdateManyWithoutProductNestedInput
+    sizes?: ProductSizeUncheckedUpdateManyWithoutProductNestedInput
+    reviews?: ReviewUncheckedUpdateManyWithoutProductNestedInput
+  }
+
+  export type ProductUncheckedUpdateManyWithoutFavoritedByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    stock?: IntFieldUpdateOperationsInput | number
+    images?: ProductUpdateimagesInput | string[]
+    featured?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    allowFlocage?: BoolFieldUpdateOperationsInput | boolean
+    allowGravure?: BoolFieldUpdateOperationsInput | boolean
+    discountPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    subCategory?: NullableStringFieldUpdateOperationsInput | string | null
+    categoryId?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type OrderItemCreateManyProductInput = {
@@ -23815,6 +23809,12 @@ export namespace Prisma {
     size?: string | null
   }
 
+  export type ProductSizeCreateManyProductInput = {
+    id?: string
+    size: string
+    stock?: number
+  }
+
   export type ReviewCreateManyProductInput = {
     id?: string
     rating?: number
@@ -23822,24 +23822,6 @@ export namespace Prisma {
     userId: string
     createdAt?: Date | string
     updatedAt?: Date | string
-  }
-
-  export type ProductSizeUpdateWithoutProductInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    size?: StringFieldUpdateOperationsInput | string
-    stock?: IntFieldUpdateOperationsInput | number
-  }
-
-  export type ProductSizeUncheckedUpdateWithoutProductInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    size?: StringFieldUpdateOperationsInput | string
-    stock?: IntFieldUpdateOperationsInput | number
-  }
-
-  export type ProductSizeUncheckedUpdateManyWithoutProductInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    size?: StringFieldUpdateOperationsInput | string
-    stock?: IntFieldUpdateOperationsInput | number
   }
 
   export type OrderItemUpdateWithoutProductInput = {
@@ -23872,6 +23854,24 @@ export namespace Prisma {
     size?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
+  export type ProductSizeUpdateWithoutProductInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    size?: StringFieldUpdateOperationsInput | string
+    stock?: IntFieldUpdateOperationsInput | number
+  }
+
+  export type ProductSizeUncheckedUpdateWithoutProductInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    size?: StringFieldUpdateOperationsInput | string
+    stock?: IntFieldUpdateOperationsInput | number
+  }
+
+  export type ProductSizeUncheckedUpdateManyWithoutProductInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    size?: StringFieldUpdateOperationsInput | string
+    stock?: IntFieldUpdateOperationsInput | number
+  }
+
   export type ReviewUpdateWithoutProductInput = {
     id?: StringFieldUpdateOperationsInput | string
     rating?: IntFieldUpdateOperationsInput | number
@@ -23901,50 +23901,50 @@ export namespace Prisma {
 
   export type UserUpdateWithoutFavoritesInput = {
     id?: StringFieldUpdateOperationsInput | string
-    name?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
-    emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    image?: NullableStringFieldUpdateOperationsInput | string | null
     password?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: NullableStringFieldUpdateOperationsInput | string | null
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    image?: NullableStringFieldUpdateOperationsInput | string | null
     accounts?: AccountUpdateManyWithoutUserNestedInput
-    sessions?: SessionUpdateManyWithoutUserNestedInput
-    orders?: OrderUpdateManyWithoutUserNestedInput
     addresses?: AddressUpdateManyWithoutUserNestedInput
-    reviews?: ReviewUpdateManyWithoutUserNestedInput
+    orders?: OrderUpdateManyWithoutUserNestedInput
     paymentMethods?: PaymentMethodUpdateManyWithoutUserNestedInput
+    reviews?: ReviewUpdateManyWithoutUserNestedInput
+    sessions?: SessionUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutFavoritesInput = {
     id?: StringFieldUpdateOperationsInput | string
-    name?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
-    emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    image?: NullableStringFieldUpdateOperationsInput | string | null
     password?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: NullableStringFieldUpdateOperationsInput | string | null
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    image?: NullableStringFieldUpdateOperationsInput | string | null
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
-    sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
-    orders?: OrderUncheckedUpdateManyWithoutUserNestedInput
     addresses?: AddressUncheckedUpdateManyWithoutUserNestedInput
-    reviews?: ReviewUncheckedUpdateManyWithoutUserNestedInput
+    orders?: OrderUncheckedUpdateManyWithoutUserNestedInput
     paymentMethods?: PaymentMethodUncheckedUpdateManyWithoutUserNestedInput
+    reviews?: ReviewUncheckedUpdateManyWithoutUserNestedInput
+    sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateManyWithoutFavoritesInput = {
     id?: StringFieldUpdateOperationsInput | string
-    name?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
-    emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    image?: NullableStringFieldUpdateOperationsInput | string | null
     password?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: NullableStringFieldUpdateOperationsInput | string | null
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    image?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type OrderItemCreateManyOrderInput = {
@@ -23992,15 +23992,15 @@ export namespace Prisma {
     name: string
     description?: string | null
     price: Decimal | DecimalJsLike | number | string
-    discountPrice?: Decimal | DecimalJsLike | number | string | null
     stock?: number
-    subCategory?: string | null
     images?: ProductCreateimagesInput | string[]
     featured?: boolean
-    allowFlocage?: boolean
-    allowGravure?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
+    allowFlocage?: boolean
+    allowGravure?: boolean
+    discountPrice?: Decimal | DecimalJsLike | number | string | null
+    subCategory?: string | null
   }
 
   export type ProductUpdateWithoutCategoryInput = {
@@ -24008,17 +24008,17 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    discountPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     stock?: IntFieldUpdateOperationsInput | number
-    subCategory?: NullableStringFieldUpdateOperationsInput | string | null
     images?: ProductUpdateimagesInput | string[]
     featured?: BoolFieldUpdateOperationsInput | boolean
-    allowFlocage?: BoolFieldUpdateOperationsInput | boolean
-    allowGravure?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    sizes?: ProductSizeUpdateManyWithoutProductNestedInput
+    allowFlocage?: BoolFieldUpdateOperationsInput | boolean
+    allowGravure?: BoolFieldUpdateOperationsInput | boolean
+    discountPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    subCategory?: NullableStringFieldUpdateOperationsInput | string | null
     orderItems?: OrderItemUpdateManyWithoutProductNestedInput
+    sizes?: ProductSizeUpdateManyWithoutProductNestedInput
     reviews?: ReviewUpdateManyWithoutProductNestedInput
     favoritedBy?: UserUpdateManyWithoutFavoritesNestedInput
   }
@@ -24028,17 +24028,17 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    discountPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     stock?: IntFieldUpdateOperationsInput | number
-    subCategory?: NullableStringFieldUpdateOperationsInput | string | null
     images?: ProductUpdateimagesInput | string[]
     featured?: BoolFieldUpdateOperationsInput | boolean
-    allowFlocage?: BoolFieldUpdateOperationsInput | boolean
-    allowGravure?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    sizes?: ProductSizeUncheckedUpdateManyWithoutProductNestedInput
+    allowFlocage?: BoolFieldUpdateOperationsInput | boolean
+    allowGravure?: BoolFieldUpdateOperationsInput | boolean
+    discountPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    subCategory?: NullableStringFieldUpdateOperationsInput | string | null
     orderItems?: OrderItemUncheckedUpdateManyWithoutProductNestedInput
+    sizes?: ProductSizeUncheckedUpdateManyWithoutProductNestedInput
     reviews?: ReviewUncheckedUpdateManyWithoutProductNestedInput
     favoritedBy?: UserUncheckedUpdateManyWithoutFavoritesNestedInput
   }
@@ -24048,15 +24048,15 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    discountPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     stock?: IntFieldUpdateOperationsInput | number
-    subCategory?: NullableStringFieldUpdateOperationsInput | string | null
     images?: ProductUpdateimagesInput | string[]
     featured?: BoolFieldUpdateOperationsInput | boolean
-    allowFlocage?: BoolFieldUpdateOperationsInput | boolean
-    allowGravure?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    allowFlocage?: BoolFieldUpdateOperationsInput | boolean
+    allowGravure?: BoolFieldUpdateOperationsInput | boolean
+    discountPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    subCategory?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
 

@@ -167,6 +167,14 @@ export function SiteFooter() {
                             &copy; {new Date().getFullYear()} Mbor Store — Élegance Sportive. Tous droits réservés.
                         </p>
                     </div>
+
+                    {/* Payment Logos */}
+                    <div className="flex items-center space-x-6 grayscale opacity-40 hover:grayscale-0 hover:opacity-100 transition-all duration-500">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/ca/Wave_Logo.svg/2560px-Wave_Logo.svg.png" alt="Wave" className="h-4 object-contain" />
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e0/Orange_Money_logo.svg/2048px-Orange_Money_logo.svg.png" alt="Orange Money" className="h-6 object-contain" />
+                        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRkY8O_08x7F-KOfhG4_KiwU8N5C93l23p33g&s" alt="Espèces" className="h-5 object-contain" />
+                    </div>
+
                     <div className="flex items-center space-x-6">
                         <Link href="/terms" className="text-[11px] font-medium text-white/20 hover:text-white transition-colors">CGV</Link>
                         <Link href="/privacy" className="text-[11px] font-medium text-white/20 hover:text-white transition-colors">Vie privée</Link>

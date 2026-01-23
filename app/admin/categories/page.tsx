@@ -9,6 +9,7 @@ import {
     Edit,
     Trash,
     ImageIcon,
+    ChevronLeft,
     ChevronRight,
     LayoutGrid,
     Eye,
@@ -56,6 +57,11 @@ export default function AdminCategoriesPage() {
         description: "",
         image: ""
     })
+    const [searchQuery, setSearchQuery] = React.useState("")
+
+    // Pagination state
+    const [currentPage, setCurrentPage] = React.useState(1)
+    const itemsPerPage = 10
 
     const loadData = React.useCallback(async () => {
         setIsLoading(true)
@@ -73,6 +79,10 @@ export default function AdminCategoriesPage() {
     React.useEffect(() => {
         loadData()
     }, [loadData])
+
+    React.useEffect(() => {
+        setCurrentPage(1)
+    }, [searchQuery])
 
     const handleOpenModal = (category: any = null) => {
         if (category) {
@@ -126,6 +136,18 @@ export default function AdminCategoriesPage() {
     }
 
     const totalItems = categoriesData.reduce((acc, cat) => acc + (cat._count?.products || 0), 0)
+
+    // Filter and paginate logic
+    const filteredCategories = categoriesData.filter(category =>
+        category.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        (category.description && category.description.toLowerCase().includes(searchQuery.toLowerCase()))
+    )
+
+    const totalPages = Math.ceil(filteredCategories.length / itemsPerPage)
+    const currentCategories = filteredCategories.slice(
+        (currentPage - 1) * itemsPerPage,
+        currentPage * itemsPerPage
+    )
 
     const stats = [
         { label: "Univers Actifs", value: categoriesData.length.toString(), icon: LayoutGrid, color: "text-gray-600", bg: "bg-gray-50" },
@@ -191,6 +213,8 @@ export default function AdminCategoriesPage() {
                         <Input
                             placeholder="Rechercher un univers structurel..."
                             className="bg-white h-12 pl-12 pr-6 rounded-2xl border-gray-100 focus-visible:ring-2 focus-visible:ring-indigo-100 focus-visible:border-indigo-200 text-[14px] font-medium placeholder:text-gray-400 shadow-sm"
+                            value={searchQuery}
+                            onChange={(e) => setSearchQuery(e.target.value)}
                         />
                     </div>
                 </div>
@@ -211,10 +235,10 @@ export default function AdminCategoriesPage() {
                                 [...Array(3)].map((_, i) => (
                                     <tr key={i}><td colSpan={5} className="px-8 py-6"><div className="h-12 w-full bg-gray-50 animate-pulse rounded-2xl" /></td></tr>
                                 ))
-                            ) : categoriesData.length === 0 ? (
+                            ) : currentCategories.length === 0 ? (
                                 <tr><td colSpan={5} className="px-8 py-20 text-center text-gray-400 font-bold uppercase tracking-widest">Aucune entité trouvée</td></tr>
                             ) : (
-                                categoriesData.map((category) => (
+                                currentCategories.map((category) => (
                                     <tr key={category.id} className="group hover:bg-gray-50/30 transition-all cursor-pointer">
                                         <td className="px-8 py-5" onClick={() => handleOpenModal(category)}>
                                             <div className="h-14 w-28 rounded-2xl overflow-hidden border border-gray-100 bg-gray-100 relative shrink-0 rotate-1 group-hover:rotate-0 transition-transform duration-500 shadow-sm">
@@ -278,11 +302,46 @@ export default function AdminCategoriesPage() {
                     </table>
                 </div>
 
-                <div className="p-6 border-t border-gray-50 flex items-center justify-between bg-gray-50/20">
-                    <p className="text-[11px] font-black text-gray-400 uppercase tracking-widest opacity-60">Architecture : {categoriesData.length} Univers Structurels</p>
-                    <Link href="/admin/products" className="text-[11px] font-black text-indigo-600 hover:text-indigo-700 flex items-center gap-2 transition-all group uppercase tracking-widest">
-                        Gérer le catalogue <ArrowUpRight className="h-4 w-4 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
-                    </Link>
+                <div className="p-8 border-t border-gray-50 flex flex-col sm:flex-row items-center justify-between bg-gray-50/20 gap-6">
+                    <p className="text-[11px] font-black text-gray-400 uppercase tracking-widest">
+                        Affichage : {Math.min(currentCategories.length, itemsPerPage)} sur {filteredCategories.length} Univers
+                    </p>
+                    <div className="flex items-center gap-2">
+                        <Button
+                            variant="outline"
+                            size="icon"
+                            className="h-10 w-10 rounded-xl border-gray-100 hover:bg-white shadow-sm"
+                            onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
+                            disabled={currentPage === 1}
+                        >
+                            <ChevronLeft className="h-4 w-4" />
+                        </Button>
+                        <div className="flex items-center gap-1">
+                            {[...Array(totalPages)].map((_, i) => (
+                                <Button
+                                    key={i}
+                                    onClick={() => setCurrentPage(i + 1)}
+                                    className={cn(
+                                        "h-10 w-10 rounded-xl font-black text-[11px] transition-all",
+                                        currentPage === i + 1
+                                            ? "bg-gray-900 text-white shadow-xl"
+                                            : "bg-white text-gray-400 border border-gray-100 hover:bg-gray-50"
+                                    )}
+                                >
+                                    {i + 1}
+                                </Button>
+                            )).slice(Math.max(0, currentPage - 3), Math.min(totalPages, currentPage + 2))}
+                        </div>
+                        <Button
+                            variant="outline"
+                            size="icon"
+                            className="h-10 w-10 rounded-xl border-gray-100 hover:bg-white shadow-sm"
+                            onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
+                            disabled={currentPage === totalPages || totalPages === 0}
+                        >
+                            <ChevronRight className="h-4 w-4" />
+                        </Button>
+                    </div>
                 </div>
             </div>
 

@@ -3,6 +3,40 @@
 import { prisma } from "@/lib/prisma"
 import { revalidatePath } from "next/cache"
 
+// Helpers to serialize Decimal types safely
+function serializeProduct(product: any) {
+    if (!product) return null
+    try {
+        return {
+            ...product,
+            price: product.price ? (typeof product.price.toNumber === 'function' ? product.price.toNumber() : Number(product.price)) : 0,
+            discountPrice: product.discountPrice ? (typeof product.discountPrice.toNumber === 'function' ? product.discountPrice.toNumber() : Number(product.discountPrice)) : null
+        }
+    } catch (e) {
+        console.error("Serialization error for product:", product.id, e)
+        return { ...product, price: 0, discountPrice: null }
+    }
+}
+
+function serializeOrder(order: any) {
+    if (!order) return null
+    try {
+        return {
+            ...order,
+            total: order.total ? (typeof order.total.toNumber === 'function' ? order.total.toNumber() : Number(order.total)) : 0,
+            deliveryFee: order.deliveryFee ? (typeof order.deliveryFee.toNumber === 'function' ? order.deliveryFee.toNumber() : Number(order.deliveryFee)) : 0,
+            items: order.items?.map((item: any) => ({
+                ...item,
+                price: item.price ? (typeof item.price.toNumber === 'function' ? item.price.toNumber() : Number(item.price)) : 0,
+                product: serializeProduct(item.product)
+            })) || []
+        }
+    } catch (e) {
+        console.error("Serialization error for order:", order.id, e)
+        return { ...order, total: 0, deliveryFee: 0, items: [] }
+    }
+}
+
 export async function getDashboardStats() {
     const [totalRevenue, ordersCount, productsCount, usersCount] = await Promise.all([
         prisma.order.aggregate({
@@ -22,8 +56,11 @@ export async function getDashboardStats() {
         })
     ])
 
+    const revenueDecimal = totalRevenue._sum.total
+    const revenue = revenueDecimal ? (typeof revenueDecimal.toNumber === 'function' ? revenueDecimal.toNumber() : Number(revenueDecimal)) : 0
+
     return {
-        revenue: totalRevenue._sum.total?.toNumber() || 0,
+        revenue,
         orders: ordersCount,
         products: productsCount,
         users: usersCount
@@ -41,10 +78,7 @@ export async function getRecentOrders(limit = 5) {
         }
     })
 
-    return orders.map(order => ({
-        ...order,
-        total: order.total.toNumber()
-    }))
+    return orders.map(order => serializeOrder(order))
 }
 
 export async function getAdminProducts() {
@@ -58,11 +92,7 @@ export async function getAdminProducts() {
         }
     })
 
-    return products.map(product => ({
-        ...product,
-        price: product.price.toNumber(),
-        discountPrice: product.discountPrice?.toNumber() || null
-    }))
+    return products.map(product => serializeProduct(product))
 }
 
 export async function deleteProduct(id: string) {
@@ -75,6 +105,7 @@ export async function deleteProduct(id: string) {
 
 export async function getAdminOrders() {
     const orders = await prisma.order.findMany({
+        take: 200,
         orderBy: {
             createdAt: 'desc'
         },
@@ -88,19 +119,7 @@ export async function getAdminOrders() {
         }
     })
 
-    return orders.map(order => ({
-        ...order,
-        total: order.total.toNumber(),
-        items: order.items.map(item => ({
-            ...item,
-            price: item.price.toNumber(),
-            product: {
-                ...item.product,
-                price: item.product.price.toNumber(),
-                discountPrice: item.product.discountPrice?.toNumber() || null
-            }
-        }))
-    }))
+    return orders.map(order => serializeOrder(order))
 }
 
 export async function getAdminOrder(id: string) {
@@ -120,21 +139,7 @@ export async function getAdminOrder(id: string) {
         }
     })
 
-    if (!order) return null
-
-    return {
-        ...order,
-        total: order.total.toNumber(),
-        items: order.items.map(item => ({
-            ...item,
-            price: item.price.toNumber(),
-            product: {
-                ...item.product,
-                price: item.product.price.toNumber(),
-                discountPrice: item.product.discountPrice?.toNumber() || null
-            }
-        }))
-    }
+    return serializeOrder(order)
 }
 
 export async function updateOrderStatus(orderId: string, status: any) {
@@ -192,12 +197,7 @@ export async function getProduct(id: string) {
     const product = await prisma.product.findUnique({
         where: { id }
     })
-    if (!product) return null
-    return {
-        ...product,
-        price: product.price.toNumber(),
-        discountPrice: product.discountPrice?.toNumber() || null
-    }
+    return serializeProduct(product)
 }
 
 export async function createProduct(data: any) {
@@ -221,11 +221,7 @@ export async function createProduct(data: any) {
     })
     revalidatePath('/admin/products')
     revalidatePath('/admin/stock')
-    return {
-        ...product,
-        price: product.price.toNumber(),
-        discountPrice: product.discountPrice?.toNumber() || null
-    }
+    return serializeProduct(product)
 }
 
 export async function updateProduct(id: string, data: any) {
@@ -265,11 +261,7 @@ export async function updateProduct(id: string, data: any) {
 
     revalidatePath('/admin/products')
     revalidatePath('/admin/stock')
-    return {
-        ...product,
-        price: product.price.toNumber(),
-        discountPrice: product.discountPrice?.toNumber() || null
-    }
+    return serializeProduct(product)
 }
 
 export async function updateStock(id: string, increment: number) {
@@ -323,8 +315,8 @@ export async function getStoreConfig() {
 
     return {
         ...config,
-        deliveryFee: config.deliveryFee.toNumber(),
-        freeDeliveryOver: config.freeDeliveryOver.toNumber()
+        deliveryFee: config.deliveryFee ? (typeof config.deliveryFee.toNumber === 'function' ? config.deliveryFee.toNumber() : Number(config.deliveryFee)) : 0,
+        freeDeliveryOver: config.freeDeliveryOver ? (typeof config.freeDeliveryOver.toNumber === 'function' ? config.freeDeliveryOver.toNumber() : Number(config.freeDeliveryOver)) : 0
     }
 }
 
@@ -347,32 +339,12 @@ export async function updateStoreConfig(data: any) {
     revalidatePath('/admin/settings')
     return {
         ...config,
-        deliveryFee: config.deliveryFee.toNumber(),
-        freeDeliveryOver: config.freeDeliveryOver.toNumber()
-    }
-}
-// Helper to serialize Decimal types
-function serializeProduct(product: any) {
-    if (!product) return null
-    return {
-        ...product,
-        price: Number(product.price),
-        discountPrice: product.discountPrice ? Number(product.discountPrice) : null
+        deliveryFee: config.deliveryFee ? (typeof config.deliveryFee.toNumber === 'function' ? config.deliveryFee.toNumber() : Number(config.deliveryFee)) : 0,
+        freeDeliveryOver: config.freeDeliveryOver ? (typeof config.freeDeliveryOver.toNumber === 'function' ? config.freeDeliveryOver.toNumber() : Number(config.freeDeliveryOver)) : 0
     }
 }
 
-function serializeOrder(order: any) {
-    if (!order) return null
-    return {
-        ...order,
-        total: Number(order.total),
-        items: order.items?.map((item: any) => ({
-            ...item,
-            price: Number(item.price),
-            product: serializeProduct(item.product)
-        })) || []
-    }
-}
+// These are now at the top
 
 export async function createInStoreOrder(data: {
     customerName: string,
@@ -380,6 +352,8 @@ export async function createInStoreOrder(data: {
     customerPhone?: string,
     customerAddress?: string,
     paymentMethod?: string,
+    deliveryType?: string,
+    deliveryFee?: number,
     items: { productId: string, quantity: number, price: number, customName?: string, customNumber?: string }[],
     total: number
 }) {
@@ -390,6 +364,8 @@ export async function createInStoreOrder(data: {
             customerPhone: data.customerPhone,
             customerAddress: data.customerAddress,
             paymentMethod: data.paymentMethod,
+            deliveryType: data.deliveryType,
+            deliveryFee: data.deliveryFee,
             status: "PAID",
             total: data.total,
             items: {
@@ -431,4 +407,47 @@ export async function createInStoreOrder(data: {
     revalidatePath('/admin/stock')
 
     return serializeOrder(order)
+}
+
+export async function getNotifications() {
+    const [recentOrders, recentUsers] = await Promise.all([
+        prisma.order.findMany({
+            take: 5,
+            orderBy: { createdAt: 'desc' },
+            include: { user: true }
+        }),
+        prisma.user.findMany({
+            where: { role: 'USER' },
+            take: 5,
+            orderBy: { createdAt: 'desc' }
+        })
+    ])
+
+    const notifications = [
+        ...recentOrders.map(o => {
+            const total = o.total ? (typeof o.total.toNumber === 'function' ? o.total.toNumber() : Number(o.total)) : 0
+            return {
+                id: `order-${o.id}`,
+                type: 'ORDER',
+                title: `Nouvelle commande #${o.id.slice(-4).toUpperCase()}`,
+                description: `${o.customerName || o.user?.name || 'Client'} • ${total.toLocaleString()} FCFA`,
+                time: o.createdAt,
+                icon: 'ShoppingCart',
+                color: 'text-blue-600',
+                bg: 'bg-blue-50'
+            }
+        }),
+        ...recentUsers.map(u => ({
+            id: `user-${u.id}`,
+            type: 'USER',
+            title: 'Nouveau client inscrit',
+            description: `${u.name || (u.email ? u.email.split('@')[0] : 'Inconnu')}`,
+            time: u.createdAt,
+            icon: 'Users',
+            color: 'text-green-600',
+            bg: 'bg-green-50'
+        }))
+    ].sort((a, b) => b.time.getTime() - a.time.getTime()).slice(0, 5)
+
+    return notifications
 }
