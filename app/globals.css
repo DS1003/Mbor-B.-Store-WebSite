@@ -10,16 +10,16 @@
     --color-popover: hsl(var(--popover));
     --color-popover-foreground: hsl(var(--popover-foreground));
 
-    --color-primary: hsl(var(--primary));
+    --color-primary: var(--primary);
     --color-primary-foreground: hsl(var(--primary-foreground));
 
-    --color-secondary: hsl(var(--secondary));
+    --color-secondary: var(--secondary);
     --color-secondary-foreground: hsl(var(--secondary-foreground));
 
     --color-muted: hsl(var(--muted));
     --color-muted-foreground: hsl(var(--muted-foreground));
 
-    --color-accent: hsl(var(--accent));
+    --color-accent: var(--accent);
     --color-accent-foreground: hsl(var(--accent-foreground));
 
     --color-destructive: hsl(var(--destructive));
@@ -33,8 +33,8 @@
     --radius-md: calc(var(--radius) - 2px);
     --radius-sm: calc(var(--radius) - 4px);
 
-    --font-sans: var(--font-sans);
-    --font-heading: var(--font-heading);
+    --font-sans: var(--font-custom, var(--font-sans-base));
+    --font-heading: var(--font-custom, var(--font-heading-base));
 }
 
 @layer base {
@@ -52,17 +52,20 @@
         --popover-foreground: 0 0% 9%;
 
         /* Mbor Yellow - Sparse Accent (#cc9933) */
-        --primary: 40 60% 50%;
+        --primary-fallback: hsl(40 60% 50%);
+        --primary: var(--primary-custom, var(--primary-fallback));
         --primary-foreground: 0 0% 100%;
 
-        --secondary: 0 0% 92%;
+        --secondary-fallback: hsl(0 0% 92%);
+        --secondary: var(--secondary-custom, var(--secondary-fallback));
         /* Neutral Gray */
         --secondary-foreground: 0 0% 9%;
 
         --muted: 0 0% 92%;
         --muted-foreground: 0 0% 45%;
 
-        --accent: 40 60% 95%;
+        --accent-fallback: hsl(40 60% 95%);
+        --accent: var(--accent-custom, var(--accent-fallback));
         /* Very soft yellow for hovers/accents */
         --accent-foreground: 0 0% 9%;
 

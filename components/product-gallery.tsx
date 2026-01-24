@@ -7,7 +7,7 @@ interface ProductGalleryProps {
     images?: string[]
 }
 
-export function ProductGallery({ images = ["/placeholder.svg"] }: ProductGalleryProps) {
+export function ProductGallery({ images = ["https://res.cloudinary.com/da1dmwqhb/image/upload/v1769271862/mbor_store/placeholder.svg"] }: ProductGalleryProps) {
     const [active, setActive] = React.useState(0)
 
     return (

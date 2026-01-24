@@ -7,9 +7,9 @@ import { ScrollReveal } from "@/components/scroll-reveal"
 export function RelatedProducts() {
     const products = [
         { id: "2", name: "Nike Mercurial Vapor Elite Blue", price: 185000, category: "Crampons", image: "https://www.foot.fr/151289-large_default/nike-air-zoom-mercurial-vapor-16-pro-fg-bleu-rose.jpg" },
-        { id: "3", name: "Tracksuit Elite Performance", price: 65000, category: "Tenues", image: "/placeholder.svg" },
+        { id: "3", name: "Tracksuit Elite Performance", price: 65000, category: "Tenues", image: "https://res.cloudinary.com/da1dmwqhb/image/upload/v1769271862/mbor_store/placeholder.svg" },
         { id: "10", name: "Nike Mercurial Academy", price: 75000, category: "Crampons", image: "https://www.foot.fr/151284-large_default/nike-air-zoom-mercurial-vapor-16-pro-fg-bleu-rose.jpg" },
-        { id: "5", name: "Maillot Sénégal Training", price: 35000, category: "Maillots", image: "/placeholder.svg" },
+        { id: "5", name: "Maillot Sénégal Training", price: 35000, category: "Maillots", image: "https://res.cloudinary.com/da1dmwqhb/image/upload/v1769271862/mbor_store/placeholder.svg" },
     ]
 
     return (

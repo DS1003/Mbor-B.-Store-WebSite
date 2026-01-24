@@ -410,7 +410,7 @@ export default function POSPage() {
                                     paymentMethod === "CASH" ? "border-emerald-500 bg-emerald-50/50" : "border-gray-100 bg-white hover:bg-gray-50"
                                 )}
                             >
-                                <img src="/payment-cash.png" alt="Espèces" className="h-8 w-8 object-contain" />
+                                <img src="https://res.cloudinary.com/da1dmwqhb/image/upload/v1769271855/mbor_store/payment-cash.png" alt="Espèces" className="h-8 w-8 object-contain" />
                                 <span className={cn("text-[10px] font-black uppercase", paymentMethod === "CASH" ? "text-emerald-700" : "text-gray-400")}>Espèces</span>
                             </button>
                             <button
@@ -420,7 +420,7 @@ export default function POSPage() {
                                     paymentMethod === "WAVE" ? "border-blue-500 bg-blue-50/50" : "border-gray-100 bg-white hover:bg-gray-50"
                                 )}
                             >
-                                <img src="/payment-wave.png" alt="Wave" className="h-8 w-8 object-contain" />
+                                <img src="https://res.cloudinary.com/da1dmwqhb/image/upload/v1769271856/mbor_store/payment-wave.png" alt="Wave" className="h-8 w-8 object-contain" />
                                 <span className={cn("text-[10px] font-black uppercase", paymentMethod === "WAVE" ? "text-blue-700" : "text-gray-400")}>Wave</span>
                             </button>
                             <button
@@ -430,7 +430,7 @@ export default function POSPage() {
                                     paymentMethod === "OM" ? "border-orange-500 bg-orange-50/50" : "border-gray-100 bg-white hover:bg-gray-50"
                                 )}
                             >
-                                <img src="/payment-om.png" alt="Orange Money" className="h-8 w-8 object-contain" />
+                                <img src="https://res.cloudinary.com/da1dmwqhb/image/upload/v1769271856/mbor_store/payment-om.png" alt="Orange Money" className="h-8 w-8 object-contain" />
                                 <span className={cn("text-[10px] font-black uppercase", paymentMethod === "OM" ? "text-orange-700" : "text-gray-400")}>Orange Mobile</span>
                             </button>
                         </div>

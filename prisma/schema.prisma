@@ -187,6 +187,10 @@ model StoreConfig {
   waveNumber       String?
   tiktokUrl        String?
   workingHours     String?
+  primaryColor     String  @default("#4F46E5")
+  secondaryColor   String  @default("#111827")
+  accentColor      String  @default("#F59E0B")
+  fontFamily       String  @default("Inter")
 }
 
 model Category {
@@ -210,4 +214,17 @@ enum OrderStatus {
   SHIPPED
   DELIVERED
   CANCELLED
+}
+
+model Media {
+  id        String   @id @default(cuid())
+  name      String
+  url       String
+  publicId  String   @unique
+  format    String?
+  width     Int?
+  height    Int?
+  size      Int?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }

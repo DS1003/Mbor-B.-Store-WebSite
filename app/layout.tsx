@@ -64,14 +64,33 @@ export const metadata: Metadata = {
     }
 }
 
-export default function RootLayout({
+import { getStoreConfig } from "./admin/actions"
+import { ThemeVariables } from "@/components/theme-variables"
+
+export default async function RootLayout({
     children,
 }: Readonly<{
     children: React.ReactNode
 }>) {
+    const storeConfig = await getStoreConfig()
+
     return (
         <html lang="fr" suppressHydrationWarning>
-            <body className={`${inter.variable} ${outfit.variable} font-sans min-h-screen bg-background text-foreground flex flex-col antialiased selection:bg-primary selection:text-primary-foreground`}>
+            <body
+                className={`min-h-screen bg-background text-foreground flex flex-col antialiased selection:bg-primary selection:text-primary-foreground`}
+                style={{
+                    '--font-sans-base': inter.style.fontFamily,
+                    '--font-heading-base': outfit.style.fontFamily
+                } as React.CSSProperties}
+            >
+                {storeConfig && (
+                    <ThemeVariables config={{
+                        primaryColor: storeConfig.primaryColor,
+                        secondaryColor: storeConfig.secondaryColor,
+                        accentColor: storeConfig.accentColor,
+                        fontFamily: storeConfig.fontFamily
+                    }} />
+                )}
                 <Providers
                     attribute="class"
                     defaultTheme="system"

@@ -255,9 +255,9 @@ export default function CheckoutPage() {
                                 </div>
                                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                                     {[
-                                        { id: "wave", label: "Wave", desc: "Mobile Money", logo: "/payment-wave.png" },
-                                        { id: "om", label: "Orange Money", desc: "Mobile Money", logo: "/payment-om.png" },
-                                        { id: "cash", label: "Espèces", desc: "Paiement à la livraison", logo: "/payment-cash.png" }
+                                        { id: "wave", label: "Wave", desc: "Mobile Money", logo: "https://res.cloudinary.com/da1dmwqhb/image/upload/v1769271856/mbor_store/payment-wave.png" },
+                                        { id: "om", label: "Orange Money", desc: "Mobile Money", logo: "https://res.cloudinary.com/da1dmwqhb/image/upload/v1769271856/mbor_store/payment-om.png" },
+                                        { id: "cash", label: "Espèces", desc: "Paiement à la livraison", logo: "https://res.cloudinary.com/da1dmwqhb/image/upload/v1769271855/mbor_store/payment-cash.png" }
                                     ].map((m) => (
                                         <button
                                             key={m.id}

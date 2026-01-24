@@ -9,22 +9,27 @@ const globalForPrisma = globalThis as unknown as {
 }
 
 const connectionString = process.env.DATABASE_URL
-
 const pool = globalForPrisma.pool ?? new pg.Pool({ connectionString })
 if (process.env.NODE_ENV !== "production") globalForPrisma.pool = pool
 
 const adapter = globalForPrisma.adapter ?? new PrismaPg(pool)
 if (process.env.NODE_ENV !== "production") globalForPrisma.adapter = adapter
 
-const prismaClientSingleton = () => {
-    return new PrismaClient({
-        adapter,
-        log: process.env.NODE_ENV === "development" ? ["error", "warn"] : ["error"],
-    })
-}
+const prisma = globalForPrisma.prisma ?? new PrismaClient({
+    adapter,
+    log: process.env.NODE_ENV === "development" ? ["error", "warn"] : ["error"],
+})
 
-export const prisma = globalForPrisma.prisma ?? prismaClientSingleton()
+if (process.env.NODE_ENV === "development") {
+    if (!('media' in prisma)) {
+        console.error("CRITICAL: 'media' model missing from prisma client!")
+    } else {
+        console.log("SUCCESS: 'media' model detected.")
+    }
+}
 
 if (process.env.NODE_ENV !== "production") {
     globalForPrisma.prisma = prisma
 }
+
+export { prisma }

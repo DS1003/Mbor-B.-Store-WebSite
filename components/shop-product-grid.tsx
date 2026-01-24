@@ -52,7 +52,7 @@ export async function ShopProductGrid({ searchParams }: ShopProductGridProps) {
         name: p.name,
         price: Number(p.price),
         category: p.category?.name || "Sans catégorie",
-        image: p.images[0] || "/placeholder.svg",
+        image: p.images[0] || "https://res.cloudinary.com/da1dmwqhb/image/upload/v1769271862/mbor_store/placeholder.svg",
         isNew: true
     }))
 

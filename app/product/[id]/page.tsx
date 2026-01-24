@@ -29,7 +29,7 @@ export default async function ProductPage({ params }: { params: Promise<{ id: st
         price: Number(product.price),
         category: product.category?.name || "Sport",
         description: product.description ?? "",
-        images: product.images.length > 0 ? product.images : ["/placeholder.svg"],
+        images: product.images.length > 0 ? product.images : ["https://res.cloudinary.com/da1dmwqhb/image/upload/v1769271862/mbor_store/placeholder.svg"],
         allowFlocage: product.allowFlocage,
         isNew: true,
         sizes: product.sizes.map(s => ({ size: s.size, stock: s.stock }))

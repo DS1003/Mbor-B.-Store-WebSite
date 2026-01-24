@@ -57,7 +57,11 @@ export default function AdminSettingsPage() {
         bankAccount: "",
         paymentPolicy: "",
         returnPolicy: "",
-        aboutUs: ""
+        aboutUs: "",
+        primaryColor: "#4F46E5",
+        secondaryColor: "#111827",
+        accentColor: "#F59E0B",
+        fontFamily: "Inter"
     })
 
     const loadConfig = React.useCallback(async () => {
@@ -84,7 +88,11 @@ export default function AdminSettingsPage() {
                     bankAccount: config.bankAccount || "",
                     paymentPolicy: config.paymentPolicy || "",
                     returnPolicy: config.returnPolicy || "",
-                    aboutUs: config.aboutUs || ""
+                    aboutUs: config.aboutUs || "",
+                    primaryColor: config.primaryColor || "#4F46E5",
+                    secondaryColor: config.secondaryColor || "#111827",
+                    accentColor: config.accentColor || "#F59E0B",
+                    fontFamily: config.fontFamily || "Inter"
                 })
             }
         } catch (error) {
@@ -395,14 +403,123 @@ export default function AdminSettingsPage() {
                             )}
 
                             {activeTab === "Apparence" && (
-                                <section className="bg-white border border-gray-50 rounded-[2.5rem] p-10 shadow-sm space-y-12 text-center">
-                                    <div className="py-20 space-y-6">
-                                        <div className="h-20 w-20 bg-indigo-50 rounded-full flex items-center justify-center mx-auto text-indigo-600">
-                                            <Palette className="h-10 w-10" />
+                                <section className="space-y-10">
+                                    <div className="bg-white border border-gray-50 rounded-[2.5rem] p-10 shadow-sm space-y-10">
+                                        <div className="flex items-center gap-4">
+                                            <div className="h-10 w-1.5 bg-indigo-600 rounded-full" />
+                                            <h3 className="text-xl font-black text-gray-900 uppercase italic">Thème <span className="text-indigo-600">Personnalisé.</span></h3>
                                         </div>
-                                        <div className="space-y-2">
-                                            <h3 className="text-xl font-black uppercase italic">Customisation Thématique</h3>
-                                            <p className="text-[13px] text-gray-400 max-w-sm mx-auto">Sélectionnez les couleurs et polices de l'espace client. (Arrive bientôt)</p>
+
+                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+                                            {/* Color Configuration */}
+                                            <div className="space-y-8">
+                                                <div className="space-y-4">
+                                                    <div className="flex items-center justify-between">
+                                                        <Label className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Couleur Primaire</Label>
+                                                        <span className="text-[10px] font-mono text-gray-400 uppercase">{formData.primaryColor}</span>
+                                                    </div>
+                                                    <div className="flex gap-4 items-center h-14 bg-gray-50/50 rounded-2xl px-4 border border-gray-100">
+                                                        <input
+                                                            type="color"
+                                                            value={formData.primaryColor}
+                                                            onChange={(e) => setFormData({ ...formData, primaryColor: e.target.value })}
+                                                            className="h-8 w-8 rounded-lg border-none cursor-pointer bg-transparent"
+                                                        />
+                                                        <Input
+                                                            value={formData.primaryColor}
+                                                            onChange={(e) => setFormData({ ...formData, primaryColor: e.target.value })}
+                                                            className="flex-1 bg-transparent border-none focus-visible:ring-0 text-[13px] font-black tabular-nums"
+                                                        />
+                                                    </div>
+                                                </div>
+
+                                                <div className="space-y-4">
+                                                    <div className="flex items-center justify-between">
+                                                        <Label className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Couleur Secondaire</Label>
+                                                        <span className="text-[10px] font-mono text-gray-400 uppercase">{formData.secondaryColor}</span>
+                                                    </div>
+                                                    <div className="flex gap-4 items-center h-14 bg-gray-50/50 rounded-2xl px-4 border border-gray-100">
+                                                        <input
+                                                            type="color"
+                                                            value={formData.secondaryColor}
+                                                            onChange={(e) => setFormData({ ...formData, secondaryColor: e.target.value })}
+                                                            className="h-8 w-8 rounded-lg border-none cursor-pointer bg-transparent"
+                                                        />
+                                                        <Input
+                                                            value={formData.secondaryColor}
+                                                            onChange={(e) => setFormData({ ...formData, secondaryColor: e.target.value })}
+                                                            className="flex-1 bg-transparent border-none focus-visible:ring-0 text-[13px] font-black tabular-nums"
+                                                        />
+                                                    </div>
+                                                </div>
+
+                                                <div className="space-y-4">
+                                                    <div className="flex items-center justify-between">
+                                                        <Label className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Couleur Accent</Label>
+                                                        <span className="text-[10px] font-mono text-gray-400 uppercase">{formData.accentColor}</span>
+                                                    </div>
+                                                    <div className="flex gap-4 items-center h-14 bg-gray-50/50 rounded-2xl px-4 border border-gray-100">
+                                                        <input
+                                                            type="color"
+                                                            value={formData.accentColor}
+                                                            onChange={(e) => setFormData({ ...formData, accentColor: e.target.value })}
+                                                            className="h-8 w-8 rounded-lg border-none cursor-pointer bg-transparent"
+                                                        />
+                                                        <Input
+                                                            value={formData.accentColor}
+                                                            onChange={(e) => setFormData({ ...formData, accentColor: e.target.value })}
+                                                            className="flex-1 bg-transparent border-none focus-visible:ring-0 text-[13px] font-black tabular-nums"
+                                                        />
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            {/* Typo Configuration */}
+                                            <div className="space-y-8">
+                                                <div className="space-y-4">
+                                                    <Label className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Police de Caractère (Font Family)</Label>
+                                                    <div className="grid grid-cols-2 gap-3">
+                                                        {["Inter", "Roboto", "Montserrat", "Outfit", "Space Grotesk", "Lexend"].map((font) => (
+                                                            <button
+                                                                key={font}
+                                                                onClick={() => setFormData({ ...formData, fontFamily: font })}
+                                                                style={{ fontFamily: font }}
+                                                                className={cn(
+                                                                    "p-4 rounded-2xl border transition-all text-sm font-medium",
+                                                                    formData.fontFamily === font
+                                                                        ? "bg-gray-900 text-white border-gray-900 shadow-xl"
+                                                                        : "bg-white text-gray-600 border-gray-100 hover:border-indigo-200"
+                                                                )}
+                                                            >
+                                                                {font}
+                                                            </button>
+                                                        ))}
+                                                    </div>
+                                                </div>
+
+                                                {/* Live Preview Sample */}
+                                                <div className="p-6 bg-gray-50 rounded-[2rem] space-y-4 border border-dashed border-gray-200">
+                                                    <p className="text-[9px] font-black text-gray-400 uppercase tracking-widest">Aperçu en Temps Réel</p>
+                                                    <div className="space-y-3">
+                                                        <div
+                                                            className="h-10 rounded-xl flex items-center justify-center text-xs font-bold text-white shadow-lg"
+                                                            style={{ backgroundColor: formData.primaryColor, fontFamily: formData.fontFamily }}
+                                                        >
+                                                            Bouton Primaire
+                                                        </div>
+                                                        <div
+                                                            className="h-10 rounded-xl flex items-center justify-center text-xs font-bold text-white"
+                                                            style={{ backgroundColor: formData.secondaryColor, fontFamily: formData.fontFamily }}
+                                                        >
+                                                            Bouton Secondaire
+                                                        </div>
+                                                        <div className="flex items-center gap-2">
+                                                            <div className="h-3 w-3 rounded-full" style={{ backgroundColor: formData.accentColor }} />
+                                                            <span className="text-[11px] font-bold" style={{ color: formData.accentColor, fontFamily: formData.fontFamily }}>Badge Alert / News</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </section>

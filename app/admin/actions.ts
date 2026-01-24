@@ -308,7 +308,11 @@ export async function getStoreConfig() {
                 facebookUrl: "Mbor Business Center",
                 address: "Boutique 1 : Pikine, Boutique 2 : Sacré-Cœur",
                 deliveryFee: 2000,
-                freeDeliveryOver: 50000
+                freeDeliveryOver: 50000,
+                primaryColor: "#4F46E5",
+                secondaryColor: "#111827",
+                accentColor: "#F59E0B",
+                fontFamily: "Inter"
             }
         })
     }
@@ -333,7 +337,11 @@ export async function updateStoreConfig(data: any) {
             id: 'singleton',
             ...rest,
             deliveryFee: deliveryFee !== undefined ? Number(deliveryFee) : 2000,
-            freeDeliveryOver: freeDeliveryOver !== undefined ? Number(freeDeliveryOver) : 50000
+            freeDeliveryOver: freeDeliveryOver !== undefined ? Number(freeDeliveryOver) : 50000,
+            primaryColor: data.primaryColor || "#4F46E5",
+            secondaryColor: data.secondaryColor || "#111827",
+            accentColor: data.accentColor || "#F59E0B",
+            fontFamily: data.fontFamily || "Inter"
         }
     })
     revalidatePath('/admin/settings')
@@ -450,4 +458,33 @@ export async function getNotifications() {
     ].sort((a, b) => b.time.getTime() - a.time.getTime()).slice(0, 5)
 
     return notifications
+}
+
+export async function getMediaItems() {
+    return prisma.media.findMany({
+        orderBy: {
+            createdAt: 'desc'
+        }
+    })
+}
+
+export async function createMediaItem(data: any) {
+    const media = await prisma.media.create({
+        data: {
+            name: data.name,
+            url: data.url,
+            publicId: data.publicId,
+            format: data.format,
+            width: Number(data.width),
+            height: Number(data.height),
+            size: Number(data.size)
+        }
+    })
+    revalidatePath('/admin/media')
+    return media
+}
+
+export async function deleteMediaItem(id: string) {
+    await prisma.media.delete({ where: { id } })
+    revalidatePath('/admin/media')
 }

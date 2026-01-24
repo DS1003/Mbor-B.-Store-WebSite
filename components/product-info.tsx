@@ -44,7 +44,7 @@ export function ProductInfo({ product }: ProductInfoProps) {
         price: 0,
         category: "Collection",
         description: "Description du produit non disponible.",
-        images: ["/placeholder.svg"],
+        images: ["https://res.cloudinary.com/da1dmwqhb/image/upload/v1769271862/mbor_store/placeholder.svg"],
         isNew: true,
         allowFlocage: false,
         sizes: []

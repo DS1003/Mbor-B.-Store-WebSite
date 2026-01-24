@@ -100,11 +100,11 @@ export function SiteHeader() {
                     <div className="hidden lg:flex items-center gap-8 mr-auto">
                         <Link href="/" className="flex items-center group">
                             <Image
-                                src="/mbor-logo-new.png"
+                                src="https://res.cloudinary.com/da1dmwqhb/image/upload/v1769271852/mbor_store/mbor-logo-new.png"
                                 alt="Mbor.Store"
-                                width={120}
-                                height={40}
-                                className="h-10 w-auto object-contain"
+                                width={180}
+                                height={60}
+                                className="h-[60px] w-auto object-contain"
                             />
                         </Link>
 
@@ -256,11 +256,11 @@ export function SiteHeader() {
                         <div className="absolute left-1/2 -translate-x-1/2 flex-shrink-0 z-20">
                             <Link href="/" className="flex items-center group">
                                 <Image
-                                    src="/mbor-logo-new.png"
+                                    src="https://res.cloudinary.com/da1dmwqhb/image/upload/v1769271852/mbor_store/mbor-logo-new.png"
                                     alt="Mbor.Store"
-                                    width={100}
-                                    height={36}
-                                    className="h-9 w-auto object-contain"
+                                    width={140}
+                                    height={48}
+                                    className="h-10 w-auto object-contain"
                                 />
                             </Link>
                         </div>
@@ -279,15 +279,7 @@ export function SiteHeader() {
                         </div>
 
                         {/* Theme Toggle - Hidden on very small mobile to save space if needed, or just smaller */}
-                        <Button
-                            variant="ghost"
-                            size="icon"
-                            onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-                            className="h-9 w-9 sm:h-10 sm:w-10 rounded-xl sm:rounded-2xl hover:bg-muted/50 transition-transform active:scale-90"
-                        >
-                            <Sun className="h-4 w-4 rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
-                            <Moon className="absolute h-4 w-4 rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
-                        </Button>
+
 
                         <Link href="/wishlist" className="hidden sm:flex">
                             <Button variant="ghost" size="icon" className="h-10 w-10 rounded-2xl hover:bg-muted/50">

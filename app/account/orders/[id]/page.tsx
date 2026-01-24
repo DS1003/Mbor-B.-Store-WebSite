@@ -141,7 +141,7 @@ export default function OrderDetailsPage() {
                                         <div key={item.id} className="p-8 flex gap-6 group hover:bg-muted/5 transition-colors">
                                             <div className="relative h-24 w-20 rounded-2xl overflow-hidden bg-muted shrink-0 border border-border/50">
                                                 <Image
-                                                    src={item.product?.images?.[0] || "/placeholder.svg"}
+                                                    src={item.product?.images?.[0] || "https://res.cloudinary.com/da1dmwqhb/image/upload/v1769271862/mbor_store/placeholder.svg"}
                                                     alt={item.product?.name}
                                                     fill
                                                     className="object-cover"

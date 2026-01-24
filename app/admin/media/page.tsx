@@ -38,7 +38,7 @@ import { Badge } from "@/components/ui/badge"
 import { motion, AnimatePresence } from "framer-motion"
 import { toast } from "sonner"
 
-import { getAdminProducts } from "../actions"
+import { getAdminProducts, getMediaItems, createMediaItem, deleteMediaItem } from "../actions"
 import { DeleteConfirmModal } from "@/components/admin/delete-confirm-modal"
 import { CldUploadWidget } from "next-cloudinary"
 
@@ -56,21 +56,21 @@ export default function AdminMediaPage() {
     const loadMedia = React.useCallback(async () => {
         setIsLoading(true)
         try {
-            const products = await getAdminProducts()
-            const images = products.flatMap(p =>
-                (p.images || []).map((img: string, i: number) => ({
-                    id: `${p.id}-${i}`,
-                    url: img,
-                    name: p.name,
-                    productName: p.name,
-                    size: `${(Math.random() * 2 + 0.5).toFixed(1)} MB`,
-                    type: img.split('.').pop()?.toUpperCase() || "JPEG",
-                    date: new Date(p.createdAt).toLocaleDateString()
-                }))
-            )
-            setMediaItems(images)
+            const data = await getMediaItems()
+            const formatted = data.map((item: any) => ({
+                id: item.id,
+                url: item.url,
+                name: item.name,
+                publicId: item.publicId,
+                productName: "Générique", // Default or if we link to product later
+                size: `${(item.size / 1024 / 1024).toFixed(2)} MB`,
+                type: item.format?.toUpperCase() || "IMG",
+                date: new Date(item.createdAt).toLocaleDateString()
+            }))
+            setMediaItems(formatted)
         } catch (error) {
             console.error("Failed to load media:", error)
+            toast.error("Impossible de charger la médiathèque")
         } finally {
             setIsLoading(false)
         }
@@ -82,7 +82,7 @@ export default function AdminMediaPage() {
 
     const handleCopyUrl = (url: string) => {
         navigator.clipboard.writeText(url)
-        toast.info("Lien Alpha copié")
+        toast.info("Lien copié dans le presse-papier")
     }
 
     const confirmDelete = (item: any) => {
@@ -91,14 +91,21 @@ export default function AdminMediaPage() {
     }
 
     const handleDelete = async () => {
-        // Since images are derived from products in this demo, real deletion would involve updating the product
-        toast.error("La suppression directe d'asset doit être effectuée via la fiche produit.")
-        setIsDeleteDialogOpen(false)
+        if (!itemToDelete) return
+        try {
+            await deleteMediaItem(itemToDelete.id)
+            toast.success("Média supprimé")
+            loadMedia()
+        } catch (error) {
+            toast.error("Erreur lors de la suppression")
+        } finally {
+            setIsDeleteDialogOpen(false)
+            setItemToDelete(null)
+        }
     }
 
     const filteredMedia = mediaItems.filter(item =>
-        item.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        item.productName.toLowerCase().includes(searchQuery.toLowerCase())
+        item.name.toLowerCase().includes(searchQuery.toLowerCase())
     )
 
     const totalPages = Math.ceil(filteredMedia.length / itemsPerPage)
@@ -112,9 +119,9 @@ export default function AdminMediaPage() {
     }, [searchQuery])
 
     const stats = [
-        { label: "Assets Référencés", value: mediaItems.length.toString(), icon: FileImage, color: "text-indigo-600", bg: "bg-indigo-50" },
+        { label: "Assets Stockés", value: mediaItems.length.toString(), icon: FileImage, color: "text-indigo-600", bg: "bg-indigo-50" },
         { label: "Performance CDN", value: "99.9%", icon: Zap, color: "text-emerald-600", bg: "bg-emerald-50" },
-        { label: "Stockage Virtuel", value: "4.2 GB", icon: History, color: "text-amber-600", bg: "bg-amber-50" },
+        { label: "Types supportés", value: "IMG, VID", icon: History, color: "text-amber-600", bg: "bg-amber-50" },
     ]
 
     return (
@@ -122,8 +129,8 @@ export default function AdminMediaPage() {
             {/* Header Area */}
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6">
                 <div className="space-y-1">
-                    <h1 className="text-3xl font-black tracking-tighter text-gray-900 uppercase italic">Médiathèque <span className="text-indigo-600">Assets.</span></h1>
-                    <p className="text-[13px] text-gray-500 font-medium">Gestion et audit des ressources visuelles de la plateforme.</p>
+                    <h1 className="text-3xl font-black tracking-tighter text-gray-900 uppercase italic">Médiathèque <span className="text-indigo-600">Cloud.</span></h1>
+                    <p className="text-[13px] text-gray-500 font-medium">Centralisation des ressources Cloudinary.</p>
                 </div>
 
                 <div className="flex items-center gap-3">
@@ -139,10 +146,29 @@ export default function AdminMediaPage() {
                     </Tabs>
                     <CldUploadWidget
                         uploadPreset="ml_default"
-                        onSuccess={() => { toast.success("Média Uploadé ! Associez-le à un produit."); loadMedia(); }}
+                        onSuccess={async (result: any) => {
+                            if (result.info) {
+                                try {
+                                    await createMediaItem({
+                                        name: result.info.original_filename || "Sans nom",
+                                        url: result.info.secure_url,
+                                        publicId: result.info.public_id,
+                                        format: result.info.format,
+                                        width: result.info.width,
+                                        height: result.info.height,
+                                        size: result.info.bytes
+                                    })
+                                    toast.success("Média sauvegardé !")
+                                    loadMedia()
+                                } catch (error) {
+                                    console.error("Save error:", error)
+                                    toast.error("Erreur de sauvegarde base de données")
+                                }
+                            }
+                        }}
                         onError={(err) => {
                             console.error("Media Page Upload Error:", err);
-                            toast.error("Erreur d'upload: Vérifiez que votre preset est 'UNSIGNED'");
+                            toast.error("Erreur d'upload Cloudinary");
                         }}
                     >
                         {({ open }) => (
@@ -150,7 +176,7 @@ export default function AdminMediaPage() {
                                 onClick={() => open()}
                                 className="h-11 px-6 rounded-2xl bg-indigo-600 text-white text-[12px] font-bold hover:bg-indigo-700 hover:shadow-2xl transition-all flex items-center gap-2 uppercase tracking-widest shadow-xl"
                             >
-                                <Plus className="h-4 w-4" /> Import Alpha
+                                <Plus className="h-4 w-4" /> Upload
                             </Button>
                         )}
                     </CldUploadWidget>
@@ -253,19 +279,20 @@ export default function AdminMediaPage() {
                                 exit={{ opacity: 0 }}
                                 className="overflow-hidden rounded-[2.5rem] border border-gray-100"
                             >
-                                <table className="w-full text-left">
+                                <table className="w-full text-left table-auto">
                                     <thead>
                                         <tr className="bg-gray-50/50 border-b border-gray-50 font-black text-[10px] text-gray-400 uppercase tracking-widest">
-                                            <th className="px-8 py-5">Aperçu</th>
+                                            <th className="px-8 py-5 w-px whitespace-nowrap">Aperçu</th>
                                             <th className="px-8 py-5">Référence / Parent</th>
-                                            <th className="px-8 py-5">Type Asset</th>
-                                            <th className="px-8 py-5 text-right">Volume</th>
+                                            <th className="px-8 py-5 w-px whitespace-nowrap">Type Asset</th>
+                                            <th className="px-8 py-5 text-right w-px whitespace-nowrap">Volume</th>
+                                            <th className="px-8 py-5 w-px whitespace-nowrap">Actions</th>
                                         </tr>
                                     </thead>
                                     <tbody className="divide-y divide-gray-50">
                                         {currentMedia.map((item) => (
                                             <tr key={item.id} className="group hover:bg-gray-50/50 transition-all cursor-pointer">
-                                                <td className="px-8 py-4">
+                                                <td className="px-8 py-4 w-px whitespace-nowrap">
                                                     <div className="h-14 w-14 rounded-2xl border border-gray-100 overflow-hidden shadow-sm group-hover:rotate-6 transition-transform duration-500">
                                                         <img src={item.url} className="h-full w-full object-cover" />
                                                     </div>
@@ -274,16 +301,16 @@ export default function AdminMediaPage() {
                                                     <p className="text-[14px] font-bold text-gray-900 leading-tight mb-1">{item.name}</p>
                                                     <p className="text-[10px] text-indigo-600 font-black uppercase tracking-widest italic">{item.productName}</p>
                                                 </td>
-                                                <td className="px-8 py-4">
+                                                <td className="px-8 py-4 w-px whitespace-nowrap">
                                                     <Badge className="bg-gray-50 text-gray-500 text-[9px] font-black tracking-widest px-3 py-1.5 rounded-xl uppercase border border-gray-100/50">{item.type}</Badge>
                                                 </td>
-                                                <td className="px-8 py-4 text-right">
+                                                <td className="px-8 py-4 text-right w-px whitespace-nowrap">
                                                     <div className="flex flex-col items-end">
                                                         <p className="text-[13px] font-black text-gray-900 tabular-nums">{item.size}</p>
                                                         <p className="text-[10px] text-gray-400 font-bold">{item.date}</p>
                                                     </div>
                                                 </td>
-                                                <td className="px-8 py-4 text-right">
+                                                <td className="px-8 py-4 text-right w-px whitespace-nowrap">
                                                     <div className="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
                                                         <Button variant="ghost" size="icon" className="h-9 w-9 text-gray-400 hover:text-indigo-600 hover:bg-indigo-50 rounded-xl" onClick={(e) => { e.stopPropagation(); handleCopyUrl(item.url); }}>
                                                             <Copy className="h-4 w-4" />

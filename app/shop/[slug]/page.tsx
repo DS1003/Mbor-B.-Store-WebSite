@@ -16,10 +16,10 @@ export default function CategoryPage() {
     const products = [
         { id: "1", name: `Elite ${categoryName} Performance`, price: 154000, category: categoryName, image: "https://www.foot.fr/151284-large_default/nike-air-zoom-mercurial-vapor-16-pro-fg-bleu-rose.jpg", isNew: true },
         { id: "2", name: `Pro ${categoryName} Series`, price: 85000, category: categoryName, image: "https://www.foot.fr/151289-large_default/nike-air-zoom-mercurial-vapor-16-pro-fg-bleu-rose.jpg" },
-        { id: "3", name: `Club ${categoryName} Edition`, price: 45000, category: categoryName, image: "/placeholder.svg" },
-        { id: "4", name: `Official ${categoryName} Match`, price: 110000, category: categoryName, image: "/placeholder.svg" },
-        { id: "5", name: `Training ${categoryName} Gear`, price: 35000, category: categoryName, image: "/placeholder.svg" },
-        { id: "6", name: `Classic ${categoryName} Style`, price: 65000, category: categoryName, image: "/placeholder.svg" },
+        { id: "3", name: `Club ${categoryName} Edition`, price: 45000, category: categoryName, image: "https://res.cloudinary.com/da1dmwqhb/image/upload/v1769271862/mbor_store/placeholder.svg" },
+        { id: "4", name: `Official ${categoryName} Match`, price: 110000, category: categoryName, image: "https://res.cloudinary.com/da1dmwqhb/image/upload/v1769271862/mbor_store/placeholder.svg" },
+        { id: "5", name: `Training ${categoryName} Gear`, price: 35000, category: categoryName, image: "https://res.cloudinary.com/da1dmwqhb/image/upload/v1769271862/mbor_store/placeholder.svg" },
+        { id: "6", name: `Classic ${categoryName} Style`, price: 65000, category: categoryName, image: "https://res.cloudinary.com/da1dmwqhb/image/upload/v1769271862/mbor_store/placeholder.svg" },
     ]
 
     return (

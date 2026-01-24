@@ -5,18 +5,18 @@ import { ArrowLeft, ArrowRight } from "lucide-react"
 import { motion } from "framer-motion"
 
 const BRANDS = [
-    { name: "Nike", logo: "/brands/nike.svg" },
-    { name: "Adidas", logo: "/brands/adidas.svg" },
-    { name: "Puma", logo: "/brands/puma.svg" },
-    { name: "New Balance", logo: "/brands/newbalance.svg" },
-    { name: "Under Armour", logo: "/brands/underarmour.svg" },
-    { name: "Reebok", logo: "/brands/reebok.svg" },
-    { name: "Fila", logo: "/brands/fila.svg" },
+    { name: "Nike", logo: "https://res.cloudinary.com/da1dmwqhb/image/upload/v1769271825/mbor_store/brands/nike.svg" },
+    { name: "Adidas", logo: "https://res.cloudinary.com/da1dmwqhb/image/upload/v1769271819/mbor_store/brands/adidas.svg" },
+    { name: "Puma", logo: "https://res.cloudinary.com/da1dmwqhb/image/upload/v1769271827/mbor_store/brands/puma.svg" },
+    { name: "New Balance", logo: "https://res.cloudinary.com/da1dmwqhb/image/upload/v1769271824/mbor_store/brands/newbalance.svg" },
+    { name: "Under Armour", logo: "https://res.cloudinary.com/da1dmwqhb/image/upload/v1769271830/mbor_store/brands/underarmour.svg" },
+    { name: "Reebok", logo: "https://res.cloudinary.com/da1dmwqhb/image/upload/v1769271829/mbor_store/brands/reebok.svg" },
+    { name: "Fila", logo: "https://res.cloudinary.com/da1dmwqhb/image/upload/v1769271822/mbor_store/brands/fila.svg" },
     // Repeats for infinite scroll feel
-    { name: "Nike", logo: "/brands/nike.svg" },
-    { name: "Adidas", logo: "/brands/adidas.svg" },
-    { name: "Puma", logo: "/brands/puma.svg" },
-    { name: "New Balance", logo: "/brands/newbalance.svg" },
+    { name: "Nike", logo: "https://res.cloudinary.com/da1dmwqhb/image/upload/v1769271825/mbor_store/brands/nike.svg" },
+    { name: "Adidas", logo: "https://res.cloudinary.com/da1dmwqhb/image/upload/v1769271819/mbor_store/brands/adidas.svg" },
+    { name: "Puma", logo: "https://res.cloudinary.com/da1dmwqhb/image/upload/v1769271827/mbor_store/brands/puma.svg" },
+    { name: "New Balance", logo: "https://res.cloudinary.com/da1dmwqhb/image/upload/v1769271824/mbor_store/brands/newbalance.svg" },
 ]
 
 export function BrandCarousel() {

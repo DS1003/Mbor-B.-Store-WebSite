@@ -54,7 +54,7 @@ const HERO_SLIDES = [
 ]
 
 export function HeroCarousel() {
-    const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true, duration: 40 }, [Autoplay({ delay: 6000, stopOnInteraction: false })])
+    const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true, duration: 40 }, [Autoplay({ delay: 6000, stopOnInteraction: false }) as any])
     const [selectedIndex, setSelectedIndex] = React.useState(0)
 
     const scrollPrev = React.useCallback(() => emblaApi && emblaApi.scrollPrev(), [emblaApi])
@@ -156,7 +156,7 @@ export function HeroCarousel() {
             </div>
 
             {/* Pagination Dots - Positioned for thumb reach */}
-            <div className="absolute bottom-10 sm:bottom-12 left-1/2 -translate-x-1/2 z-30 flex items-center gap-3 bg-black/20 backdrop-blur-sm px-4 sm:px-6 py-2.5 sm:py-3 rounded-full border border-white/10">
+            <div className="absolute bottom-4 sm:bottom-12 left-1/2 -translate-x-1/2 z-30 flex items-center gap-3 sm:bg-black/20 sm:backdrop-blur-sm sm:px-6 sm:py-3 rounded-full sm:border border-white/10">
                 {HERO_SLIDES.map((_, index) => (
                     <button
                         key={index}
