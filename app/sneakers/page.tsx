@@ -22,7 +22,7 @@ import {
 } from "@/components/ui/sheet"
 import { getCategories } from "@/lib/actions/public"
 
-interface ShopPageProps {
+interface SneakersPageProps {
     searchParams: Promise<{
         category?: string
         size?: string
@@ -33,7 +33,7 @@ interface ShopPageProps {
     }>
 }
 
-export default async function ShopPage({ searchParams }: ShopPageProps) {
+export default async function SneakersPage({ searchParams }: SneakersPageProps) {
     const params = await searchParams
     const currentSort = params.sort || "newest"
     const currentView = params.view || "grid"
@@ -47,8 +47,20 @@ export default async function ShopPage({ searchParams }: ShopPageProps) {
 
     const activeSortLabel = sortOptions.find(opt => opt.value === currentSort)?.label
 
-    // Fetch category list for filters
-    const categories = await getCategories()
+    // Fetch category list for filters - specialized for sneakers
+    const allCategories = await getCategories()
+    const categories = allCategories.filter(cat =>
+        cat.toLowerCase().includes('sneaker') ||
+        cat.toLowerCase().includes('chaussure') ||
+        cat.toLowerCase().includes('basket') ||
+        cat.toLowerCase().includes('shoe') ||
+        cat.toLowerCase().includes('air') ||
+        cat.toLowerCase().includes('jordan')
+    )
+    // Active sneakers filter by default for this page
+    if (!params.category) {
+        params.category = "Sneakers"
+    }
 
     return (
         <div className="flex flex-col w-full bg-background min-h-screen">
@@ -61,15 +73,15 @@ export default async function ShopPage({ searchParams }: ShopPageProps) {
                                 <div className="flex items-center space-x-2 text-[10px] font-black uppercase tracking-[0.3em] text-primary mb-2">
                                     <span>Store</span>
                                     <ArrowRight className="h-2.5 w-2.5" />
-                                    <span className="text-foreground">Catalogue</span>
+                                    <span className="text-foreground">Sneakers</span>
                                 </div>
                                 <h1 className="font-heading text-5xl md:text-8xl font-black uppercase italic tracking-tighter">
-                                    ELITE <span className="text-primary italic">STORE</span>
+                                    SNEAKERS <span className="text-primary italic">ELITE</span>
                                 </h1>
                             </ScrollReveal>
                             <ScrollReveal direction="left" delay={0.1}>
                                 <p className="text-muted-foreground font-medium text-lg max-w-xl italic">
-                                    L'excellence du football et du streetwear sélectionnée pour l'élite.
+                                    Les sneakers les plus exclusives pour dominer sur le terrain et dans la rue.
                                 </p>
                             </ScrollReveal>
                         </div>
@@ -103,7 +115,7 @@ export default async function ShopPage({ searchParams }: ShopPageProps) {
                         {/* Filters Sidebar */}
                         <aside className="hidden lg:block lg:sticky lg:top-32 h-fit bg-muted/5 p-8 rounded-[2.5rem] border border-muted/40 shadow-sm">
                             <ScrollReveal direction="left">
-                                <ShopFilters availableCategories={categories} />
+                                <ShopFilters availableCategories={categories} initialCategory="Sneakers" />
                             </ScrollReveal>
                         </aside>
 
@@ -124,19 +136,19 @@ export default async function ShopPage({ searchParams }: ShopPageProps) {
                                                     Mbor<span className="text-primary">.Filters</span>
                                                 </SheetTitle>
                                             </SheetHeader>
-                                            <ShopFilters availableCategories={categories} />
+                                            <ShopFilters availableCategories={categories} initialCategory="Sneakers" />
                                         </div>
                                     </SheetContent>
                                 </Sheet>
                             </div>
 
                             <Suspense key={JSON.stringify(params)} fallback={<ShopProductGridSkeleton />}>
-                                <ShopProductGrid searchParams={params} />
+                                <ShopProductGrid searchParams={params} categoryFilter="sneaker" />
                             </Suspense>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
+        </div >
     )
 }

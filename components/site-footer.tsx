@@ -163,16 +163,18 @@ export function SiteFooter() {
                 <div className="pt-10 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-8">
                     <div className="flex items-center space-x-3">
                         <div className="h-1.5 w-1.5 bg-green-500 rounded-full animate-pulse shadow-[0_0_8px_rgba(34,197,94,0.4)]" />
-                        <p className="text-[11px] font-medium text-white/20 tracking-tight">
+                        <p className="text-[11px] font-medium text-white tracking-tight">
                             &copy; {new Date().getFullYear()} Mbor Store — Élegance Sportive. Tous droits réservés.
+                            <span className="mx-3 text-white/20">|</span>
+                            <span className="text-white/50">Conçu par</span> <Link href="https://portofolio-seydiop07.vercel.app/" target="_blank" className="hover:text-primary transition-colors font-bold">Seydiop</Link>
                         </p>
                     </div>
 
                     {/* Payment Logos */}
-                    <div className="flex items-center space-x-6 grayscale opacity-40 hover:grayscale-0 hover:opacity-100 transition-all duration-500">
-                        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/ca/Wave_Logo.svg/2560px-Wave_Logo.svg.png" alt="Wave" className="h-4 object-contain" />
-                        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e0/Orange_Money_logo.svg/2048px-Orange_Money_logo.svg.png" alt="Orange Money" className="h-6 object-contain" />
-                        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRkY8O_08x7F-KOfhG4_KiwU8N5C93l23p33g&s" alt="Espèces" className="h-5 object-contain" />
+                    <div className="flex items-center space-x-4">
+                        <img src="/payment-wave.png" alt="Wave" className="h-8 w-auto object-contain" />
+                        <img src="/payment-om.png" alt="Orange Money" className="h-8 w-auto object-contain" />
+                        <img src="/payment-cash.png" alt="Espèces" className="h-8 w-auto object-contain" />
                     </div>
 
                     <div className="flex items-center space-x-6">

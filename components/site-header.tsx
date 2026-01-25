@@ -3,7 +3,7 @@
 import * as React from "react"
 import Link from "next/link"
 import Image from "next/image"
-import { usePathname } from "next/navigation"
+import { usePathname, useRouter } from "next/navigation"
 import { useSession, signOut } from "next-auth/react"
 import {
     Search,
@@ -45,12 +45,22 @@ import { ShinyText } from "./interactions"
 import { useCart } from "./cart-context"
 
 export function SiteHeader() {
+    const router = useRouter()
     const { setTheme, theme } = useTheme()
     const pathname = usePathname()
     const { data: session, status } = useSession()
     const { cartCount } = useCart()
     const [scrolled, setScrolled] = React.useState(false)
     const [isMenuOpen, setIsMenuOpen] = React.useState(false)
+    const [searchQuery, setSearchQuery] = React.useState("")
+
+    const handleSearch = (e: React.FormEvent) => {
+        e.preventDefault()
+        if (searchQuery.trim()) {
+            router.push(`/shop?query=${encodeURIComponent(searchQuery.trim())}`)
+            setSearchQuery("")
+        }
+    }
 
     React.useEffect(() => {
         const handleScroll = () => setScrolled(window.scrollY > 10)
@@ -62,9 +72,9 @@ export function SiteHeader() {
 
     const navLinks = [
         { href: "/shop", label: "Boutique" },
-        { href: "/shop/maillots", label: "Maillots" },
-        { href: "/shop/sneakers", label: "Sneakers" },
-        { href: "/shop/crampons", label: "Performance" },
+        { href: "/shop/maillot", label: "Maillot", category: "maillot" },
+        { href: "/shop/sneakers", label: "Sneakers", category: "sneakers" },
+        { href: "/shop/crampons", label: "Crampons", category: "crampons" },
         { href: "/about", label: "A Propos" },
         { href: "/contact", label: "Contact" },
     ]
@@ -272,14 +282,16 @@ export function SiteHeader() {
                     {/* Right Side: Actions - Improved responsiveness & Elegance */}
                     <div className="flex items-center justify-end flex-1 space-x-1 sm:space-x-3">
                         {/* Search Bar - Sleeker */}
-                        <div className="hidden xl:flex items-center bg-muted/30 h-10 rounded-2xl px-4 border border-transparent focus-within:border-primary/20 transition-all group">
+                        <form onSubmit={handleSearch} className="hidden xl:flex items-center bg-muted/30 h-10 rounded-2xl px-4 border border-transparent focus-within:border-primary/20 transition-all group">
                             <Search className="h-4 w-4 text-muted-foreground group-focus-within:text-primary" />
                             <input
                                 type="text"
                                 placeholder="Souhaité..."
+                                value={searchQuery}
+                                onChange={(e) => setSearchQuery(e.target.value)}
                                 className="bg-transparent border-none focus:ring-0 text-[12px] font-medium tracking-tight ml-3 w-28 focus:w-44 transition-all outline-none md:block"
                             />
-                        </div>
+                        </form>
 
                         {/* Theme Toggle - Hidden on very small mobile to save space if needed, or just smaller */}
 

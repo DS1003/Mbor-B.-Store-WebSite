@@ -4,10 +4,15 @@ import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
 import { getProducts } from "@/lib/actions/public"
 
-export async function ShopProductGrid({ searchParams }: { searchParams: any }) {
+export async function ShopProductGrid({ searchParams, categoryFilter }: { searchParams: any; categoryFilter?: string }) {
     const { view = "grid" } = searchParams
 
-    const { products } = await getProducts(searchParams)
+    // Merge categoryFilter into searchParams if provided
+    const enhancedParams = categoryFilter
+        ? { ...searchParams, categoryFilter }
+        : searchParams
+
+    const { products } = await getProducts(enhancedParams)
 
     if (products.length === 0) {
         return (

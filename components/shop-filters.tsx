@@ -1,17 +1,22 @@
 "use client"
 
 import * as React from "react"
-import { Check, SlidersHorizontal, X } from "lucide-react"
+import { Check, SlidersHorizontal, X, Search } from "lucide-react"
 import { useRouter, useSearchParams, usePathname } from "next/navigation"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 
-export function ShopFilters() {
+interface ShopFiltersProps {
+    availableCategories: string[]
+    initialCategory?: string
+}
+
+export function ShopFilters({ availableCategories = [], initialCategory }: ShopFiltersProps) {
     const router = useRouter()
     const pathname = usePathname()
     const searchParams = useSearchParams()
 
-    const categories = [
+    const categories = availableCategories.length > 0 ? availableCategories : [
         "Maillots", "Sneakers", "Lifestyle", "Crampons", "Équipements", "Flocage"
     ]
 
@@ -38,12 +43,37 @@ export function ShopFilters() {
         router.push(pathname)
     }
 
-    const currentCat = searchParams.get("category")
+    const currentCat = searchParams.get("category") || initialCategory
     const currentSize = searchParams.get("size")
     const currentMin = searchParams.get("minPrice")
+    const currentQuery = searchParams.get("query") || ""
+
+    const [searchValue, setSearchValue] = React.useState(currentQuery)
+
+    // Update search value if URL changes
+    React.useEffect(() => {
+        setSearchValue(currentQuery)
+    }, [currentQuery])
+
+    const handleSearch = (e: React.FormEvent) => {
+        e.preventDefault()
+        updateFilter("query", searchValue || null)
+    }
 
     return (
         <div className="space-y-12">
+            {/* Search Input */}
+            <form onSubmit={handleSearch} className="relative group">
+                <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground group-focus-within:text-primary transition-colors" />
+                <input
+                    type="text"
+                    placeholder="Chercher..."
+                    value={searchValue}
+                    onChange={(e) => setSearchValue(e.target.value)}
+                    className="w-full h-12 pl-11 pr-4 bg-muted/20 border-2 border-transparent focus:border-primary/20 focus:bg-background rounded-2xl text-sm font-bold tracking-tight transition-all outline-none"
+                />
+            </form>
+
             <div className="flex items-center justify-between">
                 <div className="flex items-center space-x-3 text-foreground">
                     <SlidersHorizontal className="h-5 w-5 text-primary" />
@@ -64,21 +94,40 @@ export function ShopFilters() {
             <div className="space-y-6">
                 <h4 className="text-[11px] font-black tracking-[0.2em] text-muted-foreground/60 uppercase">Catégories</h4>
                 <div className="space-y-3">
+                    {/* All (Tout) Filter */}
+                    <button
+                        onClick={() => updateFilter("category", null)}
+                        className="flex items-center space-x-3 w-full group text-left"
+                    >
+                        <div className={cn(
+                            "h-5 w-5 border-2 rounded-lg flex items-center justify-center transition-all duration-300",
+                            (!currentCat && !initialCategory) ? "bg-primary border-primary shadow-lg shadow-primary/20" : "bg-muted/30 border-muted/60 group-hover:border-primary/50"
+                        )}>
+                            {(!currentCat && !initialCategory) && <Check className="h-3 w-3 text-black font-bold" />}
+                        </div>
+                        <span className={cn(
+                            "text-sm font-bold tracking-tight transition-colors duration-300",
+                            (!currentCat && !initialCategory) ? "text-primary" : "text-foreground/70 group-hover:text-foreground"
+                        )}>
+                            Tout
+                        </span>
+                    </button>
+
                     {categories.map((item) => (
                         <button
                             key={item}
-                            onClick={() => updateFilter("category", currentCat === item ? null : item)}
+                            onClick={() => updateFilter("category", currentCat?.toLowerCase() === item.toLowerCase() ? null : item)}
                             className="flex items-center space-x-3 w-full group text-left"
                         >
                             <div className={cn(
                                 "h-5 w-5 border-2 rounded-lg flex items-center justify-center transition-all duration-300",
-                                currentCat === item ? "bg-primary border-primary shadow-lg shadow-primary/20" : "bg-muted/30 border-muted/60 group-hover:border-primary/50"
+                                currentCat?.toLowerCase() === item.toLowerCase() ? "bg-primary border-primary shadow-lg shadow-primary/20" : "bg-muted/30 border-muted/60 group-hover:border-primary/50"
                             )}>
-                                {currentCat === item && <Check className="h-3 w-3 text-black font-bold" />}
+                                {currentCat?.toLowerCase() === item.toLowerCase() && <Check className="h-3 w-3 text-black font-bold" />}
                             </div>
                             <span className={cn(
                                 "text-sm font-bold tracking-tight transition-colors duration-300",
-                                currentCat === item ? "text-primary" : "text-foreground/70 group-hover:text-foreground"
+                                currentCat?.toLowerCase() === item.toLowerCase() ? "text-primary" : "text-foreground/70 group-hover:text-foreground"
                             )}>
                                 {item}
                             </span>

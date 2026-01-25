@@ -29,17 +29,40 @@ export const getFeaturedProducts = unstable_cache(
 export const getProducts = unstable_cache(
     async (params: {
         category?: string
+        categoryFilter?: string
         size?: string
         minPrice?: string
         maxPrice?: string
         sort?: string
         take?: number
         skip?: number
+        query?: string
     }) => {
-        const { category, size, minPrice, maxPrice, sort, take = 12, skip = 0 } = params
+        const { category, categoryFilter, size, minPrice, maxPrice, sort, take = 12, skip = 0, query } = params
 
         const where: any = {}
-        if (category) where.category = { name: category }
+
+        // Search query
+        if (query) {
+            where.OR = [
+                { name: { contains: query, mode: 'insensitive' } },
+                { description: { contains: query, mode: 'insensitive' } },
+            ]
+        }
+
+        // Use AND for multiple category filters if needed
+        const categoryConditions: any[] = []
+        if (params.category) {
+            categoryConditions.push({ name: { contains: params.category, mode: 'insensitive' } })
+        }
+        if (params.categoryFilter) {
+            categoryConditions.push({ name: { contains: params.categoryFilter, mode: 'insensitive' } })
+        }
+
+        if (categoryConditions.length > 0) {
+            where.category = { AND: categoryConditions }
+        }
+
         if (size) where.sizes = { some: { size: size } }
         if (minPrice || maxPrice) {
             where.price = {
@@ -87,4 +110,16 @@ export const getRelatedProducts = unstable_cache(
     },
     ['related-products'],
     { tags: ['products'], revalidate: 3600 }
+)
+
+export const getCategories = unstable_cache(
+    async () => {
+        const categories = await prisma.category.findMany({
+            select: { name: true },
+            orderBy: { name: 'asc' }
+        })
+        return categories.map(c => c.name)
+    },
+    ['categories-list'],
+    { tags: ['categories'], revalidate: 3600 }
 )
