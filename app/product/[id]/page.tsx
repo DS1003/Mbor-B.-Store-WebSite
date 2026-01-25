@@ -1,4 +1,5 @@
 import * as React from "react"
+import { Suspense } from "react"
 import { ProductGallery } from "@/components/product-gallery"
 import { ProductInfo } from "@/components/product-info"
 import { RelatedProducts } from "@/components/related-products"
@@ -85,9 +86,9 @@ export default async function ProductPage({ params }: { params: Promise<{ id: st
 
                 {/* Related Products */}
                 <div className="mt-32 pt-24 border-t">
-                    <ScrollReveal direction="up">
-                        <RelatedProducts />
-                    </ScrollReveal>
+                    <Suspense fallback={<div className="h-96 animate-pulse bg-muted/20 rounded-[3rem]" />}>
+                        <RelatedProducts productId={product.id} categoryId={product.categoryId || ""} />
+                    </Suspense>
                 </div>
             </div>
         </div>

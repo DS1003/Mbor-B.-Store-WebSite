@@ -119,7 +119,7 @@ export default function AdminMediaPage() {
     }, [searchQuery])
 
     const stats = [
-        { label: "Assets Stockés", value: mediaItems.length.toString(), icon: FileImage, color: "text-indigo-600", bg: "bg-indigo-50" },
+        { label: "Assets Stockés", value: mediaItems.length.toString(), icon: FileImage, color: "text-amber-600", bg: "bg-amber-50" },
         { label: "Performance CDN", value: "99.9%", icon: Zap, color: "text-emerald-600", bg: "bg-emerald-50" },
         { label: "Types supportés", value: "IMG, VID", icon: History, color: "text-amber-600", bg: "bg-amber-50" },
     ]
@@ -129,7 +129,7 @@ export default function AdminMediaPage() {
             {/* Header Area */}
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6">
                 <div className="space-y-1">
-                    <h1 className="text-3xl font-black tracking-tighter text-gray-900 uppercase italic">Médiathèque <span className="text-indigo-600">Cloud.</span></h1>
+                    <h1 className="text-3xl font-black tracking-tighter text-gray-900 uppercase italic">Médiathèque <span className="text-amber-600">Cloud.</span></h1>
                     <p className="text-[13px] text-gray-500 font-medium">Centralisation des ressources Cloudinary.</p>
                 </div>
 
@@ -174,7 +174,7 @@ export default function AdminMediaPage() {
                         {({ open }) => (
                             <Button
                                 onClick={() => open()}
-                                className="h-11 px-6 rounded-2xl bg-indigo-600 text-white text-[12px] font-bold hover:bg-indigo-700 hover:shadow-2xl transition-all flex items-center gap-2 uppercase tracking-widest shadow-xl"
+                                className="h-11 px-6 rounded-2xl bg-amber-600 text-white text-[12px] font-bold hover:bg-amber-700 hover:shadow-2xl transition-all flex items-center gap-2 uppercase tracking-widest shadow-xl"
                             >
                                 <Plus className="h-4 w-4" /> Upload
                             </Button>
@@ -215,10 +215,10 @@ export default function AdminMediaPage() {
             <div className="bg-white border border-gray-50 rounded-[2.5rem] overflow-hidden shadow-sm min-h-[600px]">
                 <div className="p-6 flex flex-col md:flex-row items-center gap-4 bg-gray-50/30 border-b border-gray-50">
                     <div className="relative flex-1 w-full flex items-center group">
-                        <Search className="absolute left-5 h-4 w-4 text-gray-400 group-focus-within:text-indigo-600 transition-colors" />
+                        <Search className="absolute left-5 h-4 w-4 text-gray-400 group-focus-within:text-amber-600 transition-colors" />
                         <Input
                             placeholder="Interroger la base d'assets..."
-                            className="bg-white h-12 pl-12 pr-6 rounded-2xl border-gray-100 focus-visible:ring-2 focus-visible:ring-indigo-100 focus-visible:border-indigo-200 text-[14px] font-medium placeholder:text-gray-400 shadow-sm"
+                            className="bg-white h-12 pl-12 pr-6 rounded-2xl border-gray-100 focus-visible:ring-2 focus-visible:ring-amber-100 focus-visible:border-amber-200 text-[14px] font-medium placeholder:text-gray-400 shadow-sm"
                             value={searchQuery}
                             onChange={(e) => setSearchQuery(e.target.value)}
                         />
@@ -256,7 +256,7 @@ export default function AdminMediaPage() {
                                         <div className="absolute inset-0 bg-gray-950/80 opacity-0 group-hover:opacity-100 transition-all duration-300 backdrop-blur-[4px] flex flex-col justify-end p-5">
                                             <div className="space-y-4 translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
                                                 <div className="space-y-1">
-                                                    <p className="text-[10px] font-black text-indigo-400 uppercase tracking-widest line-clamp-1">{item.name}</p>
+                                                    <p className="text-[10px] font-black text-amber-400 uppercase tracking-widest line-clamp-1">{item.name}</p>
                                                     <p className="text-[9px] text-white/50 font-bold uppercase">{item.type} • {item.size}</p>
                                                 </div>
                                                 <div className="flex items-center gap-2">
@@ -299,7 +299,7 @@ export default function AdminMediaPage() {
                                                 </td>
                                                 <td className="px-8 py-4">
                                                     <p className="text-[14px] font-bold text-gray-900 leading-tight mb-1">{item.name}</p>
-                                                    <p className="text-[10px] text-indigo-600 font-black uppercase tracking-widest italic">{item.productName}</p>
+                                                    <p className="text-[10px] text-amber-600 font-black uppercase tracking-widest italic">{item.productName}</p>
                                                 </td>
                                                 <td className="px-8 py-4 w-px whitespace-nowrap">
                                                     <Badge className="bg-gray-50 text-gray-500 text-[9px] font-black tracking-widest px-3 py-1.5 rounded-xl uppercase border border-gray-100/50">{item.type}</Badge>
@@ -312,7 +312,7 @@ export default function AdminMediaPage() {
                                                 </td>
                                                 <td className="px-8 py-4 text-right w-px whitespace-nowrap">
                                                     <div className="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                                                        <Button variant="ghost" size="icon" className="h-9 w-9 text-gray-400 hover:text-indigo-600 hover:bg-indigo-50 rounded-xl" onClick={(e) => { e.stopPropagation(); handleCopyUrl(item.url); }}>
+                                                        <Button variant="ghost" size="icon" className="h-9 w-9 text-gray-400 hover:text-amber-600 hover:bg-amber-50 rounded-xl" onClick={(e) => { e.stopPropagation(); handleCopyUrl(item.url); }}>
                                                             <Copy className="h-4 w-4" />
                                                         </Button>
                                                         <Button variant="ghost" size="icon" className="h-9 w-9 text-gray-400 hover:text-rose-600 hover:bg-rose-50 rounded-xl" onClick={(e) => { e.stopPropagation(); confirmDelete(item); }}>
@@ -337,7 +337,7 @@ export default function AdminMediaPage() {
                             <p className="text-[13px] font-black text-gray-900 italic">{filteredMedia.length} Assets <span className="text-gray-300 mx-1">/</span> {mediaItems.length} Total</p>
                         </div>
                         <div className="h-8 w-px bg-gray-100 hidden md:block" />
-                        <Button variant="ghost" onClick={loadMedia} className="h-9 px-4 rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-white text-indigo-600">
+                        <Button variant="ghost" onClick={loadMedia} className="h-9 px-4 rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-white text-amber-600">
                             <RefreshCw className={cn("h-4 w-4 mr-2", isLoading && "animate-spin")} /> Refresh
                         </Button>
                     </div>
@@ -371,8 +371,8 @@ export default function AdminMediaPage() {
                                                 className={cn(
                                                     "h-10 w-10 p-0 rounded-2xl transition-all font-black text-[12px] italic",
                                                     currentPage === page
-                                                        ? "bg-indigo-600 text-white shadow-xl shadow-indigo-100"
-                                                        : "text-gray-400 hover:text-indigo-600 hover:bg-white"
+                                                        ? "bg-amber-600 text-white shadow-xl shadow-amber-100"
+                                                        : "text-gray-400 hover:text-amber-600 hover:bg-white"
                                                 )}
                                             >
                                                 {page}

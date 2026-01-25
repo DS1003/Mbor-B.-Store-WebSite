@@ -107,6 +107,10 @@ model Product {
   sizes         ProductSize[]
   reviews       Review[]
   favoritedBy   User[]        @relation("UserFavorites")
+
+  @@index([featured])
+  @@index([categoryId])
+  @@index([createdAt])
 }
 
 model Review {
@@ -145,10 +149,13 @@ model Order {
   customerAddress String?
   customerPhone   String?
   paymentMethod   String?
-  deliveryType    String?     @default("PICKUP")
   deliveryFee     Decimal     @default(0)
+  deliveryType    String?     @default("PICKUP")
   user            User?       @relation(fields: [userId], references: [id])
   items           OrderItem[]
+
+  @@index([status])
+  @@index([createdAt])
 }
 
 model OrderItem {
@@ -187,10 +194,10 @@ model StoreConfig {
   waveNumber       String?
   tiktokUrl        String?
   workingHours     String?
-  primaryColor     String  @default("#4F46E5")
-  secondaryColor   String  @default("#111827")
   accentColor      String  @default("#F59E0B")
   fontFamily       String  @default("Inter")
+  primaryColor     String  @default("#4F46E5")
+  secondaryColor   String  @default("#111827")
 }
 
 model Category {
@@ -201,19 +208,6 @@ model Category {
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
   products    Product[]
-}
-
-enum Role {
-  USER
-  ADMIN
-}
-
-enum OrderStatus {
-  PENDING
-  PAID
-  SHIPPED
-  DELIVERED
-  CANCELLED
 }
 
 model Media {
@@ -227,4 +221,38 @@ model Media {
   size      Int?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+model AdminLog {
+  id        String   @id @default(cuid())
+  action    String
+  details   String?
+  adminName String?
+  createdAt DateTime @default(now())
+}
+
+model Promotion {
+  id          String    @id @default(cuid())
+  title       String
+  description String?
+  code        String?   @unique
+  discount    Decimal?
+  startDate   DateTime?
+  endDate     DateTime?
+  isActive    Boolean   @default(true)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+enum OrderStatus {
+  PENDING
+  PAID
+  SHIPPED
+  DELIVERED
+  CANCELLED
 }

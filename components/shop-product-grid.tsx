@@ -1,60 +1,13 @@
 import { ProductCard } from "@/components/product-card"
 import { ScrollReveal } from "@/components/scroll-reveal"
-import { prisma } from "@/lib/prisma"
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
+import { getProducts } from "@/lib/actions/public"
 
-interface ShopProductGridProps {
-    searchParams: {
-        category?: string
-        size?: string
-        minPrice?: string
-        maxPrice?: string
-        sort?: string
-        view?: "grid" | "list"
-    }
-}
+export async function ShopProductGrid({ searchParams }: { searchParams: any }) {
+    const { view = "grid" } = searchParams
 
-export async function ShopProductGrid({ searchParams }: ShopProductGridProps) {
-    const { category, size, minPrice, maxPrice, sort, view = "grid" } = searchParams
-
-    // Build Prisma query
-    const where: any = {}
-
-    if (category) {
-        where.category = { name: category }
-    }
-
-    if (size) {
-        where.sizes = { some: { size: size } }
-    }
-
-    if (minPrice || maxPrice) {
-        where.price = {
-            gte: minPrice ? Number(minPrice) : undefined,
-            lte: maxPrice ? Number(maxPrice) : undefined,
-        }
-    }
-
-    let orderBy: any = { createdAt: "desc" }
-    if (sort === "price_asc") orderBy = { price: "asc" }
-    if (sort === "price_desc") orderBy = { price: "desc" }
-    if (sort === "oldest") orderBy = { createdAt: "asc" }
-
-    const productsFromDb = await prisma.product.findMany({
-        where,
-        orderBy,
-        include: { category: true }
-    })
-
-    const products = productsFromDb.map(p => ({
-        id: p.id,
-        name: p.name,
-        price: Number(p.price),
-        category: p.category?.name || "Sans catégorie",
-        image: p.images[0] || "https://res.cloudinary.com/da1dmwqhb/image/upload/v1769271862/mbor_store/placeholder.svg",
-        isNew: true
-    }))
+    const { products } = await getProducts(searchParams)
 
     if (products.length === 0) {
         return (

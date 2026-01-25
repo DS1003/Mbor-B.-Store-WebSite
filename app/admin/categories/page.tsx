@@ -151,7 +151,7 @@ export default function AdminCategoriesPage() {
 
     const stats = [
         { label: "Univers Actifs", value: categoriesData.length.toString(), icon: LayoutGrid, color: "text-gray-600", bg: "bg-gray-50" },
-        { label: "Articles Total", value: totalItems.toLocaleString(), icon: Layers, color: "text-indigo-600", bg: "bg-indigo-50" },
+        { label: "Articles Total", value: totalItems.toLocaleString(), icon: Layers, color: "text-amber-600", bg: "bg-amber-50" },
         { label: "Status Système", value: "Optimal", icon: Zap, color: "text-emerald-600", bg: "bg-emerald-50" },
     ]
 
@@ -160,17 +160,17 @@ export default function AdminCategoriesPage() {
             {/* Header Area */}
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6">
                 <div className="space-y-1">
-                    <h1 className="text-3xl font-black tracking-tighter text-gray-900 uppercase italic">Architecture <span className="text-indigo-600">Univers.</span></h1>
-                    <p className="text-[13px] text-gray-500 font-medium">Organisation structurelle des catégories du catalogue.</p>
+                    <h1 className="text-2xl font-bold tracking-tight text-gray-900">Gestion des <span className="text-amber-600">Catégories.</span></h1>
+                    <p className="text-[13px] text-gray-500 font-medium">Organisation structurelle des catégories du catalogue Mbor B. Store.</p>
                 </div>
 
                 <div className="flex items-center gap-3">
-                    <Button variant="outline" className="h-11 px-6 rounded-2xl text-[12px] font-bold border-gray-100 hover:bg-white hover:shadow-xl transition-all flex items-center gap-2 uppercase tracking-widest">
+                    <Button variant="outline" className="h-10 px-5 rounded-xl text-[12px] font-semibold border-gray-100 hover:bg-gray-50 transition-all flex items-center gap-2 bg-white shadow-sm">
                         <Database className="h-4 w-4 text-gray-400" /> Flux Tags
                     </Button>
                     <Button
                         onClick={() => handleOpenModal()}
-                        className="h-11 px-6 rounded-2xl bg-gray-900 text-white text-[12px] font-bold hover:bg-black hover:shadow-2xl transition-all flex items-center gap-2 uppercase tracking-widest"
+                        className="h-10 px-5 rounded-xl bg-gray-900 text-white text-[12px] font-semibold hover:bg-black transition-all flex items-center gap-2 shadow-sm"
                     >
                         <Plus className="h-4 w-4" /> Nouvelle Catégorie
                     </Button>
@@ -190,14 +190,14 @@ export default function AdminCategoriesPage() {
                         <div className="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity">
                             <stat.icon className="h-10 w-10" />
                         </div>
-                        <div className="flex items-center justify-between mb-6">
-                            <div className={cn("h-12 w-12 rounded-2xl flex items-center justify-center shadow-inner", stat.bg, stat.color)}>
-                                <stat.icon className="h-6 w-6" />
+                        <div className="flex items-center justify-between mb-5">
+                            <div className={cn("h-10 w-10 rounded-xl flex items-center justify-center", stat.bg, stat.color)}>
+                                <stat.icon className="h-5 w-5" />
                             </div>
                         </div>
-                        <div className="space-y-1">
-                            <p className="text-[10px] font-black text-gray-400 uppercase tracking-[0.2em]">{stat.label}</p>
-                            <h3 className="text-2xl font-black tracking-tighter text-gray-900 italic">
+                        <div className="space-y-0.5">
+                            <p className="text-[11px] font-bold text-gray-400 uppercase tracking-wider">{stat.label}</p>
+                            <h3 className="text-2xl font-bold tracking-tight text-gray-900">
                                 {isLoading ? <span className="h-8 w-16 bg-gray-50 animate-pulse block rounded-lg" /> : stat.value}
                             </h3>
                         </div>
@@ -209,10 +209,10 @@ export default function AdminCategoriesPage() {
             <div className="bg-white border border-gray-50 rounded-[2.5rem] overflow-hidden shadow-sm">
                 <div className="p-6 flex flex-col md:flex-row items-center gap-4 bg-gray-50/30 border-b border-gray-50">
                     <div className="relative flex-1 w-full flex items-center group">
-                        <Search className="absolute left-5 h-4 w-4 text-gray-400 group-focus-within:text-indigo-600 transition-colors" />
+                        <Search className="absolute left-5 h-4 w-4 text-gray-400 group-focus-within:text-amber-500 transition-colors" />
                         <Input
-                            placeholder="Rechercher un univers structurel..."
-                            className="bg-white h-12 pl-12 pr-6 rounded-2xl border-gray-100 focus-visible:ring-2 focus-visible:ring-indigo-100 focus-visible:border-indigo-200 text-[14px] font-medium placeholder:text-gray-400 shadow-sm"
+                            placeholder="Rechercher une catégorie..."
+                            className="bg-white h-11 pl-12 pr-6 rounded-xl border-gray-100 focus-visible:ring-2 focus-visible:ring-amber-50 focus-visible:border-amber-200 text-[14px] font-medium placeholder:text-gray-400 shadow-sm"
                             value={searchQuery}
                             onChange={(e) => setSearchQuery(e.target.value)}
                         />
@@ -222,12 +222,12 @@ export default function AdminCategoriesPage() {
                 <div className="overflow-x-auto">
                     <table className="w-full text-left">
                         <thead>
-                            <tr className="bg-gray-50/50 border-b border-gray-50">
-                                <th className="px-8 py-5 text-[10px] font-black text-gray-400 uppercase tracking-widest">Aperçu</th>
-                                <th className="px-8 py-5 text-[10px] font-black text-gray-400 uppercase tracking-widest">Désignation</th>
-                                <th className="px-8 py-5 text-[10px] font-black text-gray-400 uppercase tracking-widest">Répartition</th>
-                                <th className="px-8 py-5 text-[10px] font-black text-gray-400 uppercase tracking-widest text-center">Status</th>
-                                <th className="px-8 py-5 text-[10px] font-black text-gray-400 uppercase tracking-widest text-right">Actions</th>
+                            <tr className="border-b border-gray-100">
+                                <th className="px-8 py-4 text-[11px] font-bold text-gray-400 uppercase tracking-wider">Bannière</th>
+                                <th className="px-8 py-4 text-[11px] font-bold text-gray-400 uppercase tracking-wider">Catégorie</th>
+                                <th className="px-8 py-4 text-[11px] font-bold text-gray-400 uppercase tracking-wider">Articles</th>
+                                <th className="px-8 py-4 text-[11px] font-bold text-gray-400 uppercase tracking-wider text-center">Status</th>
+                                <th className="px-8 py-4 text-[11px] font-bold text-gray-400 uppercase tracking-wider text-right">Actions</th>
                             </tr>
                         </thead>
                         <tbody className="divide-y divide-gray-50">
@@ -251,9 +251,9 @@ export default function AdminCategoriesPage() {
                                                 )}
                                             </div>
                                         </td>
-                                        <td className="px-8 py-5" onClick={() => handleOpenModal(category)}>
-                                            <p className="text-[15px] font-black text-gray-900 leading-tight mb-1 uppercase italic">{category.name}</p>
-                                            <p className="text-[10px] text-indigo-600 font-black uppercase tracking-[0.2em]">ID-{category.id.slice(0, 8).toUpperCase()}</p>
+                                        <td className="px-8 py-4" onClick={() => handleOpenModal(category)}>
+                                            <p className="text-[14px] font-bold text-gray-900 leading-tight mb-0.5">{category.name}</p>
+                                            <p className="text-[10px] text-gray-400 font-bold uppercase tracking-wider">ID-{category.id.slice(0, 8).toUpperCase()}</p>
                                         </td>
                                         <td className="px-8 py-5" onClick={() => handleOpenModal(category)}>
                                             <div className="flex flex-col gap-2 w-40">
@@ -263,15 +263,15 @@ export default function AdminCategoriesPage() {
                                                 </div>
                                                 <div className="h-1.5 w-full bg-gray-100 rounded-full overflow-hidden shadow-inner">
                                                     <div
-                                                        className="h-full bg-indigo-500 rounded-full transition-all duration-700"
+                                                        className="h-full bg-amber-500 rounded-full transition-all duration-700"
                                                         style={{ width: `${totalItems > 0 ? ((category._count?.products || 0) / totalItems) * 100 : 0}%` }}
                                                     />
                                                 </div>
                                             </div>
                                         </td>
-                                        <td className="px-8 py-5 text-center">
-                                            <span className="px-3 py-1.5 rounded-xl text-[10px] font-black uppercase tracking-widest text-emerald-600 bg-emerald-50">
-                                                Opérationnel
+                                        <td className="px-8 py-4 text-center">
+                                            <span className="px-2.5 py-1 rounded-lg text-[10px] font-bold uppercase tracking-wider text-emerald-700 bg-emerald-50">
+                                                Actif
                                             </span>
                                         </td>
                                         <td className="px-8 py-5 text-right">
@@ -283,7 +283,7 @@ export default function AdminCategoriesPage() {
                                                 </DropdownMenuTrigger>
                                                 <DropdownMenuContent align="end" className="w-[200px] rounded-[1.5rem] shadow-2xl border-gray-50 p-2">
                                                     <DropdownMenuLabel className="text-[10px] font-black text-gray-400 px-3 py-2 uppercase tracking-widest border-b border-gray-50 mb-1">Actions Rapides</DropdownMenuLabel>
-                                                    <DropdownMenuItem onClick={() => handleOpenModal(category)} className="text-[12px] font-bold py-3 px-3 focus:bg-indigo-50 focus:text-indigo-600 rounded-xl transition-colors cursor-pointer">
+                                                    <DropdownMenuItem onClick={() => handleOpenModal(category)} className="text-[12px] font-bold py-3 px-3 focus:bg-amber-50 focus:text-amber-600 rounded-xl transition-colors cursor-pointer">
                                                         <Edit className="mr-3 h-4 w-4" /> Éditer l'univers
                                                     </DropdownMenuItem>
                                                     <DropdownMenuItem className="text-[12px] font-bold py-3 px-3 rounded-xl transition-colors cursor-pointer">
@@ -310,7 +310,7 @@ export default function AdminCategoriesPage() {
                         <Button
                             variant="outline"
                             size="icon"
-                            className="h-10 w-10 rounded-xl border-gray-100 hover:bg-white shadow-sm"
+                            className="h-9 w-9 rounded-lg border-gray-100 hover:bg-gray-50 transition-all"
                             onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
                             disabled={currentPage === 1}
                         >
@@ -322,9 +322,9 @@ export default function AdminCategoriesPage() {
                                     key={i}
                                     onClick={() => setCurrentPage(i + 1)}
                                     className={cn(
-                                        "h-10 w-10 rounded-xl font-black text-[11px] transition-all",
+                                        "h-9 w-9 rounded-lg font-bold text-[12px] transition-all",
                                         currentPage === i + 1
-                                            ? "bg-gray-900 text-white shadow-xl"
+                                            ? "bg-gray-900 text-white shadow-lg shadow-gray-200"
                                             : "bg-white text-gray-400 border border-gray-100 hover:bg-gray-50"
                                     )}
                                 >
@@ -335,7 +335,7 @@ export default function AdminCategoriesPage() {
                         <Button
                             variant="outline"
                             size="icon"
-                            className="h-10 w-10 rounded-xl border-gray-100 hover:bg-white shadow-sm"
+                            className="h-9 w-9 rounded-lg border-gray-100 hover:bg-gray-50 transition-all"
                             onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
                             disabled={currentPage === totalPages || totalPages === 0}
                         >
@@ -349,22 +349,22 @@ export default function AdminCategoriesPage() {
             <Sheet open={isModalOpen} onOpenChange={setIsModalOpen}>
                 <SheetContent className="sm:max-w-xl overflow-y-auto">
                     <SheetHeader>
-                        <SheetTitle className="text-xl font-black uppercase italic tracking-tight">Configuration <span className="text-indigo-600">Univers</span></SheetTitle>
-                        <SheetDescription className="font-medium text-gray-400">
-                            Définition structurelle de cette catégorie.
+                        <SheetTitle className="text-xl font-bold tracking-tight text-gray-900">Configuration <span className="text-amber-600">Catégorie</span></SheetTitle>
+                        <SheetDescription className="font-medium text-gray-500">
+                            Définir les détails structurels de cette catégorie.
                         </SheetDescription>
                     </SheetHeader>
 
                     <form onSubmit={handleSave} className="space-y-8 py-8 pb-20">
                         <div className="space-y-6">
                             <div className="space-y-2">
-                                <Label htmlFor="name" className="text-[10px] font-black uppercase tracking-widest text-gray-400 ml-1">Nom de l'Univers</Label>
+                                <Label htmlFor="name" className="text-[11px] font-bold uppercase tracking-wider text-gray-400 ml-1">Nom de la Catégorie</Label>
                                 <Input
                                     id="name"
                                     value={formData.name}
                                     onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                                     placeholder="ex: Footwear, Streetwear, Accessoires..."
-                                    className="h-12 rounded-2xl border-gray-100 focus:ring-indigo-100 focus:border-indigo-200"
+                                    className="h-11 rounded-xl border-gray-100 focus:ring-amber-50 focus:border-amber-200"
                                     required
                                 />
                             </div>
@@ -376,7 +376,7 @@ export default function AdminCategoriesPage() {
                                     value={formData.description}
                                     onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                                     placeholder="Décrivez l'univers de cette catégorie..."
-                                    className="rounded-[1.5rem] border-gray-100 focus:ring-indigo-100 focus:border-indigo-200 p-4"
+                                    className="rounded-[1.5rem] border-gray-100 focus:ring-amber-100 focus:border-amber-200 p-4"
                                     rows={4}
                                 />
                             </div>
@@ -393,21 +393,21 @@ export default function AdminCategoriesPage() {
                             </div>
                         </div>
 
-                        <div className="pt-4 flex items-center gap-4 sticky bottom-0 bg-white py-4 -mx-6 px-6 border-t border-gray-50">
+                        <div className="pt-4 flex items-center gap-3 sticky bottom-0 bg-white py-4 -mx-6 px-6 border-t border-gray-100/60">
                             <Button
                                 type="button"
                                 variant="outline"
-                                className="flex-1 h-14 rounded-[1.5rem] font-bold text-gray-500 uppercase tracking-widest"
+                                className="flex-1 h-12 rounded-xl font-bold text-gray-500 border-gray-100"
                                 onClick={() => setIsModalOpen(false)}
                             >
                                 Annuler
                             </Button>
                             <Button
                                 type="submit"
-                                className="flex-1 h-14 rounded-[1.5rem] bg-gray-900 text-white font-black uppercase tracking-widest shadow-2xl shadow-indigo-100"
+                                className="flex-1 h-12 rounded-xl bg-gray-900 text-white font-bold shadow-lg shadow-gray-200"
                                 disabled={isSaving}
                             >
-                                {isSaving ? "Flux en cours..." : editingCategory ? "Actualiser" : "Déployer"}
+                                {isSaving ? "Flux en cours..." : editingCategory ? "Mettre à jour" : "Créer"}
                             </Button>
                         </div>
                     </form>

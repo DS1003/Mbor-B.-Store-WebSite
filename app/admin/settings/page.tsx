@@ -58,7 +58,7 @@ export default function AdminSettingsPage() {
         paymentPolicy: "",
         returnPolicy: "",
         aboutUs: "",
-        primaryColor: "#4F46E5",
+        primaryColor: "#F59E0B",
         secondaryColor: "#111827",
         accentColor: "#F59E0B",
         fontFamily: "Inter"
@@ -89,7 +89,7 @@ export default function AdminSettingsPage() {
                     paymentPolicy: config.paymentPolicy || "",
                     returnPolicy: config.returnPolicy || "",
                     aboutUs: config.aboutUs || "",
-                    primaryColor: config.primaryColor || "#4F46E5",
+                    primaryColor: config.primaryColor || "#F59E0B",
                     secondaryColor: config.secondaryColor || "#111827",
                     accentColor: config.accentColor || "#F59E0B",
                     fontFamily: config.fontFamily || "Inter"
@@ -120,13 +120,13 @@ export default function AdminSettingsPage() {
     }
 
     const menuItems = [
-        { label: "Général", icon: Store, color: "text-indigo-600", bg: "bg-indigo-50" },
+        { label: "Général", icon: Store, color: "text-amber-600", bg: "bg-amber-50" },
         { label: "Profil Admin", icon: User, color: "text-gray-600", bg: "bg-gray-50" },
         { label: "Sécurité", icon: Lock, color: "text-rose-600", bg: "bg-rose-50" },
         { label: "Notifications", icon: Bell, color: "text-amber-600", bg: "bg-amber-50" },
         { label: "Paiements", icon: CreditCard, color: "text-emerald-600", bg: "bg-emerald-50" },
-        { label: "Livraison", icon: Globe, color: "text-blue-600", bg: "bg-blue-50" },
-        { label: "Apparence", icon: Palette, color: "text-indigo-600", bg: "bg-indigo-50" },
+        { label: "Livraison", icon: Globe, color: "text-amber-600", bg: "bg-amber-50" },
+        { label: "Apparence", icon: Palette, color: "text-amber-600", bg: "bg-amber-50" },
     ]
 
     return (
@@ -134,18 +134,18 @@ export default function AdminSettingsPage() {
             {/* Header Area */}
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6">
                 <div className="space-y-1">
-                    <h1 className="text-3xl font-black tracking-tighter text-gray-900 uppercase italic">Configuration <span className="text-indigo-600">Système.</span></h1>
+                    <h1 className="text-2xl font-bold tracking-tight text-gray-900">Configuration du <span className="text-amber-600">Système.</span></h1>
                     <p className="text-[13px] text-gray-500 font-medium">Réglages structurels et identité de l'écosystème Mbor B. Store.</p>
                 </div>
 
                 <div className="flex items-center gap-3">
-                    <Button variant="outline" className="h-11 px-6 rounded-2xl text-[12px] font-bold border-gray-100 hover:bg-white hover:shadow-xl transition-all flex items-center gap-2 uppercase tracking-widest bg-white shadow-sm">
+                    <Button variant="outline" className="h-10 px-5 rounded-xl text-[12px] font-semibold border-gray-100 hover:bg-gray-50 transition-all flex items-center gap-2 bg-white shadow-sm">
                         <Database className="h-4 w-4 text-gray-400" /> Back-up DB
                     </Button>
                     <Button
                         onClick={handleSave}
                         disabled={isSaving}
-                        className="h-11 px-6 rounded-2xl bg-gray-900 text-white text-[12px] font-bold hover:bg-black hover:shadow-2xl transition-all flex items-center gap-2 uppercase tracking-widest shadow-xl"
+                        className="h-10 px-5 rounded-xl bg-gray-900 text-white text-[12px] font-semibold hover:bg-black transition-all flex items-center gap-2 shadow-sm"
                     >
                         {isSaving ? <Zap className="h-4 w-4 animate-pulse" /> : <Save className="h-4 w-4" />}
                         {isSaving ? "Sync Flow..." : "Enregistrer"}
@@ -162,35 +162,35 @@ export default function AdminSettingsPage() {
                                 key={item.label}
                                 onClick={() => setActiveTab(item.label)}
                                 className={cn(
-                                    "w-full flex items-center px-5 py-3.5 rounded-2xl transition-all duration-300 group relative overflow-hidden",
+                                    "w-full flex items-center px-5 py-3 rounded-xl transition-all duration-300 group relative overflow-hidden",
                                     activeTab === item.label
-                                        ? "bg-gray-900 text-white shadow-xl shadow-gray-200"
+                                        ? "bg-gray-900 text-white shadow-lg shadow-gray-200"
                                         : "text-gray-500 hover:bg-gray-50 hover:text-gray-900"
                                 )}
                             >
                                 <item.icon className={cn(
-                                    "h-4.4 w-4.4 mr-3 transition-colors",
+                                    "h-4 w-4 mr-3 transition-colors",
                                     activeTab === item.label ? "text-white" : item.color
                                 )} />
-                                <span className="text-[12px] font-black tracking-widest uppercase italic">
+                                <span className="text-[12px] font-bold tracking-wider uppercase">
                                     {item.label}
                                 </span>
-                                {activeTab === item.label && <Check className="ml-auto h-3.5 w-3.5 opacity-50" />}
+                                {activeTab === item.label && <Check className="ml-auto h-3 w-3 opacity-50" />}
                             </button>
                         ))}
                     </div>
 
-                    <div className="bg-gray-950 rounded-[2.5rem] p-8 space-y-6 shadow-2xl relative overflow-hidden group">
+                    <div className="bg-gray-950 rounded-[2rem] p-7 space-y-6 shadow-xl relative overflow-hidden group">
                         <div className="absolute top-0 right-0 p-6 opacity-10 group-hover:opacity-20 transition-opacity">
-                            <Zap className="h-20 w-20 text-indigo-400" />
+                            <Zap className="h-16 w-16 text-amber-400" />
                         </div>
                         <div className="flex items-center gap-2 relative z-10">
                             <div className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
-                            <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-gray-500">Node Status</h4>
+                            <h4 className="text-[10px] font-bold uppercase tracking-wider text-gray-500">Node Status</h4>
                         </div>
-                        <div className="space-y-1 relative z-10">
-                            <p className="text-lg font-black text-white italic tracking-tight">Full Operational</p>
-                            <p className="text-[11px] text-gray-500 font-medium">Gateway Latency: <span className="text-indigo-400 tabular-nums">24ms</span></p>
+                        <div className="space-y-0.5 relative z-10">
+                            <p className="text-lg font-bold text-white tracking-tight">Opérationnel</p>
+                            <p className="text-[11px] text-gray-500 font-medium">Latence Gateway: <span className="text-amber-400 tabular-nums">24ms</span></p>
                         </div>
                     </div>
                 </aside>
@@ -209,10 +209,10 @@ export default function AdminSettingsPage() {
                             {activeTab === "Général" && (
                                 <>
                                     {/* Visual Identity */}
-                                    <section className="bg-white border border-gray-50 rounded-[2.5rem] p-10 shadow-sm space-y-12">
+                                    <section className="bg-white border border-gray-50 rounded-[2rem] p-8 shadow-sm space-y-10">
                                         <div className="flex items-center gap-4">
-                                            <div className="h-10 w-1.5 bg-indigo-600 rounded-full" />
-                                            <h3 className="text-xl font-black text-gray-900 uppercase italic">Identité <span className="text-indigo-600">Visuelle.</span></h3>
+                                            <div className="h-10 w-1.5 bg-amber-600 rounded-full" />
+                                            <h3 className="text-xl font-bold text-gray-900 tracking-tight">Identité <span className="text-amber-600">Visuelle.</span></h3>
                                         </div>
 
                                         <div className="flex flex-col md:flex-row gap-12 items-start">
@@ -225,31 +225,31 @@ export default function AdminSettingsPage() {
                                                 />
                                             </div>
 
-                                            <div className="flex-1 w-full grid grid-cols-1 md:grid-cols-2 gap-8">
+                                            <div className="flex-1 w-full grid grid-cols-1 md:grid-cols-2 gap-6">
                                                 <div className="space-y-2">
-                                                    <Label htmlFor="store-name" className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">Identifiant Public</Label>
+                                                    <Label htmlFor="store-name" className="text-[11px] font-bold text-gray-400 uppercase tracking-wider ml-1">Nom de la Boutique</Label>
                                                     <Input
                                                         id="store-name"
                                                         value={formData.name}
                                                         onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                                                        className="h-12 border-gray-100 focus:ring-indigo-100 focus:border-indigo-200 rounded-2xl text-[14px] font-black uppercase italic"
+                                                        className="h-11 border-gray-100 focus:ring-amber-50 focus:border-amber-200 rounded-xl text-[14px] font-bold"
                                                     />
                                                 </div>
                                                 <div className="space-y-2">
-                                                    <Label htmlFor="slogan" className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">Manifesto (Slogan)</Label>
+                                                    <Label htmlFor="slogan" className="text-[11px] font-bold text-gray-400 uppercase tracking-wider ml-1">Slogan</Label>
                                                     <Input
                                                         id="slogan"
                                                         value={formData.slogan}
                                                         onChange={(e) => setFormData({ ...formData, slogan: e.target.value })}
-                                                        className="h-12 border-gray-100 focus:ring-indigo-100 focus:border-indigo-200 rounded-2xl text-[14px] font-medium italic"
+                                                        className="h-11 border-gray-100 focus:ring-amber-50 focus:border-amber-200 rounded-xl text-[14px] font-medium"
                                                     />
                                                 </div>
                                                 <div className="md:col-span-2 space-y-2">
-                                                    <Label htmlFor="manifesto-seo" className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">Description Narrative (SEO)</Label>
+                                                    <Label htmlFor="manifesto-seo" className="text-[11px] font-bold text-gray-400 uppercase tracking-wider ml-1">Description (SEO)</Label>
                                                     <Textarea
                                                         id="manifesto-seo"
-                                                        rows={5}
-                                                        className="border-gray-100 focus:ring-indigo-100 focus:border-indigo-200 rounded-[2rem] p-6 text-[14px] leading-relaxed resize-none bg-gray-50/30"
+                                                        rows={4}
+                                                        className="border-gray-100 focus:ring-amber-50 focus:border-amber-200 rounded-xl p-5 text-[14px] leading-relaxed resize-none bg-gray-50/20"
                                                         value={formData.description}
                                                         onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                                                     />
@@ -259,10 +259,10 @@ export default function AdminSettingsPage() {
                                     </section>
 
                                     {/* Channels */}
-                                    <section className="bg-white border border-gray-50 rounded-[2.5rem] p-10 shadow-sm space-y-10">
+                                    <section className="bg-white border border-gray-50 rounded-[2rem] p-8 shadow-sm space-y-10">
                                         <div className="flex items-center gap-4">
                                             <div className="h-10 w-1.5 bg-gray-900 rounded-full" />
-                                            <h3 className="text-xl font-black text-gray-900 uppercase italic">Canaux de <span className="text-indigo-600">Flux.</span></h3>
+                                            <h3 className="text-xl font-bold text-gray-900 tracking-tight">Canaux de <span className="text-amber-600">Contact.</span></h3>
                                         </div>
 
                                         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -279,24 +279,24 @@ export default function AdminSettingsPage() {
                                             </div>
                                             <div className="space-y-3 group">
                                                 <div className="flex items-center justify-between px-2">
-                                                    <Label className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Instagram Handler</Label>
+                                                    <Label className="text-[11px] font-bold text-gray-400 uppercase tracking-wider">Instagram</Label>
                                                     <Instagram className="h-4 w-4 text-gray-200 group-focus-within:text-rose-500 transition-colors" />
                                                 </div>
                                                 <Input
                                                     value={formData.instagramUrl}
                                                     onChange={(e) => setFormData({ ...formData, instagramUrl: e.target.value })}
-                                                    className="h-12 border-gray-100 focus:ring-rose-100 focus:border-rose-200 rounded-2xl text-[14px] font-black bg-gray-50/30 shadow-inner"
+                                                    className="h-11 border-gray-100 focus:ring-rose-50 focus:border-rose-200 rounded-xl text-[14px] font-semibold bg-gray-50/20"
                                                 />
                                             </div>
                                             <div className="space-y-3 group">
                                                 <div className="flex items-center justify-between px-2">
                                                     <Label className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Audit Email</Label>
-                                                    <Mail className="h-4 w-4 text-gray-200 group-focus-within:text-indigo-500 transition-colors" />
+                                                    <Mail className="h-4 w-4 text-gray-200 group-focus-within:text-amber-500 transition-colors" />
                                                 </div>
                                                 <Input
                                                     value={formData.contactEmail}
                                                     onChange={(e) => setFormData({ ...formData, contactEmail: e.target.value })}
-                                                    className="h-12 border-gray-100 focus:ring-indigo-100 focus:border-indigo-200 rounded-2xl text-[14px] font-black bg-gray-50/30 shadow-inner"
+                                                    className="h-12 border-gray-100 focus:ring-amber-100 focus:border-amber-200 rounded-2xl text-[14px] font-black bg-gray-50/30 shadow-inner"
                                                 />
                                             </div>
                                             <div className="space-y-3 group">
@@ -316,10 +316,10 @@ export default function AdminSettingsPage() {
                             )}
 
                             {activeTab === "Paiements" && (
-                                <section className="bg-white border border-gray-50 rounded-[2.5rem] p-10 shadow-sm space-y-12">
+                                <section className="bg-white border border-gray-50 rounded-[2rem] p-8 shadow-sm space-y-10">
                                     <div className="flex items-center gap-4">
                                         <div className="h-10 w-1.5 bg-emerald-600 rounded-full" />
-                                        <h3 className="text-xl font-black text-gray-900 uppercase italic">Canaux de <span className="text-emerald-600">Paiement.</span></h3>
+                                        <h3 className="text-xl font-bold text-gray-900 tracking-tight">Canaux de <span className="text-emerald-600">Paiement.</span></h3>
                                     </div>
 
                                     <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -364,10 +364,10 @@ export default function AdminSettingsPage() {
                             )}
 
                             {activeTab === "Livraison" && (
-                                <section className="bg-white border border-gray-50 rounded-[2.5rem] p-10 shadow-sm space-y-12">
+                                <section className="bg-white border border-gray-50 rounded-[2rem] p-8 shadow-sm space-y-10">
                                     <div className="flex items-center gap-4">
-                                        <div className="h-10 w-1.5 bg-blue-600 rounded-full" />
-                                        <h3 className="text-xl font-black text-gray-900 uppercase italic">Paramètres <span className="text-blue-600">Logistiques.</span></h3>
+                                        <div className="h-10 w-1.5 bg-amber-600 rounded-full" />
+                                        <h3 className="text-xl font-bold text-gray-900 tracking-tight">Paramètres <span className="text-amber-600">Logistiques.</span></h3>
                                     </div>
 
                                     <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -406,8 +406,8 @@ export default function AdminSettingsPage() {
                                 <section className="space-y-10">
                                     <div className="bg-white border border-gray-50 rounded-[2.5rem] p-10 shadow-sm space-y-10">
                                         <div className="flex items-center gap-4">
-                                            <div className="h-10 w-1.5 bg-indigo-600 rounded-full" />
-                                            <h3 className="text-xl font-black text-gray-900 uppercase italic">Thème <span className="text-indigo-600">Personnalisé.</span></h3>
+                                            <div className="h-10 w-1.5 bg-amber-600 rounded-full" />
+                                            <h3 className="text-xl font-black text-gray-900 uppercase italic">Thème <span className="text-amber-600">Personnalisé.</span></h3>
                                         </div>
 
                                         <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
@@ -488,7 +488,7 @@ export default function AdminSettingsPage() {
                                                                     "p-4 rounded-2xl border transition-all text-sm font-medium",
                                                                     formData.fontFamily === font
                                                                         ? "bg-gray-900 text-white border-gray-900 shadow-xl"
-                                                                        : "bg-white text-gray-600 border-gray-100 hover:border-indigo-200"
+                                                                        : "bg-white text-gray-600 border-gray-100 hover:border-amber-200"
                                                                 )}
                                                             >
                                                                 {font}
@@ -525,18 +525,16 @@ export default function AdminSettingsPage() {
                                 </section>
                             )}
 
-                            {["Profil Admin", "Sécurité", "Notifications"].includes(activeTab) && (
-                                <div className="bg-white border border-gray-50 rounded-[2.5rem] p-20 flex flex-col items-center justify-center text-center space-y-6">
-                                    <div className="h-20 w-20 rounded-full bg-gray-50 flex items-center justify-center text-gray-300">
-                                        <Database className="h-10 w-10" />
-                                    </div>
-                                    <div className="space-y-2">
-                                        <h3 className="text-xl font-black text-gray-900 uppercase italic">Module Système {activeTab}</h3>
-                                        <p className="text-[13px] text-gray-400 font-medium max-w-sm">Les réglages de "{activeTab}" sont gérés automatiquement par le noyau d'authentification.</p>
-                                    </div>
-                                    <Button onClick={() => setActiveTab("Général")} className="rounded-2xl bg-gray-900 px-8 font-black uppercase text-[11px] tracking-widest">Retour au Panneau Général</Button>
+                            <div className="bg-white border border-gray-50 rounded-[2rem] p-16 flex flex-col items-center justify-center text-center space-y-6">
+                                <div className="h-16 w-16 rounded-full bg-gray-50 flex items-center justify-center text-gray-300">
+                                    <Database className="h-8 w-8" />
                                 </div>
-                            )}
+                                <div className="space-y-1.5">
+                                    <h3 className="text-lg font-bold text-gray-900">Module {activeTab}</h3>
+                                    <p className="text-[13px] text-gray-400 font-medium max-w-sm">Ces réglages sont gérés automatiquement par le système d'authentification.</p>
+                                </div>
+                                <Button onClick={() => setActiveTab("Général")} className="h-10 px-6 rounded-xl bg-gray-900 font-bold uppercase text-[11px] tracking-widest">Retour au Panneau Général</Button>
+                            </div>
                         </motion.div>
                     </AnimatePresence>
                 </div>
@@ -547,7 +545,7 @@ export default function AdminSettingsPage() {
 
 function Label({ children, className, ...props }: any) {
     return (
-        <label className={cn("text-[10px] font-black text-gray-400 uppercase tracking-widest", className)} {...props}>
+        <label className={cn("text-[11px] font-bold text-gray-400 uppercase tracking-wider", className)} {...props}>
             {children}
         </label>
     )

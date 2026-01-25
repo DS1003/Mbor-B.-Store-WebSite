@@ -4,7 +4,6 @@ const nextConfig = {
     ignoreBuildErrors: true,
   },
   images: {
-    unoptimized: true,
     remotePatterns: [
       { protocol: "https", hostname: "cdn.blazimg.com" },
       { protocol: "https", hostname: "www.foot.fr" },

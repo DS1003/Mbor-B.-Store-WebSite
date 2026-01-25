@@ -209,10 +209,10 @@ export default function POSPage() {
             {/* Header Area */}
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6 bg-white p-6 rounded-[2rem] border border-gray-100 shadow-sm">
                 <div className="space-y-1">
-                    <h1 className="text-2xl font-black uppercase italic tracking-tighter text-gray-900">
-                        Terminal <span className="text-indigo-600">Vente Boutique.</span>
+                    <h1 className="text-2xl font-bold tracking-tight text-gray-900">
+                        Terminal <span className="text-amber-600">Vente Boutique.</span>
                     </h1>
-                    <p className="text-sm font-bold text-gray-400">Génération immédiate de facture et encaissement en point de vente.</p>
+                    <p className="text-sm font-medium text-gray-500">Génération immédiate de facture et encaissement en point de vente.</p>
                 </div>
                 <div className="flex items-center gap-3">
                     <Link href="/admin/orders">
@@ -227,10 +227,10 @@ export default function POSPage() {
                 {/* Product Selection (8 columns) */}
                 <div className="lg:col-span-7 flex flex-col gap-6 bg-white p-6 rounded-[2rem] border border-gray-100 shadow-sm relative">
                     <div className="relative group shrink-0">
-                        <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400 group-focus-within:text-indigo-600 transition-colors" />
+                        <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400 group-focus-within:text-amber-500 transition-colors" />
                         <Input
                             placeholder="Scanner ou rechercher un produit..."
-                            className="h-12 pl-12 rounded-2xl bg-gray-50/50 border-gray-100 focus:bg-white transition-all font-medium"
+                            className="h-11 pl-11 rounded-xl bg-gray-50/50 border-gray-100 focus:bg-white transition-all font-medium"
                             value={posSearchSearch}
                             onChange={(e) => setPosSearch(e.target.value)}
                         />
@@ -241,20 +241,20 @@ export default function POSPage() {
                             {filteredProductsPos.map((p) => (
                                 <div
                                     key={p.id}
-                                    className="flex flex-col p-4 bg-white border border-gray-50 rounded-2xl hover:border-indigo-100 hover:shadow-xl transition-all cursor-pointer group relative overflow-hidden"
+                                    className="flex flex-col p-4 bg-white border border-gray-50 rounded-2xl hover:border-amber-100 hover:shadow-xl transition-all cursor-pointer group relative overflow-hidden"
                                     onClick={() => addToPos(p)}
                                 >
                                     <div className="flex items-center gap-4">
-                                        <div className="h-16 w-16 rounded-xl bg-gray-50 overflow-hidden relative shrink-0">
+                                        <div className="h-14 w-14 rounded-xl bg-gray-50 overflow-hidden relative shrink-0 border border-gray-100">
                                             {p.images?.[0] && <img src={p.images[0]} className="object-cover h-full w-full group-hover:scale-110 transition-transform duration-500" />}
                                         </div>
                                         <div className="flex-1 min-w-0">
                                             <p className="text-[13px] font-bold text-gray-900 leading-tight truncate">{p.name}</p>
-                                            <p className="text-[11px] text-gray-400 font-bold mt-1">STOCK: {p.stock}</p>
-                                            <p className="text-[14px] font-black text-indigo-600 mt-0.5">{Number(p.price).toLocaleString()} F</p>
+                                            <p className="text-[11px] text-gray-400 font-bold mt-0.5">Stock: {p.stock}</p>
+                                            <p className="text-[14px] font-bold text-amber-600 mt-0.5">{Number(p.price).toLocaleString()} F</p>
                                         </div>
                                     </div>
-                                    <div className="absolute top-2 right-2 h-7 w-7 rounded-full bg-indigo-600 text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all scale-75 group-hover:scale-100 shadow-lg">
+                                    <div className="absolute top-2 right-2 h-7 w-7 rounded-full bg-amber-600 text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all scale-75 group-hover:scale-100 shadow-lg">
                                         <Plus className="h-4 w-4" />
                                     </div>
                                 </div>
@@ -267,8 +267,8 @@ export default function POSPage() {
                 <div className="lg:col-span-5 flex flex-col bg-white rounded-[2rem] border border-indigo-50 shadow-sm overflow-hidden sticky top-6">
                     {/* Customer Info Section */}
                     <div className="p-6 space-y-4 bg-gray-50/30 shrink-0 border-b border-gray-50">
-                        <h4 className="text-[11px] font-black text-indigo-600 uppercase tracking-widest flex items-center gap-2">
-                            <User className="h-3 w-3" /> Informations Client
+                        <h4 className="text-[11px] font-bold text-amber-600 uppercase tracking-widest flex items-center gap-2">
+                            <User className="h-3.5 w-3.5" /> Informations Client
                         </h4>
                         <div className="grid grid-cols-2 gap-4">
                             <div className="space-y-1.5 col-span-2 sm:col-span-1">
@@ -302,8 +302,8 @@ export default function POSPage() {
                     </div>
 
                     <div className="max-h-[500px] overflow-y-auto p-6 space-y-4 custom-scrollbar">
-                        <h4 className="text-[11px] font-black text-indigo-600 uppercase tracking-widest flex items-center gap-2 sticky top-0 bg-white pb-2 z-10 w-full">
-                            <ShoppingBag className="h-3 w-3" /> Articles Sélectionnés ({posItems.length})
+                        <h4 className="text-[11px] font-bold text-amber-600 uppercase tracking-widest flex items-center gap-2 sticky top-0 bg-white pb-2 z-10 w-full">
+                            <ShoppingBag className="h-3.5 w-3.5" /> Articles Sélectionnés ({posItems.length})
                         </h4>
 
                         {posItems.length === 0 ? (
@@ -317,13 +317,13 @@ export default function POSPage() {
                                     <div key={item.productId} className="space-y-3 p-4 bg-gray-50/50 rounded-2xl border border-gray-100">
                                         <div className="flex items-center justify-between gap-4">
                                             <div className="space-y-0.5 min-w-0">
-                                                <p className="text-[12px] font-black text-gray-900 truncate uppercase">{item.name}</p>
-                                                <p className="text-[11px] text-indigo-600 font-black tabular-nums">{Number(item.price).toLocaleString()} F</p>
+                                                <p className="text-[13px] font-bold text-gray-900 truncate">{item.name}</p>
+                                                <p className="text-[11px] text-amber-600 font-bold tabular-nums">{Number(item.price).toLocaleString()} F</p>
                                             </div>
                                             <div className="flex items-center gap-2 shrink-0">
-                                                <div className="flex items-center gap-2 bg-white rounded-xl p-1 shadow-sm border border-gray-100">
+                                                <div className="flex items-center gap-2 bg-white rounded-lg p-1 shadow-sm border border-gray-100">
                                                     <Button variant="ghost" size="icon" className="h-7 w-7 rounded-lg" onClick={() => updatePosQty(item.productId, -1)}><Minus className="h-3 w-3" /></Button>
-                                                    <span className="text-[12px] font-black tabular-nums min-w-[1.5rem] text-center">{item.quantity}</span>
+                                                    <span className="text-[12px] font-bold tabular-nums min-w-[1.2rem] text-center">{item.quantity}</span>
                                                     <Button variant="ghost" size="icon" className="h-7 w-7 rounded-lg" onClick={() => updatePosQty(item.productId, 1)}><Plus className="h-3 w-3" /></Button>
                                                 </div>
                                                 <Button variant="ghost" size="icon" className="h-8 w-8 text-rose-500 hover:bg-rose-50 rounded-xl" onClick={() => removeFromPos(item.productId)}><Trash className="h-4 w-4" /></Button>
@@ -349,8 +349,8 @@ export default function POSPage() {
                                             <div className="pt-3 border-t border-gray-100">
                                                 <div className="flex items-center justify-between">
                                                     <div className="flex items-center gap-2">
-                                                        <Shirt className="h-3.5 w-3.5 text-indigo-400" />
-                                                        <span className="text-[10px] font-black uppercase text-gray-500 tracking-tight">
+                                                        <Shirt className="h-3.5 w-3.5 text-amber-500" />
+                                                        <span className="text-[11px] font-bold uppercase text-gray-500 tracking-tight">
                                                             {item.allowFlocage ? "Flocage" : "Gravure"}
                                                         </span>
                                                     </div>
@@ -411,7 +411,7 @@ export default function POSPage() {
                                 )}
                             >
                                 <img src="https://res.cloudinary.com/da1dmwqhb/image/upload/v1769271855/mbor_store/payment-cash.png" alt="Espèces" className="h-8 w-8 object-contain" />
-                                <span className={cn("text-[10px] font-black uppercase", paymentMethod === "CASH" ? "text-emerald-700" : "text-gray-400")}>Espèces</span>
+                                <span className={cn("text-[11px] font-bold uppercase", paymentMethod === "CASH" ? "text-emerald-700" : "text-gray-400")}>Espèces</span>
                             </button>
                             <button
                                 onClick={() => setPaymentMethod("WAVE")}
@@ -460,10 +460,10 @@ export default function POSPage() {
 
                             <div className="flex justify-between items-center pt-2">
                                 <div className="space-y-0.5">
-                                    <p className="text-[11px] font-black text-gray-400 uppercase tracking-widest">Net à payer</p>
-                                    <p className="text-[10px] font-bold text-indigo-400 italic">Tout inclus</p>
+                                    <p className="text-[11px] font-bold text-gray-400 uppercase tracking-wider">Net à payer</p>
+                                    <p className="text-[10px] font-semibold text-amber-500">Taxes & frais inclus</p>
                                 </div>
-                                <span className="text-4xl font-black text-gray-900 tabular-nums italic tracking-tighter shrink-0">{Math.round(posTotal).toLocaleString()} F</span>
+                                <span className="text-3xl font-bold text-gray-900 tabular-nums tracking-tight shrink-0">{Math.round(posTotal).toLocaleString()} F</span>
                             </div>
                         </div>
 
@@ -476,9 +476,9 @@ export default function POSPage() {
                                         key={disc}
                                         onClick={() => setGlobalDiscount(disc)}
                                         className={cn(
-                                            "flex-1 py-2 rounded-lg text-[10px] font-black transition-all",
+                                            "flex-1 py-1.5 rounded-lg text-[10px] font-bold transition-all",
                                             globalDiscount === disc
-                                                ? "bg-indigo-600 text-white shadow-md"
+                                                ? "bg-amber-600 text-white shadow-sm"
                                                 : "text-gray-500 hover:bg-gray-200"
                                         )}
                                     >
@@ -489,13 +489,13 @@ export default function POSPage() {
                         </div>
 
                         <Button
-                            className="w-full h-16 bg-gray-900 text-white rounded-[1.5rem] font-black uppercase tracking-widest shadow-2xl hover:scale-[1.02] active:scale-95 transition-all flex items-center justify-center gap-4 text-sm"
+                            className="w-full h-14 bg-gray-900 text-white rounded-xl font-bold uppercase tracking-widest shadow-xl hover:scale-[1.01] active:scale-95 transition-all flex items-center justify-center gap-3 text-[13px]"
                             disabled={isSavingPos || posItems.length === 0}
                             onClick={handleCreatePosOrder}
                         >
                             {isSavingPos ? (
                                 <>
-                                    <Zap className="h-5 w-5 animate-pulse text-yellow-400" />
+                                    <Zap className="h-5 w-5 animate-pulse text-amber-400" />
                                     Traitement...
                                 </>
                             ) : (

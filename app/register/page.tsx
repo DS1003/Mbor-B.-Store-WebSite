@@ -87,9 +87,9 @@ function RegisterContent() {
                         animate={{ opacity: 1, y: 0 }}
                         className="space-y-4"
                     >
-                        <span className="text-primary font-bold uppercase tracking-[0.3em] text-xs">Innovation & Style</span>
-                        <h2 className="text-6xl font-heading font-bold text-white leading-tight">
-                            Entrez dans <br /> la <span className="text-primary italic">Légende.</span>
+                        <span className="text-amber-500 font-bold uppercase tracking-[0.3em] text-xs">Innovation & Style</span>
+                        <h2 className="text-5xl font-bold text-white leading-tight tracking-tight">
+                            Entrez dans <br /> la <span className="text-amber-500">Légende.</span>
                         </h2>
                     </motion.div>
 
@@ -119,78 +119,78 @@ function RegisterContent() {
                 <div className="absolute top-0 right-0 w-64 h-64 bg-primary/5 rounded-full blur-[100px] -translate-y-1/2 translate-x-1/2" />
 
                 <div className="w-full max-w-md space-y-10 relative z-10">
-                    <ScrollReveal direction="up" className="space-y-2">
-                        <Link href="/" className="inline-block mb-8 lg:hidden">
-                            <span className="font-heading text-3xl font-bold tracking-tight">
-                                Mbor<span className="text-primary italic">.Store</span>
+                    <ScrollReveal direction="up" className="space-y-1">
+                        <Link href="/" className="inline-block mb-10 lg:hidden">
+                            <span className="text-2xl font-bold tracking-tight">
+                                Mbor<span className="text-amber-600">.Store</span>
                             </span>
                         </Link>
-                        <h1 className="text-4xl font-heading font-bold tracking-tight">Créer un compte</h1>
-                        <p className="text-muted-foreground font-medium">Rejoignez l'élite du sportswear au Sénégal.</p>
+                        <h1 className="text-3xl font-bold tracking-tight text-gray-900">Créer un compte</h1>
+                        <p className="text-[15px] text-gray-500 font-medium">Rejoignez l'élite du sportswear au Sénégal.</p>
                     </ScrollReveal>
 
                     <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
                         <div className="space-y-5">
                             <div className="space-y-2">
-                                <Label className="text-[11px] font-bold uppercase tracking-widest text-muted-foreground/60 ml-1">Nom complet</Label>
+                                <Label className="text-[11px] font-bold uppercase tracking-wider text-gray-400 ml-1">Nom complet</Label>
                                 <div className="relative group">
-                                    <User className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground/40 group-focus-within:text-primary transition-colors" />
+                                    <User className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-300 group-focus-within:text-amber-600 transition-colors" />
                                     <Input
                                         {...form.register("name")}
                                         placeholder="Prénom Nom"
                                         disabled={isLoading}
-                                        className="h-14 pl-12 rounded-xl border-muted bg-muted/5 focus:border-primary/50 focus:ring-primary/10 transition-all font-medium"
+                                        className="h-12 pl-12 rounded-xl border-gray-100 bg-gray-50/30 focus:border-amber-500/50 focus:ring-amber-500/10 transition-all font-medium"
                                     />
                                     {form.formState.errors.name && (
-                                        <p className="text-[10px] text-destructive font-bold mt-1.5 ml-1 uppercase">{form.formState.errors.name.message}</p>
+                                        <p className="text-[10px] text-rose-500 font-bold mt-1.5 ml-1 uppercase">{form.formState.errors.name.message}</p>
                                     )}
                                 </div>
                             </div>
 
                             <div className="space-y-2">
-                                <Label className="text-[11px] font-bold uppercase tracking-widest text-muted-foreground/60 ml-1">Email</Label>
+                                <Label className="text-[11px] font-bold uppercase tracking-wider text-gray-400 ml-1">Email</Label>
                                 <div className="relative group">
-                                    <Mail className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground/40 group-focus-within:text-primary transition-colors" />
+                                    <Mail className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-300 group-focus-within:text-amber-600 transition-colors" />
                                     <Input
                                         {...form.register("email")}
                                         placeholder="votre@email.com"
                                         type="email"
                                         disabled={isLoading}
-                                        className="h-14 pl-12 rounded-xl border-muted bg-muted/5 focus:border-primary/50 focus:ring-primary/10 transition-all font-medium"
+                                        className="h-12 pl-12 rounded-xl border-gray-100 bg-gray-50/30 focus:border-amber-500/50 focus:ring-amber-500/10 transition-all font-medium"
                                     />
                                     {form.formState.errors.email && (
-                                        <p className="text-[10px] text-destructive font-bold mt-1.5 ml-1 uppercase">{form.formState.errors.email.message}</p>
+                                        <p className="text-[10px] text-rose-500 font-bold mt-1.5 ml-1 uppercase">{form.formState.errors.email.message}</p>
                                     )}
                                 </div>
                             </div>
 
                             <div className="space-y-2">
-                                <Label className="text-[11px] font-bold uppercase tracking-widest text-muted-foreground/60 ml-1">Mot de passe</Label>
+                                <Label className="text-[11px] font-bold uppercase tracking-wider text-gray-400 ml-1">Mot de passe</Label>
                                 <div className="relative group">
-                                    <Lock className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground/40 group-focus-within:text-primary transition-colors" />
+                                    <Lock className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-300 group-focus-within:text-amber-600 transition-colors" />
                                     <Input
                                         {...form.register("password")}
                                         type={showPassword ? "text" : "password"}
                                         placeholder="Min. 8 caractères"
                                         disabled={isLoading}
-                                        className="h-14 pl-12 pr-12 rounded-xl border-muted bg-muted/5 focus:border-primary/50 focus:ring-primary/10 transition-all font-medium"
+                                        className="h-12 pl-12 pr-12 rounded-xl border-gray-100 bg-gray-50/30 focus:border-amber-500/50 focus:ring-amber-500/10 transition-all font-medium"
                                     />
                                     <button
                                         type="button"
                                         onClick={() => setShowPassword(!showPassword)}
-                                        className="absolute right-4 top-1/2 -translate-y-1/2 text-muted-foreground/40 hover:text-foreground transition-colors"
+                                        className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-300 hover:text-gray-600 transition-colors"
                                     >
                                         {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                                     </button>
                                     {form.formState.errors.password && (
-                                        <p className="text-[10px] text-destructive font-bold mt-1.5 ml-1 uppercase">{form.formState.errors.password.message}</p>
+                                        <p className="text-[10px] text-rose-500 font-bold mt-1.5 ml-1 uppercase">{form.formState.errors.password.message}</p>
                                     )}
                                 </div>
                             </div>
                         </div>
 
                         <Button
-                            className="w-full h-14 rounded-xl bg-black text-white hover:bg-primary hover:text-black transition-all font-bold tracking-tight shadow-lg shadow-black/5 group"
+                            className="w-full h-12 rounded-xl bg-gray-900 text-white hover:bg-black transition-all font-bold tracking-tight shadow-lg shadow-gray-200 group"
                             disabled={isLoading}
                         >
                             {isLoading ? (
@@ -209,10 +209,10 @@ function RegisterContent() {
                     <div className="space-y-6">
                         <div className="relative">
                             <div className="absolute inset-0 flex items-center">
-                                <span className="w-full border-t border-muted/60" />
+                                <span className="w-full border-t border-gray-100" />
                             </div>
-                            <div className="relative flex justify-center text-[10px] uppercase font-bold tracking-widest">
-                                <span className="bg-background px-4 text-muted-foreground/60 italic">Elite Connection</span>
+                            <div className="relative flex justify-center text-[10px] uppercase font-bold tracking-wider">
+                                <span className="bg-white px-4 text-gray-400">Authentification Sécurisée</span>
                             </div>
                         </div>
 
@@ -224,7 +224,7 @@ function RegisterContent() {
                                 setIsLoading(true)
                                 await signIn("google", { callbackUrl: "/" })
                             }}
-                            className="w-full h-14 rounded-xl border-muted/80 hover:bg-muted/30 font-bold tracking-tight transition-all active:scale-95 flex items-center justify-center gap-3"
+                            className="w-full h-12 rounded-xl border-gray-100 hover:bg-gray-50 font-bold tracking-tight transition-all active:scale-95 flex items-center justify-center gap-3"
                         >
                             {isLoading ? (
                                 <div className="h-5 w-5 border-2 border-primary/30 border-t-primary rounded-full animate-spin" />

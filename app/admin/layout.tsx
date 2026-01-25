@@ -55,70 +55,147 @@ import { useSession, signOut } from "next-auth/react"
 import { getNotifications } from "./actions"
 import { toast } from "sonner"
 
-const menuItems = [
-    { icon: LayoutDashboard, label: "Dashboard", href: "/admin" },
-    { icon: Package, label: "Produits", href: "/admin/products" },
-    { icon: Layers, label: "Catégories", href: "/admin/categories" },
-    { icon: Database, label: "Stock", href: "/admin/stock" },
-    { icon: ImageIcon, label: "Médiathèque", href: "/admin/media" },
-    { icon: ShoppingBag, label: "Vente (POS)", href: "/admin/pos" },
-    { icon: ShoppingCart, label: "Commandes", href: "/admin/orders" },
-    { icon: Users, label: "Clients", href: "/admin/customers" },
-    { icon: BarChart3, label: "Analytiques", href: "/admin/analytics" },
-    { icon: Settings, label: "Paramètres", href: "/admin/settings" },
+const menuGroups = [
+    {
+        label: "Vue d'ensemble",
+        items: [
+            { icon: LayoutDashboard, label: "Tableau de Bord", href: "/admin" },
+            { icon: BarChart3, label: "Analytiques", href: "/admin/analytics" },
+        ]
+    },
+    {
+        label: "Catalogue",
+        items: [
+            { icon: Package, label: "Produits", href: "/admin/products" },
+            { icon: Layers, label: "Catégories", href: "/admin/categories" },
+            { icon: ImageIcon, label: "Médiathèque", href: "/admin/media" },
+        ]
+    },
+    {
+        label: "Opérations",
+        items: [
+            { icon: ShoppingBag, label: "Vente Boutique", href: "/admin/pos" },
+            { icon: ShoppingCart, label: "Commandes", href: "/admin/orders" },
+            { icon: Database, label: "Stock & Inventaire", href: "/admin/stock" },
+            { icon: Users, label: "Gestion Clients", href: "/admin/customers" },
+        ]
+    },
+    {
+        label: "Support & Système",
+        items: [
+            { icon: Settings, label: "Configuration", href: "/admin/settings" },
+        ]
+    }
 ]
 
 function SidebarContent({ isSidebarOpen, isMobile, pathname, setIsMobileMenuOpen }: any) {
     return (
-        <div className="flex flex-col h-full bg-white border-r border-gray-100">
-            {/* Branding */}
-            <div className={cn("px-6 py-8 flex items-center justify-between", !isSidebarOpen && !isMobile && "px-4")}>
-                <Link href="/admin" className={cn("transition-all duration-300", (isSidebarOpen || isMobile) ? "opacity-100" : "opacity-0 invisible w-0")}>
-                    <div className="flex items-center gap-2.5">
-                        <div className="h-8 w-8 bg-gray-900 rounded-lg flex items-center justify-center text-white shadow-sm">
-                            <Command className="h-4 w-4" />
+        <div className="flex flex-col h-full bg-white border-r border-gray-100/60">
+            {/* Branding - More refined & compact */}
+            <div className={cn(
+                "py-8 transition-all duration-500",
+                !isSidebarOpen && !isMobile ? "px-2 flex justify-center" : "px-7"
+            )}>
+                <Link href="/admin" className="block group">
+                    <div className="flex items-center gap-3">
+                        <div className={cn(
+                            "relative shrink-0 transition-all duration-500 rounded-xl overflow-hidden",
+                            isSidebarOpen || isMobile ? "h-10 w-10 shadow-lg shadow-amber-50" : "h-8 w-8"
+                        )}>
+                            <img
+                                src="https://res.cloudinary.com/da1dmwqhb/image/upload/v1769277829/Instagram_post_-_128_oy1rbm.png"
+                                alt="Mbor B. Logo"
+                                className="h-full w-full object-cover group-hover:scale-105 transition-transform duration-700"
+                            />
                         </div>
-                        <span className="font-semibold text-sm tracking-tight text-gray-900 whitespace-nowrap">
-                            Mbor <span className="text-gray-400 font-normal">Admin</span>
-                        </span>
+                        {(isSidebarOpen || isMobile) && (
+                            <motion.div
+                                initial={{ opacity: 0, x: -5 }}
+                                animate={{ opacity: 1, x: 0 }}
+                                className="flex flex-col"
+                            >
+                                <span className="font-bold text-[14px] leading-tight tracking-tight text-gray-900 group-hover:text-amber-600 transition-colors">
+                                    Mbor <span className="text-gray-400 font-medium">B. Store</span>
+                                </span>
+                                <span className="text-[10px] font-bold uppercase tracking-wider text-gray-400 mt-0.5">
+                                    Console d'administration
+                                </span>
+                            </motion.div>
+                        )}
                     </div>
                 </Link>
             </div>
 
-            {/* Navigation */}
-            <nav className="flex-1 px-4 space-y-2 mt-4">
-                {menuItems.map((item) => {
-                    const isActive = pathname === item.href
-                    return (
-                        <Link
-                            key={item.href}
-                            href={item.href}
-                            onClick={() => isMobile && setIsMobileMenuOpen(false)}
-                            className={cn(
-                                "flex items-center px-4 py-3 rounded-2xl transition-all group relative overflow-hidden",
-                                isActive
-                                    ? "bg-gray-900 text-white shadow-xl shadow-gray-200"
-                                    : "text-gray-500 hover:bg-gray-50 hover:text-gray-900"
+            {/* Navigation - Condensed for no-scroll */}
+            <div className="flex-1 px-3">
+                <nav className="space-y-4">
+                    {menuGroups.map((group, idx) => (
+                        <div key={idx} className="space-y-1">
+                            {(isSidebarOpen || isMobile) && (
+                                <p className="px-4 text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2 pointer-events-none">
+                                    {group.label}
+                                </p>
                             )}
-                        >
-                            <div className={cn(
-                                "flex items-center justify-center transition-all duration-300",
-                                isActive ? "text-white scale-110" : "text-gray-400 group-hover:text-gray-900",
-                                (isSidebarOpen || isMobile) ? "mr-3" : "mx-auto"
-                            )}>
-                                <item.icon className="h-4.5 w-4.5 stroke-[1.5px]" />
+                            <div className="space-y-0.5">
+                                {group.items.map((item) => {
+                                    const isActive = pathname === item.href
+                                    return (
+                                        <Link
+                                            key={item.href}
+                                            href={item.href}
+                                            onClick={() => isMobile && setIsMobileMenuOpen(false)}
+                                            className={cn(
+                                                "flex items-center px-4 h-9 rounded-xl transition-all group relative",
+                                                isActive
+                                                    ? "bg-amber-50 text-amber-900"
+                                                    : "text-gray-500 hover:bg-gray-50 hover:text-gray-900"
+                                            )}
+                                        >
+                                            <div className={cn(
+                                                "flex items-center justify-center transition-all duration-300",
+                                                isActive ? "text-amber-600 scale-105" : "group-hover:text-amber-500",
+                                                (isSidebarOpen || isMobile) ? "mr-3" : "mx-auto"
+                                            )}>
+                                                <item.icon className={cn(
+                                                    "h-4 w-4",
+                                                    isActive ? "stroke-[2.2px]" : "stroke-[1.6px]"
+                                                )} />
+                                            </div>
+
+                                            {(isSidebarOpen || isMobile) && (
+                                                <span className={cn(
+                                                    "text-[14px] font-semibold tracking-tight transition-all",
+                                                    isActive ? "" : "group-hover:translate-x-0.5"
+                                                )}>
+                                                    {item.label}
+                                                </span>
+                                            )}
+
+                                            {isActive && (
+                                                <motion.div
+                                                    layoutId="active-pill"
+                                                    transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
+                                                    className="absolute left-0 w-1 h-1/3 bg-amber-500 rounded-full"
+                                                />
+                                            )}
+                                        </Link>
+                                    )
+                                })}
                             </div>
-                            {(isSidebarOpen || isMobile) && <span className="text-[13px] font-bold tracking-tight">{item.label}</span>}
-                            {isActive && (
-                                <motion.div
-                                    layoutId="active-pill"
-                                    className="absolute left-0 w-1 h-1/2 bg-indigo-500 rounded-full"
-                                />
-                            )}
-                        </Link>
-                    )
-                })}
-            </nav>
+                        </div>
+                    ))}
+                </nav>
+            </div>
+
+            {/* Support Trigger - Subtle */}
+            {(isSidebarOpen || isMobile) && (
+                <div className="p-5">
+                    <button className="w-full flex items-center justify-center gap-2 h-10 border border-gray-100 rounded-xl text-[10px] font-bold uppercase tracking-widest text-gray-400 hover:bg-gray-50 hover:text-gray-900 transition-all">
+                        <Activity className="h-3.5 w-3.5" />
+                        Aide & Support
+                    </button>
+                </div>
+            )}
         </div>
     )
 }
@@ -158,6 +235,7 @@ export default function AdminLayout({
 
     // Notifications state
     const [notifications, setNotifications] = React.useState<any[]>([])
+    const [hasUnread, setHasUnread] = React.useState(false)
     const [lastChecked, setLastChecked] = React.useState<string>(new Date().toISOString())
 
     // Initial load of notifications (Server Action)
@@ -214,8 +292,8 @@ export default function AdminLayout({
 
                 toast(
                     <div className="flex items-center w-full gap-3 p-1">
-                        <div className="h-10 w-10 bg-blue-50 rounded-full flex items-center justify-center border border-blue-100 shrink-0">
-                            <ShoppingCart className="h-5 w-5 text-blue-600 animate-bounce" />
+                        <div className="h-10 w-10 bg-amber-50 rounded-full flex items-center justify-center border border-amber-100 shrink-0">
+                            <ShoppingCart className="h-5 w-5 text-amber-600 animate-bounce" />
                         </div>
                         <div className="flex-1 flex flex-col justify-center min-w-0">
                             <p className="font-bold text-sm text-gray-900 leading-none mb-1">Nouvelle commande !</p>
@@ -245,8 +323,8 @@ export default function AdminLayout({
                     description: `${order.customerName || 'Client'} • ${formattedPrice.replace('F\u202FCFA', '').trim()} FCFA`,
                     time: order.createdAt,
                     icon: 'ShoppingCart',
-                    color: 'text-blue-600',
-                    bg: 'bg-blue-50'
+                    color: 'text-amber-600',
+                    bg: 'bg-amber-50'
                 })
             })
 
@@ -293,6 +371,7 @@ export default function AdminLayout({
             // Update state: existing + new items at the top
             if (newNotificationItems.length > 0) {
                 setNotifications(prev => [...newNotificationItems, ...prev])
+                setHasUnread(true)
             }
 
             // Update checkpoint
@@ -388,51 +467,68 @@ export default function AdminLayout({
                             <div className="h-8 w-px bg-gray-100 hidden sm:block" />
 
                             {/* Notifications */}
-                            <DropdownMenu>
+                            <DropdownMenu onOpenChange={(open) => { if (open) setHasUnread(false) }}>
                                 <DropdownMenuTrigger asChild>
-                                    <Button variant="ghost" size="icon" className="relative h-9 w-9 rounded-full text-gray-400 hover:text-gray-900 hover:bg-gray-100/50">
-                                        <Bell className="h-4.5 w-4.5" />
-                                        <span className="absolute top-2.5 right-2.5 h-2 w-2 rounded-full bg-red-500 border-2 border-white" />
+                                    <Button variant="ghost" size="icon" className="relative h-10 w-10 rounded-xl border border-gray-100 bg-white shadow-sm hover:shadow-md transition-all text-gray-500 hover:text-gray-900 group">
+                                        <Bell className="h-5 w-5 transition-transform group-hover:rotate-12" />
+                                        {hasUnread && (
+                                            <span className="absolute top-2.5 right-2.5 h-2.5 w-2.5 rounded-full bg-rose-500 border-2 border-white animate-pulse" />
+                                        )}
                                     </Button>
                                 </DropdownMenuTrigger>
-                                <DropdownMenuContent align="end" className="w-80">
-                                    <DropdownMenuLabel className="flex items-center justify-between">
-                                        <span>Notifications</span>
+                                <DropdownMenuContent align="end" className="w-80 rounded-2xl border-gray-100 shadow-2xl p-2 mt-2">
+                                    <DropdownMenuLabel className="flex items-center justify-between px-3 py-2">
+                                        <span className="text-[13px] font-bold text-gray-900 tracking-tight">Flux Notifications</span>
                                         {notifications.length > 0 && (
-                                            <Badge variant="outline" className="text-[10px] font-black bg-indigo-50 text-indigo-600 border-none">
-                                                {notifications.length} Live
-                                            </Badge>
+                                            <button
+                                                onClick={() => setNotifications([])}
+                                                className="text-[10px] font-bold text-gray-400 hover:text-amber-600 transition-colors uppercase tracking-wider"
+                                            >
+                                                Tout effacer
+                                            </button>
                                         )}
                                     </DropdownMenuLabel>
                                     <DropdownMenuSeparator />
-                                    <div className="flex flex-col gap-1 p-1 max-h-[400px] overflow-y-auto custom-scrollbar">
+                                    <div className="flex flex-col gap-1 max-h-[400px] overflow-y-auto custom-scrollbar">
                                         {notifications.length === 0 ? (
-                                            <div className="py-10 text-center opacity-30 italic text-xs font-medium">
-                                                Aucun signal détecté.
+                                            <div className="py-12 flex flex-col items-center justify-center text-center space-y-3">
+                                                <div className="h-10 w-10 rounded-full bg-gray-50 flex items-center justify-center text-gray-300">
+                                                    <Bell className="h-5 w-5" />
+                                                </div>
+                                                <p className="text-[11px] text-gray-400 font-medium px-8 leading-relaxed">
+                                                    Votre flux de notifications est vide pour le moment.
+                                                </p>
                                             </div>
                                         ) : (
                                             notifications.map((n) => (
-                                                <div key={n.id} className="px-3 py-3 hover:bg-gray-50 rounded-md cursor-pointer transition-colors group">
-                                                    <div className="flex items-start gap-3">
-                                                        <div className={cn("h-8 w-8 rounded-full flex items-center justify-center shrink-0 shadow-inner", n.bg, n.color)}>
-                                                            {n.icon === 'ShoppingCart' ? <ShoppingCart className="h-3.5 w-3.5" /> : <Users className="h-3.5 w-3.5" />}
+                                                <DropdownMenuItem
+                                                    key={n.id}
+                                                    className="p-3 rounded-xl focus:bg-gray-50 cursor-pointer transition-all border border-transparent focus:border-gray-100 mb-1"
+                                                    onClick={() => {
+                                                        if (n.type === 'ORDER') router.push(`/admin/orders/${n.id.split('-')[1]}`)
+                                                        else router.push('/admin/customers')
+                                                    }}
+                                                >
+                                                    <div className="flex items-start gap-3 w-full">
+                                                        <div className={cn("h-9 w-9 rounded-xl flex items-center justify-center shrink-0", n.bg, n.color)}>
+                                                            {n.type === 'ORDER' ? <ShoppingCart className="h-4 w-4" /> : <Users className="h-4 w-4" />}
                                                         </div>
-                                                        <div className="space-y-0.5">
-                                                            <p className="text-[12px] font-bold leading-tight group-hover:text-indigo-600 transition-colors">{n.title}</p>
-                                                            <p className="text-[11px] text-gray-400 font-medium line-clamp-1">{n.description}</p>
-                                                            <p className="text-[9px] text-gray-300 font-black uppercase tracking-widest pt-1">
+                                                        <div className="space-y-1 overflow-hidden">
+                                                            <p className="text-[13px] font-bold text-gray-900 leading-tight truncate">{n.title}</p>
+                                                            <p className="text-[12px] text-gray-500 font-medium truncate">{n.description}</p>
+                                                            <p className="text-[10px] text-gray-400 font-bold uppercase tracking-wider">
                                                                 {new Date(n.time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                                                             </p>
                                                         </div>
                                                     </div>
-                                                </div>
+                                                </DropdownMenuItem>
                                             ))
                                         )}
                                     </div>
                                     <DropdownMenuSeparator />
                                     <Link href="/admin/orders">
-                                        <DropdownMenuItem className="w-full text-center justify-center cursor-pointer text-xs font-black uppercase tracking-widest text-gray-400 hover:text-gray-900 py-3">
-                                            Audit Complet Flux
+                                        <DropdownMenuItem className="w-full text-center justify-center cursor-pointer text-[11px] font-bold uppercase tracking-widest text-gray-400 hover:text-amber-600 py-3">
+                                            Voir tout l'historique
                                         </DropdownMenuItem>
                                     </Link>
                                 </DropdownMenuContent>
@@ -467,7 +563,13 @@ export default function AdminLayout({
                                         </DropdownMenuItem>
                                     </DropdownMenuGroup>
                                     <DropdownMenuSeparator />
-                                    <DropdownMenuItem onClick={() => signOut()} className="text-red-600 focus:text-red-600 cursor-pointer bg-red-50/50 hover:bg-red-50 focus:bg-red-50">
+                                    <DropdownMenuItem
+                                        onSelect={(e) => {
+                                            e.preventDefault();
+                                            signOut({ callbackUrl: "/" });
+                                        }}
+                                        className="text-red-600 focus:text-red-600 cursor-pointer bg-red-50/50 hover:bg-red-50 focus:bg-red-50"
+                                    >
                                         <LogOut className="mr-2 h-4 w-4" />
                                         <span>Se déconnecter</span>
                                     </DropdownMenuItem>

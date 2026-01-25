@@ -3,6 +3,7 @@
 import * as React from "react"
 import { ArrowLeft, ArrowRight } from "lucide-react"
 import { motion } from "framer-motion"
+import Image from "next/image"
 
 const BRANDS = [
     { name: "Nike", logo: "https://res.cloudinary.com/da1dmwqhb/image/upload/v1769271825/mbor_store/brands/nike.svg" },
@@ -79,10 +80,12 @@ export function BrandCarousel() {
                             className="flex-shrink-0 w-[140px] h-[90px] md:w-[200px] md:h-[120px] bg-card border border-muted/30 hover:border-primary/30 rounded-2xl flex items-center justify-center p-6 transition-all shadow-sm hover:shadow-xl group"
                         >
                             <div className="relative w-full h-full flex items-center justify-center">
-                                <img
+                                <Image
                                     src={brand.logo}
                                     alt={brand.name}
-                                    className="max-h-full max-w-full object-contain brightness-[0] opacity-80 group-hover:opacity-100 transition-all duration-300"
+                                    fill
+                                    className="object-contain brightness-0 opacity-80 group-hover:opacity-100 transition-all duration-300"
+                                    sizes="(max-width: 768px) 100px, 150px"
                                 />
                             </div>
                         </motion.div>

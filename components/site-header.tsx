@@ -218,7 +218,10 @@ export function SiteHeader() {
                                                     </div>
 
                                                     <button
-                                                        onClick={() => { signOut(); setIsMenuOpen(false); }}
+                                                        onClick={() => {
+                                                            signOut({ callbackUrl: "/" });
+                                                            setIsMenuOpen(false);
+                                                        }}
                                                         className="w-full py-3 text-xs font-bold text-rose-500 hover:bg-rose-50 rounded-xl transition-colors"
                                                     >
                                                         Déconnexion
@@ -321,7 +324,13 @@ export function SiteHeader() {
                                             </DropdownMenuItem>
                                         )}
                                         <DropdownMenuSeparator className="opacity-50" />
-                                        <DropdownMenuItem onClick={() => signOut()} className="rounded-xl p-2.5 focus:bg-rose-50 focus:text-rose-600 text-rose-500 cursor-pointer">
+                                        <DropdownMenuItem
+                                            onSelect={(e) => {
+                                                e.preventDefault();
+                                                signOut({ callbackUrl: "/" });
+                                            }}
+                                            className="rounded-xl p-2.5 focus:bg-rose-50 focus:text-rose-600 text-rose-500 cursor-pointer"
+                                        >
                                             <LogOut className="mr-2 h-4 w-4" /> <span>Déconnexion</span>
                                         </DropdownMenuItem>
                                     </DropdownMenuContent>

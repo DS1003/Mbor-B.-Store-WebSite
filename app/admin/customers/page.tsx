@@ -123,7 +123,7 @@ export default function AdminCustomersPage() {
     const stats = [
         { label: "Base Clients", value: totalCustomers.toLocaleString(), icon: User, color: "text-gray-600", bg: "bg-gray-50" },
         { label: "Elite Members", value: eliteMembers.toString(), icon: Trophy, color: "text-amber-600", bg: "bg-amber-50" },
-        { label: "Taux Rétention", value: retentionRate, icon: Target, color: "text-indigo-600", bg: "bg-indigo-50" },
+        { label: "Taux Rétention", value: retentionRate, icon: Target, color: "text-amber-600", bg: "bg-amber-50" },
     ]
 
     return (
@@ -131,7 +131,7 @@ export default function AdminCustomersPage() {
             {/* Header Area */}
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6">
                 <div className="space-y-1">
-                    <h1 className="text-3xl font-black tracking-tighter text-gray-900 uppercase italic">Base <span className="text-indigo-600">Clients.</span></h1>
+                    <h1 className="text-3xl font-black tracking-tighter text-gray-900 uppercase italic">Base <span className="text-amber-600">Clients.</span></h1>
                     <p className="text-[13px] text-gray-500 font-medium">Gestion de la base de données et programmes de fidélisation.</p>
                 </div>
 
@@ -177,10 +177,10 @@ export default function AdminCustomersPage() {
             <div className="bg-white border border-gray-50 rounded-[2.5rem] overflow-hidden shadow-sm">
                 <div className="p-6 flex flex-col md:flex-row items-center gap-4 bg-gray-50/30 border-b border-gray-50">
                     <div className="relative flex-1 w-full flex items-center group">
-                        <Search className="absolute left-5 h-4 w-4 text-gray-400 group-focus-within:text-indigo-600 transition-colors" />
+                        <Search className="absolute left-5 h-4 w-4 text-gray-400 group-focus-within:text-amber-600 transition-colors" />
                         <Input
                             placeholder="Rechercher par nom, email ou identifiant..."
-                            className="bg-white h-12 pl-12 pr-6 rounded-2xl border-gray-100 focus-visible:ring-2 focus-visible:ring-indigo-100 focus-visible:border-indigo-200 text-[14px] font-medium placeholder:text-gray-400 shadow-sm"
+                            className="bg-white h-12 pl-12 pr-6 rounded-2xl border-gray-100 focus-visible:ring-2 focus-visible:ring-amber-100 focus-visible:border-amber-200 text-[14px] font-medium placeholder:text-gray-400 shadow-sm"
                             value={searchQuery}
                             onChange={(e) => setSearchQuery(e.target.value)}
                         />
@@ -216,7 +216,7 @@ export default function AdminCustomersPage() {
                                                 <div>
                                                     <p className="text-[14px] font-bold text-gray-900 leading-tight mb-1">{c.name || "Invite"}</p>
                                                     <p className="text-[11px] text-gray-400 font-medium flex items-center gap-1.5 leading-none">
-                                                        <Mail className="h-3 w-3 text-indigo-400" /> {c.email}
+                                                        <Mail className="h-3 w-3 text-amber-400" /> {c.email}
                                                     </p>
                                                 </div>
                                             </div>
@@ -228,7 +228,7 @@ export default function AdminCustomersPage() {
                                                     <motion.div
                                                         initial={{ width: 0 }}
                                                         animate={{ width: `${Math.min(((c._count?.orders || 0) / 10) * 100, 100)}%` }}
-                                                        className="h-full bg-indigo-500 shadow-[0_0_10px_rgba(79,70,229,0.3)]"
+                                                        className="h-full bg-amber-500 shadow-[0_0_10px_rgba(245,158,11,0.3)]"
                                                     />
                                                 </div>
                                             </div>
@@ -257,7 +257,7 @@ export default function AdminCustomersPage() {
                                                 </DropdownMenuTrigger>
                                                 <DropdownMenuContent align="end" className="w-[200px] rounded-[1.5rem] shadow-2xl border-gray-50 p-2">
                                                     <DropdownMenuLabel className="text-[10px] font-black text-gray-400 px-3 py-2 uppercase tracking-widest border-b border-gray-50 mb-1">Audit Partenaire</DropdownMenuLabel>
-                                                    <DropdownMenuItem onClick={() => { setSelectedCustomer(c); setIsDetailsOpen(true); }} className="text-[12px] font-bold py-3 px-3 focus:bg-indigo-50 focus:text-indigo-600 rounded-xl transition-colors cursor-pointer">
+                                                    <DropdownMenuItem onClick={() => { setSelectedCustomer(c); setIsDetailsOpen(true); }} className="text-[12px] font-bold py-3 px-3 focus:bg-amber-50 focus:text-amber-600 rounded-xl transition-colors cursor-pointer">
                                                         <Eye className="mr-3 h-4 w-4" /> Profil Analytique
                                                     </DropdownMenuItem>
                                                     <DropdownMenuItem onClick={() => confirmDelete(c.id)} className="text-[12px] font-bold py-3 px-3 text-rose-600 focus:bg-rose-50 focus:text-rose-600 rounded-xl transition-colors cursor-pointer border-t border-gray-50 mt-1">
@@ -320,7 +320,7 @@ export default function AdminCustomersPage() {
             <Sheet open={isDetailsOpen} onOpenChange={setIsDetailsOpen}>
                 <SheetContent className="sm:max-w-xl overflow-y-auto">
                     <SheetHeader>
-                        <SheetTitle className="text-xl font-black uppercase italic tracking-tight">Profil <span className="text-indigo-600">Analytique</span></SheetTitle>
+                        <SheetTitle className="text-xl font-black uppercase italic tracking-tight">Profil <span className="text-amber-600">Analytique</span></SheetTitle>
                         <SheetDescription className="font-medium text-gray-400">
                             Audit complet de l'activité du partenaire commercial.
                         </SheetDescription>
@@ -338,7 +338,7 @@ export default function AdminCustomersPage() {
                                 </div>
                                 <div className="space-y-1 relative z-10">
                                     <h3 className="text-2xl font-black text-white uppercase italic leading-tight">{selectedCustomer.name || "Invite"}</h3>
-                                    <p className="text-[13px] text-indigo-400 font-black uppercase tracking-widest">{selectedCustomer.email}</p>
+                                    <p className="text-[13px] text-amber-400 font-black uppercase tracking-widest">{selectedCustomer.email}</p>
                                     <Badge className="mt-4 bg-white text-gray-900 border-0 px-4 py-1.5 rounded-xl text-[10px] font-black uppercase tracking-widest shadow-xl">
                                         {(selectedCustomer._count?.orders || 0) > 10 ? "Platinum Elite" : (selectedCustomer._count?.orders || 0) > 5 ? "Gold Partner" : "Silver Member"}
                                     </Badge>
@@ -353,7 +353,7 @@ export default function AdminCustomersPage() {
                                 </div>
                                 <div className="p-6 bg-white border border-gray-50 rounded-[2rem] space-y-2 shadow-sm group hover:shadow-xl transition-all duration-500">
                                     <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Score Trust</p>
-                                    <p className="text-2xl font-black text-indigo-600 italic tracking-tighter">9.8</p>
+                                    <p className="text-2xl font-black text-amber-600 italic tracking-tighter">9.8</p>
                                 </div>
                                 <div className="p-6 bg-white border border-gray-50 rounded-[2rem] space-y-2 shadow-sm group hover:shadow-xl transition-all duration-500">
                                     <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Anciennaté</p>
@@ -364,13 +364,13 @@ export default function AdminCustomersPage() {
                             {/* Info Rows */}
                             <div className="space-y-4">
                                 <div className="flex items-center gap-3 ml-2">
-                                    <Activity className="h-4 w-4 text-indigo-600" />
+                                    <Activity className="h-4 w-4 text-amber-600" />
                                     <h4 className="text-[12px] font-black text-gray-400 uppercase tracking-[0.2em]">Données de Liaison</h4>
                                 </div>
                                 <div className="bg-white border border-gray-50 rounded-[2.5rem] p-8 space-y-6 shadow-sm">
                                     <div className="flex items-center justify-between">
                                         <span className="text-[13px] font-bold text-gray-400">Canal Mail</span>
-                                        <span className="text-[14px] font-black text-indigo-600">{selectedCustomer.email}</span>
+                                        <span className="text-[14px] font-black text-amber-600">{selectedCustomer.email}</span>
                                     </div>
                                     <Separator className="bg-gray-50" />
                                     <div className="flex items-center justify-between">

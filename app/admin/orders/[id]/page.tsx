@@ -128,10 +128,10 @@ export default function OrderDetailsPage() {
                         <ArrowLeft className="mr-2 h-3.5 w-3.5 group-hover:-translate-x-0.5 transition-transform" /> Retour à la liste
                     </Link>
                     <div className="flex flex-col sm:flex-row sm:items-center gap-4">
-                        <h1 className="text-2xl font-semibold tracking-tight text-gray-900">
-                            Détails Commande <span className="text-gray-400 font-normal ml-1">#{order.id.slice(-8).toUpperCase()}</span>
+                        <h1 className="text-2xl font-bold tracking-tight text-gray-900">
+                            Commande <span className="text-gray-400 font-normal ml-1">#{order.id.slice(-8).toUpperCase()}</span>
                         </h1>
-                        <Badge variant="outline" className={cn("text-[11px] font-bold px-3 py-1", statusColors[order.status])}>
+                        <Badge variant="outline" className={cn("text-[11px] font-bold px-3 py-1 rounded-lg", statusColors[order.status])}>
                             {order.status}
                         </Badge>
                     </div>
@@ -148,9 +148,9 @@ export default function OrderDetailsPage() {
                     </Button>
                     <DropdownMenu>
                         <DropdownMenuTrigger asChild>
-                            <Button className="h-9 px-4 rounded-lg bg-gray-900 text-white text-[13px] font-medium hover:bg-gray-800 transition-all flex items-center gap-2" disabled={isUpdating}>
+                            <Button className="h-9 px-4 rounded-xl bg-gray-900 text-white text-[13px] font-semibold hover:bg-black transition-all flex items-center gap-2" disabled={isUpdating}>
                                 {isUpdating ? <div className="h-3.5 w-3.5 border-2 border-white/30 border-t-white rounded-full animate-spin" /> : <Truck className="h-3.5 w-3.5" />}
-                                Changer le Statut
+                                Statut
                             </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end" className="w-56 rounded-xl shadow-2xl border-gray-100">
@@ -207,9 +207,9 @@ export default function OrderDetailsPage() {
                         <div className="flex items-center justify-between border-b border-gray-50 pb-4">
                             <div className="flex items-center gap-2">
                                 <Package className="h-4 w-4 text-gray-400" />
-                                <h3 className="text-sm font-semibold text-gray-900">Articles de la commande</h3>
+                                <h3 className="text-[15px] font-bold text-gray-900">Articles commandés</h3>
                             </div>
-                            <span className="text-[12px] text-gray-400 font-medium">{order.items.length} Article(s)</span>
+                            <span className="text-[12px] text-gray-400 font-semibold">{order.items.length} Article(s)</span>
                         </div>
 
                         <div className="divide-y divide-gray-50">
@@ -221,17 +221,17 @@ export default function OrderDetailsPage() {
 
                                     <div className="flex-1 space-y-3">
                                         <div className="space-y-0.5">
-                                            <p className="text-[11px] font-bold text-gray-400 uppercase tracking-[0.15em]">{item.product.category?.name || "Sport"}</p>
-                                            <h4 className="text-base font-semibold text-gray-900">{item.product.name}</h4>
+                                            <p className="text-[11px] font-bold text-gray-400 uppercase tracking-wider">{item.product.category?.name || "Sport"}</p>
+                                            <h4 className="text-[15px] font-bold text-gray-900">{item.product.name}</h4>
                                         </div>
 
                                         <div className="flex flex-wrap gap-2">
-                                            <span className="px-2.5 py-1 rounded-lg bg-gray-50 border border-gray-100 text-[11px] font-semibold text-gray-500">
-                                                Quantité: <span className="text-gray-900 ml-1">{item.quantity}</span>
+                                            <span className="px-2.5 py-1 rounded-lg bg-gray-50 border border-gray-100 text-[11px] font-bold text-gray-500">
+                                                Qté: <span className="text-gray-900 ml-1">{item.quantity}</span>
                                             </span>
                                             {(item.customName || item.customNumber) && (
-                                                <span className="px-2.5 py-1 rounded-lg bg-indigo-50 border border-indigo-100 text-[11px] font-semibold text-indigo-600 flex items-center gap-2">
-                                                    <Zap className="h-3 w-3" /> Personnalisation: {item.customName} {item.customNumber ? `#${item.customNumber}` : ""}
+                                                <span className="px-2.5 py-1 rounded-lg bg-amber-50 border border-amber-100 text-[11px] font-bold text-amber-700 flex items-center gap-1.5">
+                                                    <Zap className="h-3 w-3" /> Flocage: {item.customName} {item.customNumber ? `#${item.customNumber}` : ""}
                                                 </span>
                                             )}
                                         </div>
@@ -257,7 +257,7 @@ export default function OrderDetailsPage() {
                                 </div>
                             </div>
                             <div className="space-y-3 w-full sm:w-64 bg-gray-50/50 p-5 rounded-xl border border-gray-100">
-                                <div className="flex justify-between items-center text-[13px] font-medium">
+                                <div className="flex justify-between items-center text-[13px] font-semibold">
                                     <span className="text-gray-400 uppercase tracking-wider text-[10px] font-bold">Total Brut</span>
                                     {/* Calculated subtotal */}
                                     <span className="text-gray-900 tabular-nums">
@@ -276,7 +276,7 @@ export default function OrderDetailsPage() {
                                 <div className="h-px w-full bg-gray-200" />
                                 <div className="flex justify-between items-center pt-1">
                                     <span className="text-[11px] font-bold text-gray-900 uppercase tracking-widest">Total Net</span>
-                                    <span className="text-2xl font-black text-gray-900 tabular-nums tracking-tighter">{order.total.toLocaleString()} F</span>
+                                    <span className="text-2xl font-bold text-gray-900 tabular-nums tracking-tight">{order.total.toLocaleString()} F</span>
                                 </div>
                             </div>
                         </div>
@@ -352,15 +352,15 @@ export default function OrderDetailsPage() {
                         </div>
 
                         <div className="flex flex-col items-center text-center space-y-4">
-                            <div className="h-20 w-20 rounded-[2rem] bg-indigo-50 text-indigo-600 flex items-center justify-center text-2xl font-black border-4 border-white shadow-xl rotate-3 scale-110">
+                            <div className="h-16 w-16 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center text-xl font-bold border border-amber-100 shadow-sm">
                                 {(order.user?.name || order.customerName || "G").split(' ').map((n: string) => n[0]).join('')}
                             </div>
                             <div className="space-y-1">
                                 <div className="flex items-center justify-center gap-2">
                                     <h4 className="text-lg font-bold text-gray-900 tracking-tight">{order.user?.name || order.customerName || "Invité"}</h4>
-                                    {order.user && <Badge className="bg-emerald-50 text-emerald-600 border-none text-[9px] font-black uppercase tracking-widest">Membre</Badge>}
+                                    {order.user && <Badge className="bg-emerald-50 text-emerald-600 border-none text-[9px] font-bold uppercase tracking-wider">Membre</Badge>}
                                 </div>
-                                <p className="text-[11px] text-gray-400 font-bold uppercase tracking-widest">Client depuis {new Date(order.user?.createdAt || order.createdAt).getFullYear()}</p>
+                                <p className="text-[11px] text-gray-400 font-bold uppercase tracking-wider">Client depuis {new Date(order.user?.createdAt || order.createdAt).getFullYear()}</p>
                             </div>
                         </div>
 
@@ -393,7 +393,7 @@ export default function OrderDetailsPage() {
                                     <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Adresse de Livraison</p>
                                     <p className="text-[12px] font-semibold text-gray-900 leading-relaxed">
                                         {order.deliveryType === 'PICKUP' ?
-                                            <span className="text-indigo-600 italic">Retrait en Boutique</span> :
+                                            <span className="text-indigo-600">Retrait en Boutique</span> :
                                             (order.customerAddress || order.user?.address || "Adresse non fournie")
                                         }
                                     </p>
@@ -439,7 +439,7 @@ export default function OrderDetailsPage() {
                     </div>
 
                     <Button
-                        className="w-full h-14 rounded-2xl bg-[#25D366] text-white hover:bg-[#128C7E] font-black uppercase tracking-widest shadow-xl shadow-[#25D366]/20 transition-all active:scale-95"
+                        className="w-full h-12 rounded-xl bg-[#25D366] text-white hover:bg-[#128C7E] font-bold uppercase tracking-widest shadow-lg shadow-[#25D366]/10 transition-all active:scale-95"
                         onClick={() => {
                             const url = `${window.location.origin}/receipt/${order.id}`;
                             const message = `*MBOR B. STORE - REÇU DE COMMANDE*\n\nBonjour ${order.customerName || order.user?.name || "Cher client"},\nVotre commande #${order.id.slice(-6).toUpperCase()} est validée.\n\nConsultez votre reçu digital ici :\n🔗 ${url}\n\nL'excellence du sport au Sénégal.`;

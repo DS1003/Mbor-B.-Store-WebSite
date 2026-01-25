@@ -78,22 +78,22 @@ function LoginContent() {
                 <div className="absolute bottom-0 left-0 w-64 h-64 bg-primary/5 rounded-full blur-[100px] translate-y-1/2 -translate-x-1/2" />
 
                 <div className="w-full max-w-md space-y-10 relative z-10">
-                    <ScrollReveal direction="up" className="space-y-2">
-                        <Link href="/" className="inline-block mb-8">
-                            <span className="font-heading text-3xl font-bold tracking-tight">
-                                Mbor<span className="text-primary italic">.Store</span>
+                    <ScrollReveal direction="up" className="space-y-1">
+                        <Link href="/" className="inline-block mb-10">
+                            <span className="text-2xl font-bold tracking-tight">
+                                Mbor<span className="text-amber-600">.Store</span>
                             </span>
                         </Link>
-                        <h1 className="text-4xl font-heading font-bold tracking-tight">Bon retour</h1>
-                        <p className="text-muted-foreground font-medium italic">Accédez à votre espace exclusif Mbor Store.</p>
+                        <h1 className="text-3xl font-bold tracking-tight text-gray-900">Bon retour</h1>
+                        <p className="text-[15px] text-gray-500 font-medium">Accédez à votre espace exclusif Mbor B. Store.</p>
                     </ScrollReveal>
 
                     <form onSubmit={onSubmit} className="space-y-6">
                         <div className="space-y-5">
                             <div className="space-y-2">
-                                <Label className="text-[11px] font-bold uppercase tracking-widest text-muted-foreground/60 ml-1">Adresse Email</Label>
+                                <Label className="text-[11px] font-bold uppercase tracking-wider text-gray-400 ml-1">Adresse Email</Label>
                                 <div className="relative group">
-                                    <Mail className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground/40 group-focus-within:text-primary transition-colors" />
+                                    <Mail className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-300 group-focus-within:text-amber-600 transition-colors" />
                                     <Input
                                         id="email"
                                         name="email"
@@ -101,18 +101,18 @@ function LoginContent() {
                                         placeholder="votre@email.com"
                                         required
                                         disabled={isLoading}
-                                        className="h-14 pl-12 rounded-xl border-muted bg-muted/5 focus:border-primary/50 focus:ring-primary/10 transition-all font-medium"
+                                        className="h-12 pl-12 rounded-xl border-gray-100 bg-gray-50/30 focus:border-amber-500/50 focus:ring-amber-500/10 transition-all font-medium"
                                     />
                                 </div>
                             </div>
 
                             <div className="space-y-2">
                                 <div className="flex items-center justify-between ml-1">
-                                    <Label className="text-[11px] font-bold uppercase tracking-widest text-muted-foreground/60">Mot de passe</Label>
-                                    <Link href="#" className="text-[11px] font-bold text-primary hover:underline underline-offset-4">Oublié ?</Link>
+                                    <Label className="text-[11px] font-bold uppercase tracking-wider text-gray-400">Mot de passe</Label>
+                                    <Link href="#" className="text-[11px] font-bold text-amber-600 hover:underline underline-offset-4">Oublié ?</Link>
                                 </div>
                                 <div className="relative group">
-                                    <Lock className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground/40 group-focus-within:text-primary transition-colors" />
+                                    <Lock className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-300 group-focus-within:text-amber-600 transition-colors" />
                                     <Input
                                         id="password"
                                         name="password"
@@ -120,7 +120,7 @@ function LoginContent() {
                                         placeholder="••••••••"
                                         required
                                         disabled={isLoading}
-                                        className="h-14 pl-12 pr-12 rounded-xl border-muted bg-muted/5 focus:border-primary/50 focus:ring-primary/10 transition-all font-medium"
+                                        className="h-12 pl-12 pr-12 rounded-xl border-gray-100 bg-gray-50/30 focus:border-amber-500/50 focus:ring-amber-500/10 transition-all font-medium"
                                     />
                                     <button
                                         type="button"
@@ -134,7 +134,7 @@ function LoginContent() {
                         </div>
 
                         <Button
-                            className="w-full h-14 rounded-xl bg-black text-white hover:bg-primary hover:text-black transition-all font-bold tracking-tight shadow-md shadow-black/5 group"
+                            className="w-full h-12 rounded-xl bg-gray-900 text-white hover:bg-black transition-all font-bold tracking-tight shadow-lg shadow-gray-200 group"
                             disabled={isLoading}
                         >
                             {isLoading ? (
@@ -153,10 +153,10 @@ function LoginContent() {
                     <div className="space-y-6">
                         <div className="relative">
                             <div className="absolute inset-0 flex items-center">
-                                <span className="w-full border-t border-muted/60" />
+                                <span className="w-full border-t border-gray-100" />
                             </div>
-                            <div className="relative flex justify-center text-[10px] uppercase font-bold tracking-widest">
-                                <span className="bg-background px-4 text-muted-foreground/60 italic">Elite Connection</span>
+                            <div className="relative flex justify-center text-[10px] uppercase font-bold tracking-wider">
+                                <span className="bg-white px-4 text-gray-400">Authentification Sécurisée</span>
                             </div>
                         </div>
 
@@ -168,7 +168,7 @@ function LoginContent() {
                                 setIsLoading(true)
                                 await signIn("google", { callbackUrl: "/" })
                             }}
-                            className="w-full h-14 rounded-xl border-muted/80 hover:bg-muted/30 font-bold tracking-tight transition-all active:scale-95 flex items-center justify-center gap-3"
+                            className="w-full h-12 rounded-xl border-gray-100 hover:bg-gray-50 font-bold tracking-tight transition-all active:scale-95 flex items-center justify-center gap-3"
                         >
                             {isLoading ? (
                                 <div className="h-5 w-5 border-2 border-primary/30 border-t-primary rounded-full animate-spin" />
@@ -185,8 +185,8 @@ function LoginContent() {
                     </div>
 
                     <div className="bg-muted/20 p-6 rounded-2xl border border-muted/40 space-y-3">
-                        <div className="flex items-center gap-2 text-[10px] font-black uppercase tracking-tighter text-primary">
-                            <ShieldCheck className="h-3 w-3" />
+                        <div className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-wider text-amber-600">
+                            <ShieldCheck className="h-3.5 w-3.5" />
                             <span>Accès Mode Test</span>
                         </div>
                         <div className="grid grid-cols-1 gap-1 text-[11px] font-medium text-muted-foreground">
@@ -216,15 +216,15 @@ function LoginContent() {
                 <div className="absolute inset-0 bg-gradient-to-br from-black/80 via-transparent to-black/80" />
                 <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-center space-y-6 w-full px-12">
                     <motion.div
-                        initial={{ opacity: 0, scale: 0.9 }}
-                        animate={{ opacity: 1, scale: 1 }}
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
                         className="space-y-4"
                     >
-                        <h2 className="text-7xl font-heading font-black text-white italic tracking-tighter">
-                            BE <br /> THE <span className="text-primary">BEST.</span>
+                        <h2 className="text-5xl font-bold text-white tracking-tight">
+                            BE THE <span className="text-amber-500">BEST.</span>
                         </h2>
-                        <div className="h-1 w-24 bg-primary mx-auto rounded-full" />
-                        <p className="text-white/60 font-medium tracking-[0.2em] text-xs uppercase">Official Gear Provider</p>
+                        <div className="h-1 w-16 bg-amber-500 mx-auto rounded-full" />
+                        <p className="text-white/60 font-medium tracking-widest text-xs uppercase">Official Gear Provider</p>
                     </motion.div>
                 </div>
 

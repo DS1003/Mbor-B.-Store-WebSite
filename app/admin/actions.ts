@@ -1,7 +1,7 @@
 "use server"
 
 import { prisma } from "@/lib/prisma"
-import { revalidatePath } from "next/cache"
+import { revalidatePath, unstable_cache } from "next/cache"
 
 // Helpers to serialize Decimal types safely
 function serializeProduct(product: any) {
@@ -143,10 +143,17 @@ export async function getAdminOrder(id: string) {
 }
 
 export async function updateOrderStatus(orderId: string, status: any) {
-    await prisma.order.update({
+    const order = await prisma.order.update({
         where: { id: orderId },
         data: { status }
     })
+
+    await createAdminLog(
+        "Mise à jour Statut",
+        `Commande #${order.id.slice(-6).toUpperCase()} passée à ${status}`,
+        "Admin"
+    )
+
     revalidatePath('/admin/orders')
 }
 
@@ -290,39 +297,43 @@ export async function deleteUser(id: string) {
     revalidatePath('/admin/customers')
 }
 
-export async function getStoreConfig() {
-    let config = await prisma.storeConfig.findUnique({
-        where: { id: 'singleton' }
-    })
-
-    if (!config) {
-        config = await prisma.storeConfig.create({
-            data: {
-                id: 'singleton',
-                name: "Mborbusiness’Store",
-                slogan: "L'excellence du sport et de la mode urbaine au Sénégal.",
-                description: "Mborbusiness’Store est une boutique spécialisée dans les équipements de sport, maillots, crampons, sneakers et streetwear. Livraison rapide à Dakar et à l’international. Paiement sécurisé via Wave et Orange Money.",
-                contactPhone: "+221 77 427 23 54",
-                whatsappNumber: "+221 78 593 48 86",
-                instagramUrl: "@MborbusinessstoreSN",
-                facebookUrl: "Mbor Business Center",
-                address: "Boutique 1 : Pikine, Boutique 2 : Sacré-Cœur",
-                deliveryFee: 2000,
-                freeDeliveryOver: 50000,
-                primaryColor: "#4F46E5",
-                secondaryColor: "#111827",
-                accentColor: "#F59E0B",
-                fontFamily: "Inter"
-            }
+export const getStoreConfig = unstable_cache(
+    async () => {
+        let config = await prisma.storeConfig.findUnique({
+            where: { id: 'singleton' }
         })
-    }
 
-    return {
-        ...config,
-        deliveryFee: config.deliveryFee ? (typeof config.deliveryFee.toNumber === 'function' ? config.deliveryFee.toNumber() : Number(config.deliveryFee)) : 0,
-        freeDeliveryOver: config.freeDeliveryOver ? (typeof config.freeDeliveryOver.toNumber === 'function' ? config.freeDeliveryOver.toNumber() : Number(config.freeDeliveryOver)) : 0
-    }
-}
+        if (!config) {
+            config = await prisma.storeConfig.create({
+                data: {
+                    id: 'singleton',
+                    name: "Mborbusiness’Store",
+                    slogan: "L'excellence du sport et de la mode urbaine au Sénégal.",
+                    description: "Mborbusiness’Store est une boutique spécialisée dans les équipements de sport, maillots, crampons, sneakers et streetwear. Livraison rapide à Dakar et à l’international. Paiement sécurisé via Wave et Orange Money.",
+                    contactPhone: "+221 77 427 23 54",
+                    whatsappNumber: "+221 78 593 48 86",
+                    instagramUrl: "@MborbusinessstoreSN",
+                    facebookUrl: "Mbor Business Center",
+                    address: "Boutique 1 : Pikine, Boutique 2 : Sacré-Cœur",
+                    deliveryFee: 2000,
+                    freeDeliveryOver: 50000,
+                    primaryColor: "#4F46E5",
+                    secondaryColor: "#111827",
+                    accentColor: "#F59E0B",
+                    fontFamily: "Inter"
+                }
+            })
+        }
+
+        return {
+            ...config,
+            deliveryFee: config.deliveryFee ? (typeof config.deliveryFee.toNumber === 'function' ? config.deliveryFee.toNumber() : Number(config.deliveryFee)) : 0,
+            freeDeliveryOver: config.freeDeliveryOver ? (typeof config.freeDeliveryOver.toNumber === 'function' ? config.freeDeliveryOver.toNumber() : Number(config.freeDeliveryOver)) : 0
+        }
+    },
+    ['store-config'],
+    { tags: ['config'], revalidate: 3600 }
+)
 
 export async function updateStoreConfig(data: any) {
     const { deliveryFee, freeDeliveryOver, ...rest } = data
@@ -345,6 +356,7 @@ export async function updateStoreConfig(data: any) {
         }
     })
     revalidatePath('/admin/settings')
+    revalidatePath('/', 'layout') // Revalidate everything using config
     return {
         ...config,
         deliveryFee: config.deliveryFee ? (typeof config.deliveryFee.toNumber === 'function' ? config.deliveryFee.toNumber() : Number(config.deliveryFee)) : 0,
@@ -410,6 +422,12 @@ export async function createInStoreOrder(data: {
             }
         })
     }
+
+    await createAdminLog(
+        "Vente Boutique",
+        `Nouvelle vente de ${data.total.toLocaleString()} F pour ${data.customerName}`,
+        "Vendeur Boutique"
+    )
 
     revalidatePath('/admin/orders')
     revalidatePath('/admin/stock')
@@ -487,4 +505,100 @@ export async function createMediaItem(data: any) {
 export async function deleteMediaItem(id: string) {
     await prisma.media.delete({ where: { id } })
     revalidatePath('/admin/media')
+}
+
+export async function getAdminLogs() {
+    try {
+        if (!prisma || !('adminLog' in prisma)) {
+            console.error("Prisma model 'adminLog' is missing")
+            return []
+        }
+        return await (prisma as any).adminLog.findMany({
+            orderBy: { createdAt: 'desc' },
+            take: 50
+        })
+    } catch (error) {
+        console.error("Failed to fetch admin logs:", error)
+        return []
+    }
+}
+
+export async function createAdminLog(action: string, details?: string, adminName?: string) {
+    try {
+        if (!prisma || !('adminLog' in prisma)) return null
+        return await (prisma as any).adminLog.create({
+            data: { action, details, adminName }
+        })
+    } catch (e) {
+        console.error("Failed to create admin log:", e)
+        return null
+    }
+}
+
+export async function getPromotions() {
+    try {
+        if (!prisma || !('promotion' in prisma)) {
+            console.error("Prisma model 'promotion' is missing")
+            return []
+        }
+        const promos = await (prisma as any).promotion.findMany({
+            orderBy: { createdAt: 'desc' }
+        })
+        return promos.map((p: any) => ({
+            ...p,
+            discount: p.discount ? Number(p.discount) : null
+        }))
+    } catch (error) {
+        console.error("Failed to fetch promotions:", error)
+        return []
+    }
+}
+
+export async function createPromotion(data: any) {
+    try {
+        if (!prisma || !('promotion' in prisma)) return null
+        const promo = await (prisma as any).promotion.create({
+            data: {
+                ...data,
+                discount: data.discount ? Number(data.discount) : null,
+                startDate: data.startDate ? new Date(data.startDate) : null,
+                endDate: data.endDate ? new Date(data.endDate) : null,
+            }
+        })
+        revalidatePath('/admin')
+        return { ...promo, discount: promo.discount ? Number(promo.discount) : null }
+    } catch (e) {
+        console.error("Failed to create promotion:", e)
+        return null
+    }
+}
+
+export async function updatePromotion(id: string, data: any) {
+    try {
+        if (!prisma || !('promotion' in prisma)) return null
+        const promo = await (prisma as any).promotion.update({
+            where: { id },
+            data: {
+                ...data,
+                discount: data.discount ? Number(data.discount) : null,
+                startDate: data.startDate ? new Date(data.startDate) : null,
+                endDate: data.endDate ? new Date(data.endDate) : null,
+            }
+        })
+        revalidatePath('/admin')
+        return { ...promo, discount: promo.discount ? Number(promo.discount) : null }
+    } catch (e) {
+        console.error("Failed to update promotion:", e)
+        return null
+    }
+}
+
+export async function deletePromotion(id: string) {
+    try {
+        if (!prisma || !('promotion' in prisma)) return
+        await (prisma as any).promotion.delete({ where: { id } })
+        revalidatePath('/admin')
+    } catch (e) {
+        console.error("Failed to delete promotion:", e)
+    }
 }

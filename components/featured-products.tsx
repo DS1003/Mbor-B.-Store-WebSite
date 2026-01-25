@@ -2,23 +2,10 @@ import Link from "next/link"
 import { ArrowRight } from "lucide-react"
 import { ProductCard } from "@/components/product-card"
 import { ScrollReveal } from "@/components/scroll-reveal"
-import { prisma } from "@/lib/prisma"
+import { getFeaturedProducts } from "@/lib/actions/public"
 
 export async function FeaturedProducts() {
-    const productsFromDb = await prisma.product.findMany({
-        where: { featured: true },
-        include: { category: true },
-        take: 4
-    })
-
-    const featuredProducts = productsFromDb.map(p => ({
-        id: p.id,
-        name: p.name,
-        price: Number(p.price),
-        category: p.category?.name || "Sans catégorie",
-        image: p.images[0] || "",
-        isNew: true
-    }))
+    const featuredProducts = await getFeaturedProducts()
 
     if (featuredProducts.length === 0) return null
 

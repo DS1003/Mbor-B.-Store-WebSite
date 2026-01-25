@@ -21,11 +21,12 @@ const prisma = globalForPrisma.prisma ?? new PrismaClient({
 })
 
 if (process.env.NODE_ENV === "development") {
-    if (!('media' in prisma)) {
-        console.error("CRITICAL: 'media' model missing from prisma client!")
-    } else {
-        console.log("SUCCESS: 'media' model detected.")
-    }
+    const models = ['media', 'adminLog', 'promotion', 'order', 'product']
+    models.forEach(model => {
+        if (!(model in prisma)) {
+            console.error(`CRITICAL: '${model}' model missing from prisma client!`)
+        }
+    })
 }
 
 if (process.env.NODE_ENV !== "production") {

@@ -105,7 +105,7 @@ export default function AdminStockPage() {
             {/* Header Area */}
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6">
                 <div className="space-y-1">
-                    <h1 className="text-3xl font-black tracking-tighter text-gray-900 uppercase italic">Gestion <span className="text-indigo-600">Logistique.</span></h1>
+                    <h1 className="text-3xl font-black tracking-tighter text-gray-900 uppercase italic">Gestion <span className="text-amber-600">Logistique.</span></h1>
                     <p className="text-[13px] text-gray-500 font-medium">Surveillance des flux de stock et réapprovisionnement stratégique.</p>
                 </div>
 
@@ -154,10 +154,10 @@ export default function AdminStockPage() {
             <div className="bg-white border border-gray-50 rounded-[2.5rem] overflow-hidden shadow-sm">
                 <div className="p-6 flex flex-col md:flex-row items-center gap-4 bg-gray-50/30 border-b border-gray-50">
                     <div className="relative flex-1 w-full flex items-center group">
-                        <Search className="absolute left-5 h-4 w-4 text-gray-400 group-focus-within:text-indigo-600 transition-colors" />
+                        <Search className="absolute left-5 h-4 w-4 text-gray-400 group-focus-within:text-amber-600 transition-colors" />
                         <Input
                             placeholder="Chercher par SKU, désignation ou univers..."
-                            className="bg-white h-12 pl-12 pr-6 rounded-2xl border-gray-100 focus-visible:ring-2 focus-visible:ring-indigo-100 focus-visible:border-indigo-200 text-[14px] font-medium placeholder:text-gray-400 shadow-sm"
+                            className="bg-white h-12 pl-12 pr-6 rounded-2xl border-gray-100 focus-visible:ring-2 focus-visible:ring-amber-100 focus-visible:border-amber-200 text-[14px] font-medium placeholder:text-gray-400 shadow-sm"
                             value={searchQuery}
                             onChange={(e) => setSearchQuery(e.target.value)}
                         />
@@ -201,7 +201,7 @@ export default function AdminStockPage() {
                                                 <div className="flex items-center justify-between text-[11px] font-black text-gray-400 uppercase tracking-widest">
                                                     <span>{item.stock} / 100 Vol.</span>
                                                     <span className={cn(
-                                                        item.stock <= 5 ? 'text-rose-600' : 'text-indigo-600'
+                                                        item.stock <= 5 ? 'text-rose-600' : 'text-amber-600'
                                                     )}>
                                                         {Math.min(item.stock, 100)}%
                                                     </span>
@@ -213,7 +213,7 @@ export default function AdminStockPage() {
                                                         className={cn(
                                                             "h-full transition-all duration-700 rounded-full",
                                                             item.stock === 0 ? 'bg-rose-500 shadow-[0_0_15px_rgba(244,63,94,0.4)]' :
-                                                                item.stock <= 5 ? 'bg-amber-500 shadow-[0_0_15px_rgba(245,158,11,0.4)]' : 'bg-indigo-600 shadow-[0_0_15px_rgba(79,70,229,0.4)]'
+                                                                item.stock <= 5 ? 'bg-amber-500 shadow-[0_0_15px_rgba(245,158,11,0.4)]' : 'bg-amber-600 shadow-[0_0_15px_rgba(245,158,11,0.4)]'
                                                         )}
                                                     />
                                                 </div>
