@@ -31,6 +31,7 @@ export const viewport: Viewport = {
 }
 
 export const metadata: Metadata = {
+    metadataBase: new URL('https://mborbusiness.store'),
     title: {
         default: "Mborbusiness’Store | Le Temple du Football & Streetwear",
         template: "%s | Mbor Store"
@@ -97,13 +98,38 @@ export default async function RootLayout({
                     enableSystem
                     disableTransitionOnChange
                 >
+                    <script
+                        type="application/ld+json"
+                        dangerouslySetInnerHTML={{
+                            __html: JSON.stringify({
+                                '@context': 'https://schema.org',
+                                '@type': 'Store',
+                                name: 'Mborbusiness’Store',
+                                description: 'La référence du sport et de la mode urbaine au Sénégal.',
+                                url: 'https://mborbusiness.store',
+                                telephone: '+221774272354',
+                                address: {
+                                    '@type': 'PostalAddress',
+                                    streetAddress: 'Pikine',
+                                    addressLocality: 'Dakar',
+                                    addressRegion: 'DK',
+                                    postalCode: '10000',
+                                    addressCountry: 'SN'
+                                },
+                                sameAs: [
+                                    'https://facebook.com/MborBusinessCenter',
+                                    'https://instagram.com/MborbusinessstoreSN'
+                                ]
+                            })
+                        }}
+                    />
                     <SiteHeader />
                     <main className="flex-1 pt-[84px]">
                         {children}
                     </main>
                     <SiteFooter />
                     <MobileNavbar />
-                    <Toaster position="top-right" richColors />
+                    <Toaster position="bottom-right" richColors />
                 </Providers>
 
             </body>

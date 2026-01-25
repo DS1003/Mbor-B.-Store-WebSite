@@ -1,4 +1,5 @@
 import * as React from "react"
+import { Metadata } from "next"
 import { Suspense } from "react"
 import { ProductGallery } from "@/components/product-gallery"
 import { ProductInfo } from "@/components/product-info"
@@ -8,6 +9,47 @@ import Link from "next/link"
 import { ScrollReveal } from "@/components/scroll-reveal"
 import { prisma } from "@/lib/prisma"
 import { notFound } from "next/navigation"
+
+export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
+    const { id } = await params
+    const product = await prisma.product.findUnique({
+        where: { id },
+        include: { category: true }
+    })
+
+    if (!product) {
+        return {
+            title: "Produit non trouvé | Mbor Store",
+            description: "Ce produit n'existe pas ou a été retiré."
+        }
+    }
+
+    const images = product.images.length > 0 ? product.images : ["https://res.cloudinary.com/da1dmwqhb/image/upload/v1769271862/mbor_store/placeholder.svg"]
+
+    return {
+        title: `${product.name} | Mbor Store`,
+        description: product.description?.slice(0, 160) || `Découvrez ${product.name} sur Mbor Store. Livraison express à Dakar.`,
+        openGraph: {
+            title: product.name,
+            description: product.description?.slice(0, 160) || `Achetez ${product.name} au meilleur prix sur Mbor Store.`,
+            images: [
+                {
+                    url: images[0],
+                    width: 800,
+                    height: 600,
+                    alt: product.name,
+                }
+            ],
+            type: 'website',
+        },
+        twitter: {
+            card: 'summary_large_image',
+            title: product.name,
+            description: product.description?.slice(0, 160) || `Achetez ${product.name} au meilleur prix.`,
+            images: [images[0]],
+        }
+    }
+}
 
 export default async function ProductPage({ params }: { params: Promise<{ id: string }> }) {
     const { id } = await params
