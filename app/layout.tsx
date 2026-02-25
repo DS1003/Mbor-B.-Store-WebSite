@@ -94,8 +94,8 @@ export default async function RootLayout({
                 )}
                 <Providers
                     attribute="class"
-                    defaultTheme="system"
-                    enableSystem
+                    defaultTheme="light"
+                    enableSystem={false}
                     disableTransitionOnChange
                 >
                     <script
