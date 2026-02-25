@@ -7,6 +7,9 @@ import { Toaster } from "@/components/ui/sonner"
 import { SiteHeader } from "@/components/site-header"
 import { SiteFooter } from "@/components/site-footer"
 import { MobileNavbar } from "@/components/mobile-navbar"
+import { Analytics } from "@vercel/analytics/react"
+import { SpeedInsights } from "@vercel/speed-insights/next"
+
 
 const outfit = Outfit({
     subsets: ["latin"],
@@ -130,6 +133,8 @@ export default async function RootLayout({
                     <SiteFooter />
                     <MobileNavbar />
                     <Toaster position="bottom-right" richColors />
+                    <Analytics />
+                    <SpeedInsights />
                 </Providers>
 
             </body>

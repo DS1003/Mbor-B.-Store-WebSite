@@ -1,0 +1,36 @@
+{
+    "github": {
+        "silent": true
+    },
+    "images": {
+        "sizes": [
+            640,
+            750,
+            828,
+            1080,
+            1200,
+            1920,
+            2048,
+            3840
+        ],
+        "domains": [
+            "cdn.blazimg.com",
+            "www.foot.fr",
+            "images.unsplash.com",
+            "maillots-senegal.com",
+            "pbs.twimg.com",
+            "res.cloudinary.com",
+            "amnakoo.com"
+        ],
+        "minimumCacheTTL": 60,
+        "formats": [
+            "image/avif",
+            "image/webp"
+        ]
+    },
+    "build": {
+        "env": {
+            "NEXT_TELEMETRY_DISABLED": "1"
+        }
+    }
+}
