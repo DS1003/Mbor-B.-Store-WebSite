@@ -1,4 +1,7 @@
+"use server"
+
 import { prisma } from "@/lib/prisma"
+
 import { unstable_cache } from "next/cache"
 
 // Serialize products for safe client-side use
@@ -12,6 +15,38 @@ function serializeProduct(p: any) {
         isNew: true
     }
 }
+
+export async function quickSearchProducts(query: string) {
+    if (!query || query.length < 2) return []
+
+    const products = await prisma.product.findMany({
+        where: {
+            OR: [
+                { name: { contains: query, mode: 'insensitive' } },
+                { description: { contains: query, mode: 'insensitive' } },
+            ]
+        },
+        select: {
+            id: true,
+            name: true,
+            price: true,
+            images: true,
+            category: {
+                select: { name: true }
+            }
+        },
+        take: 5
+    })
+
+    return products.map(p => ({
+        id: p.id,
+        name: p.name,
+        price: Number(p.price),
+        category: p.category?.name || "Sans catégorie",
+        image: p.images[0] || "",
+    }))
+}
+
 
 export const getFeaturedProducts = unstable_cache(
     async () => {

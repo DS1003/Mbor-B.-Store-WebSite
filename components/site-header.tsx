@@ -44,6 +44,8 @@ import { Separator } from "@/components/ui/separator"
 import { ShinyText } from "./interactions"
 import { useCart } from "./cart-context"
 
+import { HeaderSearch } from "./header-search"
+
 export function SiteHeader() {
     const router = useRouter()
     const { setTheme, theme } = useTheme()
@@ -52,15 +54,6 @@ export function SiteHeader() {
     const { cartCount } = useCart()
     const [scrolled, setScrolled] = React.useState(false)
     const [isMenuOpen, setIsMenuOpen] = React.useState(false)
-    const [searchQuery, setSearchQuery] = React.useState("")
-
-    const handleSearch = (e: React.FormEvent) => {
-        e.preventDefault()
-        if (searchQuery.trim()) {
-            router.push(`/shop?query=${encodeURIComponent(searchQuery.trim())}`)
-            setSearchQuery("")
-        }
-    }
 
     React.useEffect(() => {
         const handleScroll = () => setScrolled(window.scrollY > 10)
@@ -282,16 +275,10 @@ export function SiteHeader() {
                     {/* Right Side: Actions - Improved responsiveness & Elegance */}
                     <div className="flex items-center justify-end flex-1 space-x-1 sm:space-x-3">
                         {/* Search Bar - Sleeker */}
-                        <form onSubmit={handleSearch} className="hidden xl:flex items-center bg-muted/30 h-10 rounded-2xl px-4 border border-transparent focus-within:border-primary/20 transition-all group">
-                            <Search className="h-4 w-4 text-muted-foreground group-focus-within:text-primary" />
-                            <input
-                                type="text"
-                                placeholder="Souhaité..."
-                                value={searchQuery}
-                                onChange={(e) => setSearchQuery(e.target.value)}
-                                className="bg-transparent border-none focus:ring-0 text-[12px] font-medium tracking-tight ml-3 w-28 focus:w-44 transition-all outline-none md:block"
-                            />
-                        </form>
+                        <div className="hidden xl:block">
+                            <HeaderSearch />
+                        </div>
+
 
                         {/* Theme Toggle - Hidden on very small mobile to save space if needed, or just smaller */}
 

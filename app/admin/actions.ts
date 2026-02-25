@@ -2,6 +2,7 @@
 
 import { prisma } from "@/lib/prisma"
 import { revalidatePath, unstable_cache } from "next/cache"
+import { OrderStatus } from "@prisma/client"
 
 // Helpers to serialize Decimal types safely
 function serializeProduct(product: any) {
@@ -36,6 +37,67 @@ function serializeOrder(order: any) {
         return { ...order, total: 0, deliveryFee: 0, items: [] }
     }
 }
+
+export async function globalAdminSearch(query: string) {
+    if (!query || query.length < 2) return { products: [], orders: [], customers: [] }
+
+    const [products, orders, customers] = await Promise.all([
+        // Search Products
+        prisma.product.findMany({
+            where: {
+                OR: [
+                    { name: { contains: query, mode: 'insensitive' } },
+                    { id: { contains: query, mode: 'insensitive' } },
+                ]
+            },
+            select: { id: true, name: true, price: true, images: true, category: { select: { name: true } } },
+            take: 4
+        }),
+        // Search Orders
+        prisma.order.findMany({
+            where: {
+                OR: [
+                    { id: { contains: query, mode: 'insensitive' } },
+                    { customerName: { contains: query, mode: 'insensitive' } },
+                    { customerEmail: { contains: query, mode: 'insensitive' } },
+                ]
+            },
+            select: { id: true, customerName: true, total: true, status: true, createdAt: true },
+            take: 4
+        }),
+        // Search Customers
+        prisma.user.findMany({
+            where: {
+                role: 'USER',
+                OR: [
+                    { name: { contains: query, mode: 'insensitive' } },
+                    { email: { contains: query, mode: 'insensitive' } },
+                ]
+            },
+            select: { id: true, name: true, email: true, image: true },
+            take: 4
+        })
+    ])
+
+    return {
+        products: products.map(p => ({
+            id: p.id,
+            name: p.name,
+            price: Number(p.price),
+            image: p.images[0],
+            category: p.category?.name
+        })),
+        orders: orders.map(o => ({
+            id: o.id,
+            customerName: o.customerName,
+            total: Number(o.total),
+            status: o.status,
+            date: o.createdAt
+        })),
+        customers: customers
+    }
+}
+
 
 export async function getDashboardStats() {
     const [totalRevenue, ordersCount, productsCount, usersCount] = await Promise.all([
@@ -142,7 +204,33 @@ export async function getAdminOrder(id: string) {
     return serializeOrder(order)
 }
 
-export async function updateOrderStatus(orderId: string, status: any) {
+export async function updateOrderStatus(orderId: string, status: OrderStatus) {
+    const oldOrder = await prisma.order.findUnique({
+        where: { id: orderId },
+        include: { items: true }
+    })
+
+    if (!oldOrder) throw new Error("Commande non trouvée")
+
+    // Handle stock logic: if becoming CANCELLED, restore stock
+    if (status === "CANCELLED" && oldOrder.status !== "CANCELLED") {
+        for (const item of oldOrder.items) {
+            await prisma.product.update({
+                where: { id: item.productId },
+                data: { stock: { increment: item.quantity } }
+            })
+        }
+    }
+    // If was CANCELLED and now back to active status, deduct stock again
+    else if (oldOrder.status === "CANCELLED" && status !== "CANCELLED") {
+        for (const item of oldOrder.items) {
+            await prisma.product.update({
+                where: { id: item.productId },
+                data: { stock: { decrement: item.quantity } }
+            })
+        }
+    }
+
     const order = await prisma.order.update({
         where: { id: orderId },
         data: { status }
@@ -150,12 +238,15 @@ export async function updateOrderStatus(orderId: string, status: any) {
 
     await createAdminLog(
         "Mise à jour Statut",
-        `Commande #${order.id.slice(-6).toUpperCase()} passée à ${status}`,
-        "Admin"
+        `Commande #${order.id.slice(-6).toUpperCase()} : ${oldOrder.status} -> ${status}`,
+        "Système Administratif"
     )
 
     revalidatePath('/admin/orders')
+    revalidatePath(`/admin/orders/${orderId}`)
+    return serializeOrder(order)
 }
+
 
 export async function getAdminCustomers() {
     return prisma.user.findMany({
@@ -296,6 +387,36 @@ export async function deleteUser(id: string) {
     await prisma.user.delete({ where: { id } })
     revalidatePath('/admin/customers')
 }
+
+export async function createCustomer(data: { name: string, email: string }) {
+    const existing = await prisma.user.findUnique({
+        where: { email: data.email }
+    })
+    if (existing) throw new Error("Un utilisateur avec cet email existe déjà")
+
+    const user = await prisma.user.create({
+        data: {
+            name: data.name,
+            email: data.email,
+            role: "USER"
+        }
+    })
+    revalidatePath('/admin/customers')
+    return user
+}
+
+export async function sendMarketingBroadcast(data: { subject: string, message: string, recipientCount: number }) {
+    // In a real app, this would trigger an email provider (Postmark, SendGrid, etc.)
+    await (prisma as any).adminLog.create({
+        data: {
+            action: "MARKETING_BROADCAST",
+            details: `Sujet: ${data.subject} | Destinataires: ${data.recipientCount}`,
+            adminName: "Admin"
+        }
+    })
+    return { success: true }
+}
+
 
 export const getStoreConfig = unstable_cache(
     async () => {

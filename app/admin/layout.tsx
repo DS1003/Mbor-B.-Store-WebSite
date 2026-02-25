@@ -200,6 +200,8 @@ function SidebarContent({ isSidebarOpen, isMobile, pathname, setIsMobileMenuOpen
     )
 }
 
+import { AdminSearch } from "@/components/admin-search"
+
 export default function AdminLayout({
     children,
 }: {
@@ -442,19 +444,11 @@ export default function AdminLayout({
                                 </Button>
                             </SheetTrigger>
 
-                            <div className="hidden md:flex items-center bg-gray-50 px-4 h-9 rounded-lg w-full max-w-sm border border-gray-100 focus-within:border-gray-200 focus-within:bg-white transition-all group">
-                                <Search className="h-3.5 w-3.5 text-gray-400" />
-                                <input
-                                    type="text"
-                                    placeholder="Rechercher..."
-                                    className="bg-transparent border-none focus:ring-0 text-[13px] ml-2.5 w-full outline-none text-gray-600 placeholder:text-gray-400"
-                                />
-                                <div className="flex items-center gap-1 opacity-20 group-focus-within:opacity-50">
-                                    <kbd className="text-[10px] font-sans">⌘</kbd>
-                                    <kbd className="text-[10px] font-sans">K</kbd>
-                                </div>
+                            <div className="hidden md:block">
+                                <AdminSearch />
                             </div>
                         </div>
+
 
                         <div className="flex items-center gap-2 lg:gap-4">
                             <Link href="/" target="_blank">

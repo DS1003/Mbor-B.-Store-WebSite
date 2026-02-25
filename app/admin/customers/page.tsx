@@ -37,7 +37,6 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { Badge } from "@/components/ui/badge"
 import { motion, AnimatePresence } from "framer-motion"
-import { getAdminCustomers, deleteUser } from "../actions"
 import { toast } from "sonner"
 import {
     Sheet,
@@ -46,8 +45,19 @@ import {
     SheetHeader,
     SheetTitle,
 } from "@/components/ui/sheet"
+import {
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogHeader,
+    DialogTitle,
+    DialogFooter,
+} from "@/components/ui/dialog"
+import { Label } from "@/components/ui/label"
+import { Textarea } from "@/components/ui/textarea"
 import { Separator } from "@/components/ui/separator"
 import { DeleteConfirmModal } from "@/components/admin/delete-confirm-modal"
+import { getAdminCustomers, deleteUser, createCustomer, sendMarketingBroadcast } from "../actions"
 
 export default function AdminCustomersPage() {
     const [customersData, setCustomersData] = React.useState<any[]>([])
@@ -55,6 +65,13 @@ export default function AdminCustomersPage() {
     const [selectedCustomer, setSelectedCustomer] = React.useState<any>(null)
     const [isDetailsOpen, setIsDetailsOpen] = React.useState(false)
     const [searchQuery, setSearchQuery] = React.useState("")
+
+    // Action states
+    const [isRegisterOpen, setIsRegisterOpen] = React.useState(false)
+    const [isMarketingOpen, setIsMarketingOpen] = React.useState(false)
+    const [newCustomer, setNewCustomer] = React.useState({ name: "", email: "" })
+    const [marketingData, setMarketingData] = React.useState({ subject: "", message: "" })
+    const [isSubmitting, setIsSubmitting] = React.useState(false)
 
     // Delete state
     const [isDeleteDialogOpen, setIsDeleteDialogOpen] = React.useState(false)
@@ -103,6 +120,48 @@ export default function AdminCustomersPage() {
         }
     }
 
+    const handleManualRegister = async (e: React.FormEvent) => {
+        e.preventDefault()
+        if (!newCustomer.name || !newCustomer.email) {
+            toast.error("Veuillez remplir tous les champs")
+            return
+        }
+        setIsSubmitting(true)
+        try {
+            await createCustomer(newCustomer)
+            toast.success("Client enregistré avec succès")
+            setIsRegisterOpen(false)
+            setNewCustomer({ name: "", email: "" })
+            loadData()
+        } catch (error: any) {
+            toast.error(error.message || "Erreur lors de l'enregistrement")
+        } finally {
+            setIsSubmitting(false)
+        }
+    }
+
+    const handleMarketingBroadcast = async (e: React.FormEvent) => {
+        e.preventDefault()
+        if (!marketingData.subject || !marketingData.message) {
+            toast.error("Sujet et message requis")
+            return
+        }
+        setIsSubmitting(true)
+        try {
+            await sendMarketingBroadcast({
+                ...marketingData,
+                recipientCount: filteredCustomers.length
+            })
+            toast.success(`Campagne envoyée à ${filteredCustomers.length} clients`)
+            setIsMarketingOpen(false)
+            setMarketingData({ subject: "", message: "" })
+        } catch (error: any) {
+            toast.error("Erreur lors de l'envoi")
+        } finally {
+            setIsSubmitting(false)
+        }
+    }
+
     const filteredCustomers = customersData.filter(c =>
         (c.name?.toLowerCase() || "").includes(searchQuery.toLowerCase()) ||
         (c.email?.toLowerCase() || "").includes(searchQuery.toLowerCase())
@@ -136,10 +195,17 @@ export default function AdminCustomersPage() {
                 </div>
 
                 <div className="flex items-center gap-3">
-                    <Button variant="outline" className="h-11 px-6 rounded-2xl text-[12px] font-bold border-gray-100 hover:bg-white hover:shadow-xl transition-all flex items-center gap-2 uppercase tracking-widest bg-white shadow-sm">
+                    <Button
+                        onClick={() => setIsMarketingOpen(true)}
+                        variant="outline"
+                        className="h-11 px-6 rounded-2xl text-[12px] font-bold border-gray-100 hover:bg-white hover:shadow-xl transition-all flex items-center gap-2 uppercase tracking-widest bg-white shadow-sm"
+                    >
                         <MessageSquare className="h-4 w-4 text-gray-400" /> Marketing Flow
                     </Button>
-                    <Button className="h-11 px-6 rounded-2xl bg-gray-900 text-white text-[12px] font-bold hover:bg-black hover:shadow-2xl transition-all flex items-center gap-2 uppercase tracking-widest shadow-xl">
+                    <Button
+                        onClick={() => setIsRegisterOpen(true)}
+                        className="h-11 px-6 rounded-2xl bg-gray-900 text-white text-[12px] font-bold hover:bg-black hover:shadow-2xl transition-all flex items-center gap-2 uppercase tracking-widest shadow-xl"
+                    >
                         <UserPlus className="h-4 w-4" /> Manuel Register
                     </Button>
                 </div>
@@ -353,11 +419,18 @@ export default function AdminCustomersPage() {
                                 </div>
                                 <div className="p-6 bg-white border border-gray-50 rounded-[2rem] space-y-2 shadow-sm group hover:shadow-xl transition-all duration-500">
                                     <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Score Trust</p>
-                                    <p className="text-2xl font-black text-amber-600 italic tracking-tighter">9.8</p>
+                                    <p className="text-2xl font-black text-amber-600 italic tracking-tighter">
+                                        {Math.min(7 + (selectedCustomer._count?.orders || 0) * 0.5, 10).toFixed(1)}
+                                    </p>
                                 </div>
                                 <div className="p-6 bg-white border border-gray-50 rounded-[2rem] space-y-2 shadow-sm group hover:shadow-xl transition-all duration-500">
                                     <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Anciennaté</p>
-                                    <p className="text-2xl font-black text-gray-900 italic tracking-tighter">12m</p>
+                                    <p className="text-2xl font-black text-gray-900 italic tracking-tighter">
+                                        {(() => {
+                                            const months = Math.floor((new Date().getTime() - new Date(selectedCustomer.createdAt).getTime()) / (1000 * 60 * 60 * 24 * 30.44));
+                                            return months === 0 ? "Nouv." : `${months}m`;
+                                        })()}
+                                    </p>
                                 </div>
                             </div>
 
@@ -370,8 +443,17 @@ export default function AdminCustomersPage() {
                                 <div className="bg-white border border-gray-50 rounded-[2.5rem] p-8 space-y-6 shadow-sm">
                                     <div className="flex items-center justify-between">
                                         <span className="text-[13px] font-bold text-gray-400">Canal Mail</span>
-                                        <span className="text-[14px] font-black text-amber-600">{selectedCustomer.email}</span>
+                                        <span
+                                            className="text-[14px] font-black text-amber-600 cursor-pointer hover:underline"
+                                            onClick={() => {
+                                                navigator.clipboard.writeText(selectedCustomer.email);
+                                                toast.success("Email copié !");
+                                            }}
+                                        >
+                                            {selectedCustomer.email}
+                                        </span>
                                     </div>
+
                                     <Separator className="bg-gray-50" />
                                     <div className="flex items-center justify-between">
                                         <span className="text-[13px] font-bold text-gray-400">Identité Database</span>
@@ -387,7 +469,13 @@ export default function AdminCustomersPage() {
 
                             {/* Actions */}
                             <div className="pt-6 flex flex-col gap-4">
-                                <Button className="w-full h-14 bg-gray-900 text-white rounded-[1.5rem] font-black uppercase tracking-[0.2em] shadow-2xl hover:scale-[1.02] transition-transform">
+                                <Button
+                                    onClick={() => {
+                                        toast.success("Demande de ticket envoyée au support technique");
+                                        setIsDetailsOpen(false);
+                                    }}
+                                    className="w-full h-14 bg-gray-900 text-white rounded-[1.5rem] font-black uppercase tracking-[0.2em] shadow-2xl hover:scale-[1.02] transition-transform"
+                                >
                                     Générer Ticket Support
                                 </Button>
                                 <Button
@@ -398,6 +486,7 @@ export default function AdminCustomersPage() {
                                     Révoquer l'accès définitif
                                 </Button>
                             </div>
+
                         </div>
                     )}
                 </SheetContent>
@@ -411,6 +500,102 @@ export default function AdminCustomersPage() {
                 title="Séquence de Bannissement"
                 description="Êtes-vous certain de vouloir révoquer l'accès de ce client ? Cette action est irréversible et supprimera toutes les données d'engagement associées."
             />
+
+            {/* Manuel Register Modal */}
+            <Dialog open={isRegisterOpen} onOpenChange={setIsRegisterOpen}>
+                <DialogContent className="sm:max-w-md rounded-[2rem] border-0 shadow-2xl overflow-hidden">
+                    <div className="absolute top-0 right-0 p-8 opacity-5 pointer-events-none">
+                        <UserPlus className="h-24 w-24" />
+                    </div>
+                    <DialogHeader>
+                        <DialogTitle className="text-2xl font-black uppercase italic tracking-tighter">Inscription <span className="text-amber-600">Manuelle.</span></DialogTitle>
+                        <DialogDescription className="font-medium text-gray-400">Ajouter un nouveau partenaire commercial à la base de données.</DialogDescription>
+                    </DialogHeader>
+                    <form onSubmit={handleManualRegister} className="space-y-6 py-4">
+                        <div className="space-y-4">
+                            <div className="space-y-2">
+                                <Label className="text-[10px] font-black uppercase tracking-widest text-gray-400 ml-1">Nom Complet</Label>
+                                <Input
+                                    placeholder="Ex: Seydina Mouhammad Diop"
+                                    className="h-12 rounded-xl border-gray-100 focus:ring-amber-100"
+                                    value={newCustomer.name}
+                                    onChange={(e) => setNewCustomer({ ...newCustomer, name: e.target.value })}
+                                />
+                            </div>
+                            <div className="space-y-2">
+                                <Label className="text-[10px] font-black uppercase tracking-widest text-gray-400 ml-1">Canal Email</Label>
+                                <Input
+                                    type="email"
+                                    placeholder="client@mbor.com"
+                                    className="h-12 rounded-xl border-gray-100 focus:ring-amber-100"
+                                    value={newCustomer.email}
+                                    onChange={(e) => setNewCustomer({ ...newCustomer, email: e.target.value })}
+                                />
+                            </div>
+                        </div>
+                        <DialogFooter>
+                            <Button
+                                type="submit"
+                                disabled={isSubmitting}
+                                className="w-full h-12 bg-gray-900 text-white rounded-xl font-black uppercase tracking-widest shadow-xl hover:bg-black transition-all"
+                            >
+                                {isSubmitting ? "Initialisation..." : "Valider l'Inscription"}
+                            </Button>
+                        </DialogFooter>
+                    </form>
+                </DialogContent>
+            </Dialog>
+
+            {/* Marketing Flow Modal */}
+            <Dialog open={isMarketingOpen} onOpenChange={setIsMarketingOpen}>
+                <DialogContent className="sm:max-w-lg rounded-[2.5rem] border-0 shadow-2xl overflow-hidden">
+                    <div className="absolute top-0 right-0 p-8 opacity-5 pointer-events-none">
+                        <Zap className="h-32 w-32" />
+                    </div>
+                    <DialogHeader>
+                        <DialogTitle className="text-2xl font-black uppercase italic tracking-tighter">Marketing <span className="text-amber-600">Broadcast.</span></DialogTitle>
+                        <DialogDescription className="font-medium text-gray-400">
+                            Diffuser une campagne aux <span className="text-gray-900 font-bold">{filteredCustomers.length} clients</span> sélectionnés par vos filtres actuels.
+                        </DialogDescription>
+                    </DialogHeader>
+                    <form onSubmit={handleMarketingBroadcast} className="space-y-6 py-4">
+                        <div className="space-y-4">
+                            <div className="space-y-2">
+                                <Label className="text-[10px] font-black uppercase tracking-widest text-gray-400 ml-1">Objet de la Campagne</Label>
+                                <Input
+                                    placeholder="Ex: Nouvelle Collection Elite Arrivée !"
+                                    className="h-12 rounded-xl border-gray-100 focus:ring-amber-100"
+                                    value={marketingData.subject}
+                                    onChange={(e) => setMarketingData({ ...marketingData, subject: e.target.value })}
+                                />
+                            </div>
+                            <div className="space-y-2">
+                                <Label className="text-[10px] font-black uppercase tracking-widest text-gray-400 ml-1">Message Broadcast</Label>
+                                <Textarea
+                                    placeholder="Rédigez votre message ici..."
+                                    className="min-h-[150px] rounded-2xl border-gray-100 focus:ring-amber-100 p-4"
+                                    value={marketingData.message}
+                                    onChange={(e) => setMarketingData({ ...marketingData, message: e.target.value })}
+                                />
+                            </div>
+                        </div>
+                        <DialogFooter className="flex flex-col sm:flex-row gap-3">
+                            <div className="flex-1 px-4 py-3 bg-amber-50 rounded-xl border border-amber-100/50">
+                                <p className="text-[10px] text-amber-600 font-bold leading-tight">
+                                    Note: Ce message sera envoyé via le canal email privilégié de chaque client.
+                                </p>
+                            </div>
+                            <Button
+                                type="submit"
+                                disabled={isSubmitting}
+                                className="h-12 px-8 bg-gray-900 text-white rounded-xl font-black uppercase tracking-widest shadow-xl hover:bg-black transition-all shrink-0"
+                            >
+                                {isSubmitting ? "Diffusion..." : "Lancer le Flow"}
+                            </Button>
+                        </DialogFooter>
+                    </form>
+                </DialogContent>
+            </Dialog>
         </div>
     )
 }

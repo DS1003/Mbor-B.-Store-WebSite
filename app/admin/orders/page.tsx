@@ -110,11 +110,29 @@ export default function AdminOrdersPage() {
         setMounted(true)
     }, [loadOrders])
 
-    const handleStatusUpdate = async (orderId: string, status: string) => {
+    const handleStatusUpdate = async (orderId: string, status: any) => {
         try {
             await updateOrderStatus(orderId, status)
-            toast.success(`Statut synchronisé : ${status}`)
-            loadOrders()
+
+            // Re-fetch to ensure UI consistency
+            await loadOrders()
+
+            const updatedOrder = ordersData.find(o => o.id === orderId) || selectedOrder;
+
+            toast.success(`Statut synchronisé : ${status}`, {
+                action: (status === 'PAID' || status === 'DELIVERED') ? {
+                    label: "Imprimer Ticket",
+                    onClick: () => {
+                        setPrintOrder(updatedOrder)
+                        setTimeout(() => {
+                            window.print()
+                            setPrintOrder(null)
+                        }, 500)
+                    }
+                } : undefined,
+                duration: 5000
+            })
+
             if (selectedOrder?.id === orderId) {
                 setSelectedOrder({ ...selectedOrder, status })
             }
@@ -344,12 +362,17 @@ export default function AdminOrdersPage() {
                                         </td>
                                         <td className="px-8 py-4 text-center">
                                             <span className={cn(
-                                                "px-2.5 py-1 rounded-lg text-[10px] font-bold uppercase tracking-wider",
+                                                "px-2.5 py-1 rounded-lg text-[10px] font-bold uppercase tracking-wider whitespace-nowrap",
                                                 order.status === "PAID" ? "text-emerald-700 bg-emerald-50" :
                                                     order.status === "PENDING" ? "text-amber-700 bg-amber-50" :
-                                                        order.status === "SHIPPED" ? "text-amber-700 bg-amber-50" : "text-emerald-800 bg-emerald-50",
+                                                        order.status === "SHIPPED" ? "text-blue-700 bg-blue-50" :
+                                                            order.status === "DELIVERED" ? "text-emerald-800 bg-emerald-100" :
+                                                                "text-rose-700 bg-rose-50",
                                             )}>
-                                                {order.status}
+                                                {order.status === "PAID" ? "Payé" :
+                                                    order.status === "PENDING" ? "Attente" :
+                                                        order.status === "SHIPPED" ? "Expédié" :
+                                                            order.status === "DELIVERED" ? "Livré" : "Annulé"}
                                             </span>
                                         </td>
                                         <td className="px-8 py-5 text-right">
@@ -359,18 +382,40 @@ export default function AdminOrdersPage() {
                                                         <MoreHorizontal className="h-5 w-5" />
                                                     </Button>
                                                 </DropdownMenuTrigger>
-                                                <DropdownMenuContent align="end" className="w-[200px] rounded-[1.5rem] shadow-2xl border-gray-50 p-2">
-                                                    <DropdownMenuLabel className="text-[10px] font-black text-gray-400 px-3 py-2 uppercase tracking-widest border-b border-gray-50 mb-1">Audit Flux</DropdownMenuLabel>
+                                                <DropdownMenuContent align="end" className="w-[220px] rounded-[1.5rem] shadow-2xl border-gray-50 p-2">
+                                                    <DropdownMenuLabel className="text-[10px] font-black text-gray-400 px-3 py-2 uppercase tracking-widest border-b border-gray-50 mb-1">Actions Rapides</DropdownMenuLabel>
                                                     <DropdownMenuItem onClick={(e) => { e.stopPropagation(); router.push(`/admin/orders/${order.id}`); }} className="text-[12px] font-bold py-3 px-3 focus:bg-amber-50 focus:text-amber-600 rounded-xl transition-colors cursor-pointer">
                                                         <Eye className="mr-3 h-4 w-4" /> Détails Transaction
                                                     </DropdownMenuItem>
-                                                    <DropdownMenuItem onClick={() => handleStatusUpdate(order.id, "PAID")} className="text-[12px] font-bold py-3 px-3 focus:bg-emerald-50 focus:text-emerald-600 rounded-xl transition-colors cursor-pointer">
-                                                        <CheckCircle2 className="mr-3 h-4 w-4" /> Encaisser Paiement
+                                                    <DropdownMenuItem
+                                                        onClick={(e) => {
+                                                            e.stopPropagation();
+                                                            setPrintOrder(order);
+                                                            setTimeout(() => {
+                                                                window.print();
+                                                                setPrintOrder(null);
+                                                            }, 500);
+                                                        }}
+                                                        className="text-[12px] font-bold py-3 px-3 focus:bg-gray-50 rounded-xl transition-colors cursor-pointer"
+                                                    >
+                                                        <Printer className="mr-3 h-4 w-4 text-gray-400" /> Imprimer Ticket
                                                     </DropdownMenuItem>
-                                                    <DropdownMenuItem onClick={() => handleStatusUpdate(order.id, "SHIPPED")} className="text-[12px] font-bold py-3 px-3 focus:bg-amber-50 focus:text-amber-600 rounded-xl transition-colors cursor-pointer">
-                                                        <Truck className="mr-3 h-4 w-4" /> Initier Livraison
+
+                                                    <DropdownMenuLabel className="text-[10px] font-black text-gray-400 px-3 py-2 uppercase tracking-widest mt-2 border-b border-gray-50 mb-1">Mise à jour Statut</DropdownMenuLabel>
+                                                    <DropdownMenuItem onClick={(e) => { e.stopPropagation(); handleStatusUpdate(order.id, "PAID") }} className="text-[12px] font-bold py-3 px-3 focus:bg-emerald-50 focus:text-emerald-600 rounded-xl transition-colors cursor-pointer">
+                                                        <CheckCircle2 className="mr-3 h-4 w-4 text-emerald-500" /> Encaisser Paiement
                                                     </DropdownMenuItem>
-                                                    <DropdownMenuItem onClick={() => confirmDelete(order.id)} className="text-[12px] font-bold py-3 px-3 text-rose-600 focus:bg-rose-50 focus:text-rose-600 rounded-xl transition-colors cursor-pointer border-t border-gray-50 mt-1">
+                                                    <DropdownMenuItem onClick={(e) => { e.stopPropagation(); handleStatusUpdate(order.id, "SHIPPED") }} className="text-[12px] font-bold py-3 px-3 focus:bg-blue-50 focus:text-blue-600 rounded-xl transition-colors cursor-pointer">
+                                                        <Truck className="mr-3 h-4 w-4 text-blue-500" /> Initier Livraison
+                                                    </DropdownMenuItem>
+                                                    <DropdownMenuItem onClick={(e) => { e.stopPropagation(); handleStatusUpdate(order.id, "DELIVERED") }} className="text-[12px] font-bold py-3 px-3 focus:bg-emerald-50 focus:text-emerald-600 rounded-xl transition-colors cursor-pointer">
+                                                        <Star className="mr-3 h-4 w-4 text-emerald-600" /> Confirmer Livraison
+                                                    </DropdownMenuItem>
+                                                    <DropdownMenuItem onClick={(e) => { e.stopPropagation(); handleStatusUpdate(order.id, "CANCELLED") }} className="text-[12px] font-bold py-3 px-3 focus:bg-rose-50 focus:text-rose-600 rounded-xl transition-colors cursor-pointer">
+                                                        <XCircle className="mr-3 h-4 w-4 text-rose-500" /> Annuler Commande
+                                                    </DropdownMenuItem>
+
+                                                    <DropdownMenuItem onClick={(e) => { e.stopPropagation(); confirmDelete(order.id) }} className="text-[12px] font-bold py-3 px-3 text-rose-600 focus:bg-rose-50 focus:text-rose-600 rounded-xl transition-colors cursor-pointer border-t border-gray-50 mt-1">
                                                         <Trash className="mr-3 h-4 w-4" /> Révoquer Transfert
                                                     </DropdownMenuItem>
                                                 </DropdownMenuContent>
@@ -439,26 +484,66 @@ export default function AdminOrdersPage() {
                     {selectedOrder && (
                         <div id="print-area" className="space-y-10 py-10">
                             {/* Status Section (Hidden when printing receipt) */}
-                            <div className="print:hidden flex items-center justify-between p-7 bg-[#1C1C1C] rounded-[2rem] relative overflow-hidden group shadow-xl">
+                            <div className="print:hidden p-7 bg-[#1C1C1C] rounded-[3rem] relative overflow-hidden group shadow-2xl border border-white/5">
                                 <div className="absolute top-0 right-0 p-8 opacity-5">
                                     <Zap className="h-32 w-32 text-white" />
                                 </div>
-                                <div className="space-y-1 relative z-10">
-                                    <p className="text-[10px] font-bold text-gray-500 uppercase tracking-wider mb-1">Statut Logistique</p>
-                                    <Badge className={cn(
-                                        "px-4 py-1.5 rounded-lg text-[11px] font-bold uppercase tracking-wider",
-                                        selectedOrder.status === "PAID" ? "bg-emerald-500 text-white" :
-                                            selectedOrder.status === "PENDING" ? "bg-amber-500 text-white" :
-                                                "bg-amber-500 text-white",
-                                    )}>
-                                        {selectedOrder.status}
-                                    </Badge>
-                                </div>
-                                <div className="flex flex-col gap-2 relative z-10">
-                                    <Button size="sm" className="bg-white text-gray-900 hover:bg-gray-100 rounded-lg h-9 px-4 font-bold text-[10px] uppercase transition-all" onClick={() => handleStatusUpdate(selectedOrder.id, "PAID")}>Marquer Payé</Button>
-                                    <Button size="sm" variant="ghost" className="text-white hover:bg-white/10 rounded-lg h-9 px-4 font-bold text-[10px] uppercase transition-all" onClick={() => handleStatusUpdate(selectedOrder.id, "SHIPPED")}>Expédier</Button>
+                                <div className="flex flex-col gap-6 relative z-10">
+                                    <div className="space-y-1">
+                                        <p className="text-[10px] font-black text-gray-500 uppercase tracking-[0.2em] mb-2">Cycle de Vie Transactionnel</p>
+                                        <div className="flex items-center gap-3">
+                                            <Badge className={cn(
+                                                "px-4 py-2 rounded-xl text-[11px] font-black uppercase tracking-widest",
+                                                selectedOrder.status === "PAID" ? "bg-emerald-500 text-white" :
+                                                    selectedOrder.status === "PENDING" ? "bg-amber-500 text-white" :
+                                                        selectedOrder.status === "SHIPPED" ? "bg-blue-500 text-white" :
+                                                            selectedOrder.status === "DELIVERED" ? "bg-emerald-600 text-white" :
+                                                                "bg-rose-500 text-white",
+                                            )}>
+                                                {selectedOrder.status}
+                                            </Badge>
+                                            <span className="text-[11px] text-gray-400 font-bold">Dernière MaJ : {new Date(selectedOrder.updatedAt).toLocaleTimeString()}</span>
+                                        </div>
+                                    </div>
+
+                                    <div className="grid grid-cols-2 gap-3">
+                                        <Button
+                                            size="sm"
+                                            className="bg-emerald-500 hover:bg-emerald-600 text-white rounded-[1rem] h-12 px-4 font-black text-[11px] uppercase tracking-widest transition-all shadow-lg shadow-emerald-500/10"
+                                            onClick={() => handleStatusUpdate(selectedOrder.id, "PAID")}
+                                            disabled={selectedOrder.status === "PAID"}
+                                        >
+                                            <CheckCircle2 className="mr-2 h-4 w-4" /> Encaisser
+                                        </Button>
+                                        <Button
+                                            size="sm"
+                                            className="bg-blue-500 hover:bg-blue-600 text-white rounded-[1rem] h-12 px-4 font-black text-[11px] uppercase tracking-widest transition-all shadow-lg shadow-blue-500/10"
+                                            onClick={() => handleStatusUpdate(selectedOrder.id, "SHIPPED")}
+                                            disabled={selectedOrder.status === "SHIPPED"}
+                                        >
+                                            <Truck className="mr-2 h-4 w-4" /> Expédier
+                                        </Button>
+                                        <Button
+                                            size="sm"
+                                            className="bg-gray-800 hover:bg-gray-700 text-white rounded-[1rem] h-12 px-4 font-black text-[11px] uppercase tracking-widest transition-all"
+                                            onClick={() => handleStatusUpdate(selectedOrder.id, "DELIVERED")}
+                                            disabled={selectedOrder.status === "DELIVERED"}
+                                        >
+                                            <Star className="mr-2 h-4 w-4" /> Livré
+                                        </Button>
+                                        <Button
+                                            size="sm"
+                                            variant="outline"
+                                            className="border-rose-500/20 text-rose-500 hover:bg-rose-500/10 rounded-[1rem] h-12 px-4 font-black text-[11px] uppercase tracking-widest transition-all"
+                                            onClick={() => handleStatusUpdate(selectedOrder.id, "CANCELLED")}
+                                            disabled={selectedOrder.status === "CANCELLED"}
+                                        >
+                                            <XCircle className="mr-2 h-4 w-4" /> Annuler
+                                        </Button>
+                                    </div>
                                 </div>
                             </div>
+
 
                             {/* Info Section */}
                             <div className="space-y-4">
