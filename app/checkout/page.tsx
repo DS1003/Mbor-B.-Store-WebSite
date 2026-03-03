@@ -65,6 +65,27 @@ export default function CheckoutPage() {
                 throw new Error("Erreur lors de la création de la commande")
             }
 
+            const order = await response.json()
+
+            // If PayTech (online) is selected, redirect to payment gateway
+            if (paymentMethod === "online") {
+                const paytechResponse = await fetch("/api/paytech/checkout", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ orderId: order.id })
+                })
+
+                if (paytechResponse.ok) {
+                    const { redirect_url } = await paytechResponse.json()
+                    window.location.href = redirect_url
+                    return // Don't proceed to success state here, redirection handles it
+                } else {
+                    toast.error("Erreur d'initialisation du paiement électronique")
+                    setIsSubmitting(false)
+                    return
+                }
+            }
+
             setIsSuccess(true)
             toast.success("Commande confirmée !")
             clearCart()
@@ -72,7 +93,9 @@ export default function CheckoutPage() {
             console.error(error)
             toast.error("Une erreur est survenue. Veuillez réessayer.")
         } finally {
-            setIsSubmitting(false)
+            if (paymentMethod !== "online") {
+                setIsSubmitting(false)
+            }
         }
     }
 
@@ -253,10 +276,11 @@ export default function CheckoutPage() {
                                         <p className="text-[11px] font-bold tracking-widest text-muted-foreground/40 uppercase">Sécurisé & Rapide</p>
                                     </div>
                                 </div>
-                                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                                <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
                                     {[
-                                        { id: "wave", label: "Wave", desc: "Mobile Money", logo: "https://res.cloudinary.com/da1dmwqhb/image/upload/v1769271856/mbor_store/payment-wave.png" },
-                                        { id: "om", label: "Orange Money", desc: "Mobile Money", logo: "https://res.cloudinary.com/da1dmwqhb/image/upload/v1769271856/mbor_store/payment-om.png" },
+                                        { id: "online", label: "Paiement en ligne", desc: "Wave, OM, Carte", logo: "https://paytech.sn/assets/img/logo.png" },
+                                        { id: "wave", label: "Wave", desc: "Paiement manuel", logo: "https://res.cloudinary.com/da1dmwqhb/image/upload/v1769271856/mbor_store/payment-wave.png" },
+                                        { id: "om", label: "Orange Money", desc: "Paiement manuel", logo: "https://res.cloudinary.com/da1dmwqhb/image/upload/v1769271856/mbor_store/payment-om.png" },
                                         { id: "cash", label: "Espèces", desc: "Paiement à la livraison", logo: "https://res.cloudinary.com/da1dmwqhb/image/upload/v1769271855/mbor_store/payment-cash.png" }
                                     ].map((m) => (
                                         <button

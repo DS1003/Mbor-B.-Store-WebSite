@@ -15,7 +15,8 @@ const nextConfig = {
       { protocol: "https", hostname: "maillots-senegal.com" },
       { protocol: "https", hostname: "pbs.twimg.com" },
       { protocol: "https", hostname: "res.cloudinary.com" },
-      { protocol: "https", hostname: "amnakoo.com" }
+      { protocol: "https", hostname: "amnakoo.com" },
+      { protocol: "https", hostname: "paytech.sn" }
     ],
   },
   serverExternalPackages: ["@prisma/client", "prisma"],
