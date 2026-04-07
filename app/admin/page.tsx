@@ -37,10 +37,7 @@ import {
 import {
     getDashboardStats,
     getRecentOrders,
-    getAdminLogs,
-    getPromotions,
-    createPromotion,
-    deletePromotion
+    getAdminLogs
 } from "./actions"
 import {
     Dialog,
@@ -73,24 +70,18 @@ export default function AdminDashboard() {
 
     const [logs, setLogs] = React.useState<any[]>([])
     const [isLogsOpen, setIsLogsOpen] = React.useState(false)
-    const [promos, setPromos] = React.useState<any[]>([])
-    const [isPromoOpen, setIsPromoOpen] = React.useState(false)
-    const [isCreatingPromo, setIsCreatingPromo] = React.useState(false)
-    const [newPromo, setNewPromo] = React.useState({ title: "", code: "", discount: "" })
 
     const loadData = React.useCallback(async () => {
         setIsLoading(true)
         try {
-            const [stats, orders, logsData, promosData] = await Promise.all([
+            const [stats, orders, logsData] = await Promise.all([
                 getDashboardStats(),
                 getRecentOrders(5),
-                getAdminLogs(),
-                getPromotions()
+                getAdminLogs()
             ])
             setStatsData(stats)
             setRecentOrders(orders)
             setLogs(logsData)
-            setPromos(promosData)
         } catch (error) {
             console.error("Failed to load dashboard data:", error)
         } finally {
@@ -101,37 +92,6 @@ export default function AdminDashboard() {
     React.useEffect(() => {
         loadData()
     }, [loadData])
-
-    const handleCreatePromo = async () => {
-        if (!newPromo.title || !newPromo.code) return toast.error("Titre et Code requis")
-        setIsCreatingPromo(true)
-        try {
-            await createPromotion({
-                title: newPromo.title,
-                code: newPromo.code,
-                discount: Number(newPromo.discount) || 0,
-                isActive: true
-            })
-            toast.success("Promotion créée")
-            setNewPromo({ title: "", code: "", discount: "" })
-            const updatedPromos = await getPromotions()
-            setPromos(updatedPromos)
-        } catch (error) {
-            toast.error("Erreur de création")
-        } finally {
-            setIsCreatingPromo(false)
-        }
-    }
-
-    const handleDeletePromo = async (id: string) => {
-        try {
-            await deletePromotion(id)
-            toast.success("Promotion supprimée")
-            setPromos(promos.filter(p => p.id !== id))
-        } catch (error) {
-            toast.error("Erreur de suppression")
-        }
-    }
 
     const exportToCSV = () => {
         if (!statsData || !recentOrders.length) {
@@ -400,7 +360,7 @@ export default function AdminDashboard() {
                                 Logs
                             </Button>
                             <Button
-                                onClick={() => setIsPromoOpen(true)}
+                                onClick={() => router.push('/admin/promotions')}
                                 variant="outline"
                                 className="h-10 rounded-xl text-[11px] font-bold border-gray-100 hover:bg-gray-50 uppercase tracking-wider transition-all active:scale-95"
                             >
@@ -452,90 +412,6 @@ export default function AdminDashboard() {
                 </DialogContent>
             </Dialog>
 
-            {/* Promo Dialog */}
-            <Dialog open={isPromoOpen} onOpenChange={setIsPromoOpen}>
-                <DialogContent className="max-w-2xl rounded-[2.5rem] border-none shadow-2xl p-0 overflow-hidden">
-                    <div className="bg-white p-8 space-y-8">
-                        <DialogHeader>
-                            <DialogTitle className="text-2xl font-bold tracking-tight text-gray-900">
-                                Gestion des <span className="text-amber-600">Promotions.</span>
-                            </DialogTitle>
-                            <DialogDescription className="text-sm font-medium text-gray-500">
-                                Créez et gérez vos codes promo et offres spéciales.
-                            </DialogDescription>
-                        </DialogHeader>
-
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                            {/* Create Section */}
-                            <div className="space-y-6">
-                                <h4 className="text-[11px] font-bold text-gray-400 uppercase tracking-widest">Nouvelle Offre</h4>
-                                <div className="space-y-4">
-                                    <div className="space-y-1.5">
-                                        <Label className="text-[10px] font-bold text-gray-500 uppercase ml-1">Titre</Label>
-                                        <Input
-                                            placeholder="ex: Soldes Été"
-                                            className="h-11 rounded-xl bg-gray-50 border-gray-100 font-medium text-[13px]"
-                                            value={newPromo.title}
-                                            onChange={(e) => setNewPromo({ ...newPromo, title: e.target.value })}
-                                        />
-                                    </div>
-                                    <div className="space-y-1.5">
-                                        <Label className="text-[10px] font-bold text-gray-500 uppercase ml-1">Code Promo</Label>
-                                        <Input
-                                            placeholder="MBOR2024"
-                                            className="h-11 rounded-xl bg-gray-50 border-gray-100 font-bold tracking-widest text-[13px]"
-                                            value={newPromo.code}
-                                            onChange={(e) => setNewPromo({ ...newPromo, code: e.target.value.toUpperCase() })}
-                                        />
-                                    </div>
-                                    <div className="space-y-1.5">
-                                        <Label className="text-[10px] font-bold text-gray-500 uppercase ml-1">Réduction (%)</Label>
-                                        <Input
-                                            type="number"
-                                            placeholder="ex: 15"
-                                            className="h-11 rounded-xl bg-gray-50 border-gray-100 font-bold text-[13px]"
-                                            value={newPromo.discount}
-                                            onChange={(e) => setNewPromo({ ...newPromo, discount: e.target.value })}
-                                        />
-                                    </div>
-                                    <Button
-                                        onClick={handleCreatePromo}
-                                        disabled={isCreatingPromo}
-                                        className="w-full h-11 bg-gray-900 text-white rounded-xl font-bold uppercase tracking-wider text-[11px] shadow-lg shadow-gray-200"
-                                    >
-                                        {isCreatingPromo ? "Création..." : "Activer Promotion"}
-                                    </Button>
-                                </div>
-                            </div>
-
-                            {/* List Section */}
-                            <div className="space-y-6">
-                                <h4 className="text-[11px] font-bold text-gray-400 uppercase tracking-widest">Offres Actives</h4>
-                                <div className="space-y-3 max-h-[300px] overflow-y-auto pr-2 custom-scrollbar">
-                                    {promos.length === 0 ? (
-                                        <div className="py-10 text-center opacity-30 italic text-[11px] text-gray-400">Aucune promo.</div>
-                                    ) : promos.map((promo) => (
-                                        <div key={promo.id} className="p-4 bg-amber-50 rounded-2xl border border-amber-100 flex items-center justify-between group">
-                                            <div className="min-w-0">
-                                                <p className="text-[13px] font-bold text-amber-900 truncate tracking-tight">{promo.title}</p>
-                                                <p className="text-[11px] text-amber-600 font-black tracking-widest">{promo.code}</p>
-                                            </div>
-                                            <Button
-                                                onClick={() => handleDeletePromo(promo.id)}
-                                                variant="ghost"
-                                                size="icon"
-                                                className="h-8 w-8 text-rose-500 hover:bg-rose-100/50 opacity-0 group-hover:opacity-100 transition-all"
-                                            >
-                                                <Trash className="h-4 w-4" />
-                                            </Button>
-                                        </div>
-                                    ))}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </DialogContent>
-            </Dialog>
         </div>
     )
 }

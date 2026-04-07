@@ -12,9 +12,17 @@ import { Magnetic } from "./interactions"
 
 const HERO_SLIDES = [
     {
+        image: "https://www.foot.fr/146457-pdt_1500/maillot-dkali-senegal-vert.jpg",
+        title: "4 Avril 🇸🇳",
+        subtitle: "Fête de l'Indépendance — Promo exceptionnelle : -50% sur tout le catalogue !",
+        cta: "Profiter de -50% maintenant",
+        link: "/shop",
+        color: "independence"
+    },
+    {
         image: "https://cdn.blazimg.com/homepage/stores/1/FR_adidas_slider_desktop_4.webp",
         title: "Adidas F50",
-        subtitle: "La performance au service de la vitesse.",
+        subtitle: "La performance au service de la vitesse. -50% Fête Nationale !",
         cta: "Découvrir la collection",
         link: "/shop/adidas",
         color: "primary"
@@ -22,7 +30,7 @@ const HERO_SLIDES = [
     {
         image: "https://cdn.blazimg.com/homepage/stores/1/FR_Max_Voltage_slider_desktop_3.webp",
         title: "Nike Max Voltage",
-        subtitle: "L'énergie pure à chaque foulée.",
+        subtitle: "L'énergie pure à chaque foulée. -50% aujourd'hui !",
         cta: "Acheter Nike",
         link: "/shop/nike",
         color: "primary"
@@ -30,7 +38,7 @@ const HERO_SLIDES = [
     {
         image: "https://cdn.blazimg.com/homepage/stores/1/FR_Offre_A_slider_desktop_2.webp",
         title: "Offres Élites",
-        subtitle: "Équipez-vous comme un pro à prix réduit.",
+        subtitle: "Équipez-vous comme un pro à prix réduit. -50% Indépendance !",
         cta: "Profiter des offres",
         link: "/shop/sale",
         color: "primary"
@@ -84,8 +92,15 @@ export function HeroCarousel() {
                                 className="object-cover h-full w-full"
                                 priority={index === 0}
                             />
-                            {/* Overlay Gradient Softened */}
-                            <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-transparent to-transparent z-10" />
+                            {/* Overlay Gradient - Special for Independence Day */}
+                            {slide.color === "independence" ? (
+                                <div className="absolute inset-0 z-10">
+                                    <div className="absolute inset-0 bg-gradient-to-r from-[#00853F]/70 via-[#FDEF42]/20 to-[#E31B23]/50" />
+                                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+                                </div>
+                            ) : (
+                                <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-transparent to-transparent z-10" />
+                            )}
 
                             {/* Content */}
                             <div className="container-custom relative z-20 h-full flex flex-col justify-center">

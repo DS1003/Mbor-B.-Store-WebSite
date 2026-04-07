@@ -11,6 +11,8 @@ interface ProductCardProps {
     id: string
     name: string
     price: number
+    originalPrice?: number
+    discountPercent?: number
     image: string
     category: string
     isNew?: boolean
@@ -18,7 +20,7 @@ interface ProductCardProps {
 
 import { useWishlist } from "./wishlist-context"
 
-export function ProductCard({ id, name, price, image, category, isNew }: ProductCardProps) {
+export function ProductCard({ id, name, price, originalPrice, discountPercent, image, category, isNew }: ProductCardProps) {
     const [isHovered, setIsHovered] = React.useState(false)
     const { toggleFavorite, isFavorite } = useWishlist()
     const favorited = isFavorite(id)
@@ -37,11 +39,18 @@ export function ProductCard({ id, name, price, image, category, isNew }: Product
 
             {/* Image Container */}
             <div className="relative aspect-[4/5] overflow-hidden bg-muted/10">
-                {isNew && (
-                    <div className="absolute top-3 left-3 sm:top-5 sm:left-5 z-20 bg-primary text-black text-[7px] sm:text-[9px] font-black uppercase tracking-[0.2em] px-2.5 py-1 sm:px-4 sm:py-1.5 rounded-full shadow-xl">
-                        Nouveau
-                    </div>
-                )}
+                <div className="absolute top-3 left-3 sm:top-5 sm:left-5 z-20 flex flex-col gap-2">
+                    {isNew && (
+                        <div className="bg-primary text-black text-[7px] sm:text-[9px] font-black uppercase tracking-[0.2em] px-2.5 py-1 sm:px-4 sm:py-1.5 rounded-full shadow-xl">
+                            Nouveau
+                        </div>
+                    )}
+                    {discountPercent && (
+                        <div className="bg-rose-500 text-white text-[7px] sm:text-[9px] font-black uppercase tracking-[0.2em] px-2.5 py-1 sm:px-4 sm:py-1.5 rounded-full shadow-xl">
+                            -{discountPercent}%
+                        </div>
+                    )}
+                </div>
 
                 <button
                     onClick={(e) => {
@@ -96,9 +105,16 @@ export function ProductCard({ id, name, price, image, category, isNew }: Product
                 <div className="flex items-end justify-between pt-2 sm:pt-5 border-t border-muted/30">
                     <div className="space-y-0 sm:space-y-1">
                         <p className="text-[6px] sm:text-[8px] font-black uppercase tracking-widest text-muted-foreground/40 italic">Prix Unitaire</p>
-                        <span className="text-sm sm:text-2xl font-black italic tracking-tighter text-foreground tabular-nums leading-none" suppressHydrationWarning>
-                            {price.toLocaleString()} <span className="text-[8px] sm:text-[10px] font-black tracking-normal ml-0.5 text-muted-foreground/40 italic uppercase">FCFA</span>
-                        </span>
+                        <div className="flex flex-col">
+                            {originalPrice && (
+                                <span className="text-[9px] sm:text-[13px] font-bold text-muted-foreground/40 line-through decoration-rose-500/50 mb-0.5" suppressHydrationWarning>
+                                    {originalPrice.toLocaleString()} F
+                                </span>
+                            )}
+                            <span className="text-sm sm:text-2xl font-black italic tracking-tighter text-foreground tabular-nums leading-none" suppressHydrationWarning>
+                                {price.toLocaleString()} <span className="text-[8px] sm:text-[10px] font-black tracking-normal ml-0.5 text-muted-foreground/40 italic uppercase">FCFA</span>
+                            </span>
+                        </div>
                     </div>
 
                     <div className="h-7 w-7 sm:h-10 sm:w-10 rounded-md sm:rounded-xl bg-muted/10 flex items-center justify-center transition-all group-hover:bg-primary/10 group-hover:text-primary">

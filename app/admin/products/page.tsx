@@ -174,11 +174,24 @@ export default function AdminProductsPage() {
         if (!idToDelete) return
         setIsDeleting(true)
         try {
-            await deleteProduct(idToDelete)
-            toast.success("Produit supprimé")
+            const res = await deleteProduct(idToDelete)
+            
+            // Check if server returned a structured response
+            if (res && typeof res === 'object') {
+                if (!res.success) {
+                    toast.error(res.message || "Erreur de suppression")
+                    return
+                } else {
+                    toast.success("Produit supprimé")
+                }
+            } else {
+                // Fallback for success if no object is returned (for backwards compat)
+                toast.success("Produit supprimé")
+            }
+            
             loadData()
         } catch (error) {
-            toast.error("Erreur de suppression")
+            toast.error("Erreur inattendue de suppression")
         } finally {
             setIsDeleting(false)
             setIsDeleteDialogOpen(false)

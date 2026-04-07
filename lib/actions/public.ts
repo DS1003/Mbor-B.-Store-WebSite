@@ -4,12 +4,56 @@ import { prisma } from "@/lib/prisma"
 
 import { unstable_cache } from "next/cache"
 
-// Serialize products for safe client-side use
-function serializeProduct(p: any) {
+// Helper to fetch active promotions
+export const getActivePromotions = unstable_cache(
+    async () => {
+        const now = new Date()
+        const promos = await prisma.promotion.findMany({
+            where: {
+                isActive: true,
+                OR: [
+                    { startDate: null, endDate: null },
+                    { startDate: { lte: now }, endDate: null },
+                    { startDate: null, endDate: { gte: now } },
+                    { startDate: { lte: now }, endDate: { gte: now } }
+                ]
+            }
+        })
+        return promos.map(p => ({
+            ...p,
+            discount: Number(p.discount || 0)
+        }))
+    },
+    ['active-promotions'],
+    { tags: ['promotions'], revalidate: 60 }
+)
+
+// Serialize products with promotion awareness
+function serializeProduct(p: any, promos: any[] = []) {
+    const basePrice = Number(p.price)
+    let finalPrice = basePrice
+    let activeDiscount = 0
+
+    // Check for applicable promotions
+    const applicable = promos.filter(promo => {
+        if (promo.isGlobal) return true
+        if (promo.productIds.includes(p.id)) return true
+        if (p.categoryId && promo.categoryIds.includes(p.categoryId)) return true
+        return false
+    })
+
+    if (applicable.length > 0) {
+        // Pick the highest discount
+        activeDiscount = Math.max(...applicable.map(pr => pr.discount))
+        finalPrice = basePrice * (1 - (activeDiscount / 100))
+    }
+
     return {
         id: p.id,
         name: p.name,
-        price: Number(p.price),
+        price: finalPrice,
+        originalPrice: activeDiscount > 0 ? basePrice : undefined,
+        discountPercent: activeDiscount > 0 ? activeDiscount : undefined,
         category: p.category?.name || "Sans catégorie",
         image: p.images[0] || "",
         isNew: true
@@ -50,15 +94,18 @@ export async function quickSearchProducts(query: string) {
 
 export const getFeaturedProducts = unstable_cache(
     async () => {
-        const products = await prisma.product.findMany({
-            where: { featured: true },
-            include: { category: true },
-            take: 4
-        })
-        return products.map(serializeProduct)
+        const [products, activePromos] = await Promise.all([
+            prisma.product.findMany({
+                where: { featured: true },
+                include: { category: true },
+                take: 4
+            }),
+            getActivePromotions()
+        ])
+        return products.map(p => serializeProduct(p, activePromos))
     },
     ['featured-products'],
-    { tags: ['products', 'featured'], revalidate: 3600 }
+    { tags: ['products', 'featured', 'promotions'], revalidate: 3600 }
 )
 
 export const getProducts = unstable_cache(
@@ -111,40 +158,45 @@ export const getProducts = unstable_cache(
         if (sort === "price_desc") orderBy = { price: "desc" }
         if (sort === "oldest") orderBy = { createdAt: "asc" }
 
-        const products = await prisma.product.findMany({
-            where,
-            orderBy,
-            include: { category: true },
-            take,
-            skip
-        })
-
-        const totalCount = await prisma.product.count({ where })
+        const [products, totalCount, activePromos] = await Promise.all([
+            prisma.product.findMany({
+                where,
+                orderBy,
+                include: { category: true },
+                take,
+                skip
+            }),
+            prisma.product.count({ where }),
+            getActivePromotions()
+        ])
 
         return {
-            products: products.map(serializeProduct),
+            products: products.map(p => serializeProduct(p, activePromos)),
             totalCount
         }
     },
     ['shop-products'],
-    { tags: ['products'], revalidate: 600 }
+    { tags: ['products', 'promotions'], revalidate: 600 }
 )
 
 export const getRelatedProducts = unstable_cache(
     async (productId: string, categoryId?: string) => {
-        const products = await prisma.product.findMany({
-            where: {
-                id: { not: productId },
-                categoryId: categoryId || undefined
-            },
-            include: { category: true },
-            take: 4,
-            orderBy: { createdAt: 'desc' }
-        })
-        return products.map(serializeProduct)
+        const [products, activePromos] = await Promise.all([
+            prisma.product.findMany({
+                where: {
+                    id: { not: productId },
+                    categoryId: categoryId || undefined
+                },
+                include: { category: true },
+                take: 4,
+                orderBy: { createdAt: 'desc' }
+            }),
+            getActivePromotions()
+        ])
+        return products.map(p => serializeProduct(p, activePromos))
     },
     ['related-products'],
-    { tags: ['products'], revalidate: 3600 }
+    { tags: ['products', 'promotions'], revalidate: 3600 }
 )
 
 export const getCategories = unstable_cache(

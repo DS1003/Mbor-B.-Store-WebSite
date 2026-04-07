@@ -26,7 +26,8 @@ import {
     Shield,
     Calendar,
     Command,
-    ShoppingBag
+    ShoppingBag,
+    Tag
 } from "lucide-react"
 import { useTheme } from "next-themes"
 import { cn } from "@/lib/utils"
@@ -74,6 +75,7 @@ const menuGroups = [
     {
         label: "Opérations",
         items: [
+            { icon: Tag, label: "Promotions", href: "/admin/promotions" },
             { icon: ShoppingBag, label: "Vente Boutique", href: "/admin/pos" },
             { icon: ShoppingCart, label: "Commandes", href: "/admin/orders" },
             { icon: Database, label: "Stock & Inventaire", href: "/admin/stock" },

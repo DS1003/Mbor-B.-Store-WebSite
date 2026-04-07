@@ -18,6 +18,8 @@ interface ProductInfoProps {
         id: string
         name: string
         price: number
+        originalPrice?: number
+        discountPercent?: number
         category: string
         description: string
         images: string[]
@@ -42,6 +44,8 @@ export function ProductInfo({ product }: ProductInfoProps) {
         id: "placeholder",
         name: "Produit Premium",
         price: 0,
+        originalPrice: undefined,
+        discountPercent: undefined,
         category: "Collection",
         description: "Description du produit non disponible.",
         images: ["https://res.cloudinary.com/da1dmwqhb/image/upload/v1769271862/mbor_store/placeholder.svg"],
@@ -111,6 +115,11 @@ export function ProductInfo({ product }: ProductInfoProps) {
                             Nouvelle Collection
                         </span>
                     )}
+                    {data.discountPercent && (
+                        <span className="text-white font-black tracking-tight text-[11px] bg-rose-500 px-4 py-1.5 rounded-full shadow-lg shadow-rose-500/20">
+                            -{data.discountPercent}% OFF
+                        </span>
+                    )}
                 </div>
                 <h1 className="font-heading text-4xl sm:text-5xl font-bold tracking-tight leading-tight text-balance">
                     {data.name}
@@ -127,14 +136,21 @@ export function ProductInfo({ product }: ProductInfoProps) {
 
             {/* Price section - Elegant style */}
             <div className="flex flex-col space-y-3 p-8 bg-muted/30 rounded-3xl border border-muted/50">
-                <div className="flex items-baseline space-x-4">
-                    <span className="text-4xl font-bold tracking-tight tabular-nums text-foreground">
-                        {data.price.toLocaleString()} <span className="text-lg font-semibold ml-1 text-muted-foreground">FCFA</span>
-                    </span>
-                    {data.price > 0 && (
-                        <span className="text-lg text-muted-foreground/40 line-through font-medium">
-                            {(data.price * 1.2).toLocaleString()}
+                <div className="flex flex-col">
+                    <div className="flex items-baseline space-x-4">
+                        <span className="text-4xl font-bold tracking-tight tabular-nums text-foreground">
+                            {data.price.toLocaleString()} <span className="text-lg font-semibold ml-1 text-muted-foreground">FCFA</span>
                         </span>
+                        {data.originalPrice && (
+                            <span className="text-xl text-muted-foreground/40 line-through font-medium decoration-rose-500/50 decoration-2">
+                                {data.originalPrice.toLocaleString()}
+                            </span>
+                        )}
+                    </div>
+                    {data.discountPercent && (
+                        <p className="text-[11px] font-bold text-rose-500 uppercase tracking-widest mt-2">
+                            Offre spéciale Indépendance : Vous économisez {(data.originalPrice! - data.price).toLocaleString()} F
+                        </p>
                     )}
                 </div>
                 <div className="flex items-center gap-2 text-[11px] font-semibold tracking-tight text-green-600 dark:text-green-500">

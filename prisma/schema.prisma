@@ -240,6 +240,9 @@ model Promotion {
   startDate   DateTime?
   endDate     DateTime?
   isActive    Boolean   @default(true)
+  isGlobal    Boolean   @default(false)
+  categoryIds String[]  @default([])
+  productIds  String[]  @default([])
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
 }

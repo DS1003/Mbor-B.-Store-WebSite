@@ -10,6 +10,8 @@ import { ScrollReveal } from "@/components/scroll-reveal"
 import { prisma } from "@/lib/prisma"
 import { notFound } from "next/navigation"
 
+import { getActivePromotions } from "@/lib/actions/public"
+
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
     const { id } = await params
     const product = await prisma.product.findUnique({
@@ -54,22 +56,44 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
 export default async function ProductPage({ params }: { params: Promise<{ id: string }> }) {
     const { id } = await params
 
-    const product = await prisma.product.findUnique({
-        where: { id },
-        include: {
-            category: true,
-            sizes: true
-        }
-    })
+    const [product, activePromos] = await Promise.all([
+        prisma.product.findUnique({
+            where: { id },
+            include: {
+                category: true,
+                sizes: true
+            }
+        }),
+        getActivePromotions()
+    ])
 
     if (!product) {
         return notFound()
     }
 
+    // Apply promotion logic
+    const basePrice = Number(product.price)
+    let finalPrice = basePrice
+    let activeDiscount = 0
+
+    const applicable = activePromos.filter(promo => {
+        if (promo.isGlobal) return true
+        if (promo.productIds.includes(product.id)) return true
+        if (product.categoryId && promo.categoryIds.includes(product.categoryId)) return true
+        return false
+    })
+
+    if (applicable.length > 0) {
+        activeDiscount = Math.max(...applicable.map(pr => pr.discount))
+        finalPrice = basePrice * (1 - (activeDiscount / 100))
+    }
+
     const productData = {
         id: product.id,
         name: product.name,
-        price: Number(product.price),
+        price: finalPrice,
+        originalPrice: activeDiscount > 0 ? basePrice : undefined,
+        discountPercent: activeDiscount > 0 ? activeDiscount : undefined,
         category: product.category?.name || "Sport",
         description: product.description ?? "",
         images: product.images.length > 0 ? product.images : ["https://res.cloudinary.com/da1dmwqhb/image/upload/v1769271862/mbor_store/placeholder.svg"],

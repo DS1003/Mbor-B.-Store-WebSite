@@ -62,14 +62,15 @@ export const metadata: Metadata = {
         follow: true,
     },
     icons: {
-        icon: "/favicon.ico",
-        shortcut: "/favicon-16x16.png",
-        apple: "/apple-touch-icon.png",
+        icon: "/mbor-logo-new.png",
+        shortcut: "/mbor-logo-new.png",
+        apple: "/mbor-logo-new.png",
     }
 }
 
 import { getStoreConfig } from "./admin/actions"
 import { ThemeVariables } from "@/components/theme-variables"
+import { IndependenceBanner, ConfettiBurst } from "@/components/independence-banner"
 
 export default async function RootLayout({
     children,
@@ -81,6 +82,7 @@ export default async function RootLayout({
     return (
         <html lang="fr" suppressHydrationWarning>
             <body
+                suppressHydrationWarning
                 className={`min-h-screen bg-background text-foreground flex flex-col antialiased selection:bg-primary selection:text-primary-foreground`}
                 style={{
                     '--font-sans-base': inter.style.fontFamily,
@@ -126,6 +128,8 @@ export default async function RootLayout({
                             })
                         }}
                     />
+                    <ConfettiBurst />
+                    <IndependenceBanner />
                     <SiteHeader />
                     <main className="flex-1 pt-[84px]">
                         {children}

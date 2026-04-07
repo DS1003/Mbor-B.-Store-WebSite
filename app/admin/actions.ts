@@ -158,11 +158,32 @@ export async function getAdminProducts() {
 }
 
 export async function deleteProduct(id: string) {
-    await prisma.product.delete({
-        where: { id }
-    })
-    revalidatePath('/admin/products')
-    revalidatePath('/admin/stock')
+    try {
+        // Prevent deletion if the product is linked to orders to preserve history
+        const orderCount = await prisma.orderItem.count({
+            where: { productId: id }
+        })
+
+        if (orderCount > 0) {
+            return {
+                success: false,
+                message: "Impossible de supprimer ce produit car il est lié à des commandes existantes. Veuillez plutôt mettre son stock à 0."
+            }
+        }
+
+        await prisma.product.delete({
+            where: { id }
+        })
+        revalidatePath('/admin/products')
+        revalidatePath('/admin/stock')
+        return { success: true }
+    } catch (error: any) {
+        console.error("Delete product error:", error)
+        return {
+            success: false,
+            message: "Erreur lors de la suppression du produit."
+        }
+    }
 }
 
 export async function getAdminOrders() {
@@ -667,7 +688,10 @@ export async function getPromotions() {
         })
         return promos.map((p: any) => ({
             ...p,
-            discount: p.discount ? Number(p.discount) : null
+            discount: p.discount ? Number(p.discount) : 0,
+            isGlobal: p.isGlobal,
+            categoryIds: p.categoryIds,
+            productIds: p.productIds
         }))
     } catch (error) {
         console.error("Failed to fetch promotions:", error)

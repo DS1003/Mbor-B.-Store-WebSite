@@ -196,3 +196,122 @@ export function DecryptText({
         </span>
     )
 }
+
+/* --- SplitText Component (React Bits style) --- */
+export function SplitText({
+    text,
+    className = "",
+    delay = 0,
+}: {
+    text: string,
+    className?: string,
+    delay?: number
+}) {
+    const letters = text.split("")
+    
+    const container: any = {
+        hidden: { opacity: 0 },
+        visible: {
+            opacity: 1,
+            transition: { staggerChildren: 0.03, delayChildren: delay },
+        },
+    }
+    
+    const child: any = {
+        hidden: {
+            opacity: 0,
+            y: '20%',
+            rotate: -4,
+        },
+        visible: {
+            opacity: 1,
+            y: '0%',
+            rotate: 0,
+            transition: {
+                type: "spring",
+                damping: 12,
+                stiffness: 100,
+            },
+        },
+    }
+
+    return (
+        <motion.div
+            className={cn("flex flex-wrap", className)}
+            variants={container}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-50px" }}
+        >
+            {letters.map((letter, index) => (
+                <motion.span 
+                    variants={child} 
+                    key={index}
+                    className="inline-block"
+                >
+                    {letter === " " ? "\u00A0" : letter}
+                </motion.span>
+            ))}
+        </motion.div>
+    )
+}
+
+/* --- BlurText Component (React Bits style) --- */
+export function BlurText({
+    text,
+    className = "",
+    delay = 0,
+}: {
+    text: string,
+    className?: string,
+    delay?: number
+}) {
+    const words = text.split(" ")
+    
+    const container: any = {
+        hidden: { opacity: 0 },
+        visible: {
+            opacity: 1,
+            transition: { staggerChildren: 0.1, delayChildren: delay },
+        },
+    }
+    
+    const child: any = {
+        visible: {
+            opacity: 1,
+            filter: "blur(0px)",
+            y: 0,
+            transition: {
+                type: "spring",
+                damping: 12,
+                stiffness: 100,
+            },
+        },
+        hidden: {
+            opacity: 0,
+            filter: "blur(10px)",
+            y: 10,
+        },
+    }
+
+    return (
+        <motion.div
+            className={cn("flex flex-wrap", className)}
+            variants={container}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-50px" }}
+        >
+            {words.map((word, index) => (
+                <motion.span 
+                    variants={child} 
+                    key={index} 
+                    className="mr-2 last:mr-0 inline-block"
+                >
+                    {word}
+                </motion.span>
+            ))}
+        </motion.div>
+    )
+}
+
