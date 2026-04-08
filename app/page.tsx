@@ -34,17 +34,21 @@ export default function HomePage() {
             </section>
 
             {/* Categories Selection */}
-            <section className="py-20 lg:py-32 overflow-hidden">
+            <section className="py-12 lg:py-32 overflow-hidden">
                 <div className="container-custom">
                     <ScrollReveal className="flex flex-col items-center text-center space-y-4 sm:space-y-6 mb-12 sm:mb-16 lg:mb-24">
                         <SplitText 
                             text="Univers Mbor Store"
                             className="text-primary font-bold uppercase tracking-[0.2em] text-[10px] sm:text-xs justify-center"
                         />
-                        <h2 className="font-heading text-3xl sm:text-6xl lg:text-7xl font-bold tracking-tight leading-tight max-w-4xl flex flex-wrap justify-center items-center gap-x-2 sm:gap-x-4">
-                            <BlurText text="Dominez le terrain avec une" delay={0.2} />
-                            <BlurText text="élégance" delay={0.6} />
-                            <BlurText text="signature" className="text-primary italic" delay={0.8} />
+                        <h2 className="font-heading text-3xl sm:text-6xl lg:text-7xl font-bold tracking-tight leading-tight max-w-5xl text-center mx-auto space-y-2">
+                            <span className="block">
+                                <BlurText text="Dominez le terrain avec" delay={0.2} />
+                            </span>
+                            <span className="block">
+                                <BlurText text="une élégance" delay={0.6} />{" "}
+                                <BlurText text="signature" className="text-primary italic" delay={0.8} />
+                            </span>
                         </h2>
                     </ScrollReveal>
 
@@ -132,9 +136,9 @@ export default function HomePage() {
                 <div className="container-custom relative z-20 h-full flex items-center">
                     <ScrollReveal direction="left" className="max-w-3xl space-y-6 sm:space-y-8">
                         <SplitText text="4 Avril • Fête Nationale" className="text-[#FDEF42] font-bold uppercase tracking-[0.2em] text-[9px] sm:text-xs" />
-                        <h2 className="font-heading text-4xl sm:text-8xl font-bold tracking-tight leading-tight flex flex-wrap items-center gap-x-3 sm:gap-x-5">
-                            <BlurText text="-50%" className="text-[#FDEF42]" delay={0.1} />
-                            <BlurText text="sur" className="text-white" delay={0.3} />
+                        <h2 className="font-heading text-4xl sm:text-8xl font-bold tracking-tight leading-tight text-left">
+                            <BlurText text="-50%" className="text-[#FDEF42]" delay={0.1} />{" "}
+                            <BlurText text="sur" className="text-white" delay={0.3} />{" "}
                             <BlurText text="tout !" className="text-[#E31B23] italic" delay={0.5} />
                         </h2>
                         <p className="text-base sm:text-xl text-white/90 font-medium tracking-tight max-w-2xl leading-relaxed">
@@ -159,7 +163,7 @@ export default function HomePage() {
             <section className="py-20 lg:py-40">
                 <div className="container-custom">
                     <ScrollReveal>
-                        <div className="relative rounded-3xl lg:rounded-[4rem] bg-black overflow-hidden p-12 lg:p-32 text-center shadow-2xl">
+                        <div className="relative rounded-[2rem] lg:rounded-[4rem] bg-black overflow-hidden p-8 sm:p-12 lg:p-32 text-center shadow-2xl">
                             {/* Tricolor glow orbs */}
                             <div className="absolute top-0 left-0 h-[400px] w-[400px] rounded-full bg-[#00853F] opacity-15 blur-[120px] -translate-y-1/2 -translate-x-1/2" />
                             <div className="absolute top-1/2 left-1/2 h-[300px] w-[300px] rounded-full bg-[#FDEF42] opacity-10 blur-[120px] -translate-y-1/2 -translate-x-1/2" />
@@ -169,20 +173,20 @@ export default function HomePage() {
                                 <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm px-4 py-2 rounded-full border border-white/10 text-[#FDEF42] text-xs font-black uppercase tracking-widest mx-auto">
                                     🇸🇳 Offre Spéciale Indépendance
                                 </div>
-                                <h2 className="font-heading text-5xl lg:text-8xl font-bold tracking-tight flex flex-wrap justify-center items-center gap-x-3 lg:gap-x-6">
+                                <h2 className="font-heading text-4xl sm:text-5xl lg:text-8xl font-bold tracking-tight text-center">
                                     <BlurText text="-50%" className="text-[#FDEF42]" delay={0.2} /> 
-                                    <br className="hidden lg:block w-full" />
-                                    <BlurText text="sur tout" className="text-white" delay={0.4} />
+                                    <br className="sm:hidden lg:block w-full" />
+                                    <BlurText text="sur tout" className="text-white" delay={0.4} />{" "}
                                     <BlurText text="!" className="text-[#E31B23]" delay={0.6} />
                                 </h2>
-                                <p className="text-white/60 text-lg lg:text-2xl font-medium max-w-2xl mx-auto leading-relaxed">
+                                <p className="text-white/60 text-base sm:text-lg lg:text-2xl font-medium max-w-2xl mx-auto leading-relaxed px-2">
                                     Célébrez la fierté sénégalaise avec des prix imbattables. Commandez maintenant et équipez-vous comme un champion !
                                 </p>
-                                <div className="flex flex-wrap justify-center gap-6">
+                                <div className="flex flex-col sm:flex-row flex-wrap justify-center gap-4 sm:gap-6">
                                     <Magnetic>
                                         <Link
                                             href="/shop"
-                                            className="inline-flex h-14 lg:h-16 items-center justify-center bg-gradient-to-r from-[#00853F] via-[#FDEF42] to-[#E31B23] text-black px-10 lg:px-12 rounded-xl text-sm font-black tracking-tight shadow-xl hover:scale-105 transition-all group"
+                                            className="inline-flex h-14 lg:h-16 items-center justify-center bg-gradient-to-r from-[#00853F] via-[#FDEF42] to-[#E31B23] text-black px-8 sm:px-10 lg:px-12 rounded-xl text-sm font-black tracking-tight shadow-xl hover:scale-[1.02] transition-all group"
                                         >
                                             🛒 ACHETER À -50%
                                             <ArrowRight className="ml-3 h-4 w-4 transition-transform group-hover:translate-x-1" />
@@ -191,7 +195,7 @@ export default function HomePage() {
                                     <Magnetic>
                                         <Link
                                             href="https://wa.me/221770000000"
-                                            className="inline-flex h-14 lg:h-16 items-center justify-center border border-white/20 bg-white/5 backdrop-blur-md px-10 lg:px-12 rounded-xl text-sm font-bold tracking-tight text-white hover:bg-white hover:text-black transition-all"
+                                            className="inline-flex h-14 lg:h-16 items-center justify-center border border-white/20 bg-white/5 backdrop-blur-md px-8 sm:px-10 lg:px-12 rounded-xl text-sm font-bold tracking-tight text-white hover:bg-white hover:text-black transition-all"
                                         >
                                             💬 Contact WhatsApp
                                         </Link>

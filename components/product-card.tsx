@@ -20,10 +20,30 @@ interface ProductCardProps {
 
 import { useWishlist } from "./wishlist-context"
 
-export function ProductCard({ id, name, price, originalPrice, discountPercent, image, category, isNew }: ProductCardProps) {
+export function ProductCard({ id, name, price, originalPrice, discountPercent, image, category, isNew, expiresAt }: ProductCardProps & { expiresAt?: number | null }) {
     const [isHovered, setIsHovered] = React.useState(false)
+    const [isProductExpired, setIsProductExpired] = React.useState(false)
     const { toggleFavorite, isFavorite } = useWishlist()
     const favorited = isFavorite(id)
+
+    // Handle real-time promotion expiration
+    React.useEffect(() => {
+        if (!expiresAt || expiresAt === Infinity) return
+
+        const checkExpiration = () => {
+            if (Date.now() >= expiresAt) {
+                setIsProductExpired(true)
+            }
+        }
+
+        checkExpiration()
+        const interval = setInterval(checkExpiration, 1000)
+        return () => clearInterval(interval)
+    }, [expiresAt])
+
+    // Effective discount display logic
+    const showPromo = !isProductExpired && discountPercent && originalPrice
+    const displayPrice = isProductExpired && originalPrice ? originalPrice : price
 
     return (
         <motion.div
@@ -45,7 +65,7 @@ export function ProductCard({ id, name, price, originalPrice, discountPercent, i
                             Nouveau
                         </div>
                     )}
-                    {discountPercent && (
+                    {showPromo && (
                         <div className="bg-rose-500 text-white text-[7px] sm:text-[9px] font-black uppercase tracking-[0.2em] px-2.5 py-1 sm:px-4 sm:py-1.5 rounded-full shadow-xl">
                             -{discountPercent}%
                         </div>
@@ -106,13 +126,13 @@ export function ProductCard({ id, name, price, originalPrice, discountPercent, i
                     <div className="space-y-0 sm:space-y-1">
                         <p className="text-[6px] sm:text-[8px] font-black uppercase tracking-widest text-muted-foreground/40 italic">Prix Unitaire</p>
                         <div className="flex flex-col">
-                            {originalPrice && (
+                            {showPromo && (
                                 <span className="text-[9px] sm:text-[13px] font-bold text-muted-foreground/40 line-through decoration-rose-500/50 mb-0.5" suppressHydrationWarning>
-                                    {originalPrice.toLocaleString()} F
+                                    {originalPrice?.toLocaleString()} F
                                 </span>
                             )}
                             <span className="text-sm sm:text-2xl font-black italic tracking-tighter text-foreground tabular-nums leading-none" suppressHydrationWarning>
-                                {price.toLocaleString()} <span className="text-[8px] sm:text-[10px] font-black tracking-normal ml-0.5 text-muted-foreground/40 italic uppercase">FCFA</span>
+                                {displayPrice.toLocaleString()} <span className="text-[8px] sm:text-[10px] font-black tracking-normal ml-0.5 text-muted-foreground/40 italic uppercase">FCFA</span>
                             </span>
                         </div>
                     </div>

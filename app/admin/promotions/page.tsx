@@ -11,9 +11,12 @@ import {
     Trash,
     MoreVertical,
     Clock,
-    CheckCircle2,
     XCircle,
-    ArrowRight
+    ArrowRight,
+    Search,
+    Check,
+    ChevronDown,
+    Edit
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -37,13 +40,14 @@ import {
 import { toast } from "sonner"
 import { cn } from "@/lib/utils"
 
-import { getPromotions, createPromotion, deletePromotion } from "../actions"
+import { getPromotions, createPromotion, updatePromotion, deletePromotion, getCategories, adminSearchProducts } from "../actions"
 
 export default function PromotionsPage() {
     const router = useRouter()
     const [promotions, setPromotions] = React.useState<any[]>([])
     const [isLoading, setIsLoading] = React.useState(true)
     const [isCreateOpen, setIsCreateOpen] = React.useState(false)
+    const [editingPromoId, setEditingPromoId] = React.useState<string | null>(null)
     const [isSubmitting, setIsSubmitting] = React.useState(false)
 
     // Form State
@@ -54,27 +58,79 @@ export default function PromotionsPage() {
         startDate: "",
         endDate: "",
         isActive: true,
-        isGlobal: false
+        isGlobal: true,
+        categoryIds: [] as string[],
+        productIds: [] as string[]
     })
+
+    const [categories, setCategories] = React.useState<any[]>([])
+    const [productSearch, setProductSearch] = React.useState("")
+    const [searchResults, setSearchResults] = React.useState<any[]>([])
+    const [isSearching, setIsSearching] = React.useState(false)
 
     const loadData = React.useCallback(async () => {
         setIsLoading(true)
         try {
-            const data = await getPromotions()
-            setPromotions(data)
+            const [promoData, catData] = await Promise.all([
+                getPromotions(),
+                getCategories()
+            ])
+            setPromotions(promoData)
+            setCategories(catData)
         } catch (error) {
             console.error("Failed to load promotions:", error)
-            toast.error("Erreur lors du chargement des promotions")
+            toast.error("Erreur lors du chargement des données")
         } finally {
             setIsLoading(false)
         }
     }, [])
 
     React.useEffect(() => {
+        const timer = setTimeout(async () => {
+            if (productSearch.length > 1) {
+                setIsSearching(true)
+                try {
+                    const results = await adminSearchProducts(productSearch)
+                    setSearchResults(results)
+                } catch (e) {
+                    console.error(e)
+                } finally {
+                    setIsSearching(false)
+                }
+            } else {
+                setSearchResults([])
+            }
+        }, 300)
+        return () => clearTimeout(timer)
+    }, [productSearch])
+
+    React.useEffect(() => {
         loadData()
     }, [loadData])
 
-    const handleCreate = async () => {
+    const handleOpenCreate = () => {
+        setEditingPromoId(null)
+        setNewPromo({ title: "", code: "", discount: "", startDate: "", endDate: "", isActive: true, isGlobal: true, categoryIds: [], productIds: [] })
+        setIsCreateOpen(true)
+    }
+
+    const handleOpenEdit = (promo: any) => {
+        setEditingPromoId(promo.id)
+        setNewPromo({
+            title: promo.title,
+            code: promo.code,
+            discount: promo.discount.toString(),
+            startDate: promo.startDate ? new Date(promo.startDate).toISOString().slice(0, 16) : "",
+            endDate: promo.endDate ? new Date(promo.endDate).toISOString().slice(0, 16) : "",
+            isActive: promo.isActive,
+            isGlobal: promo.isGlobal,
+            categoryIds: promo.categoryIds || [],
+            productIds: promo.productIds || []
+        })
+        setIsCreateOpen(true)
+    }
+
+    const handleSave = async () => {
         if (!newPromo.title || !newPromo.code || !newPromo.discount) {
             toast.error("Veuillez remplir les champs obligatoires (Titre, Code, Réduction)")
             return
@@ -82,15 +138,23 @@ export default function PromotionsPage() {
 
         setIsSubmitting(true)
         try {
-            await createPromotion({
+            const promoData = {
                 ...newPromo,
                 discount: Number(newPromo.discount),
                 startDate: newPromo.startDate ? new Date(newPromo.startDate) : null,
                 endDate: newPromo.endDate ? new Date(newPromo.endDate) : null,
-            })
-            toast.success("Promotion créée avec succès")
+            }
+
+            if (editingPromoId) {
+                await updatePromotion(editingPromoId, promoData)
+                toast.success("Promotion mise à jour avec succès")
+            } else {
+                await createPromotion(promoData)
+                toast.success("Promotion créée avec succès")
+            }
+
             setIsCreateOpen(false)
-            setNewPromo({ title: "", code: "", discount: "", startDate: "", endDate: "", isActive: true, isGlobal: false })
+            setNewPromo({ title: "", code: "", discount: "", startDate: "", endDate: "", isActive: true, isGlobal: true, categoryIds: [], productIds: [] })
             loadData()
         } catch (error) {
             console.error("Creation failed:", error)
@@ -148,7 +212,7 @@ export default function PromotionsPage() {
                 
                 <div className="flex items-center gap-3">
                     <Button 
-                        onClick={() => setIsCreateOpen(true)}
+                        onClick={handleOpenCreate}
                         className="h-11 px-6 rounded-xl font-bold uppercase tracking-wider text-xs shadow-lg shadow-primary/20 transition-all hover:scale-105"
                     >
                         <Plus className="mr-2 h-4 w-4" /> 
@@ -220,10 +284,19 @@ export default function PromotionsPage() {
                                                         {promo.description && (
                                                             <p className="text-[12px] font-medium text-gray-500 mt-0.5 line-clamp-1">{promo.description}</p>
                                                         )}
-                                                        {promo.isGlobal && (
+                                                        {promo.isGlobal ? (
                                                             <div className="mt-1.5 flex items-center gap-1.5">
                                                                 <span className="h-1.5 w-1.5 rounded-full bg-primary animate-pulse" />
                                                                 <span className="text-[10px] font-black uppercase text-primary tracking-widest">Offre Globale</span>
+                                                            </div>
+                                                        ) : (
+                                                            <div className="mt-1.5 flex flex-wrap gap-1">
+                                                                {promo.categoryIds?.length > 0 && (
+                                                                    <span className="text-[9px] px-1.5 py-0.5 bg-amber-50 text-amber-700 rounded-md font-bold uppercase tracking-wider">{promo.categoryIds.length} Catégories</span>
+                                                                )}
+                                                                {promo.productIds?.length > 0 && (
+                                                                    <span className="text-[9px] px-1.5 py-0.5 bg-blue-50 text-blue-700 rounded-md font-bold uppercase tracking-wider">{promo.productIds.length} Produits</span>
+                                                                )}
                                                             </div>
                                                         )}
                                                     </div>
@@ -268,7 +341,15 @@ export default function PromotionsPage() {
                                                     {label}
                                                 </span>
                                             </TableCell>
-                                            <TableCell className="py-6 text-right">
+                                             <TableCell className="py-6 text-right flex items-center justify-end gap-2">
+                                                <Button
+                                                    variant="ghost"
+                                                    size="icon"
+                                                    className="h-9 w-9 text-gray-400 hover:bg-gray-100 hover:text-gray-600 rounded-xl"
+                                                    onClick={() => handleOpenEdit(promo)}
+                                                >
+                                                    <Edit className="h-4 w-4" />
+                                                </Button>
                                                 <Button
                                                     variant="ghost"
                                                     size="icon"
@@ -289,102 +370,228 @@ export default function PromotionsPage() {
 
             {/* Create Dialog */}
             <Dialog open={isCreateOpen} onOpenChange={setIsCreateOpen}>
-                <DialogContent className="max-w-2xl p-0 border-none rounded-[2.5rem] shadow-2xl overflow-hidden bg-white">
+                <DialogContent className="max-w-2xl p-0 border-none rounded-[2.5rem] shadow-2xl bg-white overflow-hidden flex flex-col max-h-[90vh]">
                     <div className="px-8 pt-8 pb-6 border-b border-gray-100 flex items-center justify-between">
                         <div>
-                            <DialogTitle className="text-2xl font-black text-gray-900 tracking-tight">Nouvelle Campagne</DialogTitle>
-                            <DialogDescription className="text-sm font-medium text-gray-500 mt-1">Configurez une nouvelle offre promotionnelle.</DialogDescription>
+                            <DialogTitle className="text-2xl font-black text-gray-900 tracking-tight">
+                                {editingPromoId ? "Modifier la Campagne" : "Nouvelle Campagne"}
+                            </DialogTitle>
+                            <DialogDescription className="text-sm font-medium text-gray-500 mt-1">
+                                {editingPromoId ? "Mettre à jour les paramètres de l'offre." : "Configurez une nouvelle offre promotionnelle."}
+                            </DialogDescription>
                         </div>
                         <div className="h-12 w-12 rounded-full bg-primary/10 flex items-center justify-center">
                             <Tag className="h-5 w-5 text-primary" />
                         </div>
                     </div>
-
-                    <div className="p-8 space-y-6">
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <div className="space-y-2 md:col-span-2">
-                                <Label className="text-[11px] font-black uppercase tracking-widest text-gray-400 ml-1">Titre de la campagne *</Label>
-                                <Input 
-                                    placeholder="ex: Soldes d'Hiver 2024"
-                                    className="h-12 rounded-xl bg-gray-50 border-transparent font-medium"
-                                    value={newPromo.title}
-                                    onChange={(e) => setNewPromo({...newPromo, title: e.target.value})}
-                                />
-                            </div>
-
-                            <div className="space-y-2">
-                                <Label className="text-[11px] font-black uppercase tracking-widest text-gray-400 ml-1">Code Promo *</Label>
-                                <Input 
-                                    placeholder="WINTER24"
-                                    className="h-12 rounded-xl bg-gray-50 border-transparent font-black tracking-widest uppercase text-primary"
-                                    value={newPromo.code}
-                                    onChange={(e) => setNewPromo({...newPromo, code: e.target.value.toUpperCase()})}
-                                />
-                            </div>
-
-                            <div className="space-y-2">
-                                <Label className="text-[11px] font-black uppercase tracking-widest text-gray-400 ml-1">Réduction (%) *</Label>
-                                <Input 
-                                    type="number"
-                                    placeholder="20"
-                                    className="h-12 rounded-xl bg-gray-50 border-transparent font-bold tabular-nums"
-                                    value={newPromo.discount}
-                                    min="1"
-                                    max="100"
-                                    onChange={(e) => setNewPromo({...newPromo, discount: e.target.value})}
-                                />
-                            </div>
-
-                            <div className="space-y-2">
-                                <Label className="text-[11px] font-black uppercase tracking-widest text-gray-400 ml-1">Date de début (optionnel)</Label>
-                                <Input 
-                                    type="datetime-local"
-                                    className="h-12 rounded-xl bg-gray-50 border-transparent font-medium text-gray-700"
-                                    value={newPromo.startDate}
-                                    onChange={(e) => setNewPromo({...newPromo, startDate: e.target.value})}
-                                />
-                            </div>
-
-                            <div className="space-y-2">
-                                <Label className="text-[11px] font-black uppercase tracking-widest text-gray-400 ml-1">Date de fin (optionnel)</Label>
-                                <Input 
-                                    type="datetime-local"
-                                    className="h-12 rounded-xl bg-gray-50 border-transparent font-medium text-gray-700"
-                                    value={newPromo.endDate}
-                                    onChange={(e) => setNewPromo({...newPromo, endDate: e.target.value})}
-                                />
-                            </div>
-
-                            <div className="md:col-span-2 p-4 bg-primary/5 rounded-2xl border border-primary/10 flex items-center justify-between">
-                                <div className="space-y-0.5">
-                                    <Label className="text-[11px] font-black uppercase tracking-widest text-primary">Appliquer à tout le site</Label>
-                                    <p className="text-[10px] font-medium text-gray-500">Si activé, cette réduction sera appliquée automatiquement sur TOUS les produits.</p>
+                    
+                    <div className="flex-1 overflow-y-auto p-8 pt-6 custom-scrollbar">
+                        <div className="space-y-8">
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div className="space-y-2 md:col-span-2">
+                                    <Label className="text-[11px] font-black uppercase tracking-widest text-gray-400 ml-1">Titre de la campagne *</Label>
+                                    <Input 
+                                        placeholder="ex: Soldes d'Hiver 2024"
+                                        className="h-12 rounded-xl bg-gray-50 border-transparent font-medium"
+                                        value={newPromo.title}
+                                        onChange={(e) => setNewPromo({...newPromo, title: e.target.value})}
+                                    />
                                 </div>
-                                <button
-                                    type="button"
-                                    onClick={() => setNewPromo({...newPromo, isGlobal: !newPromo.isGlobal})}
-                                    className={cn(
-                                        "h-6 w-11 rounded-full p-1 transition-colors relative",
-                                        newPromo.isGlobal ? "bg-primary" : "bg-gray-200"
-                                    )}
-                                >
-                                    <div className={cn(
-                                        "h-4 w-4 rounded-full bg-white transition-transform shadow-sm",
-                                        newPromo.isGlobal ? "translate-x-5" : "translate-x-0"
-                                    )} />
-                                </button>
+
+                                <div className="space-y-2">
+                                    <Label className="text-[11px] font-black uppercase tracking-widest text-gray-400 ml-1">Code Promo *</Label>
+                                    <Input 
+                                        placeholder="WINTER24"
+                                        className="h-12 rounded-xl bg-gray-50 border-transparent font-black tracking-widest uppercase text-primary"
+                                        value={newPromo.code}
+                                        onChange={(e) => setNewPromo({...newPromo, code: e.target.value.toUpperCase()})}
+                                    />
+                                </div>
+
+                                <div className="space-y-2">
+                                    <Label className="text-[11px] font-black uppercase tracking-widest text-gray-400 ml-1">Réduction (%) *</Label>
+                                    <Input 
+                                        type="number"
+                                        placeholder="20"
+                                        className="h-12 rounded-xl bg-gray-50 border-transparent font-bold tabular-nums"
+                                        value={newPromo.discount}
+                                        min="1"
+                                        max="100"
+                                        onChange={(e) => setNewPromo({...newPromo, discount: e.target.value})}
+                                    />
+                                </div>
+
+                                <div className="space-y-2">
+                                    <Label className="text-[11px] font-black uppercase tracking-widest text-gray-400 ml-1">Date de début (optionnel)</Label>
+                                    <Input 
+                                        type="datetime-local"
+                                        className="h-12 rounded-xl bg-gray-50 border-transparent font-medium text-gray-700"
+                                        value={newPromo.startDate}
+                                        onChange={(e) => setNewPromo({...newPromo, startDate: e.target.value})}
+                                    />
+                                </div>
+
+                                <div className="space-y-2">
+                                    <Label className="text-[11px] font-black uppercase tracking-widest text-gray-400 ml-1">Date de fin (optionnel)</Label>
+                                    <Input 
+                                        type="datetime-local"
+                                        className="h-12 rounded-xl bg-gray-50 border-transparent font-medium text-gray-700"
+                                        value={newPromo.endDate}
+                                        onChange={(e) => setNewPromo({...newPromo, endDate: e.target.value})}
+                                    />
+                                </div>
+                            </div>
+
+                            {/* Scope Selection Card */}
+                            <div className="p-6 bg-gray-50/50 rounded-[2rem] border border-gray-100 space-y-6">
+                                <div className="flex items-center justify-between">
+                                    <div className="space-y-0.5">
+                                        <Label className="text-[11px] font-black uppercase tracking-widest text-primary">Cible de la promotion</Label>
+                                        <p className="text-[11px] font-medium text-gray-500">Choisissez à qui s'applique cette réduction.</p>
+                                    </div>
+                                    <div className="flex bg-white p-1 rounded-xl border border-gray-200">
+                                        <button
+                                            type="button"
+                                            onClick={() => setNewPromo({ ...newPromo, isGlobal: true })}
+                                            className={cn(
+                                                "px-4 py-1.5 rounded-lg text-[11px] font-bold transition-all",
+                                                newPromo.isGlobal ? "bg-gray-900 text-white shadow-lg" : "text-gray-400 hover:text-gray-600"
+                                            )}
+                                        >
+                                            Global
+                                        </button>
+                                        <button
+                                            type="button"
+                                            onClick={() => setNewPromo({ ...newPromo, isGlobal: false })}
+                                            className={cn(
+                                                "px-4 py-1.5 rounded-lg text-[11px] font-bold transition-all",
+                                                !newPromo.isGlobal ? "bg-gray-900 text-white shadow-lg" : "text-gray-400 hover:text-gray-600"
+                                            )}
+                                        >
+                                            Sélectif
+                                        </button>
+                                    </div>
+                                </div>
+
+                                {!newPromo.isGlobal && (
+                                    <motion.div 
+                                        initial={{ opacity: 0, height: 0 }}
+                                        animate={{ opacity: 1, height: "auto" }}
+                                        className="space-y-6 pt-4 border-t border-gray-200/50"
+                                    >
+                                        {/* Categories Picker */}
+                                        <div className="space-y-3">
+                                            <Label className="text-[10px] font-black uppercase tracking-widest text-gray-400">Par Catégories ({newPromo.categoryIds.length})</Label>
+                                            <div className="flex flex-wrap gap-2">
+                                                {categories.map((cat) => (
+                                                    <button
+                                                        key={cat.id}
+                                                        type="button"
+                                                        onClick={() => {
+                                                            const ids = newPromo.categoryIds.includes(cat.id)
+                                                                ? newPromo.categoryIds.filter(id => id !== cat.id)
+                                                                : [...newPromo.categoryIds, cat.id]
+                                                            setNewPromo({ ...newPromo, categoryIds: ids })
+                                                        }}
+                                                        className={cn(
+                                                            "px-3 py-1.5 rounded-xl text-[11px] font-bold transition-all flex items-center gap-1.5",
+                                                            newPromo.categoryIds.includes(cat.id)
+                                                                ? "bg-amber-100 text-amber-700 border-transparent"
+                                                                : "bg-white border border-gray-200 text-gray-400 hover:border-gray-300"
+                                                        )}
+                                                    >
+                                                        {newPromo.categoryIds.includes(cat.id) && <Check className="h-3 w-3" />}
+                                                        {cat.name}
+                                                    </button>
+                                                ))}
+                                            </div>
+                                        </div>
+
+                                        {/* Products Picker */}
+                                        <div className="space-y-3 pt-2">
+                                            <Label className="text-[10px] font-black uppercase tracking-widest text-gray-400">Par Produits ({newPromo.productIds.length})</Label>
+                                            <div className="relative group">
+                                                <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400 group-focus-within:text-primary transition-colors" />
+                                                <Input 
+                                                    placeholder="Rechercher des produits à ajouter..."
+                                                    className="h-11 pl-11 rounded-xl bg-white border-gray-200"
+                                                    value={productSearch}
+                                                    onChange={(e) => setProductSearch(e.target.value)}
+                                                />
+                                                {isSearching && (
+                                                    <div className="absolute right-4 top-1/2 -translate-y-1/2">
+                                                        <div className="h-4 w-4 border-2 border-primary/20 border-t-primary rounded-full animate-spin" />
+                                                    </div>
+                                                )}
+
+                                                {searchResults.length > 0 && (
+                                                    <div className="absolute top-12 left-0 right-0 bg-white rounded-2xl border border-gray-200 shadow-xl z-50 p-2 space-y-1">
+                                                        {searchResults.map((p) => (
+                                                            <button
+                                                                key={p.id}
+                                                                type="button"
+                                                                onClick={() => {
+                                                                    if (!newPromo.productIds.includes(p.id)) {
+                                                                        setNewPromo({ ...newPromo, productIds: [...newPromo.productIds, p.id] })
+                                                                    }
+                                                                    setProductSearch("")
+                                                                    setSearchResults([])
+                                                                }}
+                                                                disabled={newPromo.productIds.includes(p.id)}
+                                                                className="w-full flex items-center justify-between p-2 rounded-xl hover:bg-gray-50 transition-colors disabled:opacity-50"
+                                                            >
+                                                                <div className="flex items-center gap-3">
+                                                                    <div className="h-8 w-8 rounded-lg bg-gray-100 overflow-hidden relative border border-gray-100">
+                                                                        {p.image && <Image src={p.image} alt={p.name} fill className="object-cover" />}
+                                                                    </div>
+                                                                    <div className="text-left">
+                                                                        <p className="text-[12px] font-bold text-gray-900">{p.name}</p>
+                                                                        <p className="text-[10px] font-medium text-gray-400 uppercase">{p.category}</p>
+                                                                    </div>
+                                                                </div>
+                                                                {newPromo.productIds.includes(p.id) ? (
+                                                                    <Check className="h-4 w-4 text-primary" />
+                                                                ) : (
+                                                                    <Plus className="h-4 w-4 text-gray-300" />
+                                                                )}
+                                                            </button>
+                                                        ))}
+                                                    </div>
+                                                )}
+                                            </div>
+
+                                            {/* Selected Products List */}
+                                            {newPromo.productIds.length > 0 && (
+                                                <div className="flex flex-wrap gap-2 pt-2">
+                                                    {newPromo.productIds.map(id => (
+                                                        <div key={id} className="flex items-center gap-2 px-3 py-1.5 bg-blue-50 text-blue-700 rounded-xl text-[11px] font-bold border border-blue-100">
+                                                            <span>ID: {id.slice(0, 6).toUpperCase()}</span>
+                                                            <button 
+                                                                type="button"
+                                                                onClick={() => setNewPromo({ ...newPromo, productIds: newPromo.productIds.filter(pid => pid !== id) })}
+                                                                className="hover:text-rose-500"
+                                                            >
+                                                                <XCircle className="h-3.5 w-3.5" />
+                                                            </button>
+                                                        </div>
+                                                    ))}
+                                                </div>
+                                            )}
+                                        </div>
+                                    </motion.div>
+                                )}
                             </div>
                         </div>
+                    </div>
 
-                        <div className="pt-6">
-                            <Button 
-                                onClick={handleCreate}
-                                disabled={isSubmitting}
-                                className="w-full h-14 rounded-2xl font-black uppercase tracking-widest shadow-lg shadow-primary/20"
-                            >
-                                {isSubmitting ? "Création en cours..." : "Créer la Campagne"}
-                            </Button>
-                        </div>
+                    <div className="p-8 pt-4 border-t border-gray-100 bg-gray-50/30">
+                        <Button 
+                            onClick={handleSave}
+                            disabled={isSubmitting}
+                            className="w-full h-14 rounded-2xl font-black uppercase tracking-widest shadow-lg shadow-primary/20 text-sm"
+                        >
+                            {isSubmitting ? "Enregistrement..." : editingPromoId ? "Mettre à jour" : "Créer la Campagne"}
+                        </Button>
                     </div>
                 </DialogContent>
             </Dialog>

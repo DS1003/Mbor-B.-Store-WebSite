@@ -68,7 +68,7 @@ export const metadata: Metadata = {
     }
 }
 
-import { getStoreConfig } from "./admin/actions"
+import { getStoreConfig, getPromotions } from "./admin/actions"
 import { ThemeVariables } from "@/components/theme-variables"
 import { IndependenceBanner, ConfettiBurst } from "@/components/independence-banner"
 
@@ -77,13 +77,22 @@ export default async function RootLayout({
 }: Readonly<{
     children: React.ReactNode
 }>) {
-    const storeConfig = await getStoreConfig()
+    const [storeConfig, activePromotions] = await Promise.all([
+        getStoreConfig(),
+        getPromotions()
+    ])
+
+    // Find the best global or major active promotion
+    const now = new Date()
+    const currentPromotion = (activePromotions || [])
+        .filter((p: any) => p.isActive && (!p.startDate || new Date(p.startDate) <= now) && (!p.endDate || new Date(p.endDate) >= now))
+        .sort((a: any, b: any) => b.discount - a.discount)[0]
 
     return (
         <html lang="fr" suppressHydrationWarning>
             <body
                 suppressHydrationWarning
-                className={`min-h-screen bg-background text-foreground flex flex-col antialiased selection:bg-primary selection:text-primary-foreground`}
+                className={`min-h-screen bg-background text-foreground flex flex-col antialiased overflow-x-hidden selection:bg-primary/20`}
                 style={{
                     '--font-sans-base': inter.style.fontFamily,
                     '--font-heading-base': outfit.style.fontFamily
@@ -128,8 +137,10 @@ export default async function RootLayout({
                             })
                         }}
                     />
-                    <ConfettiBurst />
-                    <IndependenceBanner />
+                    <div className="relative w-full overflow-x-hidden max-w-full z-50">
+                        {currentPromotion && <ConfettiBurst />}
+                        <IndependenceBanner promotion={currentPromotion} />
+                    </div>
                     <SiteHeader />
                     <main className="flex-1">
                         {children}
@@ -140,7 +151,15 @@ export default async function RootLayout({
                     <Analytics />
                     <SpeedInsights />
                 </Providers>
-
+                <style dangerouslySetInnerHTML={{ __html: `
+                    html, body { 
+                        overflow-x: clip !important; 
+                        max-width: 100% !important;
+                        width: 100% !important;
+                        position: relative !important;
+                    }
+                    * { box-sizing: border-box !important; }
+                `}} />
             </body>
         </html>
     )

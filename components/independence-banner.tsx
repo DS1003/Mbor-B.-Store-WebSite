@@ -30,22 +30,22 @@ function ConfettiParticle({ delay, color, left }: { delay: number; color: string
     )
 }
 
-export function IndependenceBanner() {
+export function IndependenceBanner({ promotion }: { promotion?: any }) {
     const [isVisible, setIsVisible] = React.useState(true)
 
-    if (!isVisible) return null
+    if (!isVisible || !promotion) return null
 
     const senegalColors = ["#00853F", "#FDEF42", "#E31B23"] // green, gold, red
 
     return (
         <AnimatePresence>
-            {isVisible && (
+            {isVisible && promotion && (
                 <motion.div
                     initial={{ height: 0, opacity: 0 }}
                     animate={{ height: "auto", opacity: 1 }}
                     exit={{ height: 0, opacity: 0 }}
                     transition={{ duration: 0.4, ease: "easeInOut" }}
-                    className="relative overflow-hidden z-50"
+                    className="relative w-full overflow-x-hidden max-w-[100vw] z-50"
                 >
                     <div className="relative bg-gradient-to-r from-[#00853F] via-[#FDEF42] to-[#E31B23] overflow-hidden">
                         {/* Confetti particles */}
@@ -75,7 +75,7 @@ export function IndependenceBanner() {
 
                                 <Link href="/shop" className="group flex items-center gap-2 sm:gap-3">
                                     <span className="text-[10px] sm:text-sm font-black text-white drop-shadow-md uppercase tracking-wide sm:tracking-wider whitespace-nowrap">
-                                        🇸🇳 <span className="hidden sm:inline">Fête de l'</span>Indépendance
+                                        🇸🇳 {promotion.title}
                                     </span>
                                     <span className="hidden sm:inline text-white/90 font-bold drop-shadow-sm">
                                         —
@@ -85,7 +85,7 @@ export function IndependenceBanner() {
                                         animate={{ scale: [1, 1.05, 1] }}
                                         transition={{ duration: 1.5, repeat: Infinity }}
                                     >
-                                        -50% PARTOUT
+                                        -{promotion.discount}% {promotion.isGlobal ? 'PARTOUT' : 'SUR SÉLECTION'}
                                     </motion.span>
                                     <span className="hidden sm:inline text-white/90 font-bold drop-shadow-sm">—</span>
                                     <span className="hidden md:inline text-[10px] sm:text-sm font-bold text-white/80 drop-shadow-sm group-hover:underline">

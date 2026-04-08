@@ -25,7 +25,7 @@ export const getActivePromotions = unstable_cache(
         }))
     },
     ['active-promotions'],
-    { tags: ['promotions'], revalidate: 60 }
+    { tags: ['promotions'], revalidate: 30 }
 )
 
 // Serialize products with promotion awareness
@@ -35,17 +35,34 @@ function serializeProduct(p: any, promos: any[] = []) {
     let activeDiscount = 0
 
     // Check for applicable promotions
-    const applicable = promos.filter(promo => {
+    const activeNow = new Date()
+    const applicable = (promos || []).filter(promo => {
+        if (promo.isActive === false) return false
+        
+        // Exact date check within serialization to handle cache windows
+        if (promo.startDate && new Date(promo.startDate) > activeNow) return false
+        if (promo.endDate && new Date(promo.endDate) < activeNow) return false
+
         if (promo.isGlobal) return true
-        if (promo.productIds.includes(p.id)) return true
-        if (p.categoryId && promo.categoryIds.includes(p.categoryId)) return true
+        if (p.id && promo.productIds?.includes(p.id)) return true
+        if (p.categoryId && promo.categoryIds?.includes(p.categoryId)) return true
         return false
     })
 
     if (applicable.length > 0) {
-        // Pick the highest discount
-        activeDiscount = Math.max(...applicable.map(pr => pr.discount))
+        // Pick the highest discount percentage
+        activeDiscount = Math.max(...applicable.map((pr: any) => pr.discount))
         finalPrice = basePrice * (1 - (activeDiscount / 100))
+    }
+
+    // Check if the product has an individual discount price set (manual)
+    if (p.discountPrice) {
+        const manualDiscountPrice = Number(p.discountPrice)
+        // If manual price is lower than promo price, use it
+        if (manualDiscountPrice < finalPrice) {
+            finalPrice = manualDiscountPrice
+            activeDiscount = Math.round((1 - (finalPrice / basePrice)) * 100)
+        }
     }
 
     return {
@@ -56,7 +73,8 @@ function serializeProduct(p: any, promos: any[] = []) {
         discountPercent: activeDiscount > 0 ? activeDiscount : undefined,
         category: p.category?.name || "Sans catégorie",
         image: p.images[0] || "",
-        isNew: true
+        isNew: true,
+        expiresAt: applicable.length > 0 ? Math.min(...applicable.map(pr => pr.endDate ? new Date(pr.endDate).getTime() : Infinity)) : null
     }
 }
 
@@ -105,7 +123,7 @@ export const getFeaturedProducts = unstable_cache(
         return products.map(p => serializeProduct(p, activePromos))
     },
     ['featured-products'],
-    { tags: ['products', 'featured', 'promotions'], revalidate: 3600 }
+    { tags: ['products', 'featured', 'promotions'], revalidate: 60 }
 )
 
 export const getProducts = unstable_cache(
@@ -176,7 +194,7 @@ export const getProducts = unstable_cache(
         }
     },
     ['shop-products'],
-    { tags: ['products', 'promotions'], revalidate: 600 }
+    { tags: ['products', 'promotions'], revalidate: 60 }
 )
 
 export const getRelatedProducts = unstable_cache(
@@ -196,7 +214,7 @@ export const getRelatedProducts = unstable_cache(
         return products.map(p => serializeProduct(p, activePromos))
     },
     ['related-products'],
-    { tags: ['products', 'promotions'], revalidate: 3600 }
+    { tags: ['products', 'promotions'], revalidate: 60 }
 )
 
 export const getCategories = unstable_cache(

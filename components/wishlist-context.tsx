@@ -82,7 +82,13 @@ export function WishlistProvider({ children }: { children: React.ReactNode }) {
 export function useWishlist() {
     const context = React.useContext(WishlistContext)
     if (context === undefined) {
-        throw new Error("useWishlist must be used within a WishlistProvider")
+        // Return a mocked state to prevent crash when used outside provider or during SSR
+        return {
+            wishlist: [],
+            toggleFavorite: async () => {}, // No-op if not in context
+            isFavorite: () => false,
+            loading: false
+        }
     }
     return context
 }

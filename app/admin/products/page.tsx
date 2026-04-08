@@ -170,25 +170,28 @@ export default function AdminProductsPage() {
         setIsDeleteDialogOpen(true)
     }
 
-    const handleDelete = async () => {
+    const handleDelete = async (force = false) => {
         if (!idToDelete) return
         setIsDeleting(true)
         try {
-            const res = await deleteProduct(idToDelete)
-            
-            // Check if server returned a structured response
-            if (res && typeof res === 'object') {
-                if (!res.success) {
-                    toast.error(res.message || "Erreur de suppression")
+            const res = await deleteProduct(idToDelete, force)
+
+            if (res && !res.success) {
+                if (res.requiresConfirmation) {
+                    toast.warning(res.message, {
+                        duration: 8000,
+                        action: {
+                            label: "Confirmer quand même",
+                            onClick: () => handleDelete(true)
+                        }
+                    })
                     return
-                } else {
-                    toast.success("Produit supprimé")
                 }
-            } else {
-                // Fallback for success if no object is returned (for backwards compat)
-                toast.success("Produit supprimé")
+                toast.error(res.message || "Erreur de suppression")
+                return
             }
-            
+
+            toast.success("Produit supprimé")
             loadData()
         } catch (error) {
             toast.error("Erreur inattendue de suppression")

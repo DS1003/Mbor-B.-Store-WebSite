@@ -1,7 +1,7 @@
 "use server"
 
 import { prisma } from "@/lib/prisma"
-import { revalidatePath, unstable_cache } from "next/cache"
+import { revalidatePath, revalidateTag, unstable_cache } from "next/cache"
 import { OrderStatus } from "@prisma/client"
 
 // Helpers to serialize Decimal types safely
@@ -157,25 +157,31 @@ export async function getAdminProducts() {
     return products.map(product => serializeProduct(product))
 }
 
-export async function deleteProduct(id: string) {
+export async function deleteProduct(id: string, force = false) {
     try {
-        // Prevent deletion if the product is linked to orders to preserve history
+        // Check for linked orders
         const orderCount = await prisma.orderItem.count({
             where: { productId: id }
         })
 
-        if (orderCount > 0) {
+        if (orderCount > 0 && !force) {
             return {
                 success: false,
-                message: "Impossible de supprimer ce produit car il est lié à des commandes existantes. Veuillez plutôt mettre son stock à 0."
+                requiresConfirmation: true,
+                message: `Ce produit est lié à ${orderCount} commande(s). La suppression rendra ces articles anonymes dans l'historique des commandes. Voulez-vous vraiment le supprimer ?`
             }
         }
 
         await prisma.product.delete({
             where: { id }
         })
+
         revalidatePath('/admin/products')
         revalidatePath('/admin/stock')
+        const { revalidateTag } = require('next/cache')
+        revalidateTag('products')
+        revalidateTag('promotions')
+
         return { success: true }
     } catch (error: any) {
         console.error("Delete product error:", error)
@@ -711,6 +717,9 @@ export async function createPromotion(data: any) {
             }
         })
         revalidatePath('/admin')
+        revalidatePath('/', 'layout')
+        revalidateTag('promotions')
+        revalidateTag('products')
         return { ...promo, discount: promo.discount ? Number(promo.discount) : null }
     } catch (e) {
         console.error("Failed to create promotion:", e)
@@ -731,6 +740,9 @@ export async function updatePromotion(id: string, data: any) {
             }
         })
         revalidatePath('/admin')
+        revalidatePath('/', 'layout')
+        revalidateTag('promotions')
+        revalidateTag('products')
         return { ...promo, discount: promo.discount ? Number(promo.discount) : null }
     } catch (e) {
         console.error("Failed to update promotion:", e)
@@ -740,10 +752,32 @@ export async function updatePromotion(id: string, data: any) {
 
 export async function deletePromotion(id: string) {
     try {
-        if (!prisma || !('promotion' in prisma)) return
         await (prisma as any).promotion.delete({ where: { id } })
         revalidatePath('/admin')
+        revalidatePath('/', 'layout')
+        revalidateTag('promotions')
+        revalidateTag('products')
     } catch (e) {
         console.error("Failed to delete promotion:", e)
     }
+}
+
+export async function adminSearchProducts(query: string) {
+    if (!query) return []
+    const products = await (prisma as any).product.findMany({
+        where: {
+            OR: [
+                { name: { contains: query, mode: 'insensitive' } },
+                { id: { contains: query, mode: 'insensitive' } },
+            ]
+        },
+        select: { id: true, name: true, images: true, category: { select: { name: true } } },
+        take: 10
+    })
+    return products.map((p: any) => ({
+        id: p.id,
+        name: p.name,
+        image: p.images?.[0],
+        category: p.category?.name
+    }))
 }

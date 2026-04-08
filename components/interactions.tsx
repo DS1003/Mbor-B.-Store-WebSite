@@ -237,7 +237,7 @@ export function SplitText({
 
     return (
         <motion.div
-            className={cn("flex flex-wrap", className)}
+            className={cn("inline-flex flex-wrap", className)}
             variants={container}
             initial="hidden"
             whileInView="visible"
@@ -296,7 +296,7 @@ export function BlurText({
 
     return (
         <motion.div
-            className={cn("flex flex-wrap", className)}
+            className={cn("inline-flex flex-wrap", className)}
             variants={container}
             initial="hidden"
             whileInView="visible"
