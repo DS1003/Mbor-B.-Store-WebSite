@@ -63,38 +63,38 @@ export function IndependenceBanner() {
                         {/* Shimmer overlay */}
                         <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent animate-shimmer" />
 
-                        <div className="relative z-10 px-4 py-3 sm:py-2.5">
-                            <div className="flex items-center justify-center gap-2 sm:gap-4 text-center">
+                        <div className="relative z-10 px-4 py-2 sm:py-2.5">
+                            <div className="flex items-center justify-center gap-2 sm:gap-4 text-center pr-6 sm:pr-0">
                                 <motion.div
+                                    className="shrink-0"
                                     animate={{ rotate: [0, 15, -15, 0] }}
                                     transition={{ duration: 1.5, repeat: Infinity, repeatDelay: 2 }}
                                 >
-                                    <PartyPopper className="h-4 w-4 sm:h-5 sm:w-5 text-white drop-shadow-md" />
+                                    <PartyPopper className="h-3.5 w-3.5 sm:h-5 sm:w-5 text-white drop-shadow-md" />
                                 </motion.div>
 
                                 <Link href="/shop" className="group flex items-center gap-2 sm:gap-3">
-                                    <span className="text-[11px] sm:text-sm font-black text-white drop-shadow-md uppercase tracking-wider">
-                                        🇸🇳 Fête de l'Indépendance
+                                    <span className="text-[10px] sm:text-sm font-black text-white drop-shadow-md uppercase tracking-wide sm:tracking-wider whitespace-nowrap">
+                                        🇸🇳 <span className="hidden sm:inline">Fête de l'</span>Indépendance
                                     </span>
-                                    <span className="hidden sm:inline text-[11px] sm:text-sm text-white/90 font-bold drop-shadow-sm">
+                                    <span className="hidden sm:inline text-white/90 font-bold drop-shadow-sm">
                                         —
                                     </span>
-                                    <motion.span 
-                                        className="text-[11px] sm:text-sm font-black text-white drop-shadow-md bg-black/20 px-2 sm:px-3 py-0.5 sm:py-1 rounded-full backdrop-blur-sm"
+                                    <motion.span
+                                        className="text-[10px] sm:text-sm font-black text-white drop-shadow-md bg-black/20 px-1.5 sm:px-3 py-0.5 sm:py-1 rounded-full backdrop-blur-sm whitespace-nowrap"
                                         animate={{ scale: [1, 1.05, 1] }}
                                         transition={{ duration: 1.5, repeat: Infinity }}
                                     >
-                                        -50% SUR TOUT
+                                        -50% PARTOUT
                                     </motion.span>
-                                    <span className="hidden sm:inline text-[11px] sm:text-sm text-white/90 font-bold drop-shadow-sm">
-                                        —
-                                    </span>
-                                    <span className="hidden md:inline text-[11px] sm:text-sm font-bold text-white/90 drop-shadow-sm group-hover:underline">
+                                    <span className="hidden sm:inline text-white/90 font-bold drop-shadow-sm">—</span>
+                                    <span className="hidden md:inline text-[10px] sm:text-sm font-bold text-white/80 drop-shadow-sm group-hover:underline">
                                         Profitez-en maintenant →
                                     </span>
                                 </Link>
 
                                 <motion.div
+                                    className="hidden sm:block shrink-0"
                                     animate={{ rotate: [0, -15, 15, 0] }}
                                     transition={{ duration: 1.5, repeat: Infinity, repeatDelay: 2, delay: 0.5 }}
                                 >

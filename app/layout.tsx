@@ -131,7 +131,7 @@ export default async function RootLayout({
                     <ConfettiBurst />
                     <IndependenceBanner />
                     <SiteHeader />
-                    <main className="flex-1 pt-[84px]">
+                    <main className="flex-1">
                         {children}
                     </main>
                     <SiteFooter />

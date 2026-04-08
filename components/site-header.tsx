@@ -5,6 +5,7 @@ import Link from "next/link"
 import Image from "next/image"
 import { usePathname, useRouter } from "next/navigation"
 import { useSession, signOut } from "next-auth/react"
+import { motion, AnimatePresence } from "framer-motion"
 import {
     Search,
     ShoppingCart,
@@ -29,7 +30,8 @@ import {
     SheetContent,
     SheetHeader,
     SheetTitle,
-    SheetTrigger
+    SheetTrigger,
+    SheetClose
 } from "@/components/ui/sheet"
 import {
     DropdownMenu,
@@ -78,7 +80,7 @@ export function SiteHeader() {
 
     return (
         <header className={cn(
-            "fixed top-0 z-[100] w-full transition-all duration-500",
+            "sticky top-0 z-[100] w-full transition-all duration-500",
             scrolled ? "bg-background/80 backdrop-blur-xl border-b shadow-sm" : "bg-background"
         )}>
             {/* Announcement Bar - Softer colors */}
@@ -147,44 +149,84 @@ export function SiteHeader() {
 
                                 <div className="flex flex-col h-full overflow-hidden relative bg-white">
                                     {/* Header Menu - Clean White */}
-                                    <div className="px-8 pt-14 pb-6 flex justify-between items-end border-b border-zinc-100">
+                                    <motion.div
+                                        initial={{ y: -30, opacity: 0 }}
+                                        animate={{ y: 0, opacity: 1 }}
+                                        transition={{ type: "spring", stiffness: 120, damping: 20 }}
+                                        className="px-8 pt-10 pb-5 flex justify-between items-end border-b border-zinc-100"
+                                    >
                                         <div className="flex flex-col">
-                                            <span className="text-[10px] uppercase tracking-[0.3em] text-zinc-400 font-bold mb-2">Menu</span>
-                                            <span className="font-heading text-4xl font-black tracking-tighter text-black">
+                                            <span className="text-[9px] uppercase tracking-[0.2em] text-zinc-400 font-bold mb-1">Menu</span>
+                                            <span className="font-heading text-[21px] font-black tracking-tighter text-black">
                                                 Mbor<span className="text-primary">.</span>
                                             </span>
                                         </div>
-                                    </div>
+
+                                        <SheetClose asChild>
+                                            <Button variant="ghost" size="icon" className="h-10 w-10 -mr-2 rounded-xl hover:bg-zinc-100 text-zinc-400 hover:text-black transition-all">
+                                                <X className="h-5 w-5" />
+                                            </Button>
+                                        </SheetClose>
+                                    </motion.div>
 
                                     {/* Scrollable Content */}
-                                    <div className="flex-1 overflow-y-auto px-8 py-8 space-y-12 scrollbar-none">
+                                    <div className="flex-1 overflow-y-auto px-8 py-6 space-y-7 scrollbar-none">
                                         {/* Collections */}
                                         <div className="space-y-2">
-                                            <nav className="flex flex-col space-y-1">
+                                            <motion.nav
+                                                initial="hidden"
+                                                animate="show"
+                                                variants={{
+                                                    hidden: { opacity: 0 },
+                                                    show: {
+                                                        opacity: 1,
+                                                        transition: { staggerChildren: 0.1, delayChildren: 0.3 }
+                                                    }
+                                                }}
+                                                className="flex flex-col space-y-1"
+                                            >
                                                 {navLinks.map((link, index) => (
-                                                    <Link
+                                                    <motion.div
                                                         key={link.href}
-                                                        href={link.href}
-                                                        onClick={() => setIsMenuOpen(false)}
-                                                        className="group flex items-baseline justify-between py-2 overflow-hidden"
+                                                        variants={{
+                                                            hidden: { x: -20, opacity: 0 },
+                                                            show: { x: 0, opacity: 1 }
+                                                        }}
                                                     >
-                                                        <span className={cn(
-                                                            "text-[28px] leading-tight font-bold tracking-tight transition-all duration-300",
-                                                            pathname === link.href ? "text-primary translate-x-4" : "text-black group-hover:text-primary group-hover:translate-x-4"
-                                                        )}>
-                                                            {link.label}
-                                                        </span>
-                                                        <span className="text-[10px] font-mono text-zinc-300 group-hover:text-primary transition-colors opacity-0 group-hover:opacity-100 transform translate-y-2 group-hover:translate-y-0 duration-300">
-                                                            {(index + 1).toString().padStart(2, '0')}
-                                                        </span>
-                                                    </Link>
+                                                        <motion.div
+                                                            whileHover={{ scale: 1.05, originX: 0 }}
+                                                            whileTap={{ scale: 0.95 }}
+                                                            transition={{ type: "spring", stiffness: 400, damping: 10 }}
+                                                        >
+                                                            <Link
+                                                                href={link.href}
+                                                                onClick={() => setIsMenuOpen(false)}
+                                                                className="group flex items-baseline justify-between py-2 overflow-hidden"
+                                                            >
+                                                                <span className={cn(
+                                                                    "text-[19px] leading-tight font-bold tracking-tight transition-all duration-300",
+                                                                    pathname === link.href ? "text-primary translate-x-1.5" : "text-black group-hover:text-primary"
+                                                                )}>
+                                                                    {link.label}
+                                                                </span>
+                                                                <span className="text-[10px] font-mono text-zinc-300 group-hover:text-primary transition-colors opacity-0 group-hover:opacity-100 transform translate-y-1 group-hover:translate-y-0 duration-300">
+                                                                    {(index + 1).toString().padStart(2, '0')}
+                                                                </span>
+                                                            </Link>
+                                                        </motion.div>
+                                                    </motion.div>
                                                 ))}
-                                            </nav>
+                                            </motion.nav>
                                         </div>
 
                                         {/* User Space - Clean & Boxed */}
-                                        <div className="pt-6 border-t border-zinc-100 space-y-6">
-                                            <p className="text-[10px] font-bold tracking-[0.2em] text-zinc-400 uppercase">Espace Membre</p>
+                                        <motion.div
+                                            initial={{ y: 30, opacity: 0 }}
+                                            animate={{ y: 0, opacity: 1 }}
+                                            transition={{ type: "spring", stiffness: 120, damping: 20, delay: 0.6 }}
+                                            className="pt-6 border-t border-zinc-100 space-y-5"
+                                        >
+                                            <p className="text-[10px] font-bold tracking-[0.15em] text-zinc-400 uppercase">Espace Membre</p>
 
                                             {session ? (
                                                 <div className="space-y-4">
@@ -211,11 +253,11 @@ export function SiteHeader() {
                                                         </Link>
                                                     )}
 
-                                                    <div className="grid grid-cols-2 gap-3">
-                                                        <Link href="/account" onClick={() => setIsMenuOpen(false)} className="h-14 flex items-center justify-center rounded-2xl bg-white border-2 border-zinc-100 font-bold text-xs text-zinc-700 hover:border-zinc-300 hover:bg-zinc-50 transition-all">
+                                                    <div className="grid grid-cols-2 gap-2.5">
+                                                        <Link href="/account" onClick={() => setIsMenuOpen(false)} className="h-[43px] flex items-center justify-center rounded-xl bg-white border-2 border-zinc-100 font-bold text-[11px] text-zinc-700 hover:border-zinc-300 hover:bg-zinc-50 transition-all">
                                                             Mon Profil
                                                         </Link>
-                                                        <Link href="/account/orders" onClick={() => setIsMenuOpen(false)} className="h-14 flex items-center justify-center rounded-2xl bg-white border-2 border-zinc-100 font-bold text-xs text-zinc-700 hover:border-zinc-300 hover:bg-zinc-50 transition-all">
+                                                        <Link href="/account/orders" onClick={() => setIsMenuOpen(false)} className="h-[43px] flex items-center justify-center rounded-xl bg-white border-2 border-zinc-100 font-bold text-[11px] text-zinc-700 hover:border-zinc-300 hover:bg-zinc-50 transition-all">
                                                             Commandes
                                                         </Link>
                                                     </div>
@@ -231,16 +273,16 @@ export function SiteHeader() {
                                                     </button>
                                                 </div>
                                             ) : (
-                                                <div className="space-y-3">
-                                                    <Link href="/login" onClick={() => setIsMenuOpen(false)} className="flex w-full items-center justify-center h-14 rounded-2xl border-2 border-zinc-100 font-bold text-zinc-900 hover:bg-zinc-50 transition-all">
+                                                <div className="space-y-2.5">
+                                                    <Link href="/login" onClick={() => setIsMenuOpen(false)} className="flex w-full items-center justify-center h-[47px] rounded-xl border-2 border-zinc-100 font-bold text-[13px] text-zinc-900 hover:bg-zinc-50 transition-all">
                                                         Se connecter
                                                     </Link>
-                                                    <Link href="/register" onClick={() => setIsMenuOpen(false)} className="flex w-full items-center justify-center h-14 rounded-2xl bg-black text-white font-bold hover:bg-zinc-800 transition-all shadow-lg">
+                                                    <Link href="/register" onClick={() => setIsMenuOpen(false)} className="flex w-full items-center justify-center h-[47px] rounded-xl bg-black text-white font-bold text-[13px] hover:bg-zinc-800 transition-all shadow-lg">
                                                         Créer un compte
                                                     </Link>
                                                 </div>
                                             )}
-                                        </div>
+                                        </motion.div>
                                     </div>
 
                                     {/* Footer */}
