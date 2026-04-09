@@ -151,7 +151,7 @@ export function HeaderSearch() {
                                                     <p className="text-[10px] text-muted-foreground">{product.category}</p>
                                                 </div>
                                                 <div className="text-[11px] font-black italic text-primary">
-                                                    {product.price.toLocaleString()} F
+                                                    {(product.price || 0).toLocaleString()} F
                                                 </div>
                                             </button>
                                         ))}

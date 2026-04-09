@@ -12,7 +12,7 @@ export async function PATCH(req: Request) {
         }
 
         const body = await req.json()
-        const { name, email, phone, currentPassword, newPassword } = body
+        const { name, email, phone, image, currentPassword, newPassword } = body
 
         const user = await prisma.user.findUnique({
             where: { email: session.user.email }
@@ -24,6 +24,8 @@ export async function PATCH(req: Request) {
 
         const updateData: any = {}
         if (name) updateData.name = name
+        if (image) updateData.image = image
+        if (phone) updateData.phone = phone
         if (email && email !== user.email) {
             // Check if email already exists
             const existingUser = await prisma.user.findUnique({

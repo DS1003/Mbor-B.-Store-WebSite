@@ -215,6 +215,22 @@ export default function AdminLayout({
     const [isMobileMenuOpen, setIsMobileMenuOpen] = React.useState(false)
     const { data: session } = useSession()
 
+    // Redirect if not authenticated or not an admin
+    React.useEffect(() => {
+        if (session === undefined) return // Still loading
+        if (!session || (session.user as any)?.role !== "ADMIN") {
+            router.push("/")
+        }
+    }, [session, router])
+
+    if (session === undefined || !session || (session.user as any)?.role !== "ADMIN") {
+        return (
+            <div className="h-screen w-screen flex items-center justify-center bg-[#F9FAFB]">
+                <div className="h-10 w-10 border-4 border-amber-500 border-t-transparent rounded-full animate-spin" />
+            </div>
+        )
+    }
+
     // Derived user data
     const user = session?.user
     const userInitials = user?.name
@@ -261,8 +277,15 @@ export default function AdminLayout({
 
     // Poll for NEW notifications
     const checkForNewNotifications = React.useCallback(async () => {
+        const controller = new AbortController()
+        const timeoutId = setTimeout(() => controller.abort(), 10000) // 10s timeout
+
         try {
-            const res = await fetch(`/api/admin/notifications/check?lastChecked=${lastChecked}`)
+            const res = await fetch(`/api/admin/notifications/check?lastChecked=${lastChecked}`, {
+                signal: controller.signal
+            })
+            clearTimeout(timeoutId)
+
             if (!res.ok) return
 
             const data = await res.json()
@@ -381,8 +404,12 @@ export default function AdminLayout({
             // Update checkpoint
             setLastChecked(timestamp)
 
-        } catch (error) {
-            console.error("Polling error:", error)
+        } catch (error: any) {
+            if (error.name === 'AbortError') {
+                console.log("Polling request timed out/aborted.")
+            } else {
+                console.error("Polling error:", error)
+            }
         }
     }, [lastChecked])
 

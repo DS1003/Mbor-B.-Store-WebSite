@@ -27,42 +27,50 @@ export async function GET(req: NextRequest) {
 
         const lastChecked = new Date(lastCheckedStr)
 
+        // Timeout de sécurité pour éviter que la requête ne reste bloquée indéfiniment
+        const timeoutPromise = new Promise((_, reject) =>
+            setTimeout(() => reject(new Error('Query Timeout')), 15000)
+        )
+        
         // Récupérer les nouvelles commandes et nouveaux utilisateurs en parallèle
-        const [newOrders, newUsers] = await Promise.all([
-            prisma.order.findMany({
-                where: {
-                    createdAt: {
-                        gt: lastChecked
+        const [newOrders, newUsers] = await Promise.race([
+            Promise.all([
+                prisma.order.findMany({
+                    where: {
+                        createdAt: {
+                            gt: lastChecked
+                        }
+                    },
+                    select: {
+                        id: true,
+                        customerName: true,
+                        total: true,
+                        createdAt: true
+                    },
+                    orderBy: {
+                        createdAt: 'desc'
                     }
-                },
-                select: {
-                    id: true,
-                    customerName: true,
-                    total: true,
-                    createdAt: true
-                },
-                orderBy: {
-                    createdAt: 'desc'
-                }
-            }),
-            prisma.user.findMany({
-                where: {
-                    role: "USER",
-                    createdAt: {
-                        gt: lastChecked
+                }),
+                prisma.user.findMany({
+                    where: {
+                        role: "USER",
+                        createdAt: {
+                            gt: lastChecked
+                        }
+                    },
+                    select: {
+                        id: true,
+                        name: true,
+                        email: true,
+                        createdAt: true
+                    },
+                    orderBy: {
+                        createdAt: 'desc'
                     }
-                },
-                select: {
-                    id: true,
-                    name: true,
-                    email: true,
-                    createdAt: true
-                },
-                orderBy: {
-                    createdAt: 'desc'
-                }
-            })
-        ])
+                })
+            ]),
+            timeoutPromise
+        ]) as [any[], any[]]
 
         return NextResponse.json({
             newOrders,

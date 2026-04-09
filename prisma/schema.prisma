@@ -16,12 +16,15 @@ model User {
   updatedAt      DateTime        @updatedAt
   emailVerified  DateTime?
   image          String?
+  phone          String?
   accounts       Account[]
   addresses      Address[]
   orders         Order[]
   paymentMethods PaymentMethod[]
   reviews        Review[]
   sessions       Session[]
+  resetToken     String?         @unique
+  resetTokenExpires DateTime?
   favorites      Product[]       @relation("UserFavorites")
 }
 

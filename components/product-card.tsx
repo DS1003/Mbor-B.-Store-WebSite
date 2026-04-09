@@ -132,7 +132,7 @@ export function ProductCard({ id, name, price, originalPrice, discountPercent, i
                                 </span>
                             )}
                             <span className="text-sm sm:text-2xl font-black italic tracking-tighter text-foreground tabular-nums leading-none" suppressHydrationWarning>
-                                {displayPrice.toLocaleString()} <span className="text-[8px] sm:text-[10px] font-black tracking-normal ml-0.5 text-muted-foreground/40 italic uppercase">FCFA</span>
+                                {(displayPrice || 0).toLocaleString()} <span className="text-[8px] sm:text-[10px] font-black tracking-normal ml-0.5 text-muted-foreground/40 italic uppercase">FCFA</span>
                             </span>
                         </div>
                     </div>

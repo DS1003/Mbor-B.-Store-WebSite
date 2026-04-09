@@ -2,6 +2,7 @@
 
 import * as React from "react"
 import { useSession } from "next-auth/react"
+import { CldUploadWidget } from "next-cloudinary"
 import { useRouter } from "next/navigation"
 import {
     Settings,
@@ -163,15 +164,50 @@ export default function SettingsPage() {
                                     <div className="flex flex-col md:flex-row gap-8 items-center md:items-start">
                                         <div className="space-y-4 flex flex-col items-center">
                                             <div className="relative group">
-                                                <Avatar className="h-28 w-28 rounded-3xl border-4 border-white shadow-xl">
+                                                <Avatar className="h-28 w-28 rounded-full border-4 border-white shadow-xl">
                                                     <AvatarImage src={session?.user?.image || ""} />
                                                     <AvatarFallback className="bg-muted text-2xl font-bold">
                                                         {session?.user?.name?.substring(0, 2).toUpperCase()}
                                                     </AvatarFallback>
                                                 </Avatar>
-                                                <button type="button" className="absolute -bottom-2 -right-2 h-9 w-9 bg-black text-white rounded-xl flex items-center justify-center shadow-lg border-4 border-white hover:bg-primary hover:text-black transition-all">
-                                                    <Camera className="h-4 w-4" />
-                                                </button>
+                                                <CldUploadWidget
+                                                    onSuccess={async (result: any) => {
+                                                        if (result.event === "success") {
+                                                            const imageUrl = result.info.secure_url
+                                                            try {
+                                                                const res = await fetch("/api/user/profile", {
+                                                                    method: "PATCH",
+                                                                    headers: { "Content-Type": "application/json" },
+                                                                    body: JSON.stringify({ image: imageUrl })
+                                                                })
+                                                                if (res.ok) {
+                                                                    toast.success("Photo de profil mise à jour")
+                                                                    await update({
+                                                                        ...session,
+                                                                        user: {
+                                                                            ...session?.user,
+                                                                            image: imageUrl
+                                                                        }
+                                                                    })
+                                                                    router.refresh()
+                                                                }
+                                                            } catch (e) {
+                                                                toast.error("Erreur lors de la mise à jour de la photo")
+                                                            }
+                                                        }
+                                                    }}
+                                                    uploadPreset="ml_default"
+                                                >
+                                                    {({ open }) => (
+                                                        <button 
+                                                            type="button" 
+                                                            onClick={() => open()}
+                                                            className="absolute -bottom-1 -right-1 h-9 w-9 bg-black text-white rounded-full flex items-center justify-center shadow-lg border-4 border-white hover:bg-primary hover:text-black transition-all"
+                                                        >
+                                                            <Camera className="h-4 w-4" />
+                                                        </button>
+                                                    )}
+                                                </CldUploadWidget>
                                             </div>
                                             <p className="text-[9px] font-bold uppercase tracking-widest text-muted-foreground">Modifier Photo</p>
                                         </div>

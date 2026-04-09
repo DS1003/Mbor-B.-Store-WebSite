@@ -109,7 +109,7 @@ function LoginContent() {
                             <div className="space-y-2">
                                 <div className="flex items-center justify-between ml-1">
                                     <Label className="text-[11px] font-bold uppercase tracking-wider text-gray-400">Mot de passe</Label>
-                                    <Link href="#" className="text-[11px] font-bold text-amber-600 hover:underline underline-offset-4">Oublié ?</Link>
+                                    <Link href="/forgot-password" className="text-[11px] font-bold text-amber-600 hover:underline underline-offset-4">Oublié ?</Link>
                                 </div>
                                 <div className="relative group">
                                     <Lock className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-300 group-focus-within:text-amber-600 transition-colors" />

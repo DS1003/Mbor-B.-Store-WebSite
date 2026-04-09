@@ -139,17 +139,17 @@ export function ProductInfo({ product }: ProductInfoProps) {
                 <div className="flex flex-col">
                     <div className="flex items-baseline space-x-4">
                         <span className="text-4xl font-bold tracking-tight tabular-nums text-foreground">
-                            {data.price.toLocaleString()} <span className="text-lg font-semibold ml-1 text-muted-foreground">FCFA</span>
+                            {(data.price || 0).toLocaleString()} <span className="text-lg font-semibold ml-1 text-muted-foreground">FCFA</span>
                         </span>
                         {data.originalPrice && (
                             <span className="text-xl text-muted-foreground/40 line-through font-medium decoration-rose-500/50 decoration-2">
-                                {data.originalPrice.toLocaleString()}
+                                {(data.originalPrice || 0).toLocaleString()}
                             </span>
                         )}
                     </div>
-                    {data.discountPercent && (
+                    {data.discountPercent && data.originalPrice && (
                         <p className="text-[11px] font-bold text-rose-500 uppercase tracking-widest mt-2">
-                            Offre spéciale Indépendance : Vous économisez {(data.originalPrice! - data.price).toLocaleString()} F
+                            Offre spéciale Indépendance : Vous économisez {((data.originalPrice || 0) - (data.price || 0)).toLocaleString()} F
                         </p>
                     )}
                 </div>

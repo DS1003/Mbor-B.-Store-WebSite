@@ -10,7 +10,7 @@ import { ScrollReveal } from "@/components/scroll-reveal"
 import { prisma } from "@/lib/prisma"
 import { notFound } from "next/navigation"
 
-import { getActivePromotions } from "@/lib/actions/public"
+import { getActivePromotions, serializeProduct } from "@/lib/actions/public"
 
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
     const { id } = await params
@@ -71,36 +71,7 @@ export default async function ProductPage({ params }: { params: Promise<{ id: st
         return notFound()
     }
 
-    // Apply promotion logic
-    const basePrice = Number(product.price)
-    let finalPrice = basePrice
-    let activeDiscount = 0
-
-    const applicable = activePromos.filter(promo => {
-        if (promo.isGlobal) return true
-        if (promo.productIds.includes(product.id)) return true
-        if (product.categoryId && promo.categoryIds.includes(product.categoryId)) return true
-        return false
-    })
-
-    if (applicable.length > 0) {
-        activeDiscount = Math.max(...applicable.map(pr => pr.discount))
-        finalPrice = basePrice * (1 - (activeDiscount / 100))
-    }
-
-    const productData = {
-        id: product.id,
-        name: product.name,
-        price: finalPrice,
-        originalPrice: activeDiscount > 0 ? basePrice : undefined,
-        discountPercent: activeDiscount > 0 ? activeDiscount : undefined,
-        category: product.category?.name || "Sport",
-        description: product.description ?? "",
-        images: product.images.length > 0 ? product.images : ["https://res.cloudinary.com/da1dmwqhb/image/upload/v1769271862/mbor_store/placeholder.svg"],
-        allowFlocage: product.allowFlocage,
-        isNew: true,
-        sizes: product.sizes.map(s => ({ size: s.size, stock: s.stock }))
-    }
+    const productData = await serializeProduct(product, activePromos)
 
     return (
         <div className="flex flex-col w-full min-h-screen bg-background">

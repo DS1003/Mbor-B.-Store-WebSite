@@ -146,7 +146,7 @@ export function AdminSearch() {
                                                 </div>
                                                 <div className="ml-3 flex-1 min-w-0">
                                                     <p className="text-[13px] font-bold text-gray-900 truncate group-hover:text-amber-600 transition-colors">{p.name}</p>
-                                                    <p className="text-[11px] text-gray-400 font-medium">{p.category} • {p.price.toLocaleString()} F</p>
+                                                    <p className="text-[11px] text-gray-400 font-medium">{p.category} • {(p.price || 0).toLocaleString()} F</p>
                                                 </div>
                                                 <ChevronRight className="h-3.5 w-3.5 text-gray-300 opacity-0 group-hover:opacity-100 transition-opacity" />
                                             </button>
@@ -182,7 +182,7 @@ export function AdminSearch() {
                                                             o.status === 'PAID' ? "bg-green-50 text-green-600" : "bg-gray-50 text-gray-400"
                                                         )}>{o.status}</span>
                                                     </div>
-                                                    <p className="text-[11px] text-gray-400 font-medium">{o.customerName} • {o.total.toLocaleString()} F</p>
+                                                    <p className="text-[11px] text-gray-400 font-medium">{o.customerName} • {(o.total || 0).toLocaleString()} F</p>
                                                 </div>
                                             </button>
                                         ))}

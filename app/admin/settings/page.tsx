@@ -18,6 +18,7 @@ import {
     Smartphone,
     Instagram,
     Eye,
+    EyeOff,
     ChevronRight,
     Search,
     MousePointer2,
@@ -31,6 +32,7 @@ import { cn } from "@/lib/utils"
 import { motion, AnimatePresence } from "framer-motion"
 
 import { getStoreConfig, updateStoreConfig } from "../actions"
+import { changeAdminPassword } from "../auth-actions"
 import { toast } from "sonner"
 import { ImageUpload } from "@/components/admin/image-upload"
 
@@ -38,6 +40,15 @@ export default function AdminSettingsPage() {
     const [activeTab, setActiveTab] = React.useState("Général")
     const [isLoading, setIsLoading] = React.useState(true)
     const [isSaving, setIsSaving] = React.useState(false)
+    const [isPasswordLoading, setIsPasswordLoading] = React.useState(false)
+    const [passwordData, setPasswordData] = React.useState({
+        current: "",
+        new: "",
+        confirm: ""
+    })
+    const [showCurrent, setShowCurrent] = React.useState(false)
+    const [showNew, setShowNew] = React.useState(false)
+    const [showConfirm, setShowConfirm] = React.useState(false)
     const [formData, setFormData] = React.useState<any>({
         name: "",
         slogan: "",
@@ -128,6 +139,33 @@ export default function AdminSettingsPage() {
         { label: "Livraison", icon: Globe, color: "text-amber-600", bg: "bg-amber-50" },
         { label: "Apparence", icon: Palette, color: "text-amber-600", bg: "bg-amber-50" },
     ]
+
+    const handlePasswordChange = async (e: React.FormEvent) => {
+        e.preventDefault()
+        if (passwordData.new !== passwordData.confirm) {
+            toast.error("Les nouveaux mots de passe ne correspondent pas")
+            return
+        }
+        if (passwordData.new.length < 6) {
+            toast.error("Le mot de passe doit faire au moins 6 caractères")
+            return
+        }
+
+        setIsPasswordLoading(true)
+        try {
+            const result = await changeAdminPassword(passwordData)
+            if (result.success) {
+                toast.success(result.message)
+                setPasswordData({ current: "", new: "", confirm: "" })
+            } else {
+                toast.error(result.message)
+            }
+        } catch (error) {
+            toast.error("Erreur lors du changement de mot de passe")
+        } finally {
+            setIsPasswordLoading(false)
+        }
+    }
 
     return (
         <div className="space-y-10 pb-10">
@@ -525,16 +563,141 @@ export default function AdminSettingsPage() {
                                 </section>
                             )}
 
-                            <div className="bg-white border border-gray-50 rounded-[2rem] p-16 flex flex-col items-center justify-center text-center space-y-6">
-                                <div className="h-16 w-16 rounded-full bg-gray-50 flex items-center justify-center text-gray-300">
-                                    <Database className="h-8 w-8" />
+                            {activeTab === "Sécurité" && (
+                                <section className="space-y-10">
+                                    <div className="bg-white border border-gray-50 rounded-[2.5rem] p-10 shadow-sm space-y-10">
+                                        <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
+                                            <div className="flex items-center gap-4">
+                                                <div className="h-10 w-1.5 bg-rose-600 rounded-full" />
+                                                <div className="space-y-1">
+                                                    <h3 className="text-xl font-black text-gray-900 uppercase italic">Sécurité & <span className="text-rose-600">Accès.</span></h3>
+                                                    <p className="text-[11px] text-gray-400 font-bold uppercase tracking-widest">Gérez vos identifiants d'accès au système</p>
+                                                </div>
+                                            </div>
+                                            <div className="h-12 w-12 bg-rose-50 rounded-2xl flex items-center justify-center">
+                                                <Shield className="h-6 w-6 text-rose-500" />
+                                            </div>
+                                        </div>
+
+                                        <form onSubmit={handlePasswordChange} className="max-w-xl space-y-8">
+                                            <div className="grid grid-cols-1 gap-6">
+                                                <div className="space-y-3 group">
+                                                    <div className="flex items-center justify-between px-2">
+                                                        <Label className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Mot de passe actuel</Label>
+                                                        <Lock className="h-4 w-4 text-gray-200 group-focus-within:text-rose-500 transition-colors" />
+                                                    </div>
+                                                    <div className="relative group">
+                                                        <Lock className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-300 group-focus-within:text-rose-500 transition-colors" />
+                                                        <Input
+                                                            type={showCurrent ? "text" : "password"}
+                                                            value={passwordData.current}
+                                                            onChange={(e) => setPasswordData({ ...passwordData, current: e.target.value })}
+                                                            required
+                                                            placeholder="••••••••"
+                                                            className="h-14 pl-12 pr-12 border-gray-100 focus:ring-rose-100 focus:border-rose-200 rounded-2xl text-[14px] font-bold bg-gray-50/30 shadow-inner"
+                                                        />
+                                                        <button
+                                                            type="button"
+                                                            onClick={() => setShowCurrent(!showCurrent)}
+                                                            className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-300 hover:text-rose-500 transition-colors"
+                                                        >
+                                                            {showCurrent ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                                                        </button>
+                                                    </div>
+                                                </div>
+
+                                                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                                    <div className="space-y-3 group">
+                                                        <div className="flex items-center justify-between px-2">
+                                                            <Label className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Nouveau mot de passe</Label>
+                                                            <Zap className="h-4 w-4 text-gray-200 group-focus-within:text-amber-500 transition-colors" />
+                                                        </div>
+                                                        <div className="relative group">
+                                                            <Zap className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-300 group-focus-within:text-amber-500 transition-colors" />
+                                                            <Input
+                                                                type={showNew ? "text" : "password"}
+                                                                value={passwordData.new}
+                                                                onChange={(e) => setPasswordData({ ...passwordData, new: e.target.value })}
+                                                                required
+                                                                placeholder="••••••••"
+                                                                className="h-14 pl-12 pr-12 border-gray-100 focus:ring-amber-50 focus:border-amber-200 rounded-2xl text-[14px] font-bold bg-gray-50/30 shadow-inner"
+                                                            />
+                                                            <button
+                                                                type="button"
+                                                                onClick={() => setShowNew(!showNew)}
+                                                                className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-300 hover:text-amber-500 transition-colors"
+                                                            >
+                                                                {showNew ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                    <div className="space-y-3 group">
+                                                        <div className="flex items-center justify-between px-2">
+                                                            <Label className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Confirmer</Label>
+                                                            <Check className="h-4 w-4 text-gray-200 group-focus-within:text-emerald-500 transition-colors" />
+                                                        </div>
+                                                        <div className="relative group">
+                                                            <Check className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-300 group-focus-within:text-emerald-500 transition-colors" />
+                                                            <Input
+                                                                type={showConfirm ? "text" : "password"}
+                                                                value={passwordData.confirm}
+                                                                onChange={(e) => setPasswordData({ ...passwordData, confirm: e.target.value })}
+                                                                required
+                                                                placeholder="••••••••"
+                                                                className="h-14 pl-12 pr-12 border-gray-100 focus:ring-emerald-50 focus:border-emerald-200 rounded-2xl text-[14px] font-bold bg-gray-50/30 shadow-inner"
+                                                            />
+                                                            <button
+                                                                type="button"
+                                                                onClick={() => setShowConfirm(!showConfirm)}
+                                                                className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-300 hover:text-emerald-500 transition-colors"
+                                                            >
+                                                                {showConfirm ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div className="pt-4">
+                                                <Button
+                                                    type="submit"
+                                                    disabled={isPasswordLoading}
+                                                    className="h-14 px-8 rounded-2xl bg-gray-950 text-white font-black uppercase text-[12px] tracking-[0.2em] hover:bg-black transition-all hover:scale-[1.02] active:scale-95 shadow-xl shadow-gray-200 flex items-center gap-3 w-full sm:w-auto"
+                                                >
+                                                    {isPasswordLoading ? <Zap className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
+                                                    {isPasswordLoading ? "Mise à jour..." : "Mettre à jour le mot de passe"}
+                                                </Button>
+                                            </div>
+                                        </form>
+
+                                        <div className="p-8 bg-amber-50/50 rounded-[2rem] border border-amber-100 flex items-start gap-5">
+                                            <div className="h-10 w-10 bg-white rounded-xl shadow-sm border border-amber-100 flex items-center justify-center shrink-0">
+                                                <Bell className="h-5 w-5 text-amber-500" />
+                                            </div>
+                                            <div className="space-y-2">
+                                                <h4 className="text-[13px] font-black text-amber-900 uppercase">Recommandation Sécurité</h4>
+                                                <p className="text-[12px] text-amber-800/70 font-medium leading-relaxed">
+                                                    Utilisez un mot de passe robuste combinant majuscules, chiffres et caractères spéciaux. 
+                                                    Pour une sécurité maximale, votre session sera automatiquement invalidée après un changement de mot de passe réussi.
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </section>
+                            )}
+
+                            {["Profil Admin", "Notifications"].includes(activeTab) && (
+                                <div className="bg-white border border-gray-50 rounded-[2rem] p-16 flex flex-col items-center justify-center text-center space-y-6">
+                                    <div className="h-16 w-16 rounded-full bg-gray-50 flex items-center justify-center text-gray-300">
+                                        <Database className="h-8 w-8" />
+                                    </div>
+                                    <div className="space-y-1.5">
+                                        <h3 className="text-lg font-bold text-gray-900">Module {activeTab}</h3>
+                                        <p className="text-[13px] text-gray-400 font-medium max-w-sm">Ces réglages sont gérés automatiquement par le système d'authentification.</p>
+                                    </div>
+                                    <Button onClick={() => setActiveTab("Général")} className="h-10 px-6 rounded-xl bg-gray-900 font-bold uppercase text-[11px] tracking-widest">Retour au Panneau Général</Button>
                                 </div>
-                                <div className="space-y-1.5">
-                                    <h3 className="text-lg font-bold text-gray-900">Module {activeTab}</h3>
-                                    <p className="text-[13px] text-gray-400 font-medium max-w-sm">Ces réglages sont gérés automatiquement par le système d'authentification.</p>
-                                </div>
-                                <Button onClick={() => setActiveTab("Général")} className="h-10 px-6 rounded-xl bg-gray-900 font-bold uppercase text-[11px] tracking-widest">Retour au Panneau Général</Button>
-                            </div>
+                            )}
                         </motion.div>
                     </AnimatePresence>
                 </div>

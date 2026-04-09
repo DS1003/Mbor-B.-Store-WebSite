@@ -29,7 +29,7 @@ export const getActivePromotions = unstable_cache(
 )
 
 // Serialize products with promotion awareness
-function serializeProduct(p: any, promos: any[] = []) {
+export async function serializeProduct(p: any, promos: any[] = []) {
     const basePrice = Number(p.price)
     let finalPrice = basePrice
     let activeDiscount = 0
@@ -55,15 +55,7 @@ function serializeProduct(p: any, promos: any[] = []) {
         finalPrice = basePrice * (1 - (activeDiscount / 100))
     }
 
-    // Check if the product has an individual discount price set (manual)
-    if (p.discountPrice) {
-        const manualDiscountPrice = Number(p.discountPrice)
-        // If manual price is lower than promo price, use it
-        if (manualDiscountPrice < finalPrice) {
-            finalPrice = manualDiscountPrice
-            activeDiscount = Math.round((1 - (finalPrice / basePrice)) * 100)
-        }
-    }
+    // Individual discountPrice (manual) is now IGNORED as requested to use dynamic promos only
 
     return {
         id: p.id,
@@ -72,9 +64,13 @@ function serializeProduct(p: any, promos: any[] = []) {
         originalPrice: activeDiscount > 0 ? basePrice : undefined,
         discountPercent: activeDiscount > 0 ? activeDiscount : undefined,
         category: p.category?.name || "Sans catégorie",
-        image: p.images[0] || "",
+        description: p.description || "",
+        images: p.images || [],
+        image: p.images?.[0] || "",
         isNew: true,
-        expiresAt: applicable.length > 0 ? Math.min(...applicable.map(pr => pr.endDate ? new Date(pr.endDate).getTime() : Infinity)) : null
+        expiresAt: applicable.length > 0 ? Math.min(...applicable.map(pr => pr.endDate ? new Date(pr.endDate).getTime() : Infinity)) : null,
+        allowFlocage: p.allowFlocage || false,
+        sizes: p.sizes?.map((s: any) => ({ size: s.size, stock: s.stock })) || []
     }
 }
 
@@ -120,7 +116,7 @@ export const getFeaturedProducts = unstable_cache(
             }),
             getActivePromotions()
         ])
-        return products.map(p => serializeProduct(p, activePromos))
+        return Promise.all(products.map(p => serializeProduct(p, activePromos)))
     },
     ['featured-products'],
     { tags: ['products', 'featured', 'promotions'], revalidate: 60 }
@@ -189,7 +185,7 @@ export const getProducts = unstable_cache(
         ])
 
         return {
-            products: products.map(p => serializeProduct(p, activePromos)),
+            products: await Promise.all(products.map(p => serializeProduct(p, activePromos))),
             totalCount
         }
     },
@@ -211,7 +207,7 @@ export const getRelatedProducts = unstable_cache(
             }),
             getActivePromotions()
         ])
-        return products.map(p => serializeProduct(p, activePromos))
+        return Promise.all(products.map(p => serializeProduct(p, activePromos)))
     },
     ['related-products'],
     { tags: ['products', 'promotions'], revalidate: 60 }

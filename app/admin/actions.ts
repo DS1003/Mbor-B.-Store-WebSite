@@ -3,6 +3,8 @@
 import { prisma } from "@/lib/prisma"
 import { revalidatePath, revalidateTag, unstable_cache } from "next/cache"
 import { OrderStatus } from "@prisma/client"
+import bcrypt from "bcryptjs"
+import { getServerSession } from "next-auth/next"
 
 // Helpers to serialize Decimal types safely
 function serializeProduct(product: any) {
@@ -781,3 +783,19 @@ export async function adminSearchProducts(query: string) {
         category: p.category?.name
     }))
 }
+export async function resetAllDiscountPrices() {
+    try {
+        const result = await prisma.product.updateMany({
+            data: {
+                discountPrice: null
+            }
+        })
+        revalidateTag('products')
+        revalidatePath('/')
+        return { success: true, count: result.count }
+    } catch (e) {
+        console.error("Failed to reset prices:", e)
+        return { success: false }
+    }
+}
+
