@@ -203,6 +203,7 @@ export default function AdminLayout({
 }) {
     const { setTheme } = useTheme()
     const pathname = usePathname()
+    const router = useRouter()
     const [isSidebarOpen, setIsSidebarOpen] = React.useState(true)
     const [isMobileMenuOpen, setIsMobileMenuOpen] = React.useState(false)
     const { data: session, status } = useSession()
@@ -215,26 +216,6 @@ export default function AdminLayout({
         }
     }, [session, status, router])
 
-    if (status === "loading" || status === "unauthenticated" || (session?.user as any)?.role !== "ADMIN") {
-        return (
-            <div className="h-screen w-screen flex items-center justify-center bg-[#F9FAFB]">
-                <div className="h-10 w-10 border-4 border-amber-500 border-t-transparent rounded-full animate-spin" />
-            </div>
-        )
-    }
-
-    // Derived user data
-    const user = session?.user
-    const userInitials = user?.name
-        ? user.name.split(" ").map((n: string) => n[0]).join("").toUpperCase().slice(0, 2)
-        : "AD" // AD for Admin
-
-    // Force light theme for admin
-    React.useEffect(() => {
-        setTheme("light")
-    }, [setTheme])
-
-    const router = useRouter()
     const audioRef = React.useRef<HTMLAudioElement | null>(null)
 
     // Initialize audio once
@@ -244,6 +225,17 @@ export default function AdminLayout({
         audioRef.current.volume = 1.0
         audioRef.current.load()
     }, [])
+
+    // Force light theme for admin
+    React.useEffect(() => {
+        setTheme("light")
+    }, [setTheme])
+
+    // Derived user data
+    const user = session?.user
+    const userInitials = user?.name
+        ? user.name.split(" ").map((n: string) => n[0]).join("").toUpperCase().slice(0, 2)
+        : "AD" // AD for Admin
 
     // Notifications state
     const [notifications, setNotifications] = React.useState<any[]>([])
@@ -403,13 +395,21 @@ export default function AdminLayout({
                 console.error("Polling error:", error)
             }
         }
-    }, [lastChecked])
+    }, [lastChecked, router])
 
     // Set up polling interval
     React.useEffect(() => {
         const interval = setInterval(checkForNewNotifications, 30000) // Poll every 30s
         return () => clearInterval(interval)
     }, [checkForNewNotifications])
+
+    if (status === "loading" || status === "unauthenticated" || (session?.user as any)?.role !== "ADMIN") {
+        return (
+            <div className="h-screen w-screen flex items-center justify-center bg-[#F9FAFB]">
+                <div className="h-10 w-10 border-4 border-amber-500 border-t-transparent rounded-full animate-spin" />
+            </div>
+        )
+    }
 
     return (
         <Sheet open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>

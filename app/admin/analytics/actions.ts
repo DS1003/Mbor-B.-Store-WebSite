@@ -195,6 +195,8 @@ export async function getAnalyticsData(period: Period = 'this_month') {
     let totalItemsValue = 0
 
     items.forEach(item => {
+        if (!item.product) return // Safety check for deleted products
+
         const value = Number(item.price) * item.quantity
         totalItemsValue += value
 

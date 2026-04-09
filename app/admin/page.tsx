@@ -1,11 +1,9 @@
 "use client"
 
-import dynamic from "next/dynamic"
-
-export const dynamic = 'force-dynamic'
+import nextDynamic from "next/dynamic"
 
 // Deeply skip SSR for the dashboard to prevent charting-related build crashes
-const DashboardClient = dynamic(() => import("./DashboardClient"), { ssr: false })
+const DashboardClient = nextDynamic(() => import("./DashboardClient"), { ssr: false })
 
 export default function AdminPage() {
     return <DashboardClient />
