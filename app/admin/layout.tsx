@@ -213,17 +213,17 @@ export default function AdminLayout({
     const pathname = usePathname()
     const [isSidebarOpen, setIsSidebarOpen] = React.useState(true)
     const [isMobileMenuOpen, setIsMobileMenuOpen] = React.useState(false)
-    const { data: session } = useSession()
+    const { data: session, status } = useSession()
 
     // Redirect if not authenticated or not an admin
     React.useEffect(() => {
-        if (session === undefined) return // Still loading
-        if (!session || (session.user as any)?.role !== "ADMIN") {
+        if (status === "loading") return
+        if (status === "unauthenticated" || (session?.user as any)?.role !== "ADMIN") {
             router.push("/")
         }
-    }, [session, router])
+    }, [session, status, router])
 
-    if (session === undefined || !session || (session.user as any)?.role !== "ADMIN") {
+    if (status === "loading" || status === "unauthenticated" || (session?.user as any)?.role !== "ADMIN") {
         return (
             <div className="h-screen w-screen flex items-center justify-center bg-[#F9FAFB]">
                 <div className="h-10 w-10 border-4 border-amber-500 border-t-transparent rounded-full animate-spin" />

@@ -9,10 +9,11 @@ export default function AccountLayout({
 }: {
     children: React.ReactNode
 }) {
-    const { status } = useSession()
+    const { data: session, status } = useSession()
     const router = useRouter()
 
     useEffect(() => {
+        if (status === "loading") return
         if (status === "unauthenticated") {
             router.push("/login")
         }
@@ -26,7 +27,7 @@ export default function AccountLayout({
         )
     }
 
-    if (status === "unauthenticated") {
+    if (status === "unauthenticated" || !session) {
         return null
     }
 

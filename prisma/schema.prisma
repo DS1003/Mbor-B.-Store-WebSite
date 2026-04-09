@@ -7,25 +7,25 @@ datasource db {
 }
 
 model User {
-  id             String          @id @default(cuid())
-  email          String?         @unique
-  password       String?
-  name           String?
-  role           Role            @default(USER)
-  createdAt      DateTime        @default(now())
-  updatedAt      DateTime        @updatedAt
-  emailVerified  DateTime?
-  image          String?
-  phone          String?
-  accounts       Account[]
-  addresses      Address[]
-  orders         Order[]
-  paymentMethods PaymentMethod[]
-  reviews        Review[]
-  sessions       Session[]
-  resetToken     String?         @unique
+  id                String          @id @default(cuid())
+  email             String?         @unique
+  password          String?
+  name              String?
+  role              Role            @default(USER)
+  createdAt         DateTime        @default(now())
+  updatedAt         DateTime        @updatedAt
+  emailVerified     DateTime?
+  image             String?
+  resetToken        String?         @unique
   resetTokenExpires DateTime?
-  favorites      Product[]       @relation("UserFavorites")
+  phone             String?
+  accounts          Account[]
+  addresses         Address[]
+  orders            Order[]
+  paymentMethods    PaymentMethod[]
+  reviews           Review[]
+  sessions          Session[]
+  favorites         Product[]       @relation("UserFavorites")
 }
 
 model Address {
@@ -162,7 +162,7 @@ model Order {
 }
 
 model OrderItem {
-  id           String  @id @default(cuid())
+  id           String   @id @default(cuid())
   orderId      String
   productId    String?
   quantity     Int
@@ -170,8 +170,8 @@ model OrderItem {
   customName   String?
   customNumber String?
   size         String?
-  order        Order   @relation(fields: [orderId], references: [id])
-  product      Product? @relation(fields: [productId], references: [id], onDelete: SetNull)
+  order        Order    @relation(fields: [orderId], references: [id])
+  product      Product? @relation(fields: [productId], references: [id])
 }
 
 model StoreConfig {
@@ -243,11 +243,11 @@ model Promotion {
   startDate   DateTime?
   endDate     DateTime?
   isActive    Boolean   @default(true)
-  isGlobal    Boolean   @default(false)
-  categoryIds String[]  @default([])
-  productIds  String[]  @default([])
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
+  categoryIds String[]  @default([])
+  isGlobal    Boolean   @default(false)
+  productIds  String[]  @default([])
 }
 
 enum Role {
