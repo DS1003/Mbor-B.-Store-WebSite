@@ -1,3 +1,5 @@
+"use client"
+
 import dynamic from "next/dynamic"
 
 // Deeply skip SSR for the entire analytics page to resolve the Recharts/Prerender crash
