@@ -50,7 +50,7 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Badge } from "@/components/ui/badge"
-import { motion, AnimatePresence } from "framer-motion"
+// Removed motion
 
 import { useSession, signOut } from "next-auth/react"
 import { getNotifications } from "./actions"
@@ -111,18 +111,14 @@ function SidebarContent({ isSidebarOpen, isMobile, pathname, setIsMobileMenuOpen
                             />
                         </div>
                         {(isSidebarOpen || isMobile) && (
-                            <motion.div
-                                initial={{ opacity: 0, x: -5 }}
-                                animate={{ opacity: 1, x: 0 }}
-                                className="flex flex-col"
-                            >
+                            <div className="flex flex-col">
                                 <span className="font-bold text-[14px] leading-tight tracking-tight text-gray-900 group-hover:text-amber-600 transition-colors">
                                     Mbor <span className="text-gray-400 font-medium">B. Store</span>
                                 </span>
                                 <span className="text-[10px] font-bold uppercase tracking-wider text-gray-400 mt-0.5">
                                     Console d'administration
                                 </span>
-                            </motion.div>
+                            </div>
                         )}
                     </div>
                 </Link>
@@ -174,11 +170,7 @@ function SidebarContent({ isSidebarOpen, isMobile, pathname, setIsMobileMenuOpen
                                             )}
 
                                             {isActive && (
-                                                <motion.div
-                                                    layoutId="active-pill"
-                                                    transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
-                                                    className="absolute left-0 w-1 h-1/3 bg-amber-500 rounded-full"
-                                                />
+                                                <div className="absolute left-0 w-1 h-1/3 bg-amber-500 rounded-full" />
                                             )}
                                         </Link>
                                     )
@@ -604,17 +596,9 @@ export default function AdminLayout({
                     {/* Content View */}
                     <div className="flex-1 overflow-y-auto p-6 lg:p-10 custom-scrollbar">
                         <div className="max-w-[1400px] mx-auto">
-                            <AnimatePresence mode="wait">
-                                <motion.div
-                                    key={pathname}
-                                    initial={{ opacity: 0, y: 4 }}
-                                    animate={{ opacity: 1, y: 0 }}
-                                    exit={{ opacity: 0, y: -4 }}
-                                    transition={{ duration: 0.2, ease: "easeOut" }}
-                                >
-                                    {children}
-                                </motion.div>
-                            </AnimatePresence>
+                            <div key={pathname}>
+                                {children}
+                            </div>
                         </div>
                     </div>
                 </main>

@@ -2,6 +2,8 @@
 
 import dynamic from "next/dynamic"
 
+export const dynamic = 'force-dynamic'
+
 // Deeply skip SSR for the dashboard to prevent charting-related build crashes
 const DashboardClient = dynamic(() => import("./DashboardClient"), { ssr: false })
 

@@ -20,7 +20,7 @@ import {
 } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
-import { motion } from "framer-motion"
+// Removed motion
 import dynamic from "next/dynamic"
 
 const RevenueChart = dynamic(() => import("@/components/admin/analytics-charts").then(mod => mod.RevenueChart), { ssr: false })
@@ -53,7 +53,7 @@ import {
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { getAnalyticsData, Period } from "./actions"
-import { generatePDF } from "./pdf-generator"
+// Removed top-level import
 
 export default function AdminAnalyticsPage() {
     const [data, setData] = React.useState<any>(null)
@@ -82,6 +82,7 @@ export default function AdminAnalyticsPage() {
 
     const downloadReport = async () => {
         if (!data) return
+        const { generatePDF } = await import("./pdf-generator")
         await generatePDF(data, period)
     }
 
@@ -180,10 +181,7 @@ export default function AdminAnalyticsPage() {
             {/* 1. KPIs Matrix */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                 {stats.map((stat, i) => (
-                    <motion.div
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: i * 0.1 }}
+                    <div
                         key={i}
                         className="bg-white border border-gray-50 rounded-[2rem] p-6 shadow-sm hover:shadow-xl transition-all duration-500 group relative overflow-hidden"
                     >
@@ -207,7 +205,7 @@ export default function AdminAnalyticsPage() {
                         <div className="absolute -bottom-4 -right-4 opacity-[0.03] group-hover:opacity-[0.08] transition-opacity duration-500 pointer-events-none">
                             <stat.icon className="h-32 w-32" />
                         </div>
-                    </motion.div>
+                    </div>
                 ))}
             </div>
 

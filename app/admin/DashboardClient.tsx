@@ -21,7 +21,7 @@ import {
     Database,
     Download
 } from "lucide-react"
-import { motion, AnimatePresence } from "framer-motion"
+// Removed motion
 import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import {
@@ -172,10 +172,7 @@ export default function AdminDashboard() {
             {/* Stats Grid */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                 {stats.map((stat, i) => (
-                    <motion.div
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: i * 0.1 }}
+                    <div
                         key={i}
                         className="bg-white border border-gray-50 rounded-[2rem] p-8 shadow-sm hover:shadow-2xl transition-all duration-500 group relative overflow-hidden"
                     >
@@ -200,7 +197,7 @@ export default function AdminDashboard() {
                                 {isLoading ? <span className="h-8 w-24 bg-gray-50 animate-pulse block rounded-lg" /> : stat.value}
                             </h3>
                         </div>
-                    </motion.div>
+                    </div>
                 ))}
             </div>
 
@@ -314,11 +311,9 @@ export default function AdminDashboard() {
                                 </div>
                             </div>
                             <div className="h-2 w-full bg-white/5 rounded-full overflow-hidden backdrop-blur-md">
-                                <motion.div
-                                    initial={{ width: 0 }}
-                                    animate={{ width: "75%" }}
-                                    transition={{ duration: 1.5, ease: "circOut" }}
+                                <div
                                     className="h-full bg-amber-500 rounded-full shadow-[0_0_10px_rgba(245,158,11,0.3)]"
+                                    style={{ width: "75%" }}
                                 />
                             </div>
                         </div>
