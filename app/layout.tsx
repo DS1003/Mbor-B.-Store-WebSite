@@ -71,6 +71,7 @@ export const metadata: Metadata = {
 import { getStoreConfig, getPromotions } from "./admin/actions"
 import { ThemeVariables } from "@/components/theme-variables"
 import { IndependenceBanner, ConfettiBurst } from "@/components/independence-banner"
+import { FloatingActions } from "@/components/floating-actions"
 
 export default async function RootLayout({
     children,
@@ -147,6 +148,7 @@ export default async function RootLayout({
                     </main>
                     <SiteFooter />
                     <MobileNavbar />
+                    <FloatingActions />
                     <Toaster position="bottom-right" richColors />
                     <Analytics />
                     <SpeedInsights />

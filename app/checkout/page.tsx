@@ -17,7 +17,7 @@ export default function CheckoutPage() {
     const router = useRouter()
     const { data: session } = useSession()
     const { items, subtotal, clearCart } = useCart()
-    const [paymentMethod, setPaymentMethod] = React.useState("wave")
+    const [paymentMethod, setPaymentMethod] = React.useState("online")
     const [deliveryType, setDeliveryType] = React.useState("delivery") // delivery, pickup
     const [isSubmitting, setIsSubmitting] = React.useState(false)
     const [isSuccess, setIsSuccess] = React.useState(false)
@@ -276,33 +276,60 @@ export default function CheckoutPage() {
                                         <p className="text-[11px] font-bold tracking-widest text-muted-foreground/40 uppercase">Sécurisé & Rapide</p>
                                     </div>
                                 </div>
-                                <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                     {[
-                                        { id: "online", label: "Paiement en ligne", desc: "Wave, OM, Carte", logo: "https://paytech.sn/assets/img/logo.png" },
-                                        { id: "wave", label: "Wave", desc: "Paiement manuel", logo: "https://res.cloudinary.com/da1dmwqhb/image/upload/v1769271856/mbor_store/payment-wave.png" },
-                                        { id: "om", label: "Orange Money", desc: "Paiement manuel", logo: "https://res.cloudinary.com/da1dmwqhb/image/upload/v1769271856/mbor_store/payment-om.png" },
-                                        { id: "cash", label: "Espèces", desc: "Paiement à la livraison", logo: "https://res.cloudinary.com/da1dmwqhb/image/upload/v1769271855/mbor_store/payment-cash.png" }
+                                        {
+                                            id: "online",
+                                            label: "Paiement électronique",
+                                            desc: "Automatisé & Sécurisé",
+                                            logos: [
+                                                "https://res.cloudinary.com/da1dmwqhb/image/upload/v1769271856/mbor_store/payment-wave.png",
+                                                "https://res.cloudinary.com/da1dmwqhb/image/upload/v1769271856/mbor_store/payment-om.png",
+                                                "https://upload.wikimedia.org/wikipedia/commons/b/b5/PayPal.svg",
+                                                "https://static.vecteezy.com/system/resources/thumbnails/008/490/562/small/credit-card-transparent-background-png.png"
+                                            ]
+                                        },
+                                        {
+                                            id: "cash",
+                                            label: "Paiement cash",
+                                            desc: "A la livraison (Dakar)",
+                                            logos: ["https://res.cloudinary.com/da1dmwqhb/image/upload/v1769271855/mbor_store/payment-cash.png"]
+                                        }
                                     ].map((m) => (
                                         <button
                                             key={m.id}
                                             onClick={() => setPaymentMethod(m.id)}
-                                            className={`relative flex flex-col items-center p-6 border transition-all rounded-[2rem] space-y-4 ${paymentMethod === m.id
-                                                ? "border-primary bg-primary/5 shadow-lg scale-[1.02]"
-                                                : "border-muted/60 bg-muted/10 hover:bg-muted/30"
+                                            className={`relative flex flex-col items-center p-8 border transition-all duration-500 rounded-[2.5rem] space-y-6 group cursor-pointer ${paymentMethod === m.id
+                                                ? "border-primary bg-primary/[0.03] shadow-[0_15px_40px_rgba(0,0,0,0.06)] scale-[1.01]"
+                                                : "border-muted/40 bg-white hover:border-primary/20 hover:bg-muted/5 shadow-sm"
                                                 }`}
                                         >
-                                            <div className="h-16 w-16 relative overflow-hidden rounded-2xl">
-                                                <Image src={m.logo} alt={m.label} fill className="object-contain p-1" />
+                                            {/* Logo Container */}
+                                            <div className="flex items-center justify-center -space-x-4 mb-1">
+                                                {m.logos.map((logo, i) => (
+                                                    <div 
+                                                        key={i} 
+                                                        className="h-12 w-12 relative overflow-hidden rounded-xl bg-white p-1.5 border border-black/5 shadow-lg group-hover:scale-105 transition-transform duration-500"
+                                                        style={{ zIndex: m.logos.length - i }}
+                                                    >
+                                                        <Image src={logo} alt={m.label} fill className="object-contain" />
+                                                    </div>
+                                                ))}
                                             </div>
-                                            <div className="text-center">
-                                                <p className="text-[13px] font-bold tracking-tight leading-none mb-1">{m.label}</p>
-                                                <p className="text-[10px] text-muted-foreground/60 font-medium">{m.desc}</p>
+
+                                            <div className="text-center space-y-1">
+                                                <p className="text-[16px] font-bold tracking-tight text-gray-900">{m.label}</p>
+                                                <p className="text-[10px] text-muted-foreground/50 font-bold uppercase tracking-widest">{m.desc}</p>
                                             </div>
+
                                             {paymentMethod === m.id && (
-                                                <div className="absolute top-4 right-4 h-5 w-5 bg-primary text-primary-foreground rounded-full flex items-center justify-center">
-                                                    <CheckCircle2 className="h-3 w-3" />
+                                                <div className="absolute top-5 right-5 h-6 w-6 bg-primary text-primary-foreground rounded-full flex items-center justify-center shadow-lg shadow-primary/20">
+                                                    <CheckCircle2 className="h-3.5 w-3.5" />
                                                 </div>
                                             )}
+                                            
+                                            {/* Hover underline effect */}
+                                            <div className={`absolute bottom-5 h-1 w-6 rounded-full transition-all duration-500 ${paymentMethod === m.id ? "bg-primary w-10" : "bg-transparent group-hover:bg-muted-foreground/10"}`} />
                                         </button>
                                     ))}
                                 </div>

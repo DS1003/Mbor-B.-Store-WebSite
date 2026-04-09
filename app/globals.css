@@ -135,6 +135,18 @@
         /* No forced uppercase */
     }
 
+    /* Global Clickable Cursor */
+    button,
+    a,
+    [role="button"],
+    label[for],
+    input[type="submit"],
+    input[type="button"],
+    input[type="checkbox"],
+    input[type="radio"] {
+        cursor: pointer !important;
+    }
+
     /* Fix for Cloudinary Widget + Radix UI */
     .cloudinary-widget,
     .cloudinary-widget-root,

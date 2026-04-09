@@ -166,7 +166,7 @@ export function SiteFooter() {
                         <p className="text-[11px] font-medium text-white tracking-tight">
                             &copy; {new Date().getFullYear()} Mbor Store — Élegance Sportive. Tous droits réservés.
                             <span className="mx-3 text-white/20">|</span>
-                            <span className="text-white/50">Conçu par</span> <Link href="https://portofolio-seydiop07.vercel.app/" target="_blank" className="hover:text-primary transition-colors font-bold">Seydiop</Link>
+                            <span className="text-white/50">Conçu par</span> <Link href="https://portofolio-seydiop07.vercel.app/" target="_blank" className="hover:text-primary transition-colors font-bold">Seydiop07</Link>
                         </p>
                     </div>
 

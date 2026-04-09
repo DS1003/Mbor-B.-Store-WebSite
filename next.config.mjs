@@ -16,7 +16,9 @@ const nextConfig = {
       { protocol: "https", hostname: "pbs.twimg.com" },
       { protocol: "https", hostname: "res.cloudinary.com" },
       { protocol: "https", hostname: "amnakoo.com" },
-      { protocol: "https", hostname: "paytech.sn" }
+      { protocol: "https", hostname: "paytech.sn" },
+      { protocol: "https", hostname: "static.vecteezy.com" },
+      { protocol: "https", hostname: "upload.wikimedia.org" }
     ],
   },
   serverExternalPackages: ["@prisma/client", "prisma"],

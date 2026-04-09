@@ -72,6 +72,7 @@ export function SiteHeader() {
         { href: "/shop/crampons", label: "Crampons", category: "crampons" },
         { href: "/about", label: "A Propos" },
         { href: "/contact", label: "Contact" },
+        { href: "/stores", label: "Nos Stores" },
     ]
 
     const userInitials = session?.user?.name
