@@ -1,16 +1,14 @@
 "use client"
 
-import {
-    AreaChart,
-    Area,
-    XAxis,
-    YAxis,
-    Tooltip,
-    ResponsiveContainer,
-    CartesianGrid
-} from 'recharts'
+import React from 'react'
+
+const Recharts = typeof window !== 'undefined' ? require('recharts') : null
 
 export function DashboardAreaChart({ data }: { data: any[] }) {
+    if (!Recharts) return <div className="h-full w-full bg-gray-50 animate-pulse rounded-2xl" />
+
+    const { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid } = Recharts
+
     return (
         <ResponsiveContainer width="100%" height="100%">
             <AreaChart data={data}>

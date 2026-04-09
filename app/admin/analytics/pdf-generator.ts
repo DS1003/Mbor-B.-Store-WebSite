@@ -1,6 +1,3 @@
-import { jsPDF } from 'jspdf'
-import 'jspdf-autotable'
-
 // Helper for formatting
 const formatMoney = (amount: any) => {
     if (typeof amount === 'string') return amount
@@ -10,6 +7,10 @@ const formatMoney = (amount: any) => {
 // Helper to convert image URL to base64
 const getBase64ImageFromURL = (url: string): Promise<string> => {
     return new Promise((resolve, reject) => {
+        if (typeof window === 'undefined') {
+            reject(new Error('Browser only'))
+            return
+        }
         const img = new Image()
         img.setAttribute('crossOrigin', 'anonymous')
         img.onload = () => {

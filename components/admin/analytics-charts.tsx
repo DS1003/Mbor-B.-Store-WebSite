@@ -1,21 +1,15 @@
 "use client"
 
-import {
-    AreaChart,
-    Area,
-    XAxis,
-    YAxis,
-    Tooltip,
-    ResponsiveContainer,
-    CartesianGrid,
-    BarChart,
-    Bar,
-    Cell,
-    PieChart,
-    Pie
-} from 'recharts'
+import React from 'react'
+
+// Conditional import to prevent SSR errors
+const Recharts = typeof window !== 'undefined' ? require('recharts') : null
 
 export function RevenueChart({ data }: { data: any[] }) {
+    if (!Recharts) return <div className="h-full w-full bg-gray-50 animate-pulse rounded-2xl" />
+    
+    const { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid } = Recharts
+
     return (
         <ResponsiveContainer width="100%" height="100%">
             <AreaChart data={data}>
@@ -27,7 +21,7 @@ export function RevenueChart({ data }: { data: any[] }) {
                 </defs>
                 <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f3f4f6" />
                 <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fontSize: 11, fontWeight: 700, fill: '#9ca3af' }} dy={10} />
-                <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 11, fontWeight: 700, fill: '#9ca3af' }} tickFormatter={(value) => `${value / 1000}k`} />
+                <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 11, fontWeight: 700, fill: '#9ca3af' }} tickFormatter={(value: number) => `${value / 1000}k`} />
                 <Tooltip
                     cursor={{ stroke: '#f59e0b', strokeWidth: 1, strokeDasharray: '4 4' }}
                     contentStyle={{ borderRadius: '16px', border: 'none', boxShadow: '0 20px 40px -10px rgba(0,0,0,0.1)' }}
@@ -40,6 +34,10 @@ export function RevenueChart({ data }: { data: any[] }) {
 }
 
 export function CategoryPieChart({ data }: { data: any[] }) {
+    if (!Recharts) return <div className="h-full w-full bg-gray-50 animate-pulse rounded-2xl" />
+    
+    const { PieChart, Pie, Cell, Tooltip, ResponsiveContainer } = Recharts
+
     return (
         <ResponsiveContainer width="100%" height="100%">
             <PieChart>
@@ -55,6 +53,10 @@ export function CategoryPieChart({ data }: { data: any[] }) {
 }
 
 export function OrderHealthChart({ data }: { data: any[] }) {
+    if (!Recharts) return <div className="h-full w-full bg-gray-50 animate-pulse rounded-2xl" />
+    
+    const { PieChart, Pie, Cell, Tooltip, ResponsiveContainer } = Recharts
+
     return (
         <ResponsiveContainer width="100%" height="100%">
             <PieChart>
@@ -70,6 +72,10 @@ export function OrderHealthChart({ data }: { data: any[] }) {
 }
 
 export function PaymentMethodsChart({ data }: { data: any[] }) {
+    if (!Recharts) return <div className="h-full w-full bg-gray-50 animate-pulse rounded-2xl" />
+    
+    const { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid, Cell } = Recharts
+
     return (
         <ResponsiveContainer width="100%" height="100%">
             <BarChart data={data} layout="vertical" margin={{ left: 0, right: 20 }}>
