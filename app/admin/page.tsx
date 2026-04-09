@@ -70,6 +70,11 @@ export default function AdminDashboard() {
 
     const [logs, setLogs] = React.useState<any[]>([])
     const [isLogsOpen, setIsLogsOpen] = React.useState(false)
+    const [mounted, setMounted] = React.useState(false)
+
+    React.useEffect(() => {
+        setMounted(true)
+    }, [])
 
     const loadData = React.useCallback(async () => {
         setIsLoading(true)
@@ -131,6 +136,19 @@ export default function AdminDashboard() {
         { label: "Acquisition Clients", value: statsData ? statsData.users.toString() : "0", trend: "-2.1%", up: false, icon: Users, color: "text-rose-600", bg: "bg-rose-50" },
         { label: "Articles Référencés", value: statsData ? statsData.products.toString() : "0", trend: "+0.4%", up: true, icon: TrendingUp, color: "text-emerald-600", bg: "bg-emerald-50" },
     ]
+
+    if (!mounted) {
+        return (
+            <div className="space-y-10 pb-10">
+                <div className="h-20 w-1/3 bg-gray-100 animate-pulse rounded-2xl" />
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                    {[...Array(4)].map((_, i) => (
+                        <div key={i} className="h-32 bg-gray-100 animate-pulse rounded-[2rem]" />
+                    ))}
+                </div>
+            </div>
+        )
+    }
 
     return (
         <div className="space-y-10 pb-10">

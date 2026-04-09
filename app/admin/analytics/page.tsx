@@ -67,6 +67,11 @@ export default function AdminAnalyticsPage() {
     const [data, setData] = React.useState<any>(null)
     const [loading, setLoading] = React.useState(true)
     const [period, setPeriod] = React.useState<Period>('this_month')
+    const [mounted, setMounted] = React.useState(false)
+
+    React.useEffect(() => {
+        setMounted(true)
+    }, [])
 
     React.useEffect(() => {
         async function load() {
@@ -129,6 +134,22 @@ export default function AdminAnalyticsPage() {
 
     const revenueData = data?.chartData || initialRevenueData
     const categoryData = data?.categoryData || initialCategoryData
+
+    if (!mounted) {
+        return (
+            <div className="space-y-8 pb-10">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6">
+                    <div className="h-20 w-1/3 bg-gray-100 animate-pulse rounded-2xl" />
+                    <div className="h-10 w-40 bg-gray-100 animate-pulse rounded-xl" />
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                    {[...Array(4)].map((_, i) => (
+                        <div key={i} className="h-32 bg-gray-100 animate-pulse rounded-[2rem]" />
+                    ))}
+                </div>
+            </div>
+        )
+    }
 
     return (
         <div className="space-y-8 pb-10">
