@@ -69,7 +69,7 @@ export function SiteHeader() {
         { href: "/shop", label: "Boutique" },
         { href: "/shop/maillot", label: "Maillot", category: "maillot" },
         { href: "/shop/sneakers", label: "Sneakers", category: "sneakers" },
-        { href: "/shop/crampons", label: "Crampons", category: "crampons" },
+        { href: "/coupe-du-monde-2026", label: "Équipes Nationales 🏆" },
         { href: "/about", label: "A Propos" },
         { href: "/contact", label: "Contact" },
         { href: "/stores", label: "Nos Stores" },
